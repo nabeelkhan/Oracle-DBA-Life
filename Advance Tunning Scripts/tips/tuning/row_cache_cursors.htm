@@ -1,0 +1,107 @@
+<html>
+	<head>
+		<title>
+			Tuning the _row_cache_cursors Parameter
+		</title>
+		<style>
+			<!-- a:hover{color:#660066;} -->
+		</style>
+	</head>
+	<body background="../../images/bg.jpg" link="#FF6600" vlink="#FF6600" alink="#660066">
+		
+		<h2 align="center">
+			<font color="#990000">
+				Tuning the <em>_row_cache_cursors</em> Parameter
+			</font>
+		</h2>
+		The explanation of the <em>row_cache_cursors</em> parameter as
+		"<em>the maximum number of cached recursive cursors used by the dictionary cache manager for selecting rows from the data dictionary</em>"
+		was for years one of the more enigmatic notes in the Oracle documentation.
+		Oracle eventually resolved the problem in release 8.1 by making the parameter a hidden and thus an undocumented parameter!
+		<p>
+      This was a long overdue change.
+		There is normally little, if anything, to be gained by using a larger value than the default value of 10.
+		Nevertheless, some Oracle consultants have the habit of setting this parameter to 200 or 300,
+		and are not dissuaded by the fact that it is now a hidden parameter.
+		However, such high values just waste memory, and while it is seldom more than a few megabytes,
+		a more scientific approach to the correct setting of this parameter is in order.
+
+		<h3>
+			<font color="#660066">
+				What does it do?
+			</font>
+		</h3>
+		From the explanation in the old documentation, or the description in X$KSPPI,
+		you could be forgiven for thinking that this parameter sets a limit on the number of shared cursors for dictionary cache management
+		that can be cached in the shared pool.
+		However, a simple query against V$SQLAREA is normally enough to demonstrate that there is in fact no such limit.
+		Row cache cursors get no special treatment in the shared pool.
+		<p>
+		In fact, the parameter limits the number of private SQL areas for row cache cursors that a process can cache during a call.
+		Interestingly, this cache of private SQL areas, or shared cursor instantiations, is controlled from process memory (the PGA),
+		rather than from session memory (the UGA) where the private SQL areas reside.
+		The <em>_row_cache_cursors</em> parameter sets the size of an array in permanent PGA memory.
+		Each slot in that array requires just 28 bytes.
+		An unduly small value for this parameter causes otherwise unnecessary soft parse operations.
+		An unduly large value wastes some memory in the PGA of every Oracle server process,
+		and may reduce the caching of other cursors if the <em>open_cursors</em> parameter is modestly set.
+
+		<h3>
+			<font color="#660066">
+				How can you tune it?
+			</font>
+		</h3>
+		The good news is that Oracle does keep some statistics about the caching of private SQL areas for row cache cursors.
+		These statistics are visible in X$KQDPG.
+		They report the cache limit, the number of times that a row cache cursor has been needed,
+		the number of times that an instantiation (and possibly a parse) was required,
+		and the number of times that the cache has overflowed.
+		Of course, if the cache has overflowed then it is too small. If not, it is big enough.
+		In general, the number of concurrently cached row cache cursors that might be useful is dependent on the duration and complexity of calls.
+		Long-running PL/SQL procedures, that refer to many data dictionary objects of many different types,
+		are most likely to benefit from increased caching of row cache cursor instantiations.
+		<p>
+		The bad news is that X$KQDPG is, of course, process specific and cannot be queried from another process.
+		To tune the parameter correctly, if at all, you need the statistics from representative application processes,
+		rather than those from the process being used for performance monitoring.
+		<p>
+		Fortunately, there is a solution.
+		The data structure behind X$KQDPG is in the fixed PGA,
+		and you can easily get a representative application process to dump its fixed PGA to its trace file
+		using a <em>global_area</em> dump at level 1 from ORADEBUG (or an equivalent DBMS_SYSTEM.SET_EV call).
+		From there is just a matter of finding the <em>kqdpga_</em> data structure, skipping 12 bytes,
+		and then reading the hexadecimal values that would have been returned had you been able to query X$KQDPG for the process.
+		Easy!
+		<p>
+		If you find overflows, by all means increase the <em>_row_cache_cursors</em> parameter.
+		That's what it's still there for.
+		If <em>open_cursors</em> is modest, then that parameter should be increased by the same amount.
+		A very small increase in these parameters is likely to be sufficient to prevent the overflows without any negative side effects.
+		<p>
+
+		<hr noshade align="left" width="300" size="2" color="black">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="1000">
+					<font size="2" color="#660066">
+						<strong>
+							Copyright © Ixora Pty Ltd
+						</strong>
+					</font>
+				</td>
+				<td valign="top" align="right">
+					<nobr>
+					<map name="email">
+						<area shape="rect" coords="0, 0, 32, 21" title="Feedback" href="mailto:feedback@ixora.com.au?SUBJECT=[Tip] row_cache_cursors.htm">
+					</map>
+					<img ismap usemap="#email" border="0" alt="Send Email" src="../../images/email.gif" width="32" height="21">
+					<map name="home">
+						<area shape="rect" coords="0, 0, 28, 28" title="Home" href="/">
+					</map>
+					<img ismap usemap="#home" border="0" alt="Home" src="../../images/home.gif" width="28" height="28">
+					</nobr>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

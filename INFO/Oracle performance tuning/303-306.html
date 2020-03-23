@@ -1,0 +1,526 @@
+a6b
+<HTML>
+<HEAD>
+<META name=vsisbn content="067230886x">
+<META name=vstitle content="Oracle Performance Tuning and Optimization">
+<META name=vsauthor content="Edward Whalen">
+<META name=vsimprint content="Sams">
+<META name=vspublisher content="Macmillan Computer Publishing">
+<META name=vspubdate content="04/01/96">
+<META name=vscategory content="Archive,Databases: Relational Databases">
+
+
+
+
+<TITLE>Oracle Performance Tuning and Optimization:Data Warehousing System</TITLE>
+
+<!-- HEADER -->
+
+<STYLE type="text/css"> 
+ <!--
+ A:hover  {
+ 	color : Red;
+ }
+ -->
+</STYLE>
+
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<script>
+<!--
+function displayWindow(url, width, height) {
+         var Win = window.open(url,"displayWindow",'width=' + width +',height=' + height + ',resizable=1,scrollbars=yes');
+	if (Win) {
+		Win.focus();
+	}
+}
+//-->
+</script>
+<SCRIPT>
+<!--
+function popUp(url) {
+        var Win = window.open(url,"displayWindow",'width=400,height=300,resizable=1,scrollbars=yes');
+	if (Win) {
+		Win.focus();
+	}
+}
+//-->
+</SCRIPT>
+
+<script language="JavaScript1.2">
+<!--
+function checkForQuery(fm) {
+  /* get the query value */
+  var i = escape(fm.query.value);
+  if (i == "") {
+      alert('Please enter a search word or phrase');
+      return false;
+  }                  /* query is blank, dont run the .jsp file */
+  else return true;  /* execute the .jsp file */
+}
+//-->
+</script>
+
+</HEAD>
+
+<body background="/images/back.jpg" bgcolor="#FFFFFF" link="#003399" alink="#FF0000" vlink="#003399" topmargin=0 leftmargin=0 marginheight=0 marginwidth=0>
+
+<table bgcolor="#003366" width="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td colspan="3">
+		
+		<table width="100%">
+			<tr valign="top">
+				<td bgcolor="#003366">&nbsp;&nbsp;<a href="http://www.earthweb.com" target="resource window"><img src="/images/ew_logo.jpg" width="109" height="93" vspace="5" alt="EarthWeb" border="0"></a>&nbsp;&nbsp;&nbsp;</td>
+				<td bgcolor="#003366" nowrap>
+
+<!--  Begin Ads ITK.BOOKS.DATABASE //-->
+
+<A HREF="/adclick.html/CID=00000349ba50285a00000000/site=corpitk/area=corpitk.books.database/aamsz=468x60" target="_blank"><IMG SRC="http://adimages.earthweb.com/images/ads/spidercatcher.gif?" %%HEIGHT%% %%WIDTH%% ALT="Click Here!"  BORDER="0"></A>
+
+
+<!-- ITK.BOOKS.DATABASE End Ads //--></td>
+				<td bgcolor="#003366" nowrap>
+
+<!--  Begin Ads ITKBAN.FRONT //-->
+
+<A HREF="/adclick.html/CID=00000ac5ba50285a00000000/site=corpitk/area=corpitk.books.database/aamsz=160x60/position=top" target="_blank"><IMG SRC="http://adimages.earthweb.com/images/ads/160x60/spider_catcher160x60.gif?" %%HEIGHT%% %%WIDTH%% ALT=""  BORDER="0"></A>
+
+
+<!-- ITKBAN.FRONT End Ads //-->
+990
+</td>
+<td><a href="CITK1a2b3c4d5e6f7g8h9idefcon4.html">
+<img src="/images/dotblue.gif" border="0" height="1" width="1" align="right"></a></td>
+			</tr>
+		</table>
+		
+		</td>
+	</tr>
+		
+	<tr>
+		<td height="1" colspan="3" bgcolor="#003366"><img src="/images/dotclear.gif" border=0 alt=""></td>
+	</tr>
+</table>
+
+<!-- END HEADER -->
+
+
+<!-- BEGIN SUB HEADER -->
+
+<table bgcolor="#003366" cellpadding="0" cellspacing="0" border="0" width="100%">
+
+<!-- ITK TOPNAV -->
+	
+	<tr>
+		<td align="left" valign="top" nowrap><a href="/"><img src="/images/top_tabs/home_off.gif" alt="Home" border="0"></a><a href="/content/corp.html"><img src="/images/top_tabs/subscribe.gif" alt="Subscribe" border="0"></a><a href="/search/"><img src="/images/top_tabs/search.gif" alt="Search" border="0"></a><a href="/faq/faq.html"><img src="/images/top_tabs/faq.gif" alt="FAQ" border="0"></a><a href="/sitemap.html"><img src="/images/top_tabs/sitemap.gif" alt="Sitemap" border="0"></a><a href="/contactus.html"><img src="/images/top_tabs/contact_us.gif" alt="Contact Us" border="0"></a></td> 
+	</tr>
+	
+<!-- END of ITK TOPNAV -->
+
+<!-- ITK LOGO and newsletter sign up -->
+
+</table>
+	
+<table cellpadding="0" cellspacing="0" border="0" width="100%">
+
+	<tr>
+		<td align="left" valign="top" nowrap><img src="/images/itk_logo_sm.jpg" alt="" border="0"></td>
+		<td align="right"><font face="verdana, sans-serif" size="1">
+
+<script language="JavaScript">
+<!-- 
+
+var days = new Array(8);
+days[1] = "Sunday";
+days[2] = "Monday";
+days[3] = "Tuesday";
+days[4] = "Wednesday";
+days[5] = "Thursday";
+days[6] = "Friday";
+days[7] = "Saturday";
+
+var months = new Array(13);
+months[1] = "January";
+months[2] = "February";
+months[3] = "March";
+months[4] = "April";
+months[5] = "May";
+months[6] = "June";
+months[7] = "July";
+months[8] = "August";
+months[9] = "September";
+months[10] = "October";
+months[11] = "November";
+months[12] = "December";
+
+var dateObj = new Date()
+var wday = days[dateObj.getDay() + 1]
+var lmonth = months[dateObj.getMonth() + 1]
+var date = dateObj.getDate()
+var fyear = dateObj.getYear()
+if (fyear <1000) fyear += 1900;
+document.write(wday + ", " + lmonth + " " + date + ", " + fyear)
+                
+//-->
+</script>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>
+<br><br>
+
+<!-- <img src="/images/enterprise_logo.gif" width="254" height="51" border="0"> --></td>
+	</tr>
+</table>
+
+<!-- END ITK LOGO and newsletter sign up-->
+	
+<!-- begin of ITK left NAV -->
+
+<!-- BEGIN LEFT NAVBAR -->
+
+
+1000
+
+<!-- BEGIN LEFT NAVBAR -->
+
+	<table border="0" cellpadding="0" cellspacing="0">
+	
+	
+		<tr>
+		<td width="145" valign="top" align="left" rowspan=8>
+		
+	<!-- KEYWORD SEARCH -->
+<script language="JavaScript1.2">
+<!--
+function checkForQuery(fm) {
+  /* get the query value */
+  var i = escape(fm.query.value);
+  if (i == "") {
+      alert('Please enter a search word or phrase');
+      return false;
+  }                  /* query is blank, dont run the .jsp file */
+  else return true;  /* execute the .jsp file */
+}
+//-->
+</script>
+ 
+	
+	<form name="keyword" method="POST" action="http://ewsearch.earthweb.com:80/jsp/k2search/ewkwk2search.jsp" onSubmit=" return checkForQuery(this); ">
+
+<img src="/images/keyword_searcha.gif" vspace="5" width="145" alt="" border="0">
+<INPUT type="hidden" name="collection" value="corpitk">
+<INPUT type="hidden" name="altcoll" value="bookscorpitk">
+<INPUT type="hidden" name="hl" value="on">
+<INPUT name="sortspec" type=hidden value="vspubdate desc score desc">
+<INPUT name=fields type=hidden value="vdkvgwkey score vstitle vsauthor vsisbn vspublisher vspubdate">		
+<INPUT name=imageprefix type=hidden value="http://corpitk.earthweb.com">
+<INPUT name=ssiFolder type=hidden value="corpitkads">
+		
+		<table width="145" border="0" cellpadding="0" cellspacing="0">
+		<tr>
+		<td width="145">&nbsp;&nbsp;<input type="text" name="query" value="" size="11">&nbsp;<input type="image" width=28 height=23 border=0 value="Go" name="Go" src="/images/go.gif" align=absmiddle><br>
+			<font face="arial, helvetica" size="2">
+			<img src="/images/dotclear.gif" width="1" height="5" alt="" border="0"><br>
+			
+			&nbsp;&nbsp;<a href="/search/search-tips.html"><img src="/images/arrows_blue.gif" alt="" border="0"><font size="1" color="#ffffff">Search Tips</font></a><br>
+			&nbsp;&nbsp;<a href="/search/"><img src="/images/arrows_blue.gif" alt="" border="0"><font size="1" color="#ffffff">Advanced Search</font></a><br>
+			
+			</font>
+			
+		</td>
+		<td width="5"><img src="/images/dotclear.gif" width=5 height=10 hspace="5" alt="" border="0"></td>
+		</tr>
+		</table>
+	</form>
+		
+		
+<!-- BROWSE BY TOPIC -->
+		
+
+<form name="meta" method="POST" action="http://ewsearch.earthweb.com:80/jsp/k2search/ewmetak2search.jsp" onSubmit=" return checkForQuery(this); ">
+
+
+
+<img src="/images/publication_searcha.gif" width="145" alt="" border="0">
+<INPUT type="hidden" name="collection" value="bookscorpitk">
+<INPUT type="hidden" name="altcoll" value="corpitk">
+<INPUT type="hidden" name="hl" value="on">
+<INPUT name="sortspec" type=hidden value="vspubdate desc score desc">
+<INPUT name=fields type=hidden value="vdkvgwkey score vstitle vsauthor vspublisher vspubdate">
+<INPUT name=imageprefix type=hidden value="http://corpitk.earthweb.com">
+<INPUT name=ssiFolder type=hidden value="corpitkads">
+		
+<table width="145" border="0" cellpadding="0" cellspacing="0">
+	
+			<tr>
+			<td valign="top">
+			&nbsp;&nbsp;<input type="text" name="query" value="" size="11">&nbsp;<input type="image" width=28 height=23 border=0 value="Go" name="Go" src="/images/go.gif" align=absmiddle><br><font face="arial, helvetica" size="2">
+			&nbsp;&nbsp;<SELECT NAME="metatags" style="font-size: 12; font-family: sans-serif;" size="1">
+			<option value="vstitle" SELECTED>Title
+			<option value="vsauthor">Author
+			<option value="vspublisher">Publisher
+			<option value="vsisbn">ISBN			
+			</SELECT><br><br></font>
+			</td>
+			</tr>
+</table>
+</form>
+
+<form action="" name="catlist">	
+<table width="145" border="0" cellpadding="0" cellspacing="0">				
+			<tr>
+			<td valign="top">
+			<img src="/images/jump_topica.gif" width="145" alt="" border="0">
+			</td>
+			</tr>
+			<tr>
+			<td width="145">
+				
+	        	<font face="Arial,helvetica" size="1">
+				&nbsp;&nbsp;<SELECT NAME="cat" onChange='top.location.href=this.options[selectedIndex].value;' style="font-size: 10; font-family: sans-serif;">
+                        <option value="" selected>Please Select
+                        <option value="">-----------
+						<option value="/reference/dir.ai.html">Artificial Intel
+						<option value="/reference/dir.busman.ht
+ad1
+ml">Business &amp; Mgmt
+                        <option value="/reference/dir.components.html">Components
+                        <option value="/reference/dir.contentmanagement.html">Content Mgmt
+                        <option value="/reference/dir.certification1.html">Certification
+                        <option value="/reference/dir.databases.html">Databases
+                        <option value="/reference/dir.enterprisemanagement1.html">Enterprise Mgmt
+                        <option value="/reference/dir.funandgames1.html">Fun/Games
+                        <option value="/reference/dir.groupwareandcollaboration1.html">Groupware
+                        <option value="/reference/dir.hardware1.html">Hardware
+                        <option value="/reference/dir.ibmredbooks.html">IBM Redbooks
+                        <option value="/reference/dir.intranetandextranetdevelopment1.html">Intranet Dev
+                        <option value="/reference/dir.middleware.html">Middleware
+                        <option value="/reference/dir.multimediaandgraphicdesign1.html">Multimedia
+                        <option value="/reference/dir.networkservices1.html">Networks 
+                        <option value="/reference/dir.operatingsystems.html">OS
+                        <option value="/reference/dir.productivityapplications1.html">Productivity Apps
+                        <option value="/reference/dir.programminglanguages.html">Programming Langs
+                        <option value="/reference/dir.security1.html">Security  
+						<option value="/reference/dir.softwareengineering1.html">Soft Engineering
+                        <!-- <option value="/reference/dir.ewtraining1.html">Training Guides -->
+                        <option value="/reference/dir.userinterfaces.html">UI
+                        <option value="/reference/dir.webservices.html">Web Services
+                        <option value="/reference/dir.webmasterskills1.html">Webmaster
+                        <option value="/reference/dir.y2k1.html">Y2K
+                        <option value="">-----------
+                        <option value="/reference/whatsnew.html">New Arrivals
+                        </SELECT>
+						</font>
+			
+		</td>
+		</tr>
+	</table>
+	</form>
+	
+<!-- LEFT NAV SEARCH END -->
+
+<table border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td>
+<a href="/desktop/"><img src="/images/desktop_icona.gif" border=0 alt="Go to ITKnowledge Enterprise"></a><br><br></td>
+	</tr>
+</table>
+
+<!-- END LEFT NAVBAR -->
+
+
+
+<!-- END LEFT NAVBAR -->
+	
+	<td width="15"><img src="/images/dotclear.gif" width="15" alt="" border="0"></td>
+
+<!-- end of ITK left NAV -->
+
+<!-- begin main content -->
+	
+	<td width="100%" valign="top" align="left">
+		<br>
+
+<!-- END SUB HEADER -->
+
+
+
+674
+<!-- Created by dB Page Builder.  http://www.pchelponline.com/bluestem -->
+
+<!--Begin Content Column -->
+
+<TABLE border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td width=75 valign=top>
+<img src="/images/sm_covers/067230886x.gif" width=60 height=73 alt="Oracle Performance Tuning and Optimization" border="1">
+</td>
+<td align="left">
+    <font face="arial, helvetica" size="-1" color="#336633"><b>Oracle Performance Tuning and Optimization</b></font>
+    <br>
+    <font face="arial, helvetica" size="-1"><i>by Edward Whalen</i>
+    <br>
+    Sams,&nbsp;Macmillan Computer Publishing
+    <br>
+    <b>ISBN:</b>&nbsp;067230886x<b>&nbsp;&nbsp;&nbsp;Pub Date:</b>&nbsp;04/01/96</font>
+</td>
+</tr>
+</table>
+<P>
+<FORM name= "search2" method="POST" action="http://ewsearch.earthweb.com:80/jsp/k2search/ewintrak2search.jsp" onSubmit=" return checkForQuery(this); ">
+<INPUT type="hidden" name="collection" value="corpitk">
+<INPUT type="hidden" name="altcoll" value="bookscorpitk">
+<INPUT type="hidden" name="hl" value="on">
+<INPUT name="sortspec" type=hidden value="score desc">
+<INPUT name="fields" type=hidden value="vdkvgwkey score vstitle vsisbn vsauthor vspublisher vspubdate">
+<INPUT name="imageprefix" type=hidden value="http://corpitk.earthweb.com">
+<INPUT name="ssiFolder" type=hidden value="corpitk">
+<INPUT type="hidden" name="bookid" value="corpitk.earthweb.comreferencepro067230886x">
+
+<font face="arial, helvetica" size=2><b>Search this book:</b></font><br>
+<INPUT NAME="query" size=25 VALUE="">&nbsp;<input type="image" width=28 height=23 border=0 value="Go" name="Go" src="/images/go.gif" align=absmiddle>
+
+</form>
+
+
+22 
+
+<!-- Empty Reference Subhead -->
+1000
+
+
+<!--ISBN=067230886x//-->
+<!--TITLE=Oracle Performance Tuning and Optimization//-->
+<!--AUTHOR=Edward Whalen//-->
+<!--PUBLISHER=Macmillan Computer Publishing//-->
+<!--IMPRINT=Sams//-->
+<!--CHAPTER=19//-->
+<!--PAGES=303-306//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch18/301-302.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="306-308.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H2><A NAME="Heading1"></A><FONT COLOR="#000077">Chapter 19<BR>Data Warehousing System
+</FONT></H2>
+<P>The concept of the data warehouse has been emerging over the last few years, but with the new, faster computers and the reduction in the cost of disk storage, the data warehouse is finally becoming a reality. This chapter first looks at what a data warehouse is, then at the characteristics of the data warehouse, and then at the data access patterns seen in the data warehouse.
+</P>
+<P>As its name implies, the data warehouse is a storage depot for corporate data. Enormous amounts of data are concentrated in the data warehouse; sources for the data include the following:</P>
+<DL>
+<DD><B>&#149;</B>&nbsp;&nbsp;Customer information databases
+<DD><B>&#149;</B>&nbsp;&nbsp;Accounts receivable
+<DD><B>&#149;</B>&nbsp;&nbsp;General ledger
+<DD><B>&#149;</B>&nbsp;&nbsp;Inventory databases
+<DD><B>&#149;</B>&nbsp;&nbsp;Customer credit databases
+<DD><B>&#149;</B>&nbsp;&nbsp;Other sources
+</DL>
+<P>These sources combine to provide a wealth of data about customers and their buying habits as well as information about the general state of your business.
+</P>
+<P>A data warehousing system is similar to a DSS system in some of its functionality, but the scale and focus are different. A typical DSS system focuses on one type of business function; by using its various data-input sources, the data warehousing system may perform much broader business queries.</P>
+<P>Data warehousing systems can easily achieve sizes in the hundreds of gigabytes; some systems even break the terabyte barrier. These systems are made possible by the continuing trend of computer hardware to increase in speed while decreasing in price. In the near future, it may not be uncommon to see tables of a terabyte in size.</P>
+<P>Although the cost of data warehousing hardware is decreasing, it is still out of reach of the mainstream&#151;for now. As we go further into the information age and the value of information is better understood, I believe data warehousing will become more mainstream.</P>
+<H3><A NAME="Heading2"></A><FONT COLOR="#000077">Characteristics of a Data Warehouse</FONT></H3>
+<P>Here are some of the characteristics of the data warehousing system:
+</P>
+<DL>
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Queries against large volumes of data.</B> The data warehousing system consists of much more data than the typical OLTP or DSS system.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Queries exhibit a variety of access patterns.</B> Queries may be simple or quite complex, with complicated joins and aggregations on large amounts of data.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Highly complex queries.</B> Queries on a data warehouse are typically much more complex than those used in OLTP and DSS systems.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Data access stresses the system to its limitations.</B> The processes stretch the system in terms of both performance and capacity.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Intense load activity.</B> As data from various sources is entered into the data warehousing system, the load increases dramatically.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Is a conglomeration.</B> A data warehouse is a compilation of various input sources, usually tied into the corporate OLTP databases and other sources.
+</DL>
+<P>The load on the data warehousing system is typically very high. As with the DSS system, because users do not typically use a data warehousing system for online processing, it is reasonable to push the system to its limits.
+</P>
+<P>It is not uncommon for the decision
+dea
+ support queries run against the data warehousing system to take hours or even days to complete. The queries are complex and the amount of data being queried is enormous. These systems are optimized for throughput rather than for response times. By maximizing throughput, some jobs may suffer in terms of response time.</P>
+<P>If you think that the data warehousing system is just a glorified DSS system, you are partially correct. The data warehouse may just be the next step in the evolution of the DSS system. There are many similarities, but there are many differences as well.</P>
+<H4 ALIGN="LEFT"><A NAME="Heading3"></A><FONT COLOR="#000077">Data Access Patterns</FONT></H4>
+<P>The data access patterns seen in a data warehouse are fairly similar to those seen in a DSS system. Based on the types of transactions you generate, you should be able to fairly accurately determine these patterns. Although each system has its own specific data access patterns, the data warehousing system has the following, general characteristics:
+</P>
+<DL>
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Redo log activity is moderate to high.</B> Unlike the DSS system (where the redo log activity is very low), the redo log activity for a data warehouse may be moderate or even high. This is caused, not by the activity of the business transactions, but by the procedures necessary to prepare and load the data. The metadata may be constantly put together from many external sources.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Archiving activity is moderate to high.</B> As with the redo logs, there may be significant activity due to the conglomeration of data stored in the data warehouse.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Data access for each query is mostly sequential.</B> Because the queries usually extract large amounts of data from the tables, full-table scans are not uncommon.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Data reads can (and frequently do) take advantage of multiblock reads.</B> You can expect that many of the disk accesses are the size of multiblock reads.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Access to the data files is somewhat random.</B> As with the DSS system, this random access is caused by contention with other transactions and join and indexing operations that result in fairly random access across the data volumes. However, these random reads from the disk drives access the data with a much larger data request.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Data access may be sparse.</B> Because of the massive amounts of data being stored, there may be pockets of data infrequently accessed and other pockets that see much more frequent access.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Heavy access to the temporary tables.</B> Because of the typical size of many of the join and sort operations, the temporary tables are hit hard. Remember that only the sorts that use less memory than <TT>SORT_AREA_SIZE</TT> are in memory.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Data access may not be distributed evenly.</B> Because of the massive amount of data stored in the warehouse, it is not uncommon for queries to use only isolated pieces of data.
+</DL>
+<P>Although these patterns vary depending on how your system operates, the general principles are the same. The access patterns to your tables vary based on how often and how much is done to each table.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch18/301-302.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="306-308.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+
+
+55e
+<!-- all of the reference materials (books) have the footer and subfoot reveresed -->
+<!-- reference_subfoot = footer -->
+<!-- reference_footer = subfoot -->
+
+<!-- BEGIN SUB FOOTER -->
+	<br>
+	<img src="/images/dotclear.gif" width="5" height="7" border="0">
+	</TD>
+    </TR>
+	</TABLE>
+	
+	<table width="100%" border=0 cellpadding=0 cellspacing=0>
+	<tr>
+		<td align="left" width="160"><img src="/images/bot_curve.jpg" width="160" alt="" border="0"></td>
+		<td align="left" valign="top" nowrap><a href="/"><img src="/images/top_tabs/home_bot.gif" alt="home" border="0"></a><a href="/content/corp.html"><img src="/images/top_tabs/subscribe_bot.gif" alt="subscribe" border="0"></a><a href="/search/"><img src="/images/top_tabs/search_bot.gif" alt="search" border="0"></a><a href="/faq/faq.html"><img src="/images/top_tabs/faq_bot.gif" alt="faq" border="0"></a><a href="/sitemap.html"><img src="/images/top_tabs/sitemap_bot.gif" alt="sitemap" border="0"></a><a href="/contactus.html"><img src="/images/top_tabs/contact_us_bot.gif" alt="contactus" border="0"></a><img src="/images/dotclear.gif" width=260 height="1" alt="" border="0"></td> 
+	</tr>
+	</table>
+		
+	<table width="100%" bgcolor="#003366" border=0 cellpadding=0 cellspacing=0>
+	<tr>
+		<td align="left" width=145><img src="/images/clear_pixel.gif" width=145 height="1" alt="" border="0"></td>
+				
+<!-- END SUB FOOTER -->
+
+702
+
+<!-- all of the books have the footer and subfoot reveresed -->
+<!-- reference_subfoot = footer -->
+<!-- reference_footer = subfoot -->
+
+<!-- FOOTER -->
+			
+<td align="left" bgcolor="#003366">
+<table border="0" cellspacing="10" cellpadding="5">
+<tr>
+<td align="center">
+<font face="arial, helvetica" size="1" color="#cccccc"><b><a href="/products.html"><font color="#0099CC">Products</font></a>&nbsp;|&nbsp; <a href="/contactus.html"><font color="#0099CC">Contact Us</font></a>&nbsp;|&nbsp; <a href="/aboutus.html"><font color="#0099CC">About Us</font></a>&nbsp;|&nbsp; <a href="http://www.earthweb.com/dlink.corp|privacy-jhtml.72.0.-.-.jhtml" target="resource window"><font color="#0099CC">Privacy</font></a> &nbsp;|&nbsp; <a href="http://www.itmarketer.com/" target="resource window"><font color="#0099CC">Ad Info</font></a> &nbsp;|&nbsp; <a href="/"><font color="#0099CC">Home</font></a></b>
+<br><br>Use of this site is subject to certain <a href="/agreement.html"><font color="#0099CC">Terms &amp; Conditions</font></a>, <a href="/copyright.html"><font color="#0099CC">Copyright &copy; 1996-2000 EarthWeb Inc.</font></a> All rights reserved.  Reproduction whole or in part in any form or medium without express written <a href="http://www.earthweb.com/dlink.corp|permissions-jhtml.72.0.-.-.jhtml" target="resource window"><font color="#0099CC">permission</font></a> of EarthWeb is prohibited. Read EarthWeb's <A HREF="http://www.earthweb.com/dlink.corp|privacy-jhtml.72.0.-.-.jhtml" target="resource window"><font color="#0099CC">privacy</font></A> statement.</font><br><br>
+</td>
+</tr>
+</table>
+
+<a href="CITK1a2b3c4d5e6f7g8h9idefcon4.html">
+<img src="/images/dotclear.gif" border="0" height="1" width="1" align="left"></a>
+</td>
+		</tr>
+</table>
+</BODY>
+</HTML>
+
+<!-- END FOOTER -->
+
+
+0
+

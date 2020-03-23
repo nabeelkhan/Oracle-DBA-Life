@@ -1,0 +1,34 @@
+1. Enter the Forms & Reports 6i Release 2 CDROM in the drive. 
+
+2. Run the Program Compatibility Wizard 
+From Start Menu->Programs->Accessories->Program Compatibility Wizard 
+
+3. Click the following: 
+Next->I want to use the program in the CDROM drive-> 
+Next-> Microsoft Windows NT Service Pack 5-> 
+Next->Next-> 
+Next-> Yes, set this program to always use this compatibility settings-> 
+Next->No->Next->Finish 
+
+4. During the steps taken during the Program Compatibility Wizard the test screen actually runs up Oracle Installer and it is possible to perform the installation at this stage) If the decision was taken not to do this at this stage, perform the installation now by double-clicking on setup.exe. 
+
+5. Note having run through the above steps installing any product via the CD ROM Windows XP will remember to run in Windows NT 4.0 compatibility mode. 
+
+6. It is recommended to apply the latest patchset after the installation of Oracle Developer Forms & Reports 6i on Windows XP. 
+In order to be able to also apply the patchset succesfully, the Program Compatibiltity Wizard again needs to be invoked. 
+
+a. Specify 'I want to locate the program manually', 
+b. Browse for orainst.exe within the <patch extraction directory>\INSTALL 
+c. Set compatibility to be 'MS Windows NT 4.0 with Service Pack 5'. 
+d. Again either perform the installation during the compatibility test step or run orainst.exe from <patch extraction directory>\INSTALL directory after compatibility has been set. 
+
+
+
+
+Have A Great Day, 
+
+With Best Regards 
+NK
+
+
+

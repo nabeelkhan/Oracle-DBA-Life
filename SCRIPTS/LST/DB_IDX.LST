@@ -1,0 +1,178 @@
+Enter value for owner: 
+
+SQL> @LOGINS
+Press <Enter> to continue...Date: 03/18/03                                          Kuwait Insurance Co.                                         Page:   1      
+Time: 02:08 PM                                         Expandeded Index Report                                       PREMPROD       
+                                                        orakic database                                                             
+                                                                                                                                    
+L_PREMIA_U L_ L_LOGIN_ L_LOGOUT L_LOGIN_D L_SID L_SRNO   L_AUDSID USERNAME                       CONNECTIO                          
+---------- -- -------- -------- --------- ----- ------ ---------- ------------------------------ ---------                          
+ADEL01     ^  08:56:30 ^        18-MAR-03   121     50       9253 FINAL7                         DEDICATED                          
+AMAL01     20 07:52:23 ^        18-MAR-03    47     52       9127 PREMPROD                       DEDICATED                          
+ANAN       ^  08:09:15 ^        18-MAR-03    73     85       9161 FINAL7                         DEDICATED                          
+ATEF01     20 08:27:39 ^        18-MAR-03    59     72       9199 PREMPROD                       DEDICATED                          
+AYMANM02   40 13:01:46 ^        18-MAR-03    84     11       9528 PREMPROD                       DEDICATED                          
+AYMANM02   40 13:38:33 ^        18-MAR-03   169     18       9549 PREMPROD                       DEDICATED                          
+BAHJAT01   40 10:11:59 ^        18-MAR-03   120    229       9350 PREMPROD                       DEDICATED                          
+BS01       30 09:03:30 ^        18-MAR-03   139      2       9270 PREMPROD                       DEDICATED                          
+BUSHNAQ    ^  14:03:25 ^        18-MAR-03    37    122       9571 FINAL7                         DEDICATED                          
+CONNIE     20 08:34:13 ^        18-MAR-03   113     30       9211 PREMPROD                       DEDICATED                          
+DOLEH      60 08:00:52 ^        18-MAR-03    63     14       9142 PREMPROD                       DEDICATED                          
+DOLEH      ^  10:43:37 ^        18-MAR-03   164     72       9378 FINAL7                         DEDICATED                          
+ELIZABAC   10 12:18:13 ^        18-MAR-03   155    232       9490 PREMPROD                       DEDICATED                          
+FEIDI      ^  08:09:26 ^        18-MAR-03    75      2       9162 FINAL7                         DEDICATED                          
+FEIDIQ     10 08:10:26 ^        18-MAR-03    77     26       9165 PREMPROD                       DEDICATED                          
+FIRE01     30 12:07:54 ^        18-MAR-03    30    200       9480 PREMPROD                       DEDICATED                          
+FIRE01     30 10:42:30 ^        18-MAR-03    56     25       9376 PREMPROD                       DEDICATED                          
+FIRE07     30 08:12:45 ^        18-MAR-03    81     59       9169 PREMPROD                       DEDICATED                          
+GRACY      10 10:53:58 ^        18-MAR-03    69     94       9388 PREMPROD                       DEDICATED                          
+HAIFA      10 08:16:15 ^        18-MAR-03    86     60       9176 PREMPROD                       DEDICATED                          
+HALA01     40 07:46:28 ^        18-MAR-03    38      6       9110 PREMPROD                       DEDICATED                          
+HISHAM     40 12:30:43 ^        18-MAR-03   157    203       9507 PREMPROD                       DEDICATED                          
+HIYAMM03   40 10:36:49 ^        18-MAR-03    91    379       9371 PREMPROD                       DEDICATED                          
+HIYAMM03   40 10:36:48 ^        18-MAR-03   100    155       9372 PREMPROD                       DEDICATED                          
+HULLCLM    10 07:45:56 ^        18-MAR-03    36     77       9108 PREMPROD                       DEDICATED                          
+HULLPROD   10 13:57:54 ^        18-MAR-03   135    222       9563 PREMPROD                       DEDICATED                          
+HUSSAING02 20 13:32:53 ^        18-MAR-03    17     79       9546 PREMPROD                       DEDICATED                          
+IMAN       ^  14:09:04 ^        18-MAR-03   107    371       9576 FINAL7                         DEDICATED                          
+IMAN       ^  12:00:55 ^        18-MAR-03   115    139       9473 FINAL7                         DEDICATED                          
+IMAN_ACT   60 09:21:00 ^        18-MAR-03   140     63       9295 PREMPROD                       DEDICATED                          
+JICHI      20 12:02:15 ^        18-MAR-03   138    148       9476 PREMPROD                       DEDICATED                          
+JILANI01   20 07:37:31 ^        18-MAR-03    18      6       9084 PREMPROD                       DEDICATED                          
+JOHN03     10 07:44:20 ^        18-MAR-03    32      4       9102 PREMPROD                       DEDICATED                          
+KA09       20 13:37:32 ^        18-MAR-03   146     72       9547 PREMPROD                       DEDICATED                          
+KHAIRYF08  30 13:30:29 ^        18-MAR-03   145    118       9544 PREMPROD                       DEDICATED                          
+KHAIRYM08  40 07:45:25 ^        18-MAR-03    21    193       9106 PREMPROD                       DEDICATED                          
+KHALIL     20 08:05:18 ^        18-MAR-03    68      8       9157 PREMPROD                       DEDICATED                          
+MA01       20 14:04:23 ^        18-MAR-03    49    237       9572 PREMPROD                       DEDICATED                          
+MAHERRI    10 12:16:06 ^        18-MAR-03   171     36       9487 PREMPROD                       DEDICATED                          
+MAHM06     40 08:29:31 ^        18-MAR-03   106      9       9202 PREMPROD                       DEDICATED                          
+MARI01     40 14:01:40 ^        18-MAR-03    24     39       9568 PREMPROD                       DEDICATED                          
+MARI01     40 11:14:27 ^        18-MAR-03   153     75       9415 PREMPROD                       DEDICATED                          
+MARIAM     ^  07:37:58 ^        18-MAR-03    20      3       9087 FINAL7                         DEDICATED                          
+MARIAM_ACT 60 08:03:22 ^        18-MAR-03    55     31       9150 PREMPROD                       DEDICATED                          
+MHASSAN    10 08:01:56 ^        18-MAR-03    65     29       9146 PREMPROD                       DEDICATED                          
+MITHKAL07  40 11:48:48 ^        18-MAR-03    35    192       9454 PREMPROD                       DEDICATED                          
+MOHAMED01  40 11:43:19 ^        18-MAR-03   154    137       9450 PREMPROD                       DEDICATED                          
+MOSTAFA01  40 08:25:08 ^        18-MAR-03   102      4       9194 PREMPROD                       DEDICATED                          
+MQUERY01   40 07:57:00 ^        18-MAR-03    53     11       9130 PREMPROD                       DEDICATED                          
+MQUERY01   40 11:31:39 ^        18-MAR-03    60    240       9437 PREMPROD                       DEDICATED                          
+MQUERY01   40 09:31:14 ^        18-MAR-03   148     50       9307 PREMPROD                       DEDICATED                          
+MS01       30 11:33:40 ^        18-MAR-03   162    227       9442 PREMPROD                       DEDICATED                          
+Press <Enter> to continue...Date: 03/18/03                                          Kuwait Insurance Co.                                         Page:   2      
+Time: 02:08 PM                                         Expandeded Index Report                                       PREMPROD       
+                                                        orakic database                                                             
+                                                                                                                                    
+L_PREMIA_U L_ L_LOGIN_ L_LOGOUT L_LOGIN_D L_SID L_SRNO   L_AUDSID USERNAME                       CONNECTIO                          
+---------- -- -------- -------- --------- ----- ------ ---------- ------------------------------ ---------                          
+MUNIR      ^  10:31:19 ^        18-MAR-03    41    187       9367 FINAL7                         DEDICATED                          
+NABELR02   10 07:44:58 ^        18-MAR-03    34     17       9105 PREMPROD                       DEDICATED                          
+ND01       20 11:14:44 ^        18-MAR-03   150    286       9416 PREMPROD                       DEDICATED                          
+QUERY      10 08:33:16 ^        18-MAR-03   111     16       9208 PREMPROD                       DEDICATED                          
+QUERY      ^  08:20:20 ^        18-MAR-03    94     46       9184 FINAL7                         DEDICATED                          
+RASHA01    20 08:38:46 ^        18-MAR-03   117     54       9222 PREMPROD                       DEDICATED                          
+REEMA01    40 12:59:37 ^        18-MAR-03    88     75       9526 PREMPROD                       DEDICATED                          
+REEMA01    40 12:48:50 ^        18-MAR-03   149    240       9519 PREMPROD                       DEDICATED                          
+REEMA05    40 12:57:04 ^        18-MAR-03   128    203       9524 PREMPROD                       DEDICATED                          
+RETAG01    20 08:59:42 ^        18-MAR-03    83    128       9258 PREMPROD                       DEDICATED                          
+ROSEF06    30 08:04:58 ^        18-MAR-03    25     23       9156 PREMPROD                       DEDICATED                          
+SABER30    30 13:43:44 ^        18-MAR-03    28    228       9552 PREMPROD                       DEDICATED                          
+SABER30    30 13:50:33 ^        18-MAR-03    67    526       9557 PREMPROD                       DEDICATED                          
+SALAH01C   40 07:56:25 ^        18-MAR-03    52     40       9129 PREMPROD                       DEDICATED                          
+SALEHM04   40 08:09:50 ^        18-MAR-03    76     16       9163 PREMPROD                       DEDICATED                          
+SAMEERA08  40 07:58:32 ^        18-MAR-03    57     34       9135 PREMPROD                       DEDICATED                          
+SAMEERA08  40 13:13:18 ^        18-MAR-03   143    198       9535 PREMPROD                       DEDICATED                          
+SAYEDM09   40 07:41:14 ^        18-MAR-03    22    157       9091 PREMPROD                       DEDICATED                          
+SAYEDM09   40 07:49:44 ^        18-MAR-03    46     69       9120 PREMPROD                       DEDICATED                          
+SJ01       20 08:04:02 ^        18-MAR-03    62     24       9153 PREMPROD                       DEDICATED                          
+STEPHEN01  30 07:51:09 ^        18-MAR-03    51      6       9124 PREMPROD                       DEDICATED                          
+STEPHEN02  30 08:05:40 ^        18-MAR-03    71     19       9158 PREMPROD                       DEDICATED                          
+SUDEEP     ^  10:00:18 ^        18-MAR-03   156      2       9339 FINAL7                         DEDICATED                          
+SUZAN      40 10:23:36 ^        18-MAR-03    70     17       9360 PREMPROD                       DEDICATED                          
+SUZAN      40 13:13:15 ^        18-MAR-03    85    208       9534 PREMPROD                       DEDICATED                          
+SUZAN      40 11:15:21 ^        18-MAR-03   130    233       9419 PREMPROD                       DEDICATED                          
+SUZAN      40 11:59:18 ^        18-MAR-03   170     63       9469 PREMPROD                       DEDICATED                          
+YAMANI     ^  09:43:33 ^        18-MAR-03   151     17       9315 FINAL7                         DEDICATED                          
+SQL> @KILL_SESS
+Enter value for sid: 
+Enter value for srl: 
+ALTER SYSTEM KILL SESSION ', '
+*
+ERROR at line 1:
+ORA-00026: missing or invalid session ID 
+
+
+SQL> @KILL_SESS
+Enter value for sid: 146
+Enter value for srl: 72
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> @KILL_SESS
+Enter value for sid: 
+Enter value for srl: 
+ALTER SYSTEM KILL SESSION ', '
+*
+ERROR at line 1:
+ORA-00026: missing or invalid session ID 
+
+
+SQL> 
+SQL> @logins
+Press <Enter> to continue...Date: 03/18/03                                          Kuwait Insurance Co.                                         Page:   1      
+Time: 02:08 PM                                         Expandeded Index Report                                       PREMPROD       
+                                                        orakic database                                                             
+                                                                                                                                    
+L_PREMIA_U L_ L_LOGIN_ L_LOGOUT L_LOGIN_D L_SID L_SRNO   L_AUDSID USERNAME                       CONNECTIO                          
+---------- -- -------- -------- --------- ----- ------ ---------- ------------------------------ ---------                          
+ADEL01     ^  08:56:30 ^        18-MAR-03   121     50       9253 FINAL7                         DEDICATED                          
+AYMANM02   40 13:01:46 ^        18-MAR-03    84     11       9528 PREMPROD                       DEDICATED                          
+BAHJAT01   40 10:11:59 ^        18-MAR-03   120    229       9350 PREMPROD                       DEDICATED                          
+BS01       30 09:03:30 ^        18-MAR-03   139      2       9270 PREMPROD                       DEDICATED                          
+HIYAMM03   40 10:36:49 ^        18-MAR-03    91    379       9371 PREMPROD                       DEDICATED                          
+HIYAMM03   40 10:36:48 ^        18-MAR-03   100    155       9372 PREMPROD                       DEDICATED                          
+HUSSAING02 20 13:32:53 ^        18-MAR-03    17     79       9546 PREMPROD                       DEDICATED                          
+MQUERY01   40 09:31:14 ^        18-MAR-03   148     50       9307 PREMPROD                       DEDICATED                          
+SALEHM04   40 08:09:50 ^        18-MAR-03    76     16       9163 PREMPROD                       DEDICATED                          
+SQL> @login
+SP2-0310: unable to open file "login.sql"
+SQL> @login
+SP2-0310: unable to open file "login.sql"
+SQL> 
+SQL> clear scree
+SQL> @logins
+Press <Enter> to continue...Date: 03/18/03                                          Kuwait Insurance Co.                                         Page:   1      
+Time: 02:08 PM                                         Expandeded Index Report                                       PREMPROD       
+                                                        orakic database                                                             
+                                                                                                                                    
+L_PREMIA_U L_ L_LOGIN_ L_LOGOUT L_LOGIN_D L_SID L_SRNO   L_AUDSID USERNAME                       CONNECTIO                          
+---------- -- -------- -------- --------- ----- ------ ---------- ------------------------------ ---------                          
+ADEL01     ^  08:56:30 ^        18-MAR-03   121     50       9253 FINAL7                         DEDICATED                          
+AYMANM02   40 13:01:46 ^        18-MAR-03    84     11       9528 PREMPROD                       DEDICATED                          
+BAHJAT01   40 10:11:59 ^        18-MAR-03   120    229       9350 PREMPROD                       DEDICATED                          
+BS01       30 09:03:30 ^        18-MAR-03   139      2       9270 PREMPROD                       DEDICATED                          
+HIYAMM03   40 10:36:49 ^        18-MAR-03    91    379       9371 PREMPROD                       DEDICATED                          
+HIYAMM03   40 10:36:48 ^        18-MAR-03   100    155       9372 PREMPROD                       DEDICATED                          
+HUSSAING02 20 13:32:53 ^        18-MAR-03    17     79       9546 PREMPROD                       DEDICATED                          
+MQUERY01   40 09:31:14 ^        18-MAR-03   148     50       9307 PREMPROD                       DEDICATED                          
+SALEHM04   40 08:09:50 ^        18-MAR-03    76     16       9163 PREMPROD                       DEDICATED                          
+SQL> /
+Press <Enter> to continue...Date: 03/18/03                                          Kuwait Insurance Co.                                         Page:   1      
+Time: 02:08 PM                                         Expandeded Index Report                                       PREMPROD       
+                                                        orakic database                                                             
+                                                                                                                                    
+L_PREMIA_U L_ L_LOGIN_ L_LOGOUT L_LOGIN_D L_SID L_SRNO   L_AUDSID USERNAME                       CONNECTIO                          
+---------- -- -------- -------- --------- ----- ------ ---------- ------------------------------ ---------                          
+ADEL01     ^  08:56:30 ^        18-MAR-03   121     50       9253 FINAL7                         DEDICATED                          
+AYMANM02   40 13:01:46 ^        18-MAR-03    84     11       9528 PREMPROD                       DEDICATED                          
+BAHJAT01   40 10:11:59 ^        18-MAR-03   120    229       9350 PREMPROD                       DEDICATED                          
+BS01       30 09:03:30 ^        18-MAR-03   139      2       9270 PREMPROD                       DEDICATED                          
+HIYAMM03   40 10:36:49 ^        18-MAR-03    91    379       9371 PREMPROD                       DEDICATED                          
+HIYAMM03   40 10:36:48 ^        18-MAR-03   100    155       9372 PREMPROD                       DEDICATED                          
+HUSSAING02 20 13:32:53 ^        18-MAR-03    17     79       9546 PREMPROD                       DEDICATED                          
+MQUERY01   40 09:31:14 ^        18-MAR-03   148     50       9307 PREMPROD                       DEDICATED                          
+SALEHM04   40 08:09:50 ^        18-MAR-03    76     16       9163 PREMPROD                       DEDICATED                          
+SQL> EXIT

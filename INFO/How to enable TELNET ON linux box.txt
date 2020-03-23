@@ -1,0 +1,31 @@
+How to enable TELNET ON linux box
+
+http://www.linuxquestions.org/questions/history/227074
+
+a) Check if its installed
+
+Typing commands
+>which telnet
+shows
+/usr/kerberos/bin/telnet
+and
+>which ftp
+shows
+/usr/kerberos/bin/ftp
+
+
+I tried >ftp linuxboxname
+and get
+ftp: connect: connection refused
+
+telnet from the linux box to self gives
+trying 192.168.2.4...
+telnet: unable to connect to remote host: connection refused
+
+b) Go to /etc/xinetd.d
+
+c) edit krb5-telnet to change disable = yes to no
+
+d) restart service
+
+service xinetd restart 

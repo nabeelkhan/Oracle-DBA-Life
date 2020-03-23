@@ -1,0 +1,69 @@
+$!********************************************************************************
+$! Name         : Hot_bu.sh
+$! Purpose             : Perform a hot backup of an Oracle Database
+$! Limitations  : Creates read consistent image, but doesn't backup in process
+$!                        transactions
+$!
+$!********************************************************************************
+$!
+$! Define symbol for backup command so don't have to fully specify it each time
+$ dup_it = "backup/ignore=(noback,interlock,label) /log"
+$ !
+$ sqldba
+     connect internal
+     alter tablespace system begin backup;
+     exit
+$ dup_it m_ora_disk2:[m_oracle.oracle6.db_example]ora_system_1.dbs
+   mua0:ora_system.bck/save
+$!
+ sqldba
+   connect internal
+   alter tablespace system end backup;
+   alter tablespace tools begin backup;
+   exit
+$ dup_it m_ora_disk3:[m_oracle.oracle6.db_example]ora_tools_1.dbs
+  mua0:ts_tools.bck/save
+$!
+sqldba
+   connect internal
+   alter tablespace tools end backup;
+   alter tablespace user_tables begin backup;
+   exit
+$ dup_it m_ora_disk3:[m_oracle.oracle6.db_example]ora_user_tables_1.dbs-
+        mua0:ts_tools.bck/save
+$!
+   sqldba
+   alter tablespace user_tables end backup;
+   exit
+$! force write of all archive logs
+$!
+$ sqldba
+   connect internal
+   alter system switch logfile;
+   archive log all;
+   exit
+$!
+$ rename m_ora_disk5:[m_oracle.oracle6.db_example.archives]*.arc *.oldarc
+$! Now backup a control file
+$!
+$ sqldba
+   connect internal
+   alter database example 
+   backup controlfile to 
+   'm_ora_disk1:[m_oracle.oracle6.db_example]ora_control.bac 
+   reuse;
+   exit
+$ dup_it m_ora_disk1:[m_oracle.oracle6.db_example]ora_control1.con -
+        mua0:ora_control.bac/save
+$! now backup all archive logs
+$!
+$! you don't want to delete logs if an error causes them not to be backed up
+$ on error goto end_it
+$!
+$ dup_it m_ora_disk5:[m_oracle.oracle6.db_example.archives]*.oldarc-
+        mua0:ora_archives.bck/save
+$! Now delete logs
+$!
+$ delete/log m_ora_disk5:[m_oracle.oracle6.db_examples.archives]*.oldarc;*
+$ end_it:
+$ exit 

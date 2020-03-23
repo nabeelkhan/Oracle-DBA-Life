@@ -1,0 +1,53 @@
+By default in 10g Oracle Database uses the Flash recovery area, and this could be confiured according to retentions policy!
+
+
+In mount stage run the following query:
+
+SELECT substr(name, 1, 30) name, space_limit AS quota,
+       space_used        AS used,
+        space_reclaimable AS reclaimable,
+        number_of_files   AS files
+  FROM  v$recovery_file_dest ;
+
+NAME                                QUOTA       USED RECLAIMABLE      FILES
+------------------------------ ---------- ---------- ----------- ----------
+/u05/flash_recovery_area       2147483648  130774528           0          3
+
+
+The result will look like this... use the following command after setting up the SID
+
+on NT
+
+C:\> set oracle_sid=<your_sid_name>
+C:\> rman target /
+
+RMAN> CROSSCHECK ARCHIVELOG ALL;
+RMAN> LIST EXPIRED ARCHIVELOG ALL;
+RMAN> DELETE EXPIRED ARCHIVELOG ALL;
+
+
+on Linux/Unix
+
+[oracle@oracle2 ~]$ rman target /
+
+Recovery Manager: Release 10.2.0.2.0 - Production on Sun Apr 22 15:57:20 2007
+
+Copyright (c) 1982, 2005, Oracle.  All rights reserved.
+
+connected to target database: OVNNM (DBID=401492857)
+
+RMAN> CROSSCHECK ARCHIVELOG ALL;
+RMAN> DELETE EXPIRED ARCHIVELOG ALL;
+
+RMAN> Exit
+
+Return to sqlplus and start the database then 
+
+SQL> alter system archive log all;
+
+
+
+If incase you need to free up the space from flash_recovery_area then move the files from flash_recovery_area to any empty directory and then delete the files using RMAN, then in RMAN catalog the new location by doin the following:
+
+
+RMAN> CATALOG START WITH '/OVNNM_ARCS/';

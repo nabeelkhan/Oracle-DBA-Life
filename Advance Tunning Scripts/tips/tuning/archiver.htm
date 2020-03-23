@@ -1,0 +1,145 @@
+<html>
+	<head>
+		<title>
+			Archiver Tuning
+		</title>
+		<style>
+			<!-- a:hover{color:#660066;} -->
+		</style>
+	</head>
+	<body background="../../images/bg.jpg" link="#FF6600" vlink="#FF6600" alink="#660066">
+		
+		<h2 align="center">
+			<font color="#990000">
+				Archiver Tuning
+			</font>
+		</h2>
+		<p>
+		Your first priority when tuning archiving is to ensure that LGWR never gets stuck on a log switch waiting for ARCn to finish archiving a log file.
+		Your second priority is to minimize the impact that ARCn has on foreground processes when it is active.
+		Of course, these two priorities are opposed to one another.
+		Our preference is to tune ARCn to run quickly, and only slow it down if there is evidence that it is impacting foreground performance.
+		</p>
+		<p>
+		In addition to following the disk configuration principles outlined in our series of database creation tips,
+		the key areas to tune are the size and number of buffers available for archiving, and the number of ARCn processes.
+		<p>
+		
+		<h3>
+			<font color="#660066">
+				What size buffers?
+			</font>
+		</h3>
+		<p>
+		ARCn reads buffers of <em>_log_archive_buffer_size</em>, specified in log blocks, from the online log file,
+		and writes them to the archive destinations.
+		Therefore, ARCn's performance is maximized, and its load on the I/O subsystem is minimized
+		if <em>_log_archive_buffer_size</em> is set to the maximum value possible under your operating system.
+		If this parameter is unlimited on your operating system, then it is best set to several times the maximum physical I/O size.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				How many buffers?
+			</font>
+		</h3>
+		<p>
+		If multiple <em>_log_archive_buffers</em> are available and if asynchronous reads are possible from the online log files,
+		then ARCn will use the <em>aio_read</em>() system call to read the redo into multiple buffers in parallel.
+		If multiple log members are available,
+		then parallel asynchronous reads will be addressed to distinct log file members in order to spread the disk I/O load.
+		If hardware or software mirroring is used in preference to log file multiplexing,
+		then similar load balancing is performed automatically by the operating system or hardware.
+		Therefore, you should plan for the parallelism of archiving reads to be equal to the number of disks used for each log file,
+		whether mirrored or multiplexed, and configure that number of <em>_log_archive_buffers</em> up to a maximum of three.
+		</p>
+		<blockquote>
+			<small>
+				Note that multiple <em>_arch_io_slaves</em> cannot be used to simulate parallel asynchronous reads from the log file members.
+				ARCn always performs this task itself and only uses the I/O slaves for writing.
+			</small>
+		</blockquote>
+		<p>
+		To sustain asynchronous archiving writes if possible, two more <em>_log_archive_buffers</em> should be made available,
+		over and above those required for parallel reading from the log files.
+		This allows for maximum archival performance.
+		However, if your system is so CPU bound so that foreground performance is noticeably affected during archival,
+		and if there is no risk of archival backlogs, then the number of buffers may be reduced,
+		to spread out the CPU impact of archival over a longer period.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				How many processes?
+			</font>
+		</h3>
+		<p>
+		As explained in <b><a href="../creation/archived_log_files.htm">Disk Configuration for Archived Log Files</a></b>,
+		it is normal to require multiple ARCn processes if heavy redo generation will be sustained, or if archiving to multiple destinations.
+		From release 8.1, this is allowed for by setting the <em>log_archive_max_processes</em> parameter.
+		Under earlier releases, it is necessary to schedule a regular job to run the ALTER SYSTEM ARCHIVE LOG ALL command.
+		This command has very little impact if there is no archival backlog.
+		It just takes a shared lock on the CF enqueue briefly.
+		However, if an archival backlog is developing, this command effectively spawns an extra ARCn process to help catch up the backlog.
+		</p>
+		<p>
+		The ability to run multiple ARCn processes is your most important insurance against LGWR getting stuck behind archival backlogs.
+		However, for this strategy to be effective, it is essential that the disks for the online files and archive destinations be configured appropriately.
+		</p>
+		<p>
+		Because manual archiving is always possible, Oracle holds an exclusive WL (writing log) enqueue lock on any online log file while archiving it,
+		regardless of the <em>log_archive_max_processes</em> setting.
+		Operations against these enqueues are protected by the <em>archive control</em> latch.
+		Archival activity can be inferred from standard performance reports
+		(such as those produced with <em>utlbstat.sql</em> and <em>utlestat.sql</em>)
+		by examining the gets against this latch.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				Are there any other issues?
+			</font>
+		</h3>
+		<p>
+		Yes, there are two more dangers to be aware of that can impact ARCn performance.
+		</p>
+		<p>
+		In a parallel server environment, when an instance is not up, its thread is closed but remains enabled.
+		If the current SCN of a closed, enabled threads falls behind the force SCN,
+		then a log switch is forced in that thread and the ARCn process of an active instance archives the log file on behalf of the inactive instance.
+		Of course, this distracts the ARCn process in that instance from doing its own job.
+		While that ARCn process will suspend this work to archive a log for its own instance if posted by its LGWR,
+		this should be avoided entirely either by keeping the idle instance up, or by disabling its redo thread.
+		</p>
+		<p>
+		Archival is also disabled entirely during the roll forward phase of instance and media recovery.
+		So try to ensure clean shutdowns, and keep redo generation to a minimum during and shortly after online recovery.
+		</p>
+		
+		
+		<hr noshade align="left" width="300" size="2" color="black">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="1000">
+					<font size="2" color="#660066">
+						<strong>
+							Copyright © Ixora Pty Ltd
+						</strong>
+					</font>
+				</td>
+				<td valign="top" align="right">
+					<nobr>
+					<map name="email">
+						<area shape="rect" coords="0, 0, 32, 21" title="Feedback" href="mailto:feedback@ixora.com.au?SUBJECT=[Tip] archiver.htm">
+					</map>
+					<img ismap usemap="#email" border="0" alt="Send Email" src="../../images/email.gif" width="32" height="21">
+					<map name="home">
+						<area shape="rect" coords="0, 0, 28, 28" title="Home" href="/">
+					</map>
+					<img ismap usemap="#home" border="0" alt="Home" src="../../images/home.gif" width="28" height="28">
+					</nobr>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

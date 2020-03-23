@@ -1,0 +1,309 @@
+########################################################################
+#               Oracle Database Tuning Report                        			        #
+########################################################################
+
+Instance Name:
+
+orakic                                                                                                                                                                                                                                                                        
+
+
+Date Of This Report:
+
+18 March     2003  12:09                                                                                                                                                                                                                                                      
+
+
+########################################################################
+
+Memory Allocation Checks
+
+########################################################################
+
+
+Library Cache Check
+
+Goal:			<1%
+
+Corrective Action:	Increase shared_pool_size
+.			Write identical SQL statements
+
+
+Library Cache Miss Ratio (%)                                                                                                                                                                                                                                                  
+----------------------------                                                                                                                                                                                                                                                  
+                         .19                                                                                                                                                                                                                                                  
+
+
+########################################################################
+
+Data Dictionary Cache Check
+
+Goal:			<10%
+
+Corrective Actions:	Increase shared_pool_size
+
+
+Data Dictionary Cache Miss Ratio (%)                                                                                                                                                                                                                                          
+------------------------------------                                                                                                                                                                                                                                          
+                                3.62                                                                                                                                                                                                                                          
+
+
+########################################################################
+
+Multi-Threaded Server Session Memory
+
+Goal:			Shared_pool_size at lease equal to maximum
+.			session memory
+
+Corrective Action:	Increase shared_pool_size
+
+
+Session Memory (Bytes)                                                                                                                                                                                                                                                        
+----------------------                                                                                                                                                                                                                                                        
+^                                                                                                                                                                                                                                                                             
+
+
+Shared_Pool_Size (Bytes)                                                                                                                                                                                                                                                      
+------------------------                                                                                                                                                                                                                                                      
+             855,638,016                                                                                                                                                                                                                                                      
+
+
+########################################################################
+
+Buffer Cache Hit Ratio
+
+Goal:			Above 60 to 70 percent
+
+Corrective Action:	Increase db_block_buffers
+
+
+Hit Ratio (%)                                                                                                                                                                                                                                                                 
+-------------                                                                                                                                                                                                                                                                 
+         93.0                                                                                                                                                                                                                                                                 
+
+
+########################################################################
+
+Disk I/O Checks
+
+########################################################################
+########################################################################
+
+Disk Activity Check
+
+Goal:			Balance Load Between Disks
+
+Corrective Action:	Transfer files, reduce other loads to disks,
+.			striping disks, separating data files and redo
+.			logs
+
+
+
+Data File                                            Reads       Writes                                                                                                                                                                                                       
+--------------------------------------------- ------------ ------------                                                                                                                                                                                                       
+/u01/ORADATA/orakic/orakic/system01.dbf              6,068        2,048                                                                                                                                                                                                       
+/u01/ORADATA/orakic/orakic/undotbs01.dbf                51       23,386                                                                                                                                                                                                       
+/u01/ORADATA/orakic/orakic/drsys01.dbf                 160            2                                                                                                                                                                                                       
+/u01/ORADATA/orakic/orakic/example01.dbf               400            2                                                                                                                                                                                                       
+/u01/ORADATA/orakic/orakic/indx01.dbf                    6            2                                                                                                                                                                                                       
+/u01/ORADATA/orakic/orakic/odm01.dbf                   101            2                                                                                                                                                                                                       
+/u01/ORADATA/orakic/orakic/tools01.dbf                 766            3                                                                                                                                                                                                       
+/u01/ORADATA/orakic/orakic/users01.dbf                   6            2                                                                                                                                                                                                       
+/u01/ORADATA/orakic/orakic/xdb01.dbf                   611            2                                                                                                                                                                                                       
+/u01/ORADATA/orakic/orakic/EDP.dbf                     820            2                                                                                                                                                                                                       
+/u01/ORADATA/orakic/orakic/FIN7IDXTAB.dbf            3,313        6,595                                                                                                                                                                                                       
+/u01/ORADATA/orakic/orakic/FIN7IDX_NYR.dbf           7,499        1,304                                                                                                                                                                                                       
+/u01/ORADATA/orakic/orakic/FIN7LIFE.dbf                456           78                                                                                                                                                                                                       
+/u01/ORADATA/orakic/orakic/FINAL7.dbf               58,267        1,516                                                                                                                                                                                                       
+/u01/ORADATA/orakic/orakic/LIFE.dbf                  8,526       13,134                                                                                                                                                                                                       
+/u01/ORADATA/orakic/orakic/PAYROLL.dbf                   6            2                                                                                                                                                                                                       
+/u01/ORADATA/orakic/orakic/PREMIA.dbf            1,365,209       21,297                                                                                                                                                                                                       
+/u01/ORADATA/orakic/orakic/PREMIDXTAB.dbf           33,103       25,110                                                                                                                                                                                                       
+/u01/ORADATA/orakic/orakic/SHARES.dbf                  317           99                                                                                                                                                                                                       
+/u01/ORADATA/orakic/orakic/SHS_DATA.dbf                 51            2                                                                                                                                                                                                       
+
+
+########################################################################
+
+Oracle Contention Checks
+
+########################################################################
+########################################################################
+
+Rollback Segment Contention
+
+Goal:			Measured Counts < 1% of total gets
+.			(the choice of Oracle column names makes it
+.			impossible to do this calculation for you)
+
+Corrective Action:	Add more rollback segments
+
+
+
+      Total Gets                                                                                                                                                                                                                                                              
+----------------                                                                                                                                                                                                                                                              
+     163,070,813                                                                                                                                                                                                                                                              
+
+
+
+Class                      Counts                                                                                                                                                                                                                                             
+-------------------- ------------                                                                                                                                                                                                                                             
+system undo header              1                                                                                                                                                                                                                                             
+system undo block               0                                                                                                                                                                                                                                             
+undo header                   216                                                                                                                                                                                                                                             
+undo block                     95                                                                                                                                                                                                                                             
+
+
+########################################################################
+
+Latch Contention Analysis
+
+Goal:			< 1% miss/get for redo allocation
+.			< 1% immediate miss/get for redo copy
+
+Corrective Action:	Redo allocation-  decrease log_small_entry_
+.			  max_size
+.			Redo copyIncrease log_simultaneous_copies
+
+
+
+Latch Type                Misses/Gets (%) Immediate Misses/Gets (%)                                                                                                                                                                                                           
+------------------------- --------------- -------------------------                                                                                                                                                                                                           
+redo copy                          .00000                    .14202                                                                                                                                                                                                           
+redo allocation                    .05937                    .00000                                                                                                                                                                                                           
+
+
+########################################################################
+
+MTS Dispatcher Contention
+
+Goal:			< 50%
+
+Corrective Action:	Add dispatcher processes
+
+
+
+Protocol        Percent Busy                                                                                                                                                                                                                                                  
+--------------- ------------                                                                                                                                                                                                                                                  
+(ADDRESS=(PROTO       .00953                                                                                                                                                                                                                                                  
+COL=tcp)(HOST=k                                                                                                                                                                                                                                                               
+ic-compaq)(PORT                                                                                                                                                                                                                                                               
+=1127))                                                                                                                                                                                                                                                                       
+                                                                                                                                                                                                                                                                              
+
+
+########################################################################
+
+Shared Server Process Contention
+
+Goal:			Shared processes less that MTS_MAX_SERVERS
+
+Corrective Action:	Alter MTS_MAX_SERVERS
+
+
+
+Average wait per request                                                                                                                                                                                                                                                      
+-------------------------------------------------                                                                                                                                                                                                                             
+01/100 sec                                                                                                                                                                                                                                                                    
+
+
+Shared Server Processes                                                                                                                                                                                                                                                       
+-----------------------                                                                                                                                                                                                                                                       
+                      2                                                                                                                                                                                                                                                       
+
+
+Latch Type                MTS_MAX_SERVERS                                                                                                                                                                                                                                     
+------------------------- ---------------                                                                                                                                                                                                                                     
+mts_max_servers                        20                                                                                                                                                                                                                                     
+
+
+########################################################################
+
+Redo Log Buffer Space Contention
+
+Goal:			Near 0
+
+Corrective Action:	Increase size of redo log buffer
+
+
+
+    Requests                                                                                                                                                                                                                                                                  
+------------                                                                                                                                                                                                                                                                  
+           5                                                                                                                                                                                                                                                                  
+
+
+########################################################################
+
+Sort Memory Contention
+
+Goal:			Mimimize sorts to disk
+
+Corrective Action:	Increase sort-area-size
+
+
+
+Type                  Number                                                                                                                                                                                                                                                  
+--------------- ------------                                                                                                                                                                                                                                                  
+sorts (memory)        74,042                                                                                                                                                                                                                                                  
+sorts (disk)              55                                                                                                                                                                                                                                                  
+
+
+########################################################################
+
+Free List Contention
+
+Goal:			Number of counts less that 1% of total gets
+
+Corrective Action:	Increase free lists (per table)
+
+
+
+      Total Gets                                                                                                                                                                                                                                                              
+----------------                                                                                                                                                                                                                                                              
+     163,072,118                                                                                                                                                                                                                                                              
+
+
+Class                      Counts                                                                                                                                                                                                                                             
+-------------------- ------------                                                                                                                                                                                                                                             
+free list                       0                                                                                                                                                                                                                                             
+
+
+
+########################################################################
+########################################################################
+
+sar statistics
+
+These statistics have been gathered by the operating system's sar
+utility.
+
+The data will be concantonated onto the end of this file approximately
+five minutes after the dbcheck script is started (these processes
+monitor operating system activity for 5 minutes)
+
+
+Factors to watch:
+
+%idle > 0 at peak load	If users see appreciable degradation and
+.			user CPU time > system CPU time and memory
+.			and disks are not issued, then larger
+.			CPU needed
+
+bread,bwrit,pread,pwrit	If this sum if over 40 for two drives or
+.			60 for 4 to 8 drives, I/O problem
+
+%wio			If consistently greater than 20, may be
+.			I/O bound
+
+%rcache > 90		For file systems, else I/O bound
+% wcache > 60		For file systems, else I/O bound
+
+page outs,swaps outs	If high, memory may be too small
+
+
+########################################################################
+
+System Monitoring Data
+
+########################################################################
+
+
+SP2-0734: unknown command beginning "End Of Scr..." - rest of line ignored.

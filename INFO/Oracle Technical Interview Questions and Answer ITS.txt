@@ -1,0 +1,4532 @@
+PL/SQL Question:
+
+1)	Describe the difference between a procedure, function and anonymous PL/SQL block?
+
+Function returns value, A function is a module that returns a value. Unlike a procedure, which is a standalone executable statement, a call to a function can only be part of an executable statement. 
+
+A PL/SQL procedure is a stand alone program that is compiled into an Oracle database schema. Procedures can accept arguments. Procedure may /may not return value
+
+Anonymous pl/sql block: unnamed pl/sql block,its not store in database anonymous blocks are anonymous block procedures
+
+
+
+2)	What is a mutating table error and how can you get around it?
+
+A mutating table is a table that is currently being modified by an UPDATE, DELETE, or INSERT statement, or a table that might be updated by the effects of a DELETE CASCADE constraint
+
+A mutating table is a table that is currently being modified by an update, delete, or insert statement. If you have a row trigger that reads or modifies the mutating table then you will encounter the ORA-04091 error. For example, if your trigger contains a select statement referencing the table it is triggering from then you will see this error.
+
+The law about triggers is that in the body of the trigger it is forbidden to do a DML operation on the table that fired the trigger. This is so because a trigger is considered a part of the DML operation that fired it. So, the SELECT statement from x that you're doing in the body of the trigger causes the table to mutate.
+
+
+
+We must defer processing against the mutating or constrainng table until an AFTER trigger
+
+
+3)	Describe the use of %ROWTYPE AND %TYPE in PL/SQL?
+
+Using %TYPE
+The %TYPE attribute provides the datatype of a variable or database column. In the following example, %TYPE provides the datatype of a variable:
+
+credit REAL(7,2);
+debit  credit%TYPE;
+
+
+Variables declared using %TYPE are treated like those declared using a datatype specifier. For example, given the previous declarations, PL/SQL treats debit like a REAL(7,2) variable. The next example shows that a %TYPE declaration can include an initialization clause:
+
+balance         NUMBER(7,2);
+minimum_balance balance%TYPE := 10.00;
+
+
+The %TYPE attribute is particularly useful when declaring variables that refer to database columns. You can reference a table and column, or you can reference an owner, table, and column, as in
+
+my_dname scott.dept.dname%TYPE;
+
+
+Using %TYPE to declare my_dname has two advantages. First, you need not know the exact datatype of dname. Second, if the database definition of dname changes, the datatype of my_dname changes accordingly at run time.
+
+However, %TYPE variables do not inherit the NOT NULL column constraint. In the next example, even though the database column empno is defined as NOT NULL, you can assign a null to the variable my_empno:
+
+DECLARE
+   my_empno emp.empno%TYPE;
+   ...
+BEGIN
+   my_empno := NULL;  -- this works
+
+Using %ROWTYPE
+The %ROWTYPE attribute provides a record type that represents a row in a table (or view). The record can store an entire row of data selected from the table or fetched from a cursor or strongly typed cursor variable. In the example below, you declare two records. The first record stores a row selected from the emp table. The second record stores a row fetched from cursor c1.
+
+DECLARE
+   emp_rec emp%ROWTYPE;
+   CURSOR c1 IS SELECT deptno, dname, loc FROM dept;
+   dept_rec c1%ROWTYPE;
+
+
+Columns in a row and corresponding fields in a record have the same names and datatypes. However, fields in a %ROWTYPE record do not inherit the NOT NULL column constraint.
+
+In the following example, you select column values into record emp_rec:
+
+BEGIN
+   SELECT * INTO emp_rec FROM emp WHERE ...
+
+
+The column values returned by the SELECT statement are stored in fields. To reference a field, you use dot notation. For example, you might reference the deptno field as follows:
+
+IF emp_rec.deptno = 20 THEN ...
+
+
+Also, you can assign the value of an expression to a specific field, as the following examples show:
+
+emp_rec.ename := 'JOHNSON';
+emp_rec.sal := emp_rec.sal * 1.15;
+
+
+In the final example, you use %ROWTYPE to define a packaged cursor:
+
+CREATE PACKAGE emp_actions AS
+   CURSOR c1 RETURN emp%ROWTYPE;  -- declare cursor specification
+   ...
+END emp_actions;
+
+CREATE PACKAGE BODY emp_actions AS
+   CURSOR c1 RETURN emp%ROWTYPE IS  -- define cursor body
+      SELECT * FROM emp WHERE sal > 3000;
+   ...
+END emp_actions;
+
+
+
+
+
+
+
+4)	What Package: (If any) has Oracle provided for use by developer?
+
+dbms_output too is a package
+
+http://www.unix.org.ua/orelly/oracle/advprog/index.htm
+
+
+What Is a PL/SQL Package?
+A package is a collection of PL/SQL elements that are "packaged" or grouped together within a special BEGIN-END syntax, a kind of "meta-block." Here is a partial list of the kinds of elements you can place in a package:
+
+Cursors
+
+Variables (scalars, records, tables, etc.) and constants
+
+Exception names and pragmas for associating an error number with an exception
+
+PL/SQL table and record TYPE statements
+
+Procedures and functions
+
+Packages are among the least understood and most underutilized features of PL/SQL. That's a shame because the package structure is also one of the most useful constructs for building well-designed PL/SQL-based applications. Packages provide a structure to organize your modules and other PL/SQL elements. They encourage proper structured programming techniques in an environment that often befuddles the implementation of structured programming. When you place a program unit into a package you automatically create a "context" for that program. By collecting related PL/SQL elements in a package, you express that relationship in the very structure of the code itself. Packages are often called "the poor man's objects" because they support some, but not all, object-oriented rules.
+
+The PL/SQL package is a deceptively simple, yet powerful construct. It consists of up to two distinct parts: the specification and the body. 
+
+The package specification, which defines the public interface (API) of the package: those elements that can be referenced outside of the package. 
+
+The package body, which contains the implementation of the package and elements of the package you want to keep hidden from view.
+
+In just a few hours you can learn the basic elements of package syntax and rules; there's not all that much to it. You can spend weeks and months, however, uncovering all the nuances and implications of the package structure. 
+
+Oracle Corporation itself uses the package construct to define and extend the PL/SQL language. In fact, the most basic operators of the PL/SQL language, such as the + and LIKE operators and the INSTR function, are all defined in a special package called STANDARD.[1] Packages will, without doubt, be the preferred method of delivering new functionality in PL/SQL in the coming decade. Just consider PL/SQL packages in the Oracle Web Agent: these add-ons provide a powerful interface between World Wide Web pages/HTML and the Oracle database, allowing you to construct Oracle-aware WWW pages more easily.
+
+[1] If Oracle believes that packages are the way to go when it comes to building both fundamental and complex programs, don't you think that you could benefit from the same?
+
+Builtin Packages
+Table 1.1 shows a partial list of builtin packages provided by Oracle Corporation. Unless otherwise noted, these packages are available in PL/SQL Release 2.1 and beyond. Most of these packages are installed by default when you create a database instance. In some cases, you may have to grant execute privileges on specific packages (such as DBMS_LOCK and DBMS_SQL) in order to make them available to your user community.
+
+
+Table 1.1: Some of the Builtin Packages Stored in the Oracle Database  Package Name
+ Description
+ 
+DBMS_ALERT
+ Provides support for notification of database events on an asynchronous basis. Registers a process with an alert and then waits for a signal from that alert. 
+ 
+DBMS_DDL
+ Provides a programmatic access to some of the SQL DDL statements.
+ 
+DBMS_JOB
+ Used to submit and manage regularly scheduled jobs for execution inside the database. 
+ 
+DBMS_LOCK
+ Allows users to create their own locks using the Oracle Lock Management (OLM) services in the database.
+ 
+DBMS_MAIL
+ Offers an interface to Oracle Office (previously known as Oracle Mail).
+ 
+DBMS_OUTPUT
+ Displays output from PL/SQL programs to the terminal. The "lowest common denominator" debugger mechanism for PL/SQL code.
+ 
+DBMS_PIPE
+ Allows communication between different Oracle sessions through a pipe in the RDBMs shared memory. One of the few ways to share memory-resident data between Oracle sessions.
+ 
+DBMS_SESSION
+ Provides a programmatic interface to several SQL ALTER SESSION commands and other session-level commands.
+ 
+DBMS_SNAPSHOT
+ A programmatic interface through which you can manage snapshots and purge snapshot logs. You might use modules in this package to build scripts to automate maintenance of snapshots.
+ 
+DBMS_SQL
+ Full support for dynamic SQL within PL/SQL. Dynamic SQL means SQL statements that are not prewritten into your programs. They are, instead, constructed at runtime as character strings and then passed to the SQL Engine for execution. (PL/SQL Release 2.1 only)
+ 
+DBMS_TRANSACTION
+ A programmatic interface to a number of the SQL transaction statements, such as the SET TRANSACTION command.
+ 
+DBMS_UTILITY
+ The "miscellaneous" package. Contains various useful utilities, such as GET_TIME, which calculates elapsed time to the hundredth of a second, and FORMAT_CALL_STACK, which returns the current execution stack in the PL/SQL runtime engine.
+ 
+UTL_FILE
+ Allows PL/SQL programs to read from and write to operating system files. (PL/SQL Release 2.3 only)
+ 
+
+All of the packages in Table 1.1 are stored in the database and can be executed by both client and server-based PL/SQL programs. In addition to these packages, many of the development tools, like Oracle Forms, offer their own specific package extensions as well, such as packages to manage OLE2 objects and DDE communication.
+
+It is no longer sufficient for a developer to become familiar simply with the basic PL/SQL functions like TO_CHAR and ROUND. Those functions have now become simply the inner layer of useful functionality. Oracle Corporation has built upon them, and you should do the same. (To take full advantage of the Oracle technology as it blasts its way to the 21st century, you must be aware of these packages and how they can help you.)
+
+Builtin packages can and should revolutionize the code you write. With the last few releases of the Oracle Corporation's CDE tools, Oracle Server, and PL/SQL itself, the software vendor has shifted course. As Oracle developed the code it needed to implement new features, it no longer hid that code from the rest of the world. Instead, Oracle has exposed that code -- invariably structured as one or more packages -- so that all developers can also take advantage of those same techniques it employs. The next section gives you an example of this process.
+
+
+
+
+5)	Describe the use of PL/SQL tables?
+
+http://www.unix.org.ua/orelly/oracle/prog2/ch10_01.htm
+
+A definition worth repeating: A PL/SQL table is a one-dimensional, unbounded, sparse collection of homogenous elements, indexed by integers. 
+
+Let's examine each of these characteristics in detail:
+
+One-dimensional
+A PL/SQL table can have only one column. It is, in this way, similar to a one-dimensional array. You cannot define a PL/SQL table so that it can be referenced as follows: 
+
+my_table (10, 44)
+This is a two-dimensional structure and not currently supported.
+
+Unbounded or Unconstrained
+There is no predefined limit to the number of rows in a PL/SQL table. The PL/SQL table grows dynamically as you add more rows to the table. The PL/SQL table is, in this way, very different from an array. 
+
+Related to this definition, no rows for PL/SQL tables are allocated for this structure when it is defined. 
+
+Sparse
+In a PL/SQL table, a row exists in the table only when a value is assigned to that row. Rows do not have to be defined sequentially. Instead you can assign a value to any row in the table. So row 15 could have a value of `Fox' and row 15446 a value of `Red', with no other rows defined in between. 
+
+In contrast, an array is a dense data structure. When you declare an array, all cells in the array are allocated in memory and are ready to use. 
+
+Homogeneous elements
+Because a PL/SQL table can have only a single column, all rows in a PL/SQL table contain values of the same datatype. It is, therefore, homogeneous. 
+
+With PL/SQL Release 2.3, you can have PL/SQL tables of records. The resulting table is still, however, homogeneous. Each row simply contains the same set of columns. 
+
+Indexed by integers
+PL/SQL tables currently support a single indexing mode: by BINARY_INTEGER. This number acts as the "primary key" of the PL/SQL table. The range of a BINARY_INTEGER is from -231-1 to 231-1, so you have an awful lot of rows with which to work.[1] 
+
+[1] Notice that the index of a row in the table can even be negative. In the PL/SQL table, a negative row number is no different from a positive one; it's just another integer. However, there are ways that you, the programmer, can take advantage of differences between positive and negative row numbers in your application. For example, the ps_global package, included on the companion disk, uses rows with positive numbers to store "globals-by-number" and uses negative row values to store "globals-by-name".
+
+Because the row number does not have to be used sequentially and has such enormous range, you can use this integer index in interesting ways. For example, the row number for a PL/SQL table could be the primary key of your company table, so that: 
+
+company_name (14055)
+contains the name of the company whose company_id = 14055.
+
+
+
+
+6)	When is a declare statement needed?
+
+its optional...
+
+has to be given at start of pl block...
+
+eg...
+
+declare... begin.... exception.... end;
+
+set serveroutput on
+begin
+dbms_output.put_line('test');
+end;
+
+but when we have variables to define we need the declare statement rite?
+
+yes..
+
+
+7)	In what order should a OPEN/FETCH/LOOP set of commands in a PL/SQL block be implemented if you use the %NOTFOUND cursor variable in the exit when statement? Why?
+
+The %NOTFOUND attribute is the opposite of %FOUND. It returns TRUE if the cursor is unable to fetch another row because the last row was fetched. If the cursor is unable to return a row because of an error, the appropriate exception is raised. If the cursor has not yet been opened, a reference to the %NOTFOUND attribute raises the INVALID_CURSOR exception. You can evaluate the %NOTFOUND attribute of any open cursor, because you reference the cursor by name.
+The following expressions are equivalent:
+
+cursor_name%NOTFOUND = NOT cursor_name%FOUND;
+cursor_name%FOUND    = NOT cursor_name%NOTFOUND
+Prefix %NOTFOUND with the cursor variable name, for example, C1%NOTFOUND. For implicit cursors prefix it with “SQL.”
+
+
+%NOTFOUND Format
+>>??A?cursor_name????????????????A?%NOTFOUND??><
+    ??cursor_variable_name???????´
+    A?:host_cursor_variable_name?U
+Click on each parameter in BLUE for an explanation of its use ...
+
+Description
+
+Examples
+In the following example, all records are fetched. When the last record is fetched, the %NOTFOUND is TRUE.
+DECLARE
+   CURSOR c1 IS SELECT * FROM emp;
+   c1_rec c1%ROWTYPE;
+BEGIN
+   OPEN c1;
+   LOOP
+      FETCH c1 INTO c1_rec;
+      EXIT WHEN c1%NOTFOUND;
+      DBMS_OUTPUT.PUT_LINE(
+    'employee name = ' || c1_rec.ename);
+   END LOOP;
+END;
+%NOTFOUND and %FOUND should not be used with SELECT INTO. If an implicit query returns no rows, then it raises the NO_DATA_FOUND exception. Avoid relying on the %NOTFOUND attribute when working with SELECT INTO statements. In the following example, note which message gets displayed.
+
+BEGIN
+   SELECT company_id INTO the_id
+     FROM company
+    WHERE name = '$%^#';
+   IF SQL%NOTFOUND
+   THEN
+      DBMS_OUTPUT.PUT_LINE
+          ('No match found!');
+   ELSE
+      :cllr.comp_id := the_id;
+   END IF;
+EXCEPTION
+   WHEN NO_DATA_FOUND
+   THEN
+      DBMS_OUTPUT.PUT_LINE
+          ('No data found!');  
+END;
+No data found!
+
+%NOTFOUND is the logical opposite of %FOUND. %NOTFOUND yields FALSE if the last fetch returned a row, or TRUE if the last fetch failed to return a row. In the following example, you use %NOTFOUND to exit a loop when FETCH fails to return a row:
+
+LOOP
+   FETCH c1 INTO my_ename, my_sal, my_hiredate;
+   EXIT WHEN c1%NOTFOUND;
+   ...
+END LOOP;
+
+
+
+
+8)	What are SQLCODE and SQLERRM and why they important for PL/SQL developer?
+
+The SQLCODE function is used to return the number associated with an individual PL/SQL exception.  This is only for the most recently raised exception. This function can only be used from within a PL/SQL exception handler. 
+
+For internal exceptions, SQLCODE returns the number of the associated Oracle error. The number that SQLCODE returns is negative unless the Oracle error is no data found, in which case SQLCODE returns +100. 
+
+For user-defined exceptions, SQLCODE returns +1 unless you used the pragma EXCEPTION_INIT to associate the exception with an Oracle error number, in which case SQLCODE returns that error number. 
+
+The SQLCODE Syntax
+
+>>???SQLCODE????>
+
+Usage Notes
+
+SQLCODE is especially useful in the OTHERS exception handler because it lets you identify which internal exception was raised. 
+
+You cannot use SQLCODE directly in a SQL statement. First, you must assign the value of SQLCODE to a local variable, as follows: 
+
+my_sqlcode := SQLCODE;
+...
+INSERT INTO errors VALUES (my_sqlcode, ...);
+
+
+When using pragma RESTRICT_REFERENCES to assert the purity of a stored function, you cannot specify the constraints WNPS and RNPS if the function calls SQLCODE. 
+
+Related Topics
+
+Exceptions
+
+Example
+
+If an error is trapped by WHEN OTHERS, you do not know which exception was raised or which error was encountered. You can, however, use SQLCODE to find out, as shown in this example:
+
+EXCEPTION
+   WHEN NO_DATA_FOUND
+   THEN
+      MESSAGE ('No match found for entry!');
+
+   WHEN OTHERS 
+   THEN
+      MESSAGE 
+         ('Error ' || TO_CHAR (SQLCODE) || ': ' ||
+          SQLERRM);
+END; 
+
+
+The SQLERRM function is used to return the error message associated with a particular PL/SQL error code (the current value of SQLCODE). SQLERRM is only applicable within an exception handler and cannot be used as a part of a SQL script.
+
+If SQLERRM is passed a value, it will return the error associated with that value. If SQLERRM is called with no arguments, its behavior depends on where in the program is it called. If SQLERRM is called outside of the exceptions area with no argument it will always return "ORA-0000: normal, successful completion". If SQLERRM is called inside of the exception section, it will return the error message associated with the most current SQLCODE value.
+
+If the exception raised is a user defined exception with no associated PRAGMA EXCEPTION_INIT statement, it will return "User-defined exception". If the user-defined exception has been associated with a particular error, that error's message will be returned.
+
+The return value from SQLERRM will be a character value, therefore either a CHAR or VARCHAR2 variable can be used to receive its return value. The length of the message returned may be many characters long and varies widely between messages, therefore, define your return variable as long as you feel is needed to get the meaning of the message (such as 150 characters).  You can then use the SUBSTR() function to trim the returned value to the proper length.
+
+An example is shown on the following screen.  Note that this function is especially useful for the OTHERS exception handler since it allows you to identify which exceptions were raised.
+
+SQLERRM Function Syntax
+
+>>??SQLERRM???A????????????????A????????????>
+              A?(error_number)?U
+
+Example
+
+DECLARE
+	sql_code	binary_integer;   -- since a negative number is returned
+	sql_error   	varchar2(150);
+	sql_user	varchar2(30);
+	sql_date	date;
+	...
+BEGIN
+	...
+EXCEPTION
+	WHEN OTHERS THEN
+	  sql_code  := SQLCODE;
+	  sql_error := SUBSTR(SQLERRM, 1, 150);
+	  sql_user  := USER;
+	  sql_date  := SYSDATE;
+	  INSERT INTO errors VALUES (sql_user, sql_code, sql_error, sql_date);
+	  ...
+END;
+
+
+9)	How can you find within a PL/SQL block, if a cursor is OPEN?
+
+%isopen
+
+if true cursor is open else closed
+
+cursor_name%isopen
+
+%ISOPEN Attribute
+This is a cursor attribute that can be appended to the name of a cursor or cursor variable. If a cursor is open, cursor_name%ISOPEN yields TRUE; otherwise, it yields FALSE.
+
+
+10)	How can you generate debugging output from PL/SQL?
+
+http://www.oreilly.com/catalog/oraclebip/chapter/ch06.html
+
+In this chapter: 
+DBMS_OUTPUT: Displaying Output 
+UTL_FILE: Reading and Writing Server-side Files 
+ 
+
+The built-in packages offer a number of ways to generate output from within your PL/SQL program. While updating a database table is, of course, a form of "output" from PL/SQL, this chapter shows you how to use two packages that explicitly generate output. UTL_FILE reads and writes information in server-side files, and DBMS_OUTPUT displays information to your screen.
+
+DBMS_OUTPUT: Displaying Output
+DBMS_OUTPUT provides a mechanism for displaying information from your PL/SQL program on your screen (your session's output device, to be more specific). As such, it serves as just about the only immediately accessible (meaning "free with PL/SQL") means of debugging your PL/SQL stored code.[1] It is certainly your "lowest common denominator" debugger, similar to the used-and-abused MESSAGE built-in of Oracle Forms. DBMS_OUTPUT is also the package you are most likely to use to generate reports from PL/SQL scripts run in SQL*Plus. 
+
+Of all the built-in packages, the DBMS_OUTPUT package (and its PUT_LINE procedure, in particular) is likely to be the one you will find yourself using most frequently. You may therefore find it strange that I never call DBMS_OUTPUT.PUT_LINE. I find the design and functionality of DBMS_OUTPUT to be substandard and very frustrating.
+
+In fact, I recommend that you never use this package--at least, not directly. You should instead encapsulate calls to DBMS_OUTPUT (and the PUT_LINE procedure, in particular) inside a package of your own construction. This technique is discussed in the "DBMS_OUTPUT Examples" section later in this chapter.
+
+Getting Started with DBMS_OUTPUT
+The DBMS_OUTPUT package is created when the Oracle database is installed. The dbmsoutp.sql script (found in the built-in packages source code directory, as described in Chapter 1, Introduction) contains the source code for this package's specification. This script is called by the catproc.sql script, which is normally run immediately after database creation. The script creates the public synonym DBMS_OUTPUT for the package. Instance-wise access to this package is provided on installation, so no additional steps should be necessary in order to use DBMS_OUTPUT. As far as package usage is concerned, you will almost always be using only the DBMS_OUTPUT.PUT_LINE procedure and only in SQL*Plus. The section "Enabling and Disabling Output" later in this chapter shows how you set up DBMS_OUTPUT for use in SQL*Plus.
+
+DBMS_OUTPUT programs
+Table 6-1 shows the DBMS_OUTPUT program names and descriptions. 
+
+Table 6-1: DBMS_OUTPUT Programs  Name
+ Description
+ Use in SQL?
+ 
+DISABLE
+ Disables output from the package; the DBMS_OUTPUT buffer will not be flushed to the screen
+ Yes
+ 
+ENABLE
+ Enables output from the package
+ Yes
+ 
+GET_LINE
+ Gets a single line from the buffer
+ Yes
+ 
+GET_LINES
+ Gets specified number of lines from the buffer and passes them into a PL/SQL table
+ Yes
+ 
+NEW_LINE
+ Inserts an end-of-line mark in the buffer
+ Yes
+ 
+PUT
+ Puts information into the buffer
+ Yes
+ 
+PUT_LINE
+ Puts information into the buffer and appends an end-of-line marker after that data
+ Yes
+ 
+
+NOTE: All procedures in DBMS_OUTPUT have been enabled for indirect usage in SQL (that is, they can be called by a function that is then executed in a SQL statement), but only for Oracle 7.3 and later.
+
+DBMS_OUTPUT concepts
+Each user has a DBMS_OUTPUT buffer of up to 1,000,000 bytes in size. Write information to this buffer by calling the DBMS_OUTPUT.PUT and DBMS_OUTPUT.PUT_LINE programs. If you are using DBMS_OUTPUT from within SQL*Plus, this information will be displayed automatically when your program terminates. You can (optionally) explicitly retrieve information from the buffer with calls to DBMS_OUTPUT.GET and DBMS_OUTPUT.GET_LINE. 
+
+The DBMS_OUTPUT buffer can be set to a size between 2,000 and 1,000,000 bytes with the DBMS_OUTPUT.ENABLE procedure. If you do not enable the package, no information will be displayed or be retrievable from the buffer. 
+
+The buffer stores three different types of data--VARCHAR2, NUMBER, and DATE--in their internal representations. These types match the overloading available with the PUT and PUT_LINE procedures. Note that DBMS_OUTPUT does not support Boolean data in either its buffer or its overloading of the PUT procedures.
+
+The following anonymous PL/SQL block uses DBMS_OUTPUT to display the name and salary of each employee in department 10:
+
+DECLARE
+   CURSOR emp_cur 
+   IS
+      SELECT ename, sal
+        FROM emp
+       WHERE deptno = 10
+       ORDER BY sal DESC;
+BEGIN
+   FOR emp_rec IN emp_cur
+   LOOP
+      DBMS_OUTPUT.PUT_LINE 
+         ('Employee ' || emp_rec.ename || ' earns ' || 
+          TO_CHAR (emp_rec.sal) || ' dollars.');
+   END LOOP;
+END;
+/
+
+This program generates the following output when executed in SQL*Plus:
+
+Employee KING earns 5000 dollars.
+Employee SCOTT earns 3000 dollars.
+Employee JONES earns 2975 dollars.
+Employee ADAMS earns 1100 dollars.
+Employee JAMES earns 950 dollars.
+
+DBMS_OUTPUT exceptions
+DBMS_OUTPUT does not contain any declared exceptions. Instead, Oracle designed the package to rely on two error numbers in the -20 NNN range (usually reserved for Oracle customers). You may, therefore, encounter one of these two exceptions when using the DBMS_OUTPUT package (no names are associated with these exceptions). 
+
+The -20000 error number indicates that these package-specific exceptions were raised by a call to RAISE_APPLICATION_ERROR, which is in the DBMS_STANDARD package. 
+
+-20000 
+ORU-10027: buffer overflow, limit of <buf_limit> bytes. 
+
+If you receive the -10027 error, you should see if you can increase the size of your buffer with another call to DBMS_OUTPUT.ENABLE. 
+
+-20000 
+ORU-10028: line length overflow, limit of 255 bytes per line. 
+
+If you receive the -10028 error, you should restrict the amount of data you are passing to the buffer in a single call to PUT_LINE, or in a batch of calls to PUT followed by NEW_LINE. 
+
+You may also receive the ORA-06502 error:
+
+ORA-06502 
+Numeric or value error. 
+
+If you receive the -06502 error, you have tried to pass more than 255 bytes of data to DBMS_OUTPUT.PUT_LINE. You must break up the line into more than one string. 
+
+DBMS_OUTPUT nonprogram elements
+The DBMS_OUTPUT package defines a PL/SQL table TYPE as follows:
+
+TYPE chararr IS TABLE OF VARCHAR2(255) INDEX BY BINARY_INTEGER;
+
+The DBMS_OUTPUT.GET_LINES procedure returns its lines in a PL/SQL table of this type.
+
+Drawbacks of DBMS_OUTPUT
+Before learning all about this package, and rushing to use it, you should be aware of several drawbacks with the implementation of this functionality:
+
+The "put" procedures that place information in the buffer are overloaded only for strings, dates, and numbers. You cannot request the display of Booleans or any other types of data. You cannot display combinations of data (a string and a number, for instance), without performing the conversions and concatentations yourself. 
+
+You will see output from this package only after your program completes its execution. You cannot use DBMS_OUTPUT to examine the results of a program while it is running. And if your program terminates with an unhandled exception, you may not see anything at all! 
+
+If you try to display strings longer than 255 bytes, DBMS_OUTPUT will raise a VALUE_ERROR exception. 
+
+DBMS_OUTPUT is not a strong choice as a report generator, because it can handle a maximum of only 1,000,000 bytes of data in a session before it raises an exception. 
+
+If you use DBMS_OUTPUT in SQL*Plus, you may find that any leading blanks are automatically truncated. Also, attempts to display blank or NULL lines are completely ignored. 
+
+There are workarounds for almost every one of these drawbacks. The solution invariably requires the construction of a package that encapsulates and hides DBMS_OUTPUT. This technique is explained in the "DBMS_OUTPUT Examples" section.
+
+Enabling and Disabling Output
+The ENABLE and DISABLE procedures enable and disable output from the DBMS_OUTPUT.PUT_LINE (and PUT and PUTF) procedure.
+
+The DBMS_OUTPUT.ENABLE procedure
+The ENABLE procedure enables calls to the other DBMS_OUTPUT modules. If you do not first call ENABLE, then any other calls to the package modules are ignored. The specification for the procedure is,
+
+PROCEDURE DBMS_OUTPUT.ENABLE  (buffer_size IN INTEGER DEFAULT 20000);
+
+where buffer_size is the size of the buffer that will contain the information stored by calls to PUT and PUT_LINE. The buffer size can be as large as 1,000,000 bytes. You can pass larger values to this procedure without raising an error, but doing so will have no effect besides setting the buffer size to its maximum. 
+
+You can call ENABLE more than once in a session. The buffer size will be set to the largest size passed in any call to ENABLE. In other words, the buffer size is not necessarily set to the size specified in the last call.
+
+If you want to make sure that the DBMS_OUTPUT package is enabled in a program you are testing, add a statement like this one to the start of the program:
+
+DECLARE
+   ... declarations ...
+BEGIN
+   DBMS_OUTPUT.ENABLE (1000000);
+   ...
+END;
+
+The DBMS_OUTPUT.DISABLE procedure
+The DISABLE procedure disables all calls to the DBMS_OUTPUT package (except for ENABLE). It also purges the buffer of any remaining lines of information. Here's the specification for the procedure:
+
+PROCEDURE DBMS_OUTPUT.DISABLE;
+
+SQL*Plus and SQL*DBA offer a native command, SET SERVEROUTPUT, with which you can disable the package without having to execute the DISABLE procedure directly. You can use the command as follows:
+
+SQL> SET SERVEROUTPUT OFF
+
+This command is equivalent to the following PL/SQL statement:
+
+DBMS_OUTPUT.DISABLE;
+
+After you execute this command, any calls to PUT_LINE and other modules will be ignored, and you will not see any output.
+
+Enabling output in SQL*Plus
+Most developers use DBMS_OUTPUT almost exclusively in the SQL*Plus environment. To enable output from calls to PUT_LINE in SQL*Plus, you will use the SET SERVEROUTPUT command,
+
+SET SERVEROUTPUT ON SIZE 1000000
+
+or:
+
+SET SERVEROUTPUT ON
+
+Each of these calls the DBMS_OUTPUT.ENABLE procedure.
+
+I have found it useful to add SET SERVEROUTPUT ON SIZE 1000000 to my login.sql file, so that the package is automatically enabled whenever I go into SQL*Plus. (I guess that tells you how often I have to debug my code!) 
+
+You should also check the Oracle documentation for SQL*Plus to find out about the latest set of options for the SET SERVEROUTPUT command. As of Oracle8, the documentation shows the following syntax for this SET command:
+
+SET SERVEROUT[PUT] {OFF|ON} 
+   [SIZE n] [FOR[MAT] {WRA[PPED]| WOR[D_WRAPPED]|TRU[NCATED]}] 
+
+In other words, you have these options when you enable DBMS_OUTPUT in SQL*Plus:
+
+SET SERVEROUTPUT OFF 
+Turns off the display of text from DBMS_OUTPUT. 
+
+SET SERVEROUTPUT ON 
+Turns on the display of text from DBMS_OUTPUT with the default 2000-byte buffer. This is a very small size for the buffer; I recommend that you always specify a size when you call this command. 
+
+SET SERVEROUTPUT ON SIZE NNNN 
+Turns on the display of text from DBMS_OUTPUT with the specified buffer size (maximum of 1,000,000 bytes). 
+
+SET SERVEROUTPUT ON FORMAT WRAPPED 
+(Available in Oracle 7.3 and later only.) Specifies that you want the text displayed by DBMS_OUTPUT wrapped at the SQL*Plus line length. The wrapping occurs regardless of word separation. This will also stop SQL*Plus from stripping leading blanks from your text. You can also specify a SIZE value with this variation. 
+
+SET SERVEROUTPUT ON FORMAT WORD_WRAPPED 
+(Available in Oracle 7.3 and later only.) Specifies that you want the text displayed by DBMS_OUTPUT wrapped at the SQL*Plus line length. This version respects integrity of "words." As a result, lines will be broken in a way that keeps separate tokens intact. This will also stop SQL*Plus from stripping leading blanks from your text. You can also specify a SIZE value with this variation. 
+
+SET SERVEROUTPUT ON FORMAT TRUNCATED 
+(Available in Oracle 7.3 and later only.) Specifies that you want the text displayed by DBMS_OUTPUT to be truncated at the SQL*Plus line length; the rest of the text will not be displayed. This will also stop SQL*Plus from stripping leading blanks from your text. You can also specify a SIZE value with this variation. 
+
+Writing to the DBMS_OUTPUT Buffer
+You can write information to the buffer with calls to the PUT, NEW_LINE, and PUT_LINE procedures.
+
+The DBMS_OUTPUT.PUT procedure
+The PUT procedure puts information into the buffer, but does not append a newline marker into the buffer. Use PUT if you want to place information in the buffer (usually with more than one call to PUT), but not also automatically issue a newline marker. The specification for PUT is overloaded, so that you can pass data in its native format to the package without having to perform conversions,
+
+PROCEDURE DBMS_OUTPUT.PUT (A VARCHAR2);
+PROCEDURE DBMS_OUTPUT.PUT (A NUMBER);
+PROCEDURE DBMS_OUTPUT.PUT (A DATE);
+
+where A is the data being passed. 
+
+Example
+
+In the following example, three simultaneous calls to PUT place the employee name, department ID number, and hire date into a single line in the DBMS_OUTPUT buffer:
+
+DBMS_OUTPUT.PUT (:employee.lname || ', ' || :employee.fname);
+DBMS_OUTPUT.PUT (:employee.department_id);
+DBMS_OUTPUT.PUT (:employee.hiredate);
+
+If you follow these PUT calls with a NEW_LINE call, that information can then be retrieved with a single call to GET_LINE.
+
+The DBMS_OUTPUT.PUT_LINE procedure
+The PUT_LINE procedure puts information into the buffer and then appends a newline marker into the buffer. The specification for PUT_LINE is overloaded, so that you can pass data in its native format to the package without having to perform conversions:
+
+PROCEDURE DBMS_OUTPUT.PUT_LINE (A VARCHAR2);
+PROCEDURE DBMS_OUTPUT.PUT_LINE (A NUMBER);
+PROCEDURE DBMS_OUTPUT.PUT_LINE (A DATE);
+
+The PUT_LINE procedure is the one most commonly used in SQL*Plus to debug PL/SQL programs. When you use PUT_LINE in these situations, you do not need to call GET_LINE to extract the information from the buffer. Instead, SQL*Plus will automatically dump out the DBMS_OUTPUT buffer when your PL/SQL block finishes executing. (You will not see any output until the program ends.)
+
+Of course, you can also call DBMS_OUTPUT programs directly from the SQL*Plus command prompt, and not from inside a PL/SQL block, as shown in the following example.
+
+Example
+
+Suppose that you execute the following three statements in SQL*Plus:
+
+SQL> exec DBMS_OUTPUT.PUT ('I am');
+SQL> exec DBMS_OUTPUT.PUT (' writing ');
+SQL> exec DBMS_OUTPUT.PUT ('a ');
+
+You will not see anything, because PUT will place the information in the buffer, but will not append the newline marker. When you issue this next PUT_LINE command,
+
+SQL> exec DBMS_OUTPUT.PUT_LINE ('book!');
+
+you will then see the following output:
+
+I am writing a book!
+
+All of the information added to the buffer with the calls to PUT waited patiently to be flushed out with the call to PUT_LINE. This is the behavior you will see when you execute individual calls at the SQL*Plus command prompt to the put programs. 
+
+If you place these same commands in a PL/SQL block,
+
+BEGIN
+   DBMS_OUTPUT.PUT ('I am');
+   DBMS_OUTPUT.PUT (' writing ');
+   DBMS_OUTPUT.PUT ('a ');
+   DBMS_OUTPUT.PUT_LINE ('book');
+END;
+/
+
+the output from this script will be exactly the same as that generated by this single call:
+
+SQL> exec DBMS_OUTPUT.PUT_LINE ('I am writing a book!');
+
+The DBMS_OUTPUT.NEW_LINE procedure
+The NEW_LINE procedure inserts an end-of-line marker in the buffer. Use NEW_LINE after one or more calls to PUT in order to terminate those entries in the buffer with a newline marker. Here's the specification for NEW_LINE:
+
+PROCEDURE DBMS_OUTPUT.NEW_LINE;
+
+Retrieving Data from the DBMS_OUTPUT Buffer
+You can use the GET_LINE and GET_LINES procedures to extract information from the DBMS_OUTPUT buffer. If you are using DBMS_OUTPUT from within SQL*Plus, however, you will never need to call either of these procedures. Instead, SQL*Plus will automatically extract the information and display it on the screen for you.
+
+The DBMS_OUTPUT.GET_LINE procedure
+The GET_LINE procedure retrieves one line of information from the buffer. Here's the specification for the procedure:
+
+PROCEDURE DBMS_OUTPUT.GET_LINE 
+   (line OUT VARCHAR2, 
+    status OUT INTEGER);
+
+The parameters are summarized in the following table.
+
+Parameter
+ Description
+ 
+line
+ Retrieved line of text
+ 
+status
+ GET request status
+ 
+
+The line can have up to 255 bytes in it, which is not very long. If GET_LINE completes successfully, then status is set to 0. Otherwise, GET_LINE returns a status of 1. 
+
+Notice that even though the PUT and PUT_LINE procedures allow you to place information into the buffer in their native representations (dates as dates, numbers and numbers, and so forth), GET_LINE always retrieves the information into a character string. The information returned by GET_LINE is everything in the buffer up to the next newline character. This information might be the data from a single PUT_LINE or from multiple calls to PUT.
+
+Example
+
+The following call to GET_LINE extracts the next line of information into a local PL/SQL variable:
+
+FUNCTION get_next_line RETURN VARCHAR2 
+IS
+   return_value VARCHAR2(255);
+   get_status INTEGER;
+BEGIN
+   DBMS_OUTPUT.GET_LINE (return_value, get_status);
+   IF get_status = 0
+   THEN
+      RETURN return_value;
+   ELSE
+      RETURN NULL;
+   END IF;
+END;
+
+The DBMS_OUTPUT.GET_LINES procedure
+The GET_LINES procedure retrieves multiple lines from the buffer with one call. It reads the buffer into a PL/SQL string table. Here's the specification for the procedure:
+
+PROCEDURE DBMS_OUTPUT.GET_LINES 
+   (lines OUT DBMS_OUTPUT.CHARARR, 
+    numlines IN OUT INTEGER);
+
+The parameters for this procedure are summarized in the following table.
+
+Parameter
+ Description
+ 
+lines
+ PL/SQL array where retrieved lines are placed
+ 
+numlines
+ Number of individual lines retrieved from the buffer and placed into the array
+ 
+
+The lines parameter is a PL/SQL table TYPE declared in the specification of the package. It is described at the beginning of this chapter.
+
+The values retrieved by GET_LINES are placed in the first numlines rows in the table, starting from row one. As indicated in the PL/SQL table structure, each line (row in the table) may contain up to 255 bytes.
+
+Notice that numlines is an IN OUT parameter. The IN aspect of the parameter specifies the number of lines to retrieve. Once GET_LINES is done retrieving data, however, it sets numlines to the number of lines actually placed in the table. If you ask for ten rows and there are only six in the buffer, then you need to know that only the first six rows of the table are defined.
+
+Notice also that even though the PUT and PUT_LINE procedures allow you to place information into the buffer in their native representations (dates as dates, numbers and numbers, and so forth), GET_LINES always retrieves the information into a character string. The information in each line returned by GET_LINES is everything in the buffer up to the next newline character. This information might be the data from a single PUT_LINE or from multiple calls to PUT.
+
+While GET_LINES is provided with the DBMS_OUTPUT package, it is not needed to retrieve information from the DBMS_OUTPUT buffer--at least when used inside SQL*Plus. In this interactive query tool, you simply execute calls to PUT_LINE, and when the PL/SQL block terminates, SQL*Plus will automatically dump the buffer to the screen.
+
+Example
+
+The following script demonstrates both the kind of code you would write when using the GET_LINES procedure, and also the way in which the PL/SQL table is filled:
+
+/* Filename on companion disk: getlines.tst */
+
+DECLARE
+  output_table DBMS_OUTPUT.CHARARR;  /* output_buf_tab */
+  a_line VARCHAR2(10) := RPAD('*',10,'*');
+  status INTEGER;
+  max_lines CONSTANT NUMBER := 15;
+BEGIN
+   output_table (0) := 'ABC';
+   output_table (12) := 'DEF';
+   
+   /* Output 10 lines */
+   FOR linenum IN 1..10 
+   LOOP
+      DBMS_OUTPUT.PUT_LINE (a_line ||  TO_CHAR (linenum);
+   END LOOP;
+   /* retrieve 15 lines, status will receive the line count */
+   status := max_lines;
+   DBMS_OUTPUT.GET_LINES ( output_table, status);
+   DBMS_OUTPUT.PUT_LINE ('lines retrieved= ' || status));
+  
+   FOR linenum in 0..max_lines 
+   LOOP
+       BEGIN
+          DBMS_OUTPUT.PUT_LINE
+             (linenum || ':' || NVL (output_table(linenum),'<null>') );
+       EXCEPTION
+          WHEN OTHERS 
+          THEN
+             DBMS_OUTPUT.PUT_LINE (linenum || ':' || sqlerrm );
+       END;
+    END LOOP;
+EXCEPTION
+   WHEN OTHERS 
+   THEN
+       DBMS_OUTPUT.PUT_LINE ('Exception, status=' || status);
+       DBMS_OUTPUT.PUT_LINE (SQLERRM );
+END;
+/ 
+
+Here is the output from the execution of this script:
+
+lines retrieved= 10
+0:ORA-01403: no data found
+1:**********1
+2:**********2
+3:**********3
+4:**********4
+5:**********5
+6:**********6
+7:**********7
+8:**********8
+9:**********9
+10:**********10
+11:<null>
+12:ORA-01403: no data found
+13:ORA-01403: no data found
+14:ORA-01403: no data found
+15:ORA-01403: no data found
+
+You can therefore deduce the following rules:
+
+The PL/SQL table is filled starting with row 1. 
+
+If DBMS_OUTPUT.GET_LINES finds N lines of data to pass to the PL/SQL table, it sets row N+1 in that table to NULL. 
+
+All other rows in the PL/SQL table are set to "undefined." In other words, any other rows that might have been defined before the call to GET_LINES are deleted. 
+
+Tips on Using DBMS_OUTPUT
+As noted at the beginning of the chapter, DBMS_OUTPUT comes with several handicaps. The best way to overcome these handicaps is to create your own layer of code over the built-in package. This technique is explored in the "DBMS_OUTPUT Examples" section. 
+
+Regardless of the use of an encapsulation package, you should keep the following complications in mind as you work with DBMS_OUTPUT:
+
+If your program raises an unhandled exception, you may not see any executed output from PUT_LINE, even if you enabled the package for output . 
+
+This can happen because the DBMS_OUTPUT buffer will not be flushed until it is full or until the current PL/SQL block completes its execution. If a raised exception never gets handled, the buffer will not be flushed. As a result, calls to the DBMS_OUTPUT.PUT_LINE module might never show their data. So if you are working with DBMS_OUTPUT.PUT_LINE and are frustrated because you are not seeing the output you would expect, make sure that you have: 
+
+Enabled output from the package by calling SET SERVEROUTPUT ON in SQL*Plus. 
+
+Placed an exception section with a WHEN OTHERS handler in the outer block of your code (usually some sort of test script) so that your output can be flushed to your terminal by SQL*Plus. 
+
+When package state has been reinitialized in your session, DBMS_OUTPUT is reset to "not enabled." 
+
+Packages can be reset to their initial state with a call to DBMS_SESSION.RESET_PACKAGE. (See Chapter 11, Managing Session Information, for more information about this program.) You might call this procedure yourself, but that is unlikely. A more common scenario for resetting package states is when an error is raised in your session that causes packages to be reset to their initial state. Here is the error for which you need to beware:
+
+ERROR at line 1:
+
+	ORA-04068: existing state of packages has been discarded
+	ORA-04061: existing state of package "PKG.PROC" has been invalidated
+	ORA-04065: not executed, altered or dropped package "PKG.PROC"
+	ORA-06508: PL/SQL: could not find program unit being called
+
+If you get this error and simply continue with your testing, you may be surprised to find that you are not getting any output. If you remember that DBMS_OUTPUT relies on package variables for its settings, this makes perfect sense. So when you get the preceding error, you should immediately "re-enable" DBMS_OUTPUT with a command such as the following:
+
+SQL> set serveroutput on size 1000000 format wrapped
+
+I usually just re-execute my login.sql script, since I may be initializing several different packages:
+
+SQL> @login.sql
+
+When will you get this error? I have found that it occurs when I have multiple sessions connected to Oracle. Suppose that I am testing program A in session USER1. I run it and find a bug. I fix the bug and recompile program A in session USER2 (the owner of the code). When I try to execute program A from session USER1 again, it raises the ORA-04068 error. 
+
+If you do encounter this error, don't panic. Just reset your package variables and run the program again. It will now work fine; the error is simply the result of a quirk in Oracle's automatic recompilation feature.
+
+DBMS_OUTPUT Examples
+This section contains several longer examples of DBMS_OUTPUT operations.
+
+Encapsulating DBMS_OUTPUT
+Sure, it was nice of Oracle Corporation to give us the DBMS_OUTPUT package. Without it, as users of PL/SQL 1.0 found, we are running blind when we execute our code. As is the case with many of the developer-oriented utilities from Oracle, however, the DBMS_OUTPUT package is not a polished and well-planned tool. It offers nothing more than the most basic functionality, and even then it is crippled in some important ways. When I started to use it in real life (or whatever you might call the rarified atmosphere of authoring a book on software development), I found DBMS_OUTPUT.PUT_LINE to be cumbersome and limiting in ways.
+
+I hated having to type "DBMS_OUTPUT.PUT_LINE" whenever I simply wanted to display some information. That's a mouthful and a keyboardful. I felt insulted that they hadn't even taken the time to overload for Booleans, requiring me to write silly IF logic just to see the value of a Boolean variable or function. I also found myself growing incensed that DBMS_OUTPUT would actually raise a VALUE_ERROR exception if I tried to pass it a string with more than 255 characters. I had enough errors in my code without having to worry about DBMS_OUTPUT adding to my troubles.
+
+I decided that all this anger and frustration was not good for me. I needed to move past this nonconstructive lashing out at Oracle. I needed, in short, to fix my problem. So I did--with a package of my own. I am not going to provide a comprehensive explanation of my replacement package, but you can read about it (there are actually two of them) in my other books as follows:
+
+Oracle PL/SQL Programming 
+The Companion Disk section on "Package Examples" introduces you to the do package, which contains the do.pl procedure, a substitute for DBMS_OUTPUT.PUT_LINE. The do.sps and do.spb files in the book you are reading also contain the source code for this package. 
+
+Advanced Oracle PL/SQL Programming with Packages 
+Chapter 7, p: A Powerful Substitute for DMBS_OUTPUT, presents the p package and the p.l procedure (I told you I didn't like typing those long program names!), a component of the PL/Vision library.[2] 
+
+The following section shows you the basic elements involved in constructing an encapsulation around DBMS_OUTPUT.PUT_LINE, which compensates for many of its problems. You can pursue building one of these for yourself, but I would strongly suggest that you check out the PL/Vision p package. That will leave you more time to build your own application-specific code.
+
+Package specification for a DBMS_OUTPUT encapsulator
+The absolute minimum you need for such an encapsulator package is an overloading of the "print" procedure for dates, strings, and numbers. Let's at least add Booleans to the mix in this prototype:
+
+/* Filename on companion disk: prt.spp */
+
+CREATE OR REPLACE PACKAGE prt
+IS
+   c_prefix CONSTANT CHAR(1) := '*';
+   c_linelen CONSTANT INTEGER := 80;
+ 
+   PROCEDURE ln (val IN VARCHAR2);
+   PROCEDURE ln (val IN DATE);
+   PROCEDURE ln (val IN NUMBER);
+   PROCEDURE ln (val IN BOOLEAN);
+END;
+/
+
+The prefix constant is concatenated to the beginning of any string to be displayed to avoid the problem of truncated spaces and ignored lines in SQL*Plus. The line length constant is used when the string is longer than 255 bytes. Finally, each of the prt.ln procedures prints a different type of data.
+
+A complete implementation of this package would allow you to change the line length and the prefix, specify a date format for conversion, and so on. Again, check out the p package of PL/Vision for such a package.
+
+Here is the body of the prt package:
+
+/* Filename on companion disk: prt.spp */
+
+CREATE OR REPLACE PACKAGE BODY prt
+IS
+   PROCEDURE ln (val IN VARCHAR2)
+   IS
+   BEGIN
+      IF LENGTH (val) > 255
+      THEN
+         PLVprs.display_wrap (val, c_linelen);
+      ELSE
+         DBMS_OUTPUT.PUT_LINE (c_prefix || val);
+      END IF;
+   EXCEPTION
+      WHEN OTHERS
+      THEN
+         DBMS_OUTPUT.ENABLE (1000000);
+         DBMS_OUTPUT.PUT_LINE (c_prefix || val);
+   END;
+   PROCEDURE ln (val IN DATE) 
+   IS
+   BEGIN
+      ln (TO_CHAR (val));
+   END;
+   PROCEDURE ln (val IN NUMBER) 
+   IS
+   BEGIN
+      ln (TO_CHAR (val));
+   END;
+   PROCEDURE ln (val IN BOOLEAN) 
+   IS
+   BEGIN
+      IF val
+      THEN
+         ln ('TRUE');
+      ELSIF NOT val
+      THEN
+         ln ('FALSE');
+      ELSE
+         ln ('NULL BOOLEAN');
+      END IF;
+   END;
+END;
+/
+
+Here are a few things to notice about the package implementation:
+
+The string version of prt.ln is the "core" print procedure. The other three programs all call that one, after they have formatted the string appropriately. 
+
+The Boolean version of prt.ln simply performs the same IF logic you would have to write if you were using DBMS_OUTPUT. By hiding it inside the prt procedure, though, nobody else has to write that kind of code again. Plus, it handles NULL values. 
+
+The string version of prt.ln contains all the complex logic. For long strings, it relies on the PL/Vision display wrap procedure of the PLVprs package.[3] For strings with fewer than 256 characters, it calls DBMS_OUTPUT.PUT_LINE. 
+
+As an added feature, if the attempt to display using DBMS_OUTPUT.PUT_LINE raises an exception, prt.ln assumes that the problem might be that the buffer is too small. So it increases the buffer to the maximum possible value and then tries again. I believe that it is very important for developers to make the extra effort to increase the usefulness of our code. 
+
+The prt package should give you a solid idea about the way to encapsulate a built-in package inside a package of your own construction.
+
+UTL_FILE: Reading and Writing 
+Server-side Files
+UTL_FILE is a package that has been welcomed warmly by PL/SQL developers. It allows PL/SQL programs to both read from and write to any operating system files that are accessible from the server on which your database instance is running. File I/O was a feature long desired in PL/SQL, but available only with PL/SQL Release 2.3 and later (Oracle 7.3 or Oracle 8.0). You can now read ini files and interact with the operating system a little more easily than has been possible in the past. You can load data from files directly into database tables while applying the full power and flexibility of PL/SQL programming. You can generate reports directly from within PL/SQL without worrying about the maximum buffer restrictions of DBMS_OUTPUT
+
+Getting Started with UTL_FILE
+The UTL_FILE package is created when the Oracle database is installed. The utlfile.sql script (found in the built-in packages source code directory, as described in Chapter 1) contains the source code for this package's specification. This script is called by catproc.sql, which is normally run immediately after database creation. The script creates the public synonym UTL_FILE for the package and grants EXECUTE privilege on the package to public. All Oracle users can reference and make use of this package.
+
+UTL_FILE programs
+Table 6-2 shows the UTL_FILE program names and descriptions.
+
+Table 6-2: UTL_FILE Programs  Name
+ Description
+ Use in SQL
+ 
+FCLOSE 
+ Closes the speci?ed ?les
+ No
+ 
+FCLOSE_ALL 
+ Closes all open ?les
+ No
+ 
+FFLUSH 
+ Flushes all the data from the UTL_FILE buffer
+ No
+ 
+FOPEN 
+ Opens the speci?ed ?le
+ No
+ 
+GET_LINE 
+ Gets the next line from the ?le
+ No
+ 
+IS_OPEN 
+ Returns TRUE if the ?le is already open
+ No
+ 
+NEW_LINE 
+ Inserts a newline mark in the ?le at the end of the current line
+ No
+ 
+PUT 
+ Puts text into the buffer
+ No
+ 
+PUT_LINE 
+ Puts a line of text into the ?le
+ No
+ 
+PUTF 
+ Puts formatted text into the buffer
+ No
+ 
+
+Trying out UTL_FILE
+Just getting to the point where your first call to UTL_FILE's FOPEN function works can actually be a pretty frustrating experience. Here's how it usually goes.
+
+You read about UTL_FILE and you are excited. So you dash headlong into writing some code like this,
+
+DECLARE
+   config_file UTL_FILE.FILE_TYPE;
+BEGIN
+   config_file := UTL_FILE.FOPEN ('/tmp', 'newdata.txt', 'W');
+ 
+   ... lots of write operations ...
+ 
+   ... and no exception section ...
+END;
+/
+
+and then this is all you get from your "quick and dirty script" in SQL*Plus:
+
+SQL> @writefile.sql
+DECLARE
+*
+ERROR at line 1:
+ORA-06510: PL/SQL: unhandled user-defined exception
+ORA-06512: at "SYS.UTL_FILE", line 91
+ORA-06512: at "SYS.UTL_FILE", line 146
+ORA-06512: at line 4
+
+What is going wrong? This error message certainly provides little or no useful information. So you go back to the documentation, thoroughly chastened, and (over time) discover the following:
+
+You need to modify the INIT.ORA parameter initialization file of your instance. You will have to contact your database administrator and have him or her make the changes (if willing) and then "bounce" the database. 
+
+You need to get the format of the parameter entries correct. That alone used to take me days! 
+
+You need to add exception sections to your programs to give yourself a fighting chance at figuring out what is going on. 
+
+I hope that the information in this chapter will help you avoid most, if not all, of these frustrations and gotchas. But don't give up! This package is well worth the effort.
+
+File security
+UTL_FILE lets you read and write files accessible from the server on which your database is running. So you could theoretically use UTL_FILE to write right over your tablespace data files, control files, and so on. That is of course a very bad idea. Server security requires the ability to place restrictions on where you can read and write your files.
+
+UTL_FILE implements this security by limiting access to files that reside in one of the directories specified in the INIT.ORA file for the database instance on which UTL_FILE is running.
+
+When you call FOPEN to open a file, you must specify both the location and the name of the file, in separate arguments. This file location is then checked against the list of accessible directories. 
+
+Here's the format of the parameter for file access in the INIT.ORA file:
+
+utl_file_dir = <directory>
+
+Include a parameter for utl_file_dir for each directory you want to make accessible for UTL_FILE operations. The following entries, for example, enable four different directories in UNIX:
+
+utl_file_dir = /tmp
+utl_file_dir = /ora_apps/hr/time_reporting
+utl_file_dir = /ora_apps/hr/time_reporting/log
+utl_file_dir = /users/test_area
+
+To bypass server security and allow read/write access to all directories, you can use this special syntax:
+
+utl_file_dir = *
+
+You should not use this option on production systems. In a development system, this entry certainly makes it easier for developers to get up and running on UTL_FILE and test their code. However, you should allow access to only a few specific directories when you move the application to production.
+
+Some observations on working with and setting up accessible directories with UTL_FILE follow:
+
+Access is not recursive through subdirectories. If the following lines were in your INIT.ORA file, for example, 
+utl_file_dir = c:\group\dev1 utl_file_dir = c:\group\prod\oe utl_file_dir = c:\group\prod\ar 
+
+then you would not be able to open a file in the c:\group\prod\oe\reports subdirectory.
+
+Do not include the following entry in UNIX systems: 
+utl_file_dir = . 
+
+This would allow you to read/write on the current directory in the operating system.
+
+Do not enclose the directory names within single or double quotes. 
+
+In the UNIX environment, a file created by FOPEN has as its owner the shadow process running the Oracle instance. This is usually the "oracle" owner. If you try to access these files outside of UTL_FILE, you will need the correct privileges (or be logged in as "oracle") to access or change these files. 
+
+You should not end your directory name with a delimiter, such as the forward slash in UNIX. The following specification of a directory will result in problems when trying to read from or write to the directory: 
+utl_file_dir = /tmp/orafiles/ 
+
+Specifying file locations
+The location of the file is an operating system-specific string that specifies the directory or area in which to open the file. The location you provide must have been listed as an accessible directory in the INIT.ORA file for the database instance.
+
+The INIT.ORA location is a valid directory or area specification, as shown in these examples:
+
+In Windows NT: 
+'k:\common\debug' 
+
+In UNIX: 
+'/usr/od2000/admin' 
+Notice that in Windows NT, the backslash character (\) is used as a delimiter. In UNIX, the forward slash (/) is the delimiter. When you pass the location in the call to UTL_FILE.FOPEN, you provide the location specification as it appears in the INIT.ORA file (unless you just provided * for all directories in the initialization file). And remember that in case-sensitive operating systems, the case of the location specification in the initialization file must match that used in the call to UTL_FILE.FOPEN.
+
+Here are some examples:
+
+In Windows NT: 
+file_id := UTL_FILE.FOPEN ('k:\common\debug', 'trace.lis', 'R'); 
+
+In UNIX: 
+file_id := UTL_FILE.FOPEN ('/usr/od2000/admin', 'trace.lis', 'W'); 
+Your location must be an explicit, complete path to the file. You cannot use operating system-specific parameters such as environment variables in UNIX to specify file locations.
+
+UTL_FILE exceptions
+The package specification of UTL_FILE defines seven exceptions. The cause behind a UTL_FILE exception can often be difficult to understand. Here are the explanations Oracle provides for each of the exceptions:
+
+NOTE: As a result of the way these exceptions are declared (as "user-defined exceptions"), there is no error number associated with any of the exceptions. Thus you must include explicit exception handlers in programs that call UTL_FILE if you wish to find out which error was raised. See the section "Handling file I/O errors" for more details on this process.
+
+INVALID_PATH 
+The file location or the filename is invalid. Perhaps the directory is not listed as a utl_file_dir parameter in the INIT.ORA file (or doesn't exist as all), or you are trying to read a file and it does not exist. 
+
+INVALID_MODE 
+The value you provided for the open_mode parameter in UTL_FILE.FOPEN was invalid. It must be "A," "R," or "W." 
+
+INVALID_FILEHANDLE 
+The file handle you passed to a UTL_FILE program was invalid. You must call UTL_FILE.FOPEN to obtain a valid file handle. 
+
+INVALID_OPERATION 
+UTL_FILE could not open or operate on the file as requested. For example, if you try to write to a read-only file, you will raise this exception. 
+
+READ_ERROR 
+The operating system returned an error when you tried to read from the file. (This does not occur very often.) 
+
+WRITE_ERROR 
+The operating system returned an error when you tried to write to the file. (This does not occur very often.) 
+
+INTERNAL_ERROR 
+Uh-oh. Something went wrong and the PL/SQL runtime engine couldn't assign blame to any of the previous exceptions. Better call Oracle Support! 
+
+Programs in UTL_FILE may also raise the following standard system exceptions:
+
+NO_DATA_FOUND 
+Raised when you read past the end of the file with UTL_FILE.GET_LINE. 
+
+VALUE_ERROR 
+Raised when you try to read or write lines in the file which are too long. The current implementation of UTL_FILE limits the size of a line read by UTL_FILE.GET_LINE to 1022 bytes. 
+
+INVALID_MAXLINESIZE 
+Oracle 8.0 and above: raised when you try to open a file with a maximum linesize outside of the valid range (between 1 through 32767). 
+
+In the following descriptions of the UTL_FILE programs, I list the exceptions that can be raised by each individual program.
+
+UTL_FILE nonprogram elements
+When you open a file, PL/SQL returns a handle to that file for use within your program. This handle has a datatype of UTL_FILE.FILE_TYPE currently defined as the following:
+
+TYPE UTL_FILE.FILE_TYPE IS RECORD (id BINARY_INTEGER);
+
+As you can see, UTL_FILE.FILE_TYPE is actually a PL/SQL record whose fields contain all the information about the file needed by UTL_FILE. However, this information is for use only by the UTL_FILE package. You will reference the handle, but not any of the individual fields of the handle. (The fields of this record may expand over time as UTL_FILE becomes more sophisticated.)
+
+Here is an example of how to declare a local file handle based on this type:
+
+DECLARE
+   file_handle UTL_FILE.FILE_TYPE;
+BEGIN
+   ...
+
+UTL_FILE restrictions and limitations
+While UTL_FILE certainly extends the usefulness of PL/SQL, it does have its drawbacks, including:
+
+Prior to Oracle 8.0, you cannot read or write a line of text with more than 1023 bytes. In Oracle 8.0 and above, you can specify a maximum line size of up to 32767 when you open a file.. 
+
+You cannot delete files through UTL_FILE. The best you can do is empty a file, but it will still be present on the disk. 
+
+You cannot rename files. The best you can do is copy the contents of the file to another file with that new name. 
+
+You do not have random access to lines in a file. If you want to read the 55th line, you must read through the first 54 lines. If you want to insert a line of text between the 1,267th and 1,268th lines, you will have to (a) read those 1,267 lines, (b) write them to a new file, (c) write the inserted line of text, and (d) read/write the remainder of the file. Ugh. 
+
+You cannot change the security on files through UTL_FILE. 
+
+You cannot access mapped files. Generally, you will need to supply real directory locations for files if you want to read from or write to them. 
+
+You are probably getting the idea. UTL_FILE is a basic facility for reading and writing server-side files. Working with UTL_FILE is not always pretty, but you can usually get what you need done with a little or a lot of code.
+
+The UTL_FILE process flow
+The following sections describe each of the UTL_FILE programs, following the process flow for working with files. That flow is described for both writing and reading files.
+
+In order to write to a file you will (in most cases) perform the following steps:
+
+Declare a file handle. This handle serves as a pointer to the file for subsequent calls to programs in the UTL_FILE package to manipulate the contents of this file. 
+
+Open the file with a call to FOPEN, which returns a file handle to the file. You can open a file to read, replace, or append text. 
+
+Write data to the file using the PUT, PUTF, or PUT_LINE procedures. 
+
+Close the file with a call to FCLOSE. This releases resources associated with the file. 
+
+To read data from a file you will (in most cases) perform the following steps: 
+
+Declare a file handle. 
+
+Declare a VARCHAR2 string buffer that will receive the line of data from the file. You can also read directly from a file into a numeric or date buffer. In this case, the data in the file will be converted implicitly, and so it must be compatible with the datatype of the buffer. 
+
+Open the file using FOPEN in read mode. 
+
+Use the GET_LINE procedure to read data from the file and into the buffer. To read all the lines from a file, you would execute GET_LINE in a loop. 
+
+Close the file with a call to FCLOSE. 
+
+Opening Files
+Use the FOPEN and IS_OPEN functions when you open files via UTL_FILE.
+
+NOTE: Using the UTL-FILE package, you can only open a maximum of ten files for each Oracle session.
+
+The UTL_FILE.FOPEN function
+The FOPEN function opens the specified file and returns a file handle that you can then use to manipulate the file. Here's the header for the function:
+
+ All PL/SQL versions:           Oracle 8.0 and above only:
+ FUNCTION UTL_FILE.FOPEN (      FUNCTION UTL_FILE.FOPEN (
+    location     IN VARCHAR2,      location     IN VARCHAR2,
+    filename     IN VARCHAR2,      filename     IN VARCHAR2,
+    open_mode    IN VARCHAR2)      open_mode    IN VARCHAR2,
+ RETURN file_type;                 max_linesize IN BINARY_INTEGER)
+                                RETURN file_type;
+
+Parameters are summarized in the following table.
+
+Parameter
+ Description
+ 
+location
+ Location of the file
+ 
+filename
+ Name of the file
+ 
+openmode
+ Mode in which the file is to be opened (see the following modes)
+ 
+max_linesize
+ The maximum number of characters per line, including the newline character, for this file. Minimum is 1, maximum is 32767
+ 
+
+You can open the file in one of three modes:
+
+R 
+
+Open the file read-only. If you use this mode, use UTL_FILE's GET_LINE procedure to read from the file. 
+
+W 
+
+Open the file to read and write in replace mode. When you open in replace mode, all existing lines in the file are removed. If you use this mode, then you can use any of the following UTL_FILE programs to modify the file: PUT, PUT_LINE, NEW_LINE, PUTF, and FFLUSH. 
+
+A 
+
+Open the file to read and write in append mode. When you open in append mode, all existing lines in the file are kept intact. New lines will be appended after the last line in the file. If you use this mode, then you can use any of the following UTL_FILE programs to modify the file: PUT, PUT_LINE, NEW_LINE, PUTF, and fFFLUSH. 
+
+Keep the following points in mind as you attempt to open files:
+
+The file location and the filename joined together must represent a legal filename on your operating system. 
+
+The file location specified must be accessible and must already exist; FOPEN will not create a directory or subdirectory for you in order to write a new file, for example. 
+
+If you want to open a file for read access, the file must already exist. If you want to open a file for write access, the file will either be created, if it does not exist, or emptied of all its contents, if it does exist. 
+
+If you try to open with append, the file must already exist. UTL_FILE will not treat your append request like a write access request. If the file is not present, UTL_FILE will raise the INVALID_OPERATION exception. 
+
+Exceptions
+
+FOPEN may raise any of the following exceptions, described earlier:
+
+UTL_FILE.INVALID_MODE
+UTL_FILE.INVALID_OPERATION
+UTL_FILE.INVALID_PATH
+UTL_FILE.INVALID_MAXLINESIZE
+
+Example
+
+The following example shows how to declare a file handle and then open a configuration file for that handle in read-only mode: 
+
+DECLARE
+   	config_file UTL_FILE.FILE_TYPE;
+BEGIN
+   	config_file := UTL_FILE.FOPEN ('/maint/admin', 'config.txt', 'R');
+   	...
+
+The UTL_FILE.IS_OPEN function
+The IS_OPEN function returns TRUE if the specified handle points to a file that is already open. Otherwise, it returns false. The header for the function is,
+
+FUNCTION UTL_FILE.IS_OPEN (file IN UTL_FILE.FILE_TYPE) RETURN BOOLEAN;
+
+where file is the file to be checked.
+
+Within the context of UTL_FILE, it is important to know what this means. The IS_OPEN function does not perform any operating system checks on the status of the file. In actuality, it merely checks to see if the id field of the file handle record is not NULL. If you don't play around with these records and their contents, then this id field is only set to a non-NULL value when you call FOPEN. It is set back to NULL when you call FCLOSE.
+
+Reading from Files
+UTL_FILE provides only one program to retrieve data from a file: the GET_LINE procedure.
+
+The UTL_FILE.GET_LINE procedure
+The GET_LINE procedure reads a line of data from the specified file, if it is open, into the provided line buffer. Here's the header for the procedure:
+
+PROCEDURE UTL_FILE.GET_LINE 
+   (file IN UTL_FILE.FILE_TYPE, 
+    buffer OUT VARCHAR2);
+
+Parameters are summarized in the following table.
+
+Parameter
+ Description
+ 
+file
+ The file handle returned by a call to FOPEN
+ 
+buffer
+ The buffer into which the line of data is read
+ 
+
+The variable specified for the buffer parameter must be large enough to hold all the data up to the next carriage return or end-of-file condition in the file. If not, PL/SQL will raise the VALUE_ERROR exception. The line terminator character is not included in the string passed into the buffer.
+
+Exceptions
+
+GET_LINE may raise any of the following exceptions:
+
+NO_DATA_FOUND 
+VALUE_ERROR 
+UTL_FILE.INVALID_FILEHANDLE
+UTL_FILE.INVALID_OPERATION
+UTL_FILE.READ_ERROR
+
+Example
+
+Since GET_LINE reads data only into a string variable, you will have to perform your own conversions to local variables of the appropriate datatype if your file holds numbers or dates. Of course, you could call this procedure and read data directly into string and numeric variables as well. In this case, PL/SQL will be performing a runtime, implicit conversion for you. In many situations, this is fine. I generally recommend that you avoid implicit conversions and perform your own conversion instead. This approach more clearly documents the steps and dependencies. Here is an example:
+
+DECLARE
+   fileID UTL_FILE.FILE_TYPE;
+   strbuffer VARCHAR2(100);
+   mynum NUMBER;
+BEGIN
+   fileID := UTL_FILE.FOPEN ('/tmp', 'numlist.txt', 'R');
+   UTL_FILE.GET_LINE (fileID, strbuffer);
+   mynum := TO_NUMBER (strbuffer);
+END;
+/
+
+When GET_LINE attempts to read past the end of the file, the NO_DATA_FOUND exception is raised. This is the same exception that is raised when you (a) execute an implicit (SELECT INTO) cursor that returns no rows or (b) reference an undefined row of a PL/SQL (nested in PL/SQL8) table. If you are performing more than one of these operations in the same PL/SQL block, remember that this same exception can be caused by very different parts of your program. 
+
+Writing to Files
+In contrast to the simplicity of reading from a file, UTL_FILE offers a number of different procedures you can use to write to a file:
+
+UTL_FILE.PUT 
+Puts a piece of data (string, number, or date) into a file in the current line. 
+
+UTL_FILE.NEW_LINE 
+Puts a newline or line termination character into the file at the current position. 
+
+UTL_FILE.PUT_LINE 
+Puts a string into a file, followed by a platform-specific line termination character. 
+
+UTL_FILE.PUTF 
+Puts up to five strings out to the file in a format based on a template string, similar to the printf function in C. 
+
+You can use these procedures only if you have opened your file with modes W or A; if you opened the file for read-only, the runtime engine will raise the UTL_FILE.INVALID_OPERATION exception.
+
+Starting with Oracle 8.0.3, the maximum size of a file string is 32K; the limit for earlier versions is 1023 bytes. If you have longer strings, you must break them up into individual lines, perhaps using a special continuation character to notify a post-processor to recombine those lines.
+
+The UTL_FILE.PUT procedure
+The PUT procedure puts data out to the specified open file. Here's the header for this procedure:
+
+PROCEDURE UTL_FILE.PUT 
+    (file IN UTL_FILE.FILE_TYPE, 
+    buffer OUT VARCHAR2);
+
+Parameters are summarized in the following table.
+
+Parameter
+ Description
+ 
+file
+ The file handle returned by a call to FOPEN
+ 
+buffer
+ The buffer containing the text to be written to the file; maximum size allowed is 32K for Oracle 8.0.3 and above; for earlier versions, it is 1023 bytes
+ 
+
+The PUT procedure adds the data to the current line in the opened file, but does not append a line terminator. You must use the NEW_LINE procedure to terminate the current line or use PUT_LINE to write out a complete line with a line termination character.
+
+Exceptions
+
+PUT may raise any of the following exceptions:
+
+UTL_FILE.INVALID_FILEHANDLE
+UTL_FILE.INVALID_OPERATION
+UTL_FILE.WRITE_ERROR
+
+The UTL_FILE.NEW_LINE procedure
+The NEW_LINE procedure inserts one or more newline characters in the specified file. Here's the header for the procedure:
+
+PROCEDURE UTL_FILE.NEW_LINE 
+   (file IN UTL_FILE.FILE_TYPE, 
+    lines IN NATURAL := 1); 
+
+Parameters are summarized in the following table.
+
+Parameter
+ Description
+ 
+file
+ The file handle returned by a call to FOPEN
+ 
+lines
+ Number of lines to be inserted into the file
+ 
+
+If you do not specify a number of lines, NEW_LINE uses the default value of 1, which places a newline character (carriage return) at the end of the current line. So if you want to insert a blank line in your file, execute the following call to NEW_LINE:
+
+UTL_FILE.NEW_LINE (my_file, 2);
+
+If you pass 0 or a negative number for lines, nothing is written into the file. 
+
+Exceptions
+
+NEW_LINE may raise any of the following exceptions:
+
+VALUE_ERROR
+UTL_FILE.INVALID_FILEHANDLE
+UTL_FILE.INVALID_OPERATION
+UTL_FILE.WRITE_ERROR
+
+Example
+
+If you frequently wish to add an end-of-line marker after you PUT data out to the file (see the PUT procedure information), you might bundle two calls to UTL_FILE modules together, as follows:
+
+PROCEDURE add_line (file_in IN UTL_FILE.FILE_TYPE, line_in IN VARCHAR2)
+IS
+BEGIN
+   UTL_FILE.PUT (file_in, line_in);
+   UTL_FILE.NEW_LINE (file_in);
+END;
+
+By using add_line instead of PUT, you will not have to worry about remembering to call NEW_LINE to finish off the line. Of course, you could also simply call the PUT_LINE procedure.
+
+The UTL_FILE.PUT_LINE procedure
+This procedure writes data to a file and then immediately appends a newline character after the text. Here's the header for PUT_LINE:
+
+PROCEDURE UTL_FILE.PUT_LINE 
+    (file IN UTL_FILE.FILE_TYPE, 
+    buffer IN VARCHAR2);
+
+Parameters are summarized in the following table.
+
+Parameter
+ Description
+ 
+file
+ The file handle returned by a call to FOPEN
+ 
+buffer
+ Text to be written to the file; maximum size allowed is 32K for Oracle 8.0. 3 and above; for earlier versions, it is 1023 bytes
+ 
+
+Before you can call UTL_FILE.PUT_LINE, you must have already opened the file.
+
+Exceptions
+
+PUT_LINE may raise any of the following exceptions:
+
+UTL_FILE.INVALID_FILEHANDLE
+UTL_FILE.INVALID_OPERATION
+UTL_FILE.WRITE_ERROR
+
+Example
+
+Here is an example of using PUT_LINE to dump the contents of the emp table to a file:
+
+PROCEDURE emp2file 
+IS
+   fileID UTL_FILE.FILE_TYPE;
+BEGIN
+   fileID := UTL_FILE.FOPEN ('/tmp', 'emp.dat', 'W');
+ 
+   /* Quick and dirty construction here! */
+   FOR emprec IN (SELECT * FROM emp)
+   LOOP
+      UTL_FILE.PUT_LINE 
+         (TO_CHAR (emprec.empno) || ',' ||
+          emprec.ename || ',' ||
+          ...
+          TO_CHAR (emprec.deptno));
+   END LOOP;
+ 
+   UTL_FILE.FCLOSE (fileID);
+END;
+
+A call to PUT_LINE is equivalent to a call to PUT followed by a call to NEW_LINE. It is also equivalent to a call to PUTF with a format string of "%s\n" (see the description of PUTF in the next section).
+
+The UTL_FILE.PUTF procedure
+Like PUT, PUTF puts data into a file, but it uses a message format (hence, the "F" in "PUTF") to interpret the different elements to be placed in the file. You can pass between one and five different items of data to PUTF. Here's the specification:
+
+PROCEDURE UTL_FILE.PUTF
+    (file IN FILE_TYPE
+    ,format IN VARCHAR2
+    ,arg1 IN VARCHAR2 DEFAULT NULL
+    ,arg2 IN VARCHAR2 DEFAULT NULL
+    ,arg3 IN VARCHAR2 DEFAULT NULL
+    ,arg4 IN VARCHAR2 DEFAULT NULL
+    ,arg5 IN VARCHAR2 DEFAULT NULL);
+
+Parameters are summarized in the following table.
+
+Parameter
+ Description
+ 
+file
+ The file handle returned by a call to FOPEN
+ 
+format
+ The string that determines the format of the items in the file; see the following options
+ 
+argN
+ An optional argument string; up to five may be specified
+ 
+
+The format string allows you to substitute the argN values directly into the text written to the file. In addition to "boilerplate" or literal text, the format string may contain the following patterns:
+
+%s 
+Directs PUTF to put the corresponding item in the file. You can have up to five %s patterns in the format string, since PUTF will take up to five items. 
+
+\n 
+Directs PUTF to put a newline character in the file. There is no limit to the number of \n patterns you may include in a format string. 
+
+The %s formatters are replaced by the argument strings in the order provided. If you do not pass in enough values to replace all of the formatters, then the %s is simply removed from the string before writing it to the file.
+
+Exceptions
+
+UTL_FILE.PUTF may raise any of the following exceptions:
+
+UTL_FILE.INVALID_FILEHANDLE
+UTL_FILE.INVALID_OPERATION
+UTL_FILE.WRITE_ERROR
+
+Example
+
+The following example illustrates how to use the format string. Suppose you want the contents of the file to look like this:
+
+Employee: Steven Feuerstein
+Soc Sec #: 123-45-5678
+Salary: $1000
+
+This single call to PUTF will accomplish the task:
+
+UTL_FILE.PUTF 
+   (file_handle, 'Employee: %s\nSoc Sec #: %s\nSalary: %s',
+    'Steven Feuerstein', 
+    '123-45-5678', 
+    TO_CHAR (:employee.salary, '$9999'));
+
+If you need to write out more than five items of data, you can simply call PUTF twice consecutively to finish the job, as shown here:
+
+UTL_FILE.PUTF 
+   (file_handle, '%s\n%s\n%s\n%s\n%s\n',
+    TO_DATE (SYSDATE, 'MM/DD/YYYY'),
+    TO_CHAR (:pet.pet_id),
+    :pet.name,
+    TO_DATE (:pet.birth_date, 'MM/DD/YYYY'),
+    :pet.owner);
+ 
+UTL_FILE.PUTF 
+   (file_handle, '%s\n%s\n',
+    :pet.bites_mailperson,
+    :pet.does_tricks);
+
+The UTL_FILE.FFLUSH procedure
+This procedure makes sure that all pending data for the specified file is written physically out to a file. The header for FFLUSH is,
+
+PROCEDURE UTL_FILE.FFLUSH (file IN UTL_FILE.FILE_TYPE);
+
+where file is the file handle. 
+
+Your operating system probably buffers physical I/O to improve performance. As a consequence, your program may have called one of the "put" procedures, but when you look at the file, you won't see your data. UTL_FILE.FFLUSH comes in handy when you want to read the contents of a file before you have closed that file. Typical scenarios include analyzing execution trace and debugging logs. 
+
+Exceptions
+
+FFLUSH may raise any of the following exceptions:
+
+UTL_FILE.INVALID_FILEHANDLE
+UTL_FILE.INVALID_OPERATION
+UTL_FILE.WRITE_ERROR
+
+Closing Files
+Use the FCLOSE and FCLOSE_ALL procedures in closing files.
+
+The UTL_FILE.FCLOSE procedure
+Use FCLOSE to close an open file. The header for this procedure is,
+
+PROCEDURE UTL_FILE.FCLOSE (file IN OUT FILE_TYPE);
+
+where file is the file handle. 
+
+Notice that the argument to UTL_FILE.FCLOSE is an IN OUT parameter, because the procedure sets the id field of the record to NULL after the file is closed.
+
+If there is buffered data that has not yet been written to the file when you try to close it, UTL_FILE will raise the WRITE_ERROR exception.
+
+Exceptions
+
+FCLOSE may raise any of the following exceptions:
+
+UTL_FILE.INVALID_FILEHANDLE
+UTL_FILE.WRITE_ERROR 
+
+The UTL_FILE.FCLOSE_ALL procedure
+FCLOSE_ALL closes all of the opened files. The header for this procedure follows:
+
+PROCEDURE UTL_FILE.FCLOSE_ALL;
+
+This procedure will come in handy when you have opened a variety of files and want to make sure that none of them are left open when your program terminates. 
+
+In programs in which files have been opened, you should also call FCLOSE_ALL in exception handlers in programs. If there is an abnormal termination of the program, files will then still be closed.
+
+EXCEPTION
+   WHEN OTHERS
+   
+THEN
+      UTL_FILE.FCLOSE_ALL;
+      ... other clean up activities ...
+END;
+
+NOTE: When you close your files with the FCLOSE_ALL procedure, none of your file handles will be marked as closed (the id field, in other words, will still be non-NULL). The result is that any calls to IS_OPEN for those file handles will still return TRUE. You will not, however, be able to perform any read or write operations on those files (unless you reopen them). 
+
+Exceptions 
+
+FCLOSE_ALL may raise the following exception: 
+
+UTL_FILE.WRITE_ERROR 
+
+Tips on Using UTL_FILE
+This section contains a variety of tips on using UTL_FILE to its full potential. 
+
+Handling file I/O errors
+You may encounter a number of difficulties (and therefore raise exceptions) when working with operating system files. The good news is that Oracle has predefined a set of exceptions specific to the UTL_FILE package, such as UTL_FILE.INVALID_FILEHANDLE. The bad news is that these are all "user-defined exceptions," meaning that if you call SQLCODE to see what the error is, you get a value of 1, regardless of the exception. And a call to SQLERRM returns the less-than-useful string "User-Defined Exception." 
+
+To understand the problems this causes, consider the following program: 
+
+PROCEDURE file_action 
+IS
+   fileID UTL_FILE.FILE_TYPE;
+BEGIN
+   fileID := UTL_FILE.FOPEN ('c:/tmp', 'lotsa.stf', 'R');
+   UTL_FILE.PUT_LINE (fileID, 'just the beginning');
+   UTL_FILE.FCLOSE (fileID);
+END;
+
+It is filled with errors, as you can see when I try to execute the program: 
+
+SQL> exec file_action
+declare
+*
+ERROR at line 1:
+ORA-06510: PL/SQL: unhandled user-defined exception
+ORA-06512: at "SYS.UTL_FILE", line 91
+ORA-06512: at "SYS.UTL_FILE", line 146
+ORA-06512: at line 4
+
+But what error or errors? Notice that the only information you get is that it was an "unhandled user-defined exception"--even though Oracle defined the exception! 
+
+The bottom line is that if you want to get more information out of the UTL_FILE-related errors in your code, you need to add exception handlers designed explicitly to trap UTL_FILE exceptions and tell you which one was raised. The following template exception section offers that capability. It includes an exception handler for each UTL_FILE exception. The handler writes out the name of the exception and then reraises the exception. 
+
+/* Filename on companion disk: fileexc.sql */
+
+EXCEPTION
+   WHEN UTL_FILE.INVALID_PATH
+   THEN 
+       DBMS_OUTPUT.PUT_LINE ('invalid_path'); RAISE;
+ 
+   WHEN UTL_FILE.INVALID_MODE
+   THEN 
+       DBMS_OUTPUT.PUT_LINE ('invalid_mode'); RAISE;
+ 
+   WHEN UTL_FILE.INVALID_FILEHANDLE
+   THEN 
+       DBMS_OUTPUT.PUT_LINE ('invalid_filehandle'); RAISE;
+ 
+   WHEN UTL_FILE.INVALID_OPERATION
+   THEN 
+       DBMS_OUTPUT.PUT_LINE ('invalid_operation'); RAISE;
+ 
+   WHEN UTL_FILE.READ_ERROR
+   THEN  
+       DBMS_OUTPUT.PUT_LINE ('read_error'); RAISE;
+ 
+   WHEN UTL_FILE.WRITE_ERROR
+   THEN 
+      DBMS_OUTPUT.PUT_LINE ('write_error'); RAISE;
+ 
+   WHEN UTL_FILE.INTERNAL_ERROR
+   THEN 
+      DBMS_OUTPUT.PUT_LINE ('internal_error'); RAISE;
+END;
+
+If I add this exception section to my file_action procedure, I get this message, 
+
+SQL> @temp
+invalid_operation
+declare
+*
+ERROR at line 1:
+ORA-06510: PL/SQL: unhandled user-defined exception
+
+which helps me realize that I am trying to write to a read-only file. So I change the file mode to "W" and try again, only to receive the same error again! Additional analysis reveals that my file location is not valid. It should be "C:\temp" instead of "C:/tmp". So why didn't I get a UTL_FILE.INVALID_PATH exception? Who is to say? With those two changes made, file_action then ran without error. 
+
+I suggest that whenever you work with UTL_FILE programs, you include either all or the relevant part of fileexc.sql. (See each program description earlier in this chapter to find out which exceptions each program might raise.) Of course, you might want to change my template. You may not want to reraise the exception. You may want to display other information. Change whatever you need to change--just remember the basic rule that if you don't handle the UTL_FILE exception by name in the block in which the error was raised, you won't be able to tell what went wrong. 
+
+Closing unclosed files
+As a corollary to the last section on handling I/O errors, you must be very careful to close files when you are done working with them, or when errors occur in your program. If not, you may sometimes have to resort to UTL_FILE.FCLOSE_ALL to close all your files before you can get your programs to work properly. 
+
+Suppose you open a file (and get a handle to that file) and then your program hits an error and fails. Suppose further that you do not have an exception section, so the program simply fails. So let's say that you fix the bug and rerun the program. Now it fails with UTL_FILE.INVALID_OPERATION. The problem is that your file is still open--and you have lost the handle to the file, so you cannot explicitly close just that one file. 
+
+Instead, you must now issue this command (here, from SQL*Plus): 
+
+SQL> exec UTL_FILE.FCLOSE_ALL
+
+With any luck, you won't close files that you wanted to be left open in your session. As a consequence, I recommend that you always include calls to UTL_FILE.FCLOSE in each of your exception sections to avoid the need to call FCLOSE_ALL and to minimize extraneous INVALID_OPERATION exceptions. 
+
+Here is the kind of exception section you should consider including in your programs. (I use the PLVexc.recNstop handler from PL/Vision as an example of a high-level program to handle exceptions, in this case requesting that the program "record and then stop.") 
+
+EXCEPTION
+   WHEN OTHRES
+   THEN
+      UTL_FILE.FCLOSE (ini_fileID);
+      UTL_FILE.FCLOSE (new_fileID);
+      PLVexc.recNstop;
+END;
+
+In other words, I close the two files I've been working with, and then handle the exception. 
+
+Combining locations and filenames
+I wonder if anyone else out there in the PL/SQL world finds UTL_FILE as frustrating as I do. I am happy that Oracle built the package, but I sure wish they'd given us more to work with. I am bothered by these things: 
+
+The need to separate my filename from the location. Most of the time when I work with files, those two pieces are stuck together. With UTL_FILE, I have to split them apart. 
+
+The lack of support for paths. It would be nice to not have to provide a file location and just let UTL_FILE find my file for me. 
+
+This section shows you how to enhance UTL_FILE to allow you to pass in a "combo" filename: location and name joined together, as we so often encounter them. The next section explains the steps for adding path support to your manipulation of files with UTL_FILE. 
+
+If you are going to specify your file specification (location and name) in one string, what is the minimum information needed in order to separate these two elements to pass to FOPEN? The delimiter used to separate directories from filenames. In DOS (and Windows) that delimiter is "\". In UNIX it is "/". In VAX/VMS it is "]". Seems to me that I just have to find the last occurrence of this delimiter in your string and that will tell me where to break apart the string. 
+
+So to allow you to get around splitting up your file specification in your call to FOPEN, I can do the following: 
+
+Give you a way to tell me in advance the operating system delimiter for directories--and store that value for use in future attempts to open files. 
+
+Offer you a substitute FOPEN procedure that uses that delimiter. 
+
+Since I want to store that value for your entire session, I will need a package. (You can also use a database table so that you do not have to specify this value each time you start up your application.) Here is the specification: 
+
+/* Filename on companion disk: onestring.spp */
+
+CREATE OR REPLACE PACKAGE fileIO
+IS
+   PROCEDURE setsepchar (str IN VARCHAR2);
+   FUNCTION sepchar RETURN VARCHAR2;
+ 
+   FUNCTION open (file IN VARCHAR2, filemode IN VARCHAR2)
+      RETURN UTL_FILE.FILE_TYPE;
+END;
+/
+
+In other words, I set the separation character or delimiter with a call to fileIO.setsepchar, and I can retrieve the current value with a call to the fileIO.sepchar function. Once I have that value, I can call fileIO.open to open a file without having to split apart the location and name. I show an example of this program in use here: 
+
+DECLARE
+   fid UTL_FILE.FILE_TYPE;
+BEGIN
+   fileIO.setsepchar ('\');
+   fid := fileio.open ('c:\temp\newone.txt', 'w'));
+END;
+/
+
+The body of this package is quite straightforward: 
+
+CREATE OR REPLACE PACKAGE BODY fileIO
+IS
+   g_sepchar CHAR(1) := '/'; /* Unix is, after all, dominant. */
+ 
+   PROCEDURE setsepchar (str IN VARCHAR2)
+   IS
+   BEGIN
+      g_sepchar := NVL (str, '/');
+   END;
+ 
+   FUNCTION sepchar RETURN VARCHAR2
+   IS
+   BEGIN
+      RETURN g_sepchar;
+   END;
+ 
+   FUNCTION open (file IN VARCHAR2, filemode IN VARCHAR2)
+      RETURN UTL_FILE.FILE_TYPE
+   IS
+      v_loc PLS_INTEGER := INSTR (file, g_sepchar, -1);
+      retval UTL_FILE.FILE_TYPE;
+   BEGIN
+      RETURN UTL_FILE.FOPEN 
+         (SUBSTR (file, 1, v_loc-1),
+          SUBSTR (file, v_loc+1),
+          filemode);
+   END;
+END;
+/
+
+Notice that when I call INSTR I pass -1 for the third argument. This negative value tells the built-in to scan from the end of string backwards to the first occurrence of the specified character. 
+
+Adding support for paths
+Why should I have to provide the directory name for my file each time I call FOPEN to read that file? It would be so much easier to specify a path, a list of possible directories, and then just let UTL_FILE scan the different directories in the specified order until the file is found. 
+
+Even though the notion of a path is not built into UTL_FILE, it is easy to add this feature. The structure of the implementation is very similar to the package built to combine file locations and names. I will need a package to receive and store the path, or list of directories. I will need an alternative open procedure that uses the path instead of a provided location. Here is the package specification: 
+
+/* Filename on companion disk: filepath.spp */
+
+CREATE OR REPLACE PACKAGE fileIO
+IS
+   c_delim CHAR(1) := ';';
+ 
+   PROCEDURE setpath (str IN VARCHAR2);
+   FUNCTION path RETURN VARCHAR2;
+ 
+   FUNCTION open (file IN VARCHAR2, filemode IN VARCHAR2) 
+      RETURN UTL_FILE.FILE_TYPE;
+END;
+/
+
+I define the path delimiter as a constant so that a user of the package can see what he should use to separate different directories in his path. I provide a procedure to set the path and a function to get the path--but the variable containing the path is hidden away in the package body to protect its integrity. 
+
+Before exploring the implementation of this package, let's see how you would use these programs. The following test script sets a path with two directories and then displays the first line of code in the file containing the previous package: 
+
+/* Filename on companion disk: filepath.tst */
+
+DECLARE
+   fID UTL_FILE.FILE_TYPE;
+   v_line VARCHAR2(2000);
+BEGIN
+   fileio.setpath ('c:\temp;d:\oreilly\builtins\code');
+   fID := fileIO.open ('filepath.spp');
+   UTL_FILE.GET_LINE (fID, v_line);
+   DBMS_OUTPUT.PUT_LINE (v_line);
+   UTL_FILE.FCLOSE (fID);
+END;
+/
+
+I include a trace message in the package (commented out on the companion disk) so that we can watch the path-based open doing its work: 
+
+SQL> @filepath.tst
+...looking in c:\temp
+...looking in d:\oreilly\builtins\code
+CREATE OR REPLACE PACKAGE fileIO
+
+It's nice having programs do your work for you, isn't it? Here is the implementation of the fileIO package with path usage: 
+
+/* Filename on companion disk: filepath.spp */
+
+CREATE OR REPLACE PACKAGE BODY fileIO
+IS
+   g_path VARCHAR2(2000);
+ 
+   PROCEDURE setpath (str IN VARCHAR2)
+   IS 
+   BEGIN
+      g_path := str;
+   END;
+ 
+   FUNCTION path RETURN VARCHAR2
+   IS
+   BEGIN
+      RETURN g_path;
+   END;
+ 
+   FUNCTION open (file IN VARCHAR2, filemode IN VARCHAR2) 
+      RETURN UTL_FILE.FILE_TYPE
+   IS
+      /* Location of next path separator */
+      v_lastsep PLS_INTEGER := 1;
+      v_sep PLS_INTEGER := INSTR (g_path, c_delim);
+      v_dir VARCHAR2(500);
+      retval UTL_FILE.FILE_TYPE;
+   BEGIN     
+      /* For each directory in the path, attempt to open the file. */ 
+      LOOP
+         BEGIN
+            IF v_sep = 0
+            THEN
+               v_dir := SUBSTR (g_path, v_lastsep);
+            ELSE
+               v_dir := SUBSTR (g_path, v_lastsep, v_sep - v_lastsep);
+            END IF;
+            retval := UTL_FILE.FOPEN (v_dir, file, 'R');
+            EXIT;
+         EXCEPTION
+            WHEN OTHERS
+            THEN
+               IF v_sep = 0
+               THEN
+                  RAISE;
+               ELSE
+                  v_lastsep := v_sep + 1;
+                  v_sep := INSTR (g_path, c_delim, v_sep+1); 
+               END IF;
+         END;
+      END LOOP;
+      RETURN retval;
+   END;
+END;
+/
+
+The logic in this fileio.open is a little bit complicated, because I need to parse the semicolon-delimited list. The v_sep variable contains the location in the path of the next delimiter. The v_lastsep variable contains the location of the last delimiter. I have to include special handling for recognizing when I am at the last directory in the path (v_sep equals 0). Notice that I do not hard-code the semi-colon into this program. Instead, I reference the c_delim constant. 
+
+The most important implementation detail is that I place the call to FOPEN inside a loop. With each iteration of the loop body, I extract a directory from the path. Once I have the next directory to search, I call the FOPEN function to see if I can read the file. If I am able to do so successfully, I will reach the next line of code inside my loop, which is an EXIT statement: I am done and can leave. This drops me down to the RETURN statement to send back the handle to the file. 
+
+If I am unable to read the file in that directory, UTL_FILE raises an exception. Notice that I have placed the entire body of my loop inside its own anonymous block. This allows me to trap the open failure and process it. If I am on my last directory (no more delimiters, as in v_sep equals 0), I will simply reraise the exception from UTL_FILE. This will cause the loop to terminate, and then end the function execution as well. Since the fileIO.open does not have its own exception section, the error will be propagated out of the function unhandled. Even with a path, I was unable to locate the file. If, however, there are more directories, I set my start and end points for the next SUBSTR from the path and go back to the top of the loop so that FOPEN can try again. 
+
+If you do decide to use utilities like the path-based open shown previously, you should consider the following: 
+
+Combine the logic in filepath.spp with onestring.spp (a version of open that lets you pass the location and name in a single string). I should be able to override the path by providing a location; the version shown in this section assumes that the filename never has a location in it. 
+
+Allow users to add a directory to the path without having to concatenate it to a string with a semicolon between them. Why not build a procedure called fileIO.adddir that does the work for the user and allows an application to modify the path at runtime? 
+
+You closed what?
+You might run into some interesting behavior with the IS_OPEN function if you treat your file handles as variables. You are not likely to do this, but I did, so I thought I would pass on my findings to you. 
+
+In the following script, I define two file handles. I then open a file, assigning the handle record generated by FOPEN to fileID1. I immediately assign that record to fileID2. They now both have the same record contents. I then close the file by passing fileID2 to FCLOSE and check the status of the file afterwards. Finally, I assign a value of NULL to the id field of fileID1 and call IS_OPEN again. 
+
+DECLARE
+   fileID1 UTL_FILE.FILE_TYPE;
+   fileID2 UTL_FILE.FILE_TYPE;
+BEGIN
+   fileID1 := UTL_FILE.FOPEN ('c:\temp', 'newdata.txt', 'W');
+   fileID2 := fileID1;
+   UTL_FILE.FCLOSE (fileID2);
+ 
+   IF UTL_FILE.IS_OPEN (fileid1)
+   THEN
+      DBMS_OUTPUT.PUT_LINE ('still open');
+   END IF;
+ 
+   fileid1.id := NULL;
+   IF NOT UTL_FILE.IS_OPEN (fileid1)
+   THEN
+      DBMS_OUTPUT.PUT_LINE ('now closed');
+   END IF;
+END;
+/
+
+Let's run the script and check out the results: 
+
+SQL> @temp
+still open
+now closed
+
+We can conclude from this test that the IS_OPEN function returns TRUE if the id field of a UTL_FILE.FILE_TYPE record is NULL. It doesn't check the status of the file with the operating system. It is a check totally internal to UTL_FILE. 
+
+This will not cause any problems as long as (a) you don't muck around with the id field of your file handle records and (b) you are consistent with your use of file handles. In other words, if you assign one file record to another, use that new record for all operations. Don't go back to using the original. 
+
+UTL_FILE Examples
+So you've got a file (or a dozen files) out on disk, filled with all sorts of good information you want to access from your PL/SQL-based application. You will find yourself performing the same kinds of operations against those files over and over again. 
+
+After you work your way through this book, I hope that you will recognize almost without conscious thought that you do not want to repeatedly build the open, read, and close operations for each of these files, for each of the various recurring operations. Instead, you will instantly say to yourself, "Hot diggity! This is an opportunity to build a set of standard, generic modules that will help manage my files." 
+
+This section contains a few of my candidates for the first contributions to a UTL_FILE toolbox of utilities. I recommend that you consider building a single package to contain all of these utilities.[4] 
+
+Enhancing UTL_FILE.GET_LINE
+The GET_LINE procedure is simple and straightforward. It gets the next line from the file. If the pointer to the file is already located at the last line of the file, UTL_FILE.GET_LINE does not return data, but instead raises the NO_DATA_FOUND exception. Whenever you write programs using GET_LINE, you will therefore need to handle this exception. Let's explore the different ways you can do this. 
+
+The following example uses a loop to read the contents of a file into a PL/SQL table (whose type definition, tabpkg.names_tabtype, has been declared previously): 
+
+/* Filename on companion disk: file2tab.sp */
+
+CREATE OR REPLACE PACKAGE tabpkg 
+IS
+   TYPE names_tabtype IS TABLE OF VARCHAR2(100)
+      INDEX BY BINARY_INTEGER;
+END;
+/
+CREATE OR REPLACE PROCEDURE file_to_table 
+   (loc_in IN VARCHAR2, file_in IN VARCHAR2, 
+    table_in IN OUT tabpkg.names_tabtype)
+IS
+	/* Open file and get handle right in declaration */
+	names_file UTL_FILE.FILE_TYPE := UTL_FILE.FOPEN (loc_in, file_in, 'R');
+	/* Counter used to store the Nth name. */
+	line_counter INTEGER := 1;
+BEGIN
+	LOOP
+		UTL_FILE.GET_LINE (names_file, table_in(line_counter));
+		line_counter := line_counter + 1;
+	END LOOP;
+EXCEPTION
+	WHEN NO_DATA_FOUND
+	THEN
+		UTL_FILE.FCLOSE (names_file);
+END;
+/
+
+The file_to_table procedure uses an infinite loop to read through the contents of the file. Notice that there is no EXIT statement within the loop to cause the loop to terminate. Instead I rely on the fact that the UTL_FILE package raises a NO_DATA_FOUND exception once it goes past the end-of-file marker and short-circuits the loop by transferring control to the exception section. The exception handler then traps that exception and closes the file. 
+
+I am not entirely comfortable with this approach. I don't like to code infinite loops without an EXIT statement; the termination condition is not structured into the loop itself. Furthermore, the end-of-file condition is not really an exception; every file, after all, must end at some point. 
+
+I believe that a better approach to handling the end-of-file condition is to build a layer of code around GET_LINE that immediately checks for end-of-file and returns a Boolean value (TRUE or FALSE). The get_nextline procedure shown here embodies this principle. 
+
+/* Filename on companion disk: getnext.sp */
+
+PROCEDURE get_nextline 
+   (file_in IN UTL_FILE.FILE_TYPE, 
+    line_out OUT VARCHAR2, 
+    eof_out OUT BOOLEAN)
+IS
+BEGIN
+   UTL_FILE.GET_LINE (file_in, line_out);
+   eof_out := FALSE;
+EXCEPTION
+   WHEN NO_DATA_FOUND
+   THEN
+      line_out := NULL;
+      eof_out  := TRUE;
+END;
+
+The get_nextline procedure accepts an already assigned file handle and returns two pieces of information: the line of text (if there is one) and a Boolean flag (set to TRUE if the end-of-file is reached, FALSE otherwise). Using get_nextline, I can now read through a file with a loop that has an EXIT statement. 
+
+My file_to_table procedure will look like the following after adding get_nextline: 
+
+/* Filename on companion disk: fil2tab2.sp */
+
+PROCEDURE file_to_table 
+   (loc_in IN VARCHAR2, file_in IN VARCHAR2, 
+   table_in IN OUT names_tabtype)
+IS
+   /* Open file and get handle right in declaration */
+   names_file CONSTANT UTL_FILE.FILE_TYPE := 
+      UTL_FILE.FOPEN (loc_in, file_in, 'R');
+ 
+   /* counter used to create the Nth name. */
+   line_counter INTEGER := 1;
+ 
+   end_of_file BOOLEAN := FALSE;
+BEGIN
+   WHILE NOT end_of_file
+   LOOP
+      get_nextline (names_file, table_in(line_counter), end_of_file);
+      line_counter := line_counter + 1;
+   END LOOP;
+   UTL_FILE.FCLOSE (names_file);
+END;
+
+With get_nextline, I no longer treat end-of-file as an exception. I read a line from the file until I am done, and then I close the file and exit. This is, I believe, a more straightforward and easily understood program. 
+
+Creating a file
+A common way to use files does not involve the contents of the file as much as a confirmation that the file does in fact exist. You can use the two modules defined next to create a file and then check to see if that file exists. Notice that when I create a file in this type of situation, I do not even bother to return the handle to the file. The purpose of the first program, create_file, is simply to make sure that a file with the specified name (and optional line of text) is out there on disk. 
+
+/* Filename on companion disk: crefile.sp */
+
+PROCEDURE create_file 
+   (loc_in IN VARCHAR2, file_in IN VARCHAR2, line_in IN VARCHAR2 := NULL)
+IS
+   file_handle UTL_FILE.FILE_TYPE;
+BEGIN
+   /* 
+   || Open the file, write a single line and close the file.
+   */
+   file_handle := UTL_FILE.FOPEN (loc_in, file_in, 'W');
+   IF line_in IS NOT NULL
+   THEN
+      UTL_FILE.PUT_LINE (file_handle, line_in);
+   ELSE
+      UTL_FILE.PUT_LINE 
+         (file_handle, 'I make my disk light blink, therefore I am.');
+   END IF;
+   UTL_FILE.FCLOSE (file_handle);
+END;
+
+Testing for a file's existence
+The second program checks to see if a file exists. Notice that it creates a local procedure to handle the close logic (which is called both in the body of the function and in the exception section). 
+
+/* Filename on companon disk: filexist.sf */
+
+CCREATE OR REPLACE FUNCTION file_exists 
+   (loc_in IN VARCHAR2, 
+    file_in IN VARCHAR2,
+    close_in IN BOOLEAN := FALSE)
+   RETURN BOOLEAN
+IS
+   file_handle UTL_FILE.FILE_TYPE;
+   retval BOOLEAN;
+ 
+   PROCEDURE closeif IS
+   BEGIN
+      IF close_in AND UTL_FILE.IS_OPEN (file_handle) 
+      THEN
+         UTL_FILE.FCLOSE (file_handle);
+      END IF;
+   END;
+BEGIN
+   /* Open the file. */
+   file_handle := UTL_FILE.FOPEN (loc_in, file_in, 'R');
+ 
+   /* Return the result of a check with IS_OPEN. */
+   retval := UTL_FILE.IS_OPEN (file_handle);
+ 
+   closeif;
+ 
+   RETURN retval;
+EXCEPTION
+   WHEN OTHERS 
+   THEN
+      closeif;
+      RETURN FALSE;
+ END;
+/
+ 
+
+Searching a file for a string
+Because I found the INSTR function to be so useful, I figured that this same kind of operation would also really come in handy with operating system files. The line_with_text function coming up shortly returns the line number in a file containing the specified text. The simplest version of such a function would have a specification like this: 
+
+FUNCTION line_with_text 
+   (loc_in IN VARCHAR2, file_in IN VARCHAR2, text_in IN VARCHAR2)
+RETURN INTEGER
+
+In other words, given a location, a filename, and a chunk of text, find the first line in the file that contains the text. You could call this function as follows: 
+
+IF line_with_text ('h:\pers', 'names.vp', 'Hanubi') > 0
+THEN
+   MESSAGE ('Josephine Hanubi is a vice president!');
+END IF;
+
+The problem with this version of line_with_text is its total lack of vision. What if I want to find the second occurrence in the file? What if I need to start my search from the tenth line? What if I want to perform a case-insensitive search? None of these variations are supported. 
+
+I urge you strongly to think through all the different ways a utility like line_with_text might be used before you build it. Don't just build for today's requirement. Anticipate what you will need tomorrow and next week as well. 
+
+For line_with_text, a broader vision would yield a specification like this: 
+
+FUNCTION line_with_text 
+   (loc_in IN VARCHAR2,
+    file_in IN VARCHAR2, 
+    text_in IN VARCHAR2, 
+    occurrence_in IN INTEGER := 1,
+    start_line_in IN INTEGER := 1,
+    end_line_in IN INTEGER := 0,
+    ignore_case_in IN BOOLEAN := TRUE)
+RETURN INTEGER
+
+Wow! That's a lot more parameter passing. Let's take a look at the kind of flexibility we gain from these additional arguments. First, the following table provides a description of each parameter. 
+
+Parameter 
+ Description 
+ 
+loc_in 
+ The location of the file on the operating system 
+ 
+file_in 
+ The name of the file to be opened 
+ 
+text_in 
+ The chunk of text to be searched for in each line of the file 
+ 
+occurrence_in 
+ The number of times the text should be found in distinct lines in the file before the function returns the line number 
+ 
+srart_line_in 
+ The first line in the file from which the function should start its search 
+ 
+end_line_in 
+ The last line in the file to which the function should continue its search; if zero, then search through end of file 
+ 
+ignore_case_in 
+ Indicates whether the case of the file contents and text_in should be ignored when checking for its presence in the line 
+ 
+
+
+Notice that all the new parameters, occurrence_in through ignore_case_in, have default values, so I can call this function in precisely the same way and with the same results as the first, limited version: 
+
+IF line_with_text ('names.vp', 'Hanubi') > 0
+THEN
+   MESSAGE ('Josephine Hanubi is a vice president!');
+END IF;
+
+Now, however, I can also do so much more: 
+
+Confirm that the role assigned to this user is SUPERVISOR: 
+line_with_text ('c:\temp', 'config.usr', 'ROLE=SUPERVISOR') 
+
+Find the second occurrence of DELETE starting with the fifth line: 
+line_with_text ('/tmp', 'commands.dat', 'delete', 2, 5) 
+
+Verify that the third line contains a terminal type specification: 
+line_with_text ('g:\apps\user\', 'setup.cfg', 'termtype=', 1, 3, 3) 
+
+Here is the code for the line_with_text function: 
+
+/* Filename on companion disk: linetext.sf */
+
+CREATE OR REPLACE FUNCTION line_with_text 
+   (loc_in IN VARCHAR2,
+    file_in IN VARCHAR2, 
+    text_in IN VARCHAR2, 
+    occurrence_in IN INTEGER := 1,
+    start_line_in IN INTEGER := 1,
+    end_line_in IN INTEGER := 0,
+    ignore_case_in IN BOOLEAN := TRUE)
+RETURN INTEGER
+/*
+|| An "INSTR" for operating system files. Returns the line number of
+|| a file in which a text string was found.
+*/
+IS
+   /* Handle to the file. Only will open if arguments are valid. */
+   file_handle UTL_FILE.FILE_TYPE;
+ 
+   /* Holds a line of text from the file. */
+   line_of_text VARCHAR2(1000);
+ 
+   text_loc INTEGER;
+   found_count INTEGER := 0;
+ 
+   /* Boolean to determine if there are more values to read */
+   no_more_lines BOOLEAN := FALSE;
+ 
+   /* Function return value */
+   return_value INTEGER := 0;
+BEGIN
+   /* Assert valid arguments. If any fail, return NULL. */
+   IF loc_in IS NULL OR
+      file_in IS NULL OR
+      text_in IS NULL OR
+      occurrence_in <= 0 OR
+      start_line_in < 1 OR
+      end_line_in < 0
+   THEN
+      return_value := NULL;
+   ELSE
+      /* All arguments are fine. Open and read through the file. */
+      file_handle := UTL_FILE.FOPEN (loc_in, file_in, 'R');
+      LOOP
+         /* Get next line and exit if at end of file. */
+         get_nextline (file_handle, line_of_text, no_more_lines);
+         EXIT WHEN no_more_lines;
+ 
+         /* Have another line from file. */
+         return_value := return_value + 1;
+ 
+         /* If this line is between the search range... */
+         IF (return_value BETWEEN start_line_in AND end_line_in) OR
+            (return_value >= start_line_in AND end_line_in = 0)
+         THEN
+            /* Use INSTR to see if text is present. */
+            IF NOT ignore_case_in
+            THEN
+               text_loc := INSTR (line_of_text, text_in);
+            ELSE
+               text_loc := INSTR (UPPER (line_of_text), UPPER (text_in));
+            END IF;
+ 
+            /* If text location is positive, have a match. */
+            IF text_loc > 0
+            THEN
+               /* Increment found counter. Exit if matches request. */
+               found_count := found_count + 1;
+               EXIT WHEN found_count = occurrence_in;
+            END IF;
+         END IF;
+      END LOOP;
+      UTL_FILE.FCLOSE (file_handle);
+   END IF;
+ 
+   IF no_more_lines
+   THEN
+      /* read through whole file without success. */
+      return_value := NULL;
+   END IF;
+ 
+   RETURN return_value;
+END;
+
+Getting the nth line from a file
+What if you want to get a specific line from a file? The following function takes a filename and a line number and returns the text found on that line: 
+
+/* Filename on companion disk: nthline.sf */
+
+CREATE OR REPLACE FUNCTION get_nth_line 
+   (loc_in IN VARCHAR2, file_in IN VARCHAR2, line_num_in IN INTEGER)
+IS
+   /* Handle to the file. Only will open if arguments are valid. */
+   file_handle UTL_FILE.FILE_TYPE;
+ 
+   /* Count of lines read from the file. */
+   line_count INTEGER := 0;
+ 
+   /* Boolean to determine if there are more values to read */
+   no_more_lines BOOLEAN := FALSE;
+ 
+   /* Function return value */
+   return_value VARCHAR2(1000) := NULL;
+BEGIN
+   /* Need a file name and a positive line number. */
+   IF file_in IS NOT NULL AND line_num_in > 0
+   THEN
+      /* All arguments are fine. Open and read through the file. */
+      file_handle := UTL_FILE.FOPEN (loc_in, file_in, 'R');
+      LOOP
+         /* Get next line from file. */
+         get_nextline (file_handle, return_value, no_more_lines);
+ 
+         /* Done if no more lines or if at the requested line. */
+         EXIT WHEN no_more_lines OR line_count = line_num_in - 1;
+ 
+         /* Otherwise, increment counter and read another line. */
+         line_count := line_count + 1;
+      END LOOP;
+      UTL_FILE.FCLOSE (file_handle);
+   END IF;
+ 
+   /* Either NULL or contains last line read from file. */
+   RETURN return_value;
+END;
+ 
+------Second option
+Create a package containing a procedure print. This procedure will insert it's text-parameter into a debug-table if, and only if a switch is set.
+
+(Note, this code is just an examplet; it is not tested nor compiled)
+
+create or replace package my_debug
+is
+  procedure set_debug
+  ( p_debug in boolean
+  );
+  function is_debug
+  return boolean;
+  procedure print
+  ( p_text in varchar2
+  );
+end my_debug;
+
+create or replace package my_debug
+is
+  g_debug boolean := false;
+
+  procedure set_debug
+  ( p_debug in boolean
+  ) is
+  begin
+    g_debug := p_debug;
+  end set_debug;
+
+  function is_debug
+  return boolean is
+  begin
+    return g_debug;
+  end is_debug;
+
+  procedure print
+  ( p_text in varchar2
+  ) is
+  begin
+    if g_debug
+    then
+      insert into my_debug_table
+      ( text
+      ) values
+      ( p_text
+      );
+    end if;
+  end print;
+end my_debug;
+
+
+In your regular code, make calls to this print-procedure on tactical places, so you will be able to follow the flow of your code if necessary. (Including values of crucial variables).
+This way, you don't have to change code when you want to debug it.
+
+11)	What are the types of triggers?
+file:///D:/NABEEL/DBA/INFO/9i_online_Doc/SERVER.920/A96524/C18TRIGS.HTM#12312
+
+
+Parts of a Trigger
+A trigger has three basic parts:
+
+A triggering event or statement 
+A trigger restriction 
+A trigger action 
+Types of Triggers
+This section describes the different types of triggers:
+
+Row Triggers and Statement Triggers 
+BEFORE and AFTER Triggers 
+INSTEAD OF Triggers 
+Triggers on System Events and User Events 
+Row Triggers and Statement Triggers
+When you define a trigger, you can specify the number of times the trigger action is to be run:
+
+Once for every row affected by the triggering statement, such as a trigger fired by an UPDATE statement that updates many rows 
+Once for the triggering statement, no matter how many rows it affects 
+Row Triggers
+A row trigger is fired each time the table is affected by the triggering statement. For example, if an UPDATE statement updates multiple rows of a table, a row trigger is fired once for each row affected by the UPDATE statement. If a triggering statement affects no rows, a row trigger is not run.
+
+Row triggers are useful if the code in the trigger action depends on data provided by the triggering statement or rows that are affected. For example, Figure 17-3 illustrates a row trigger that uses the values of each row affected by the triggering statement.
+
+Statement Triggers
+A statement trigger is fired once on behalf of the triggering statement, regardless of the number of rows in the table that the triggering statement affects, even if no rows are affected. For example, if a DELETE statement deletes several rows from a table, a statement-level DELETE trigger is fired only once.
+
+Statement triggers are useful if the code in the trigger action does not depend on the data provided by the triggering statement or the rows affected. For example, use a statement trigger to:
+
+Make a complex security check on the current time or user 
+Generate a single audit record 
+BEFORE and AFTER Triggers
+When defining a trigger, you can specify the trigger timing--whether the trigger action is to be run before or after the triggering statement. BEFORE and AFTER apply to both statement and row triggers.
+
+BEFORE and AFTER triggers fired by DML statements can be defined only on tables, not on views. However, triggers on the base tables of a view are fired if an INSERT, UPDATE, or DELETE statement is issued against the view. BEFORE and AFTER triggers fired by DDL statements can be defined only on the database or a schema, not on particular tables.
+
+See Also: 
+"INSTEAD OF Triggers" 
+"Triggers on System Events and User Events" for information about how BEFORE and AFTER triggers can be used to publish information about DML and DDL statements 
+ 
+
+BEFORE Triggers
+BEFORE triggers run the trigger action before the triggering statement is run. This type of trigger is commonly used in the following situations:
+
+When the trigger action determines whether the triggering statement should be allowed to complete. Using a BEFORE trigger for this purpose, you can eliminate unnecessary processing of the triggering statement and its eventual rollback in cases where an exception is raised in the trigger action. 
+To derive specific column values before completing a triggering INSERT or UPDATE statement. 
+AFTER Triggers
+AFTER triggers run the trigger action after the triggering statement is run.
+
+Trigger Type Combinations
+Using the options listed previously, you can create four types of row and statement triggers:
+
+BEFORE statement trigger 
+
+Before executing the triggering statement, the trigger action is run.
+
+BEFORE row trigger 
+
+Before modifying each row affected by the triggering statement and before checking appropriate integrity constraints, the trigger action is run, if the trigger restriction was not violated.
+
+AFTER row trigger 
+
+After modifying each row affected by the triggering statement and possibly applying appropriate integrity constraints, the trigger action is run for the current row provided the trigger restriction was not violated. Unlike BEFORE row triggers, AFTER row triggers lock rows.
+
+AFTER statement trigger 
+
+After executing the triggering statement and applying any deferred integrity constraints, the trigger action is run.
+
+You can have multiple triggers of the same type for the same statement for any given table. For example, you can have two BEFORE statement triggers for UPDATE statements on the employees table. Multiple triggers of the same type permit modular installation of applications that have triggers on the same tables. Also, Oracle materialized view logs use AFTER row triggers, so you can design your own AFTER row trigger in addition to the Oracle-defined AFTER row trigger.
+
+You can create as many triggers of the preceding different types as you need for each type of DML statement, (INSERT, UPDATE, or DELETE).
+
+For example, suppose you have a table, SAL, and you want to know when the table is being accessed and the types of queries being issued. The following example contains a sample package and trigger that tracks this information by hour and type of action (for example, UPDATE, DELETE, or INSERT) on table SAL. The global session variable STAT.ROWCNT is initialized to zero by a BEFORE statement trigger. Then it is increased each time the row trigger is run. Finally the statistical information is saved in the table STAT_TAB by the AFTER statement trigger.
+
+See Also: 
+Oracle9i Application Developer's Guide - Fundamentals for examples of trigger applications
+ 
+
+INSTEAD OF Triggers
+INSTEAD OF triggers provide a transparent way of modifying views that cannot be modified directly through DML statements (INSERT, UPDATE, and DELETE). These triggers are called INSTEAD OF triggers because, unlike other types of triggers, Oracle fires the trigger instead of executing the triggering statement.
+
+You can write normal INSERT, UPDATE, and DELETE statements against the view and the INSTEAD OF trigger is fired to update the underlying tables appropriately. INSTEAD OF triggers are activated for each row of the view that gets modified.
+
+Modify Views
+Modifying views can have ambiguous results:
+
+Deleting a row in a view could either mean deleting it from the base table or updating some values so that it is no longer selected by the view. 
+Inserting a row in a view could either mean inserting a new row into the base table or updating an existing row so that it is projected by the view. 
+Updating a column in a view that involves joins might change the semantics of other columns that are not projected by the view. 
+Object views present additional problems. For example, a key use of object views is to represent master/detail relationships. This operation inevitably involves joins, but modifying joins is inherently ambiguous.
+
+As a result of these ambiguities, there are many restrictions on which views are modifiable. An INSTEAD OF trigger can be used on object views as well as relational views that are not otherwise modifiable.
+
+Even if the view is inherently modifiable, you might want to perform validations on the values being inserted, updated or deleted. INSTEAD OF triggers can also be used in this case. Here the trigger code performs the validation on the rows being modified and if valid, propagate the changes to the underlying tables.
+
+INSTEAD OF triggers also enable you to modify object view instances on the client-side through OCI. To modify an object materialized by an object view in the client-side object cache and flush it back to the persistent store, you must specify INSTEAD OF triggers, unless the object view is inherently modifiable. However, it is not necessary to define these triggers for just pinning and reading the view object in the object cache.
+
+See Also: 
+Chapter 13, "Object Datatypes and Object Views" 
+Oracle Call Interface Programmer's Guide 
+Oracle9i Application Developer's Guide - Fundamentals for an example of an INSTEAD OF trigger 
+ 
+------------Oracle 10g
+http://download-east.oracle.com/docs/cd/B19306_01/server.102/b14220/triggers.htm#i2013
+
+Parts of a Trigger
+A trigger has three basic parts:
+
+A triggering event or statement
+
+A trigger restriction
+
+A trigger action
+
+Figure 22-3 represents each of these parts of a trigger and is not meant to show exact syntax. The sections that follow explain each part of a trigger in greater detail.
+
+Figure 22-3 The REORDER Trigger
+
+
+Description of the illustration cncpt078.gif
+
+
+The Triggering Event or Statement
+A triggering event or statement is the SQL statement, database event, or user event that causes a trigger to fire. A triggering event can be one or more of the following:
+
+An INSERT, UPDATE, or DELETE statement on a specific table (or view, in some cases)
+
+A CREATE, ALTER, or DROP statement on any schema object
+
+A database startup or instance shutdown
+
+A specific error message or any error message
+
+A user logon or logoff
+
+For example, in Figure 22-3, the triggering statement is:
+
+... UPDATE OF parts_on_hand ON inventory ... 
+
+This statement means that when the parts_on_hand column of a row in the inventory table is updated, fire the trigger. When the triggering event is an UPDATE statement, you can include a column list to identify which columns must be updated to fire the trigger. You cannot specify a column list for INSERT and DELETE statements, because they affect entire rows of information.
+
+A triggering event can specify multiple SQL statements:
+
+... INSERT OR UPDATE OR DELETE OF inventory ... 
+
+This part means that when an INSERT, UPDATE, or DELETE statement is issued against the inventory table, fire the trigger. When multiple types of SQL statements can fire a trigger, you can use conditional predicates to detect the type of triggering statement. In this way, you can create a single trigger that runs different code based on the type of statement that fires the trigger.
+
+Trigger Restriction
+A trigger restriction specifies a Boolean expression that must be true for the trigger to fire. The trigger action is not run if the trigger restriction evaluates to false or unknown. In the example, the trigger restriction is:
+
+new.parts_on_hand < new.reorder_point 
+
+Consequently, the trigger does not fire unless the number of available parts is less than a present reorder amount.
+
+Trigger Action
+A trigger action is the procedure (PL/SQL block, Java program, or C callout) that contains the SQL statements and code to be run when the following events occur:
+
+A triggering statement is issued.
+
+The trigger restriction evaluates to true.
+
+Like stored procedures, a trigger action can:
+
+Contain SQL, PL/SQL, or Java statements
+
+Define PL/SQL language constructs such as variables, constants, cursors, exceptions
+
+Define Java language constructs
+
+Call stored procedures
+
+If the triggers are row triggers, the statements in a trigger action have access to column values of the row being processed by the trigger. Correlation names provide access to the old and new values for each column.
+
+Types of Triggers
+This section describes the different types of triggers:
+
+Row Triggers and Statement Triggers
+
+BEFORE and AFTER Triggers
+
+INSTEAD OF Triggers
+
+Triggers on System Events and User Events
+
+Row Triggers and Statement Triggers
+When you define a trigger, you can specify the number of times the trigger action is to be run:
+
+Once for every row affected by the triggering statement, such as a trigger fired by an UPDATE statement that updates many rows
+
+Once for the triggering statement, no matter how many rows it affects
+
+Row Triggers
+A row trigger is fired each time the table is affected by the triggering statement. For example, if an UPDATE statement updates multiple rows of a table, a row trigger is fired once for each row affected by the UPDATE statement. If a triggering statement affects no rows, a row trigger is not run.
+
+Row triggers are useful if the code in the trigger action depends on data provided by the triggering statement or rows that are affected. For example, Figure 22-3 illustrates a row trigger that uses the values of each row affected by the triggering statement.
+
+Statement Triggers 
+A statement trigger is fired once on behalf of the triggering statement, regardless of the number of rows in the table that the triggering statement affects, even if no rows are affected. For example, if a DELETE statement deletes several rows from a table, a statement-level DELETE trigger is fired only once.
+
+Statement triggers are useful if the code in the trigger action does not depend on the data provided by the triggering statement or the rows affected. For example, use a statement trigger to:
+
+Make a complex security check on the current time or user
+
+Generate a single audit record
+
+BEFORE and AFTER Triggers
+When defining a trigger, you can specify the trigger timing—whether the trigger action is to be run before or after the triggering statement. BEFORE and AFTER apply to both statement and row triggers.
+
+BEFORE and AFTER triggers fired by DML statements can be defined only on tables, not on views. However, triggers on the base tables of a view are fired if an INSERT, UPDATE, or DELETE statement is issued against the view. BEFORE and AFTER triggers fired by DDL statements can be defined only on the database or a schema, not on particular tables.
+
+
+See Also:
+
+"INSTEAD OF Triggers"
+
+"Triggers on System Events and User Events" for information about how BEFORE and AFTER triggers can be used to publish information about DML and DDL statements
+
+ 
+
+
+BEFORE Triggers 
+BEFORE triggers run the trigger action before the triggering statement is run. This type of trigger is commonly used in the following situations:
+
+When the trigger action determines whether the triggering statement should be allowed to complete. Using a BEFORE trigger for this purpose, you can eliminate unnecessary processing of the triggering statement and its eventual rollback in cases where an exception is raised in the trigger action.
+
+To derive specific column values before completing a triggering INSERT or UPDATE statement.
+
+AFTER Triggers 
+AFTER triggers run the trigger action after the triggering statement is run.
+
+Trigger Type Combinations
+Using the options listed previously, you can create four types of row and statement triggers:
+
+BEFORE statement trigger
+
+Before executing the triggering statement, the trigger action is run.
+
+BEFORE row trigger
+
+Before modifying each row affected by the triggering statement and before checking appropriate integrity constraints, the trigger action is run, if the trigger restriction was not violated.
+
+AFTER statement trigger
+
+After executing the triggering statement and applying any deferred integrity constraints, the trigger action is run.
+
+AFTER row trigger
+
+After modifying each row affected by the triggering statement and possibly applying appropriate integrity constraints, the trigger action is run for the current row provided the trigger restriction was not violated. Unlike BEFORE row triggers, AFTER row triggers lock rows.
+
+You can have multiple triggers of the same type for the same statement for any given table. For example, you can have two BEFORE statement triggers for UPDATE statements on the employees table. Multiple triggers of the same type permit modular installation of applications that have triggers on the same tables. Also, Oracle materialized view logs use AFTER row triggers, so you can design your own AFTER row trigger in addition to the Oracle-defined AFTER row trigger.
+
+You can create as many triggers of the preceding different types as you need for each type of DML statement, (INSERT, UPDATE, or DELETE).
+
+
+See Also:
+
+Oracle Database Application Developer's Guide - Fundamentals for examples of trigger applications 
+
+
+INSTEAD OF Triggers
+INSTEAD OF triggers provide a transparent way of modifying views that cannot be modified directly through DML statements (INSERT, UPDATE, and DELETE). These triggers are called INSTEAD OF triggers because, unlike other types of triggers, Oracle fires the trigger instead of executing the triggering statement.
+
+You can write normal INSERT, UPDATE, and DELETE statements against the view and the INSTEAD OF trigger is fired to update the underlying tables appropriately. INSTEAD OF triggers are activated for each row of the view that gets modified.
+
+Modify Views
+Modifying views can have ambiguous results:
+
+Deleting a row in a view could either mean deleting it from the base table or updating some values so that it is no longer selected by the view.
+
+Inserting a row in a view could either mean inserting a new row into the base table or updating an existing row so that it is projected by the view.
+
+Updating a column in a view that involves joins might change the semantics of other columns that are not projected by the view.
+
+Object views present additional problems. For example, a key use of object views is to represent master/detail relationships. This operation inevitably involves joins, but modifying joins is inherently ambiguous.
+
+As a result of these ambiguities, there are many restrictions on which views are modifiable. An INSTEAD OF trigger can be used on object views as well as relational views that are not otherwise modifiable.
+
+A view is inherently modifiable if data can be inserted, updated, or deleted without using INSTEAD OF triggers and if it conforms to the restrictions listed as follows. Even if the view is inherently modifiable, you might want to perform validations on the values being inserted, updated or deleted. INSTEAD OF triggers can also be used in this case. Here the trigger code performs the validation on the rows being modified and if valid, propagate the changes to the underlying tables.
+
+INSTEAD OF triggers also enable you to modify object view instances on the client-side through OCI. To modify an object materialized by an object view in the client-side object cache and flush it back to the persistent store, you must specify INSTEAD OF triggers, unless the object view is inherently modifiable. However, it is not necessary to define these triggers for just pinning and reading the view object in the object cache.
+
+
+
+
+
+
+
+
+DBA Questions:
+
+12)	Give one method of transferring a table from one schema to another?
+
+
+Export-Import, Create table as .. Select .. 
+
+
+
+13)	What is the purpose of the IMPORT Option IGNORE? What is its default setting?
+
+When tables are manually created before data is imported, the CREATE TABLE statement in the export dump file will fail because the table already exists. To avoid this failure and continue loading data into the table, set the import parameter IGNORE=y. Otherwise, no data will be loaded into the table because of the table creation error.
+
+
+
+14)	You have a rollback segment in a version 7.2 database that has expanded beyond optimal, how can it be restored to optimal?
+
+shrink the rollback segment
+
+ALTER ROLLBACK SEGMENT rbs1 SHRINK TO 100K;
+
+
+15)	If the DEFAULT and TEMPORARY TABLESPACE clauses are left out of a CREATE USER command what happens? Is this Bad of Good? Why?
+
+its bad...that way system tablespace will be default tablespace for this user
+
+
+
+16)	What are some of the ORACLE provided PACKAGES that DBAs should be aware of?
+
+http://download-west.oracle.com/docs/cd/B10501_01/appdev.920/a96612/toc.htm
+
+1 Introduction
+Package Overview 
+Abbreviations for Datetime and Interval Datatypes 
+Summary of Oracle Supplied PL/SQL Packages 
+Summary of Subprograms in Supplemental Packages 
+2 DBMS_ALERT
+Security, Constants, and Errors for DBMS_ALERT 
+Using Alerts 
+Summary of DBMS_ALERT Subprograms 
+3 DBMS_APPLICATION_INFO
+Privileges 
+Summary of DBMS_APPLICATION_INFO Subprograms 
+4 DBMS_APPLY_ADM
+Summary of DBMS_APPLY_ADM Subprograms 
+5 DBMS_AQ
+Java Classes 
+Enumerated Constants 
+Data Structures for DBMS_AQ 
+Summary of DBMS_AQ Subprograms 
+6 DBMS_AQADM
+Enumerated Constants 
+Summary of DBMS_AQADM Subprograms 
+7 DBMS_AQELM
+Summary of DBMS_AQELM Subprograms 
+8 DBMS_CAPTURE_ADM
+Summary of DBMS_CAPTURE_ADM Subprograms 
+9 DBMS_DDL
+Summary of DBMS_DDL Subprograms 
+10 DBMS_DEBUG
+Using DBMS_DEBUG 
+Usage Notes 
+Types and Constants 
+Error Codes, Exceptions, and Variables 
+Common and Debug Session Sections 
+OER Breakpoints 
+Summary of DBMS_DEBUG Subprograms 
+11 DBMS_DEFER
+Summary of DBMS_DEFER Subprograms 
+12 DBMS_DEFER_QUERY
+Summary of DBMS_DEFER_QUERY Subprograms 
+13 DBMS_DEFER_SYS
+Summary of DBMS_DEFER_SYS Subprograms 
+14 DBMS_DESCRIBE
+Security, Types, and Errors for DBMS_DESCRIBE 
+Summary of DBMS_DESCRIBE Subprograms 
+15 DBMS_DISTRIBUTED_TRUST_ADMIN
+Requirements 
+Summary of DBMS_DISTRIBUTED_TRUST_ADMIN Subprograms 
+16 DBMS_FGA
+Summary of DBMS_FGA Subprograms 
+17 DBMS_FLASHBACK
+DBMS_FLASHBACK Error Messages 
+Using DBMS_FLASHBACK: Example 
+Summary of DBMS_FLASHBACK Subprograms 
+18 DBMS_HS_PASSTHROUGH
+Security 
+Summary of DBMS_HS_PASSTHROUGH Subprograms 
+19 DBMS_IOT
+Summary of DBMS_IOT Subprograms 
+20 DBMS_JOB
+Requirements 
+Using the DBMS_JOB Package with Oracle Real Application Clusters 
+Summary of DBMS_JOB Subprograms 
+21 DBMS_LDAP
+Exception Summary 
+Summary of Data Types 
+Summary of DBMS_LDAP Subprograms 
+22 DBMS_LIBCACHE
+Requirements 
+Summary of DBMS_LIBCACHE Subprograms 
+23 DBMS_LOB
+LOB Locators for DBMS_LOB 
+Datatypes, Constants, and Exceptions for DBMS_LOB 
+Security for DBMS_LOB 
+Rules and Limitations for DBMS_LOB 
+Temporary LOBs 
+Summary of DBMS_LOB Subprograms 
+24 DBMS_LOCK
+Requirements, Security, and Constants for DBMS_LOCK 
+Summary of DBMS_LOCK Subprograms 
+Printing a Check: Example 
+25 DBMS_LOGMNR
+DBMS_LOGMNR Constants 
+Summary of DBMS_LOGMNR Subprograms 
+26 DBMS_LOGMNR_CDC_PUBLISH
+Publishing Change Data 
+Summary of DBMS_LOGMNR_CDC_PUBLISH Subprograms 
+27 DBMS_LOGMNR_CDC_SUBSCRIBE
+Subscribing to Change Data 
+Summary of DBMS_LOGMNR_CDC_SUBSCRIBE Subprograms 
+28 DBMS_LOGMNR_D
+Summary of DBMS_LOGMNR_D Subprograms 
+29 DBMS_LOGSTDBY
+Configuring and Managing the Logical Standby Environment 
+Summary of DBMS_LOGSTDBY Subprograms 
+30 DBMS_METADATA
+Summary of DBMS_METADATA Subprograms 
+31 DBMS_MGWADM
+Summary of DBMS_MGWADM Object Types and Methods 
+DBMS_MGWADM Constants 
+MQSeries System Properties 
+Summary of DBMS_MGWADM Subprograms 
+Summary of Database Views 
+32 DBMS_MGWMSG
+Summary of DBMS_MGWMSG Object Types and Methods 
+DBMS_MGWMSG Constants 
+Summary of DBMS_MGWMSG Subprograms 
+33 DBMS_MVIEW
+Summary of DBMS_MVIEW Subprograms 
+34 DBMS_OBFUSCATION_TOOLKIT
+Overview of Key Management 
+Summary of DBMS_OBFUSCATION Subprograms 
+35 DBMS_ODCI
+Summary of DBMS_ODCI Subprograms 
+36 DBMS_OFFLINE_OG
+Summary of DBMS_OFFLINE_OG Subprograms 
+37 DBMS_OFFLINE_SNAPSHOT
+Summary of DBMS_OFFLINE_SNAPSHOT Subprograms 
+38 DBMS_OLAP
+Requirements 
+Error Messages 
+Summary of DBMS_OLAP Subprograms 
+39 DBMS_ORACLE_TRACE_AGENT
+Security 
+Summary of DBMS_ORACLE_TRACE_AGENT Subprograms 
+40 DBMS_ORACLE_TRACE_USER
+Summary of DBMS_ORACLE_TRACE_USER Subprograms 
+41 DBMS_OUTLN
+Requirements and Security for DBMS_OUTLN 
+Summary of DBMS_OUTLN Subprograms 
+42 DBMS_OUTLN_EDIT
+Summary of DBMS_OUTLN_EDIT Subprograms 
+43 DBMS_OUTPUT
+Security, Errors, and Types for DBMS_OUTPUT 
+Using DBMS_OUTPUT 
+Summary of DBMS_OUTPUT Subprograms 
+44 DBMS_PCLXUTIL
+Using DBMS_PCLXUTIL 
+Limitations 
+Summary of DBMS_PCLUTTL Subprograms 
+45 DBMS_PIPE
+Public Pipes, Private Pipes, and Pipe Uses 
+Security, Constants, and Errors 
+Summary of DBMS_PIPE Subprograms 
+46 DBMS_PROFILER
+Using DBMS_PROFILER 
+Requirements 
+Security 
+Exceptions 
+Error Codes 
+Summary of DBMS_PROFILER Subprograms 
+47 DBMS_PROPAGATION_ADM
+Summary of DBMS_PROPAGATION_ADM Subprograms 
+48 DBMS_RANDOM
+Requirements 
+Summary of DBMS_RANDOM Subprograms 
+49 DBMS_RECTIFIER_DIFF
+Summary of DBMS_RECTIFIER_DIFF Subprograms 
+50 DBMS_REDEFINITION
+Constants for DBMS_REDEFINITION 
+Summary of DBMS_REDEFINITION Subprograms 
+51 DBMS_REFRESH
+Summary of DBMS_REFRESH Subprograms 
+52 DBMS_REPAIR
+Security, Enumeration Types, and Exceptions 
+Summary of DBMS_REPAIR Subprograms 
+53 DBMS_REPCAT
+Summary of DBMS_REPCAT Subprograms 
+54 DBMS_REPCAT_ADMIN
+Summary of DBMS_REPCAT_ADMIN Subprograms 
+55 DBMS_REPCAT_INSTANTIATE
+Summary of DBMS_REPCAT_INSTANTIATE Subprograms 
+56 DBMS_REPCAT_RGT
+Summary of DBMS_REPCAT_RGT Subprograms 
+57 DBMS_REPUTIL
+Summary of DBMS_REPUTIL Subprograms 
+58 DBMS_RESOURCE_MANAGER
+Requirements 
+Summary of DBMS_RESOURE_MANAGER Subprograms 
+59 DBMS_RESOURCE_MANAGER_PRIVS
+Summary of DBMS_RESOURCE_MANAGER_PRIVS Subprograms 
+60 DBMS_RESUMABLE
+Summary of DBMS_RESUMABLE Subprograms 
+61 DBMS_RLS
+Dynamic Predicates 
+Security 
+Usage Notes 
+Summary of DBMS_RLS Subprograms 
+62 DBMS_ROWID
+Usage Notes 
+Requirements 
+ROWID Types 
+Exceptions 
+Summary of DBMS_ROWID Subprograms 
+63 DBMS_RULE
+Summary of DBMS_RULE Subprograms 
+64 DBMS_RULE_ADM
+Summary of DBMS_RULE_ADM Subprograms 
+65 DBMS_SESSION
+Requirements 
+Summary of DBMS_SESSION Subprograms 
+66 DBMS_SHARED_POOL
+Installation Notes 
+Usage Notes 
+Summary of DBMS_SHARED_POOL Subprograms 
+67 DBMS_SPACE
+Security 
+Requirements 
+Summary of DBMS_SPACE Subprograms 
+68 DBMS_SPACE_ADMIN
+Security 
+SYSTEM Tablespace Migration: Conditions 
+Constants for DBMS_SPACE_ADMIN Constants 
+Summary of DBMS_SPACE_ADMIN Subprograms 
+69 DBMS_SQL
+Using DBMS_SQL 
+Constants, Types, and Exceptions for DBMS_SQL 
+Execution Flow 
+Security 
+Processing Queries 
+Examples 
+Processing Updates, Inserts, and Deletes 
+Locating Errors 
+Summary of DBMS_SQL Subprograms 
+70 DBMS_STATS
+Using DBMS_STATS 
+Setting or Getting Statistics 
+Transferring Statistics 
+Gathering Optimizer Statistics 
+Summary of DBMS_STATS Subprograms 
+71 DBMS_STORAGE_MAP
+Mapping Terminology 
+Summary of DBMS_STORAGE_MAP Subprograms 
+Usage Notes for DBMS_STORAGE_MAP Subprograms 
+72 DBMS_STREAMS
+Summary of DBMS_STREAMS Subprograms 
+73 DBMS_STREAMS_ADM
+Summary of DBMS_STREAMS_ADM Subprograms 
+74 DBMS_TRACE
+Requirements, Restrictions, and Constants for DBMS_TRACE 
+Using DBMS_TRACE 
+Summary of DBMS_TRACE Subprograms 
+75 DBMS_TRANSACTION
+Requirements 
+Summary of DBMS_TRANSACTION Subprograms 
+76 DBMS_TRANSFORM
+Summary of DBMS_TRANSFORM Subprograms 
+77 DBMS_TTS
+Exceptions 
+Summary of DBMS_TTS Subprograms 
+78 DBMS_TYPES
+Constants for DBMS_TYPES 
+79 DBMS_UTILITY
+Requirements and Types for DBMS_UTILITY 
+Summary of DBMS_UTILITY Subprograms 
+80 DBMS_WM
+Summary of DBMS_WM Subprograms 
+81 DBMS_XDB
+Description of DBMS_XDB 
+Functions and Procedures of DBMS_XDB 
+82 DBMS_XDBT
+Description of BMS_XDBT 
+Functions and Procedures of BMS_XDBT 
+Customizing the DBMS_XDBT package 
+83 DBMS_XDB_VERSION
+Description of DBMS_XDB_VERSION 
+Functions and Procedures of DBMS_XDB_VERSION 
+84 DBMS_XMLDOM
+Description of DBMS_XMLDOM 
+Types of DBMS_XMLDOM 
+Defined Constants of DBMS_XMLDOM 
+Exceptions of DBMS_XMLDOM 
+Functions and Procedures of DBMS_XMLDOM 
+85 DBMS_XMLGEN
+Description of DMS_XMLGEN 
+Functions and Procedures of DBMS_XMLGEN 
+86 DBMS_XMLPARSER
+Description of DBMS_XMLPARSER 
+Functions and Procedures of DBMS_XMLPARSER 
+87 DBMS_XMLQUERY
+Description of DBMS_XMLQuery 
+Types of DBMS_XMLQuery 
+Constants of DBMS_XMLQuery 
+Functions and Procedures of DBMS_XMLQuery 
+88 DBMS_XMLSAVE
+Description of DBMS_XMLSave 
+Types of DBMS_XMLSave 
+Constants of DBMS_XMLSave 
+Functions and Procedures of DBMS_XMLSave 
+89 DBMS_XMLSchema
+Description of DBMS_XMLSCHEMA 
+Constants of DBMS_XMLSCHEMA 
+Procedures and Functions of DBMS_XMLSCHEMA 
+Catalog Views 
+90 DBMS_XPLAN
+Using DBMS_XPLAN 
+Summary of DBMS_XPLAN Subprograms 
+Usage Notes 
+91 DBMS_XSLPROCESSOR
+Description of DBMS_XSLPROCESSOR 
+Subprograms of DBMS_XSLPROCESSOR 
+92 DEBUG_EXTPROC
+Requirements and Installation Notes for DEBUG_EXTPROC 
+Using DEBUG_EXTPROC 
+Summary of DBMS_EXTPROC Subprograms 
+93 UTL_COLL
+Summary of UTL_COLL Subprograms 
+94 UTL_ENCODE
+Summary of UTL_ENCODE Subprograms 
+95 UTL_FILE
+Security 
+File Ownership and Protections 
+Exceptions 
+Types 
+Summary of UTL_FILE Subprograms 
+96 UTL_HTTP
+UTL_HTTP Constants, Types and Flow 
+UTL_HTTP Exceptions 
+UTL_HTTP Examples 
+Summary of UTL_HTTP Subprograms 
+97 UTL_INADDR
+Exceptions 
+Summary of UTL_INADDR Subprograms 
+98 UTL_RAW
+Usage Notes 
+Summary of UTL_RAW Subprograms 
+99 UTL_REF
+Requirements 
+Datatypes, Exceptions, and Security for UTL_REF 
+Summary of UTL_REF Subprograms 
+100 UTL_SMTP
+Exceptions, Limitations, and Reply Codes 
+Summary of UTL_SMTP Subprograms 
+Example 
+101 UTL_TCP
+Exceptions 
+Example 
+Summary of UTL_TCP Subprograms 
+102 UTL_URL
+Introduction to the UTL_URL Package 
+UTL_URL Exceptions 
+Summary of UTL_URL Subprograms 
+103 ANYDATA TYPE
+Construction 
+Summary of ANYDATA Subprograms 
+104 ANYDATASET TYPE
+Construction 
+Summary of ANYDATASET Subprograms 
+105 ANYTYPE TYPE
+Summary of ANYTYPE Subprograms 
+106 Advanced Queuing Types
+Advanced Queuing Types 
+107 JMS Types
+Constants to Support the aq$_jms_message Type 
+Summary of JMS Types 
+Summary of JMS Type Member and Static Subprograms 
+Enqueuing Through the Oracle JMS Administrative Interface: Example 
+108 Logical Change Record Types
+LCR$_DDL_RECORD Type 
+LCR$_ROW_RECORD Type 
+Common Subprograms for LCR$_ROW_RECORD and LCR$_DDL_RECORD 
+LCR$_ROW_LIST Type 
+LCR$_ROW_UNIT Type 
+109 Rule Types
+Rule Types 
+
+
+http://download-east.oracle.com/docs/cd/B19306_01/appdev.102/b14258/toc.htm
+Oracle Database 10g Release 2 (10.2) New Features
+New Packages
+
+DBMS_AQELM
+
+DBMS_AQIN
+
+DBMS_CHANGE_NOTIFICATION
+
+DBMS_DB_VERSION
+
+DBMS_EPG
+
+DBMS_ERRLOG
+
+DBMS_EXPFIL
+
+DBMS_FILE_GROUP
+
+DBMS_PREDICTIVE_ANALYTICS
+
+DBMS_PREPROCESSOR
+
+DBMS_RLMGR
+
+DBMS_TDB
+
+SDO_NET_MEM
+
+UTL_NLA
+
+Updated Packages
+
+DBMS_ADVISOR
+
+DBMS_APPLY_ADM
+
+DBMS_AQ
+
+DBMS_AQADM
+
+DBMS_CAPTURE_ADM
+
+DBMS_CDC_PUBLISH
+
+DBMS_CRYPTO
+
+DBMS_DATA_MINING
+
+DBMS_DATA_MINING_TRANSFORM
+
+DBMS_DATAPUMP
+
+DBMS_DDL
+
+DBMS_DESCRIBE
+
+DBMS_FGA
+
+DBMS_FILE_TRANSFER
+
+DBMS_LOB
+
+DBMS_LOGMNR
+
+DBMS_LOGMNR_D
+
+DBMS_LOGSTDBY
+
+DBMS_METADATA
+
+DBMS_MGWADM
+
+DBMS_MGWMSG
+
+DBMS_MONITOR
+
+DBMS_OUTLN_EDIT
+
+DBMS_OUTPUT
+
+DBMS_PROPAGATION_ADM
+
+DBMS_REDEFINITION
+
+DBMS_REPAIR
+
+DBMS_RESOURCE_MANAGER
+
+DBMS_RULE_ADM
+
+DBMS_SCHEDULER
+
+DBMS_SERVER_ALERT
+
+DBMS_SERVICE
+
+DBMS_SESSION
+
+DBMS_SPACE
+
+DBMS_SPACE_ADMIN
+
+DBMS_SQLTUNE
+
+DBMS_STATS
+
+DBMS_STREAMS
+
+DBMS_STREAMS_ADM
+
+DBMS_STREAMS_TABLESPACE_ADM
+
+DBMS_TTS
+
+DBMS_UTILITY
+
+DBMS_WORKLOAD_REPOSITORY
+
+DBMS_XDB
+
+DBMS_XDBZ
+
+DBMS_XMLDOM
+
+DBMS_XMLSCHEMA
+
+DBMS_XPLAN
+
+DBMS_XSLPROCESSOR
+
+SDO_CS
+
+SDO_TOPO_MAP
+
+SDO_UTIL
+
+UTL_I18N
+
+
+
+
+
+17)	What happens if the CONSTRAINT NAME is left out of a constraint clause?
+
+System generated name will be assigned
+
+
+
+
+18)	What happens if a TABLESPACE clause is left off of a PRIMARY KEY constraint clause?
+
+gets created in the same tablespace where the table is created? rite?
+
+
+19)	What is the proper method for disabling and re-enabling a PRIMARY KEY Constraint?
+
+Disable Foreign Keys first then PK rite?
+
+
+
+
+20)	What happens if a PRIMARY KEY Constraint is disabled and then enabled without fully specifying the index clause?
+
+index gets repopulated..after all verification is done..
+
+
+
+
+21)	(ON UNIX) When should more than one DB writer process be used? How many should be used?
+
+if wait for db buffers is happening.. then consider increasing buffer & increasing dbwr process... 10 is max... if using asynchronous i/o.. then more than 1 can be used
+
+
+
+
+22)	You are using hot backup without being in archive log mode, can you recover in the even of a failure? Why? Or why not?
+
+
+hot backup is not possible when in no archive log mode,in fact it wont allow to take ur tablespce in backup mode and the only recovery option will be last cold backup
+
+
+
+23)	What causes the "SNAPSHOT TOO OLD" error? How can this be prevented or mitigated?
+
+http://home.clara.net/dwotton/dba/snapshot.htm
+
+Rollback segments hold pre-images of changed data. These pre-images are held for two purposes: to enable a transaction to be rolled back and, crucially, to enable Oracle to return read-consistent views of the data. This means that if you execute a long-running query or transaction, and someone else (or perhaps even your own transaction) subsequently changes the data that your query is accessing, Oracle will use the pre-images in the rollback segment to return the data to your query in the state it was at the moment the query started. 
+
+So, where does "snapshot too old" come from? Oracle will not overwrite pre-images in the rollback segments until the transaction which changed the data is complete (ie. committed or rolled back). However, once a commit or rollback has been executed, the pre-images can be overwritten even if they are needed to provide a read-consistent view to another query. "Snapshot too old" simply means that pre-images which the query needs to maintain a read-consistent view have been overwritten. 
+
+Common recommendations to reduce the possibility of "snapshot too old" are: 
+
+
+Increase the size/number of rollback segments 
+Do not specify an OPTIMAL size for your rollback segments. 
+Avoid executing long-running queries when transactions which update the table are also executing. 
+
+
+
+
+
+24)	How can you tell if a database object is invalid?
+
+
+status field in all_objects
+
+
+
+25)	A user if getting an ORA-00942 error yet you know you have granted them permission on the table, what else should you check?
+
+
+ORA-00942 table or view does not exist
+
+Cause: The table or view entered does not exist, a synonym that is not allowed here was used, or a view was referenced where a table is required. Existing user tables and views can be listed by querying the data dictionary. Certain privileges may be required to access the table. If an application returned this message, the table the application tried to access does not exist in the database, or the application does not have access to it.
+
+Action: Check each of the following:
+
+the spelling of the table or view name. 
+that a view is not specified where a table is required. 
+that an existing table or view name exists. 
+Contact the database administrator if the table needs to be created or if user or application privileges are required to access the table.
+
+Also, if attempting to access a table or view in another schema, make certain the correct schema is referenced and that access to the object is granted.
+
+
+
+26)	A developer is trying to create a view and the database won't let him. He has the "DEVELOPER" role which had the "CREATE VIEW" system privilege and SELECT grants on the tables he is using, what is the problem?
+
+u may require create any view priv for this..
+
+
+27)	If you have an example table, what is the best way to get sizing data for the production implementation?
+
+get average row size & multiply that by total expected no. of rows in table...u will get probable table size  that way
+
+Collect status on the table and query dba_tables for avg row size
+
+28)	How can you find out how many users are currently logged into the database? How can you find their operating system ID?
+
+SELECT   /*+ RULE */
+          s.status "Status", s.serial# "Serial#", s.TYPE "Type",
+          s.username "DB User", s.osuser "Client User", s.server "Server",
+          s.machine "Machine", s.MODULE "Module", s.client_info "Client Info",
+          s.terminal "Terminal", s.program "Program",
+          p.program "O.S. Program", s.logon_time "Connect Time",
+          lockwait "Lock Wait", si.physical_reads "Physical Reads",
+          si.block_gets "Block Gets", si.consistent_gets "Consistent Gets",
+          si.block_changes "Block Changes",
+          si.consistent_changes "Consistent Changes", s.process "Process",
+          p.spid, p.pid, si.SID, s.audsid, s.sql_address "Address",
+          s.sql_hash_value "Sql Hash", s.action,
+          SYSDATE - (s.last_call_et / 86400) "Last Call"
+    FROM v$session s, v$process p, SYS.v_$sess_io si
+   WHERE s.paddr = p.addr(+) AND si.SID(+) = s.SID
+ORDER BY 5
+/
+
+
+
+
+SQL> DESC V$SESSION
+ Name                                      Null?    Type
+ ----------------------------------------- -------- --------------
+ SADDR                                              RAW(8)
+ SID                                                NUMBER
+ SERIAL#                                            NUMBER
+ AUDSID                                             NUMBER
+ PADDR                                              RAW(8)
+ USER#                                              NUMBER
+ USERNAME                                           VARCHAR2(30)
+ COMMAND                                            NUMBER
+ OWNERID                                            NUMBER
+ TADDR                                              VARCHAR2(16)
+ LOCKWAIT                                           VARCHAR2(16)
+ STATUS                                             VARCHAR2(8)
+ SERVER                                             VARCHAR2(9)
+ SCHEMA#                                            NUMBER
+ SCHEMANAME                                         VARCHAR2(30)
+ OSUSER                                             VARCHAR2(30)
+ PROCESS                                            VARCHAR2(12)
+ MACHINE                                            VARCHAR2(64)
+ TERMINAL                                           VARCHAR2(30)
+ PROGRAM                                            VARCHAR2(48)
+ TYPE                                               VARCHAR2(10)
+ SQL_ADDRESS                                        RAW(8)
+ SQL_HASH_VALUE                                     NUMBER
+ PREV_SQL_ADDR                                      RAW(8)
+ PREV_HASH_VALUE                                    NUMBER
+ MODULE                                             VARCHAR2(48)
+ MODULE_HASH                                        NUMBER
+ ACTION                                             VARCHAR2(32)
+ ACTION_HASH                                        NUMBER
+ CLIENT_INFO                                        VARCHAR2(64)
+ FIXED_TABLE_SEQUENCE                               NUMBER
+ ROW_WAIT_OBJ#                                      NUMBER
+ ROW_WAIT_FILE#                                     NUMBER
+ ROW_WAIT_BLOCK#                                    NUMBER
+ ROW_WAIT_ROW#                                      NUMBER
+ LOGON_TIME                                         DATE
+ LAST_CALL_ET                                       NUMBER
+ PDML_ENABLED                                       VARCHAR2(3)
+ FAILOVER_TYPE                                      VARCHAR2(13)
+ FAILOVER_METHOD                                    VARCHAR2(10)
+ FAILED_OVER                                        VARCHAR2(3)
+ RESOURCE_CONSUMER_GROUP                            VARCHAR2(32)
+ PDML_STATUS                                        VARCHAR2(8)
+ PDDL_STATUS                                        VARCHAR2(8)
+ PQ_STATUS                                          VARCHAR2(8)
+ CURRENT_QUEUE_DURATION                             NUMBER
+ CLIENT_IDENTIFIER                                  VARCHAR2(64)
+
+
+
+
+29)	A user selects from a sequence and gets back two values, his select statement is:  SELECT pf_seq.nextval FROM dual; What is the problem?
+
+sequence is corrupt...
+nextval shd return just 1 value..
+recreate the sequence
+
+
+
+30)	How can you determine if an index needs to be dropped and rebuilt?
+
+You may decide to rebuild an index if the deleted entries represent 20% or more of the current entries, although this depends on your application and priorities. You can use the query on the previous slide to find the ratio. Use the ALTER INDEX REBUILD statement to reorganize or compact an existing index or to change its storage characteristics. The REBUILD statement uses the existing index as the basis for the new index. All index storage commands are supported, such as STORAGE (for extent allocation), TABLESPACE (to move the index to a new tablespace), and INITRANS (to change the initial number of entries).
+
+
+DBA_INDEXES 
+
+ALL_INDEXES 
+
+USER_INDEXES
+ DBA view describes indexes on all tables in the database. ALL view describes indexes on all tables accessible to the user. USER view is restricted to indexes owned by the user. Some columns in these views contain statistics that are generated by the DBMS_STATS package or ANALYZE statement.
+ 
+DBA_IND_COLUMNS 
+
+ALL_IND_COLUMNS 
+
+USER_IND_COLUMNS
+ These views describe the columns of indexes on tables. Some columns in these views contain statistics that are generated by the DBMS_STATS package or ANALYZE statement.
+ 
+DBA_IND_EXPRESSIONS 
+
+ALL_IND_EXPRESSIONS 
+
+USER_IND_EXPRESSIONS
+ These views describe the expressions of function-based indexes on tables.
+ 
+INDEX_STATS
+ Stores information from the last ANALYZE INDEX ... VALIDATE STRUCTURE statement.
+ 
+INDEX_HISTOGRAM
+ Stores information from the last ANALYZE INDEX ... VALIDATE STRUCTURE statement.
+ 
+V$OBJECT_USAGE
+ Contains index usage information produced by the ALTER INDEX ... MONITORING USAGE functionality.
+ 
+
+
+Abstract
+
+Indexes provide a fast and efficient method of retrieving selected data from a table. By pointing to the blocks that contain the selected data, the entire table does not have to read in order to extract the required information. Most indexes in Oracle databases are built using the B-tree data structure. Contrary to some widely accepted beliefs, indexes in Oracle are not self-balancing. After a table experiences a large number of inserts, updates, and deletes, the index can become unbalanced and fragmented and can hinder query performance. Knowing when to rebuild the indexes is a topic of some confusion. This paper hopes to shine some light on the subject.
+
+Where is the index now?
+
+In order to understand what we must do with the index, we must first get an idea of the current state of the index. This can be accomplished by using the ANALYZE INDEX VALIDATE STRUCTURE command. Normally, the ANALYZE INDEX command creates either computed or estimated statistics for the index that can be seen in the DBA_INDEXES view. Analyzing the index changes the optimizer’s execution plans for queries that potentially use that index. This action may produce unintentional side effects, especially if the index has not previously been analyzed. The VALIDATE STRUCTURE command can be safely executed without affecting the optimizer. The VALIDATE STRUCTURE command populates the SYS.INDEX_STATS table only. The SYS.INDEX_STATS table can be accessed with the public synonym INDEX_STATS. The INDEX_STATS table will only hold validation information for one index at a time. You will need to query this table before validating the structure of the next index.
+
+Below is an example of ANALYZE INDEX VALIDATE STRUCTURE and sample output from INDEX_STATS:
+
+SQLWKS> ANALYZE INDEX shopping_basket_pk VALIDATE STRUCTURE;
+Statement processed.
+SQLWKS> SELECT name,height,lf_rows,lf_blks,del_lf_rows,distinct_keys,used_space
+     2> FROM INDEX_STATS;
+NAME                      HEIGHT    LF_ROWS    LF_BLKS    DEL_LF_ROW DISTINCT_K USED_SPACE
+------------------------- --------- ---------- ---------- ---------- ---------- ----------
+SHOPPING_BASKET_PK                2          1          3          1          1         65
+1 row selected.
+
+I have the information, now what?
+
+There are two rules of thumb to help determine if the index needs to be rebuilt. If it is determined that the index needs to be rebuilt, this can easily be accomplished by the ALTER INDEX REBUILD command. Although not necessarily recommended, this command could be executed during normal operating hours. Rebuilding the index uses the existing index as a basis. The alternative is to drop and re-create the index. Creating an index uses the base table as its data source that needs to put a lock on the table. The index is also unavailable during creation.
+
+First rule of thumb is if the index has height greater than four, rebuild the index. For most indexes, the height of the index will be quite low, i.e. one or two. I have seen an index on a 3 million-row table that had height three. An index with height greater than four may need to be rebuilt as this might indicate a skewed tree structure. This can lead to unnecessary database block reads of the index. It is helpful to know the data structure for the table and index. Most times, the index height should be two or less, but there are exceptions.
+
+The second rule of thumb is that the deleted leaf rows should be less than 20% of the total number of leaf rows. An excessive number of deleted leaf rows indicates that a high number of deletes or updates have occurred to the index column(s). The index should be rebuilt to better balance the tree. The INDEX_STATS table can be queried to determine if there are excessive deleted leaf rows in relation to the total number of leaf rows. Let’s look at an example:
+
+SQLWKS> ANALYZE INDEX item_basket_pk VALIDATE STRUCTURE;
+Statement processed.
+SQLWKS> SELECT name,height,lf_rows,del_lf_rows,(del_lf_rows/lf_rows)*100 as ratio
+     2> FROM INDEX_STATS;
+NAME                           HEIGHT     LF_ROWS    DEL_LF_ROW RATIO     
+------------------------------ ---------- ---------- ---------- ----------
+ITEM_BASKET_PK                          1        235         74 31.4893617
+1 row selected.
+
+In this example, the ratio of deleted leaf rows to total leaf rows is clearly above 20%. This is a good candidate for rebuilding. Let’s rebuild the index and examine the results. 
+SQLWKS> ALTER INDEX item_basket_pk REBUILD;
+Statement processed.
+SQLWKS> ANALYZE INDEX item_basket_pk VALIDATE STRUCTURE;
+Statement processed.
+SQLWKS> SELECT name,height,lf_rows,del_lf_rows,(del_lf_rows/lf_rows)*100 as ratio
+     2> FROM INDEX_STATS;
+NAME                           HEIGHT     LF_ROWS    DEL_LF_ROW RATIO     
+------------------------------ ---------- ---------- ---------- ----------
+ITEM_BASKET_PK                          1        161          0          0
+1 row selected.
+
+The index is rebuilt and validated once again. Examining the INDEX_STATS table shows that the 74 deleted leaf rows were dropped from the index. Notice that the total number of leaf rows went from 235 to 161, which is a difference of 74 leaf rows. This index should provide better performance for the application.
+
+A Case Study
+
+To illustrate the ideas in this paper, a test case was created and various queries were executed against a large table before and after rebuilding the primary key index. It should be noted that this test case was created specifically for this paper and results in the field may vary.
+
+The test table only contains two columns, ID and NAME. The table is described below:
+
+REQ SQL> desc analyze;
+ Name                            Null?    Type
+ ------------------------------- -------- ----
+ ID                                       NUMBER
+ NAME                                     VARCHAR2(20)
+
+The test table has a primary key, ANALYZE_PK on the ID field. The test table was populated with 1 million rows of data. After populating the table, over 270,000 rows were selectively deleted from the table. This method ensured that the primary key index would have a sufficient number of deleted leaf rows. After populating and deleting rows from the table, the index was validated as below: 
+
+REQ SQL> analyze index analyze_pk validate structure;
+
+Index analyzed.
+
+REQ SQL> select name,height,lf_rows,del_lf_rows,del_lf_rows/lf_rows from index_stats;
+
+NAME                               HEIGHT    LF_ROWS DEL_LF_ROWS DEL_LF_ROWS/LF_ROWS
+------------------------------ ---------- ---------- ----------- -------------------
+ANALYZE_PK                              3     990206      277353          .280096263
+
+It is now clear that the deleted leaf rows comprise approximately 28% of the total leaf rows.
+
+Four different queries were executed against the table. All of these queries will utilize the primary key index as verified by the explain plan. These queries are executed against the table with the current index. The index is then rebuilt. These queries are re-executed and the results are compared. The four queries are:
+
+1. select count(*) from analyze where id between 250000 and 600000;
+2. select count(*) from analyze where id in (50000,4321,698754);
+3. select count(*) from analyze where id > 500000;
+4. select count(*) from analyze where id = 4321;
+
+With the current index, these three queries are executed against the test table. SQL Trace is enabled and the queries are shown in the following excerpt from TKPROF: 
+********************************************************************************
+
+select count(*) 
+from
+ analyze where id between 250000 and 600000
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        2      0.47       0.47          0        293          0           1
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        4      0.47       0.47          0        293          0           1
+
+Misses in library cache during parse: 0
+Optimizer goal: CHOOSE
+Parsing user id: 5  (SYSTEM)
+
+Rows     Execution Plan
+-------  ---------------------------------------------------
+      0  SELECT STATEMENT   GOAL: CHOOSE
+      0   SORT (AGGREGATE)
+ 138614    INDEX (RANGE SCAN) OF 'ANALYZE_PK' (UNIQUE)
+
+********************************************************************************
+
+select count(*) 
+from
+ analyze where id in (50000,4321,698754)
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.01          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        2      0.00       0.00          0          9          0           1
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        4      0.00       0.01          0          9          0           1
+
+Misses in library cache during parse: 0
+Optimizer goal: CHOOSE
+Parsing user id: 5  (SYSTEM)
+
+Rows     Execution Plan
+-------  ---------------------------------------------------
+      0  SELECT STATEMENT   GOAL: CHOOSE
+      0   SORT (AGGREGATE)
+      0    CONCATENATION
+      1     INDEX (UNIQUE SCAN) OF 'ANALYZE_PK' (UNIQUE)
+      1     INDEX (UNIQUE SCAN) OF 'ANALYZE_PK' (UNIQUE)
+      1     INDEX (UNIQUE SCAN) OF 'ANALYZE_PK' (UNIQUE)
+
+********************************************************************************
+
+select count(*) 
+from
+ analyze where id > 500000
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        2      1.11       1.11          0       1611          0           1
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        4      1.11       1.11          0       1611          0           1
+
+Misses in library cache during parse: 1
+Optimizer goal: CHOOSE
+Parsing user id: 5  (SYSTEM)
+
+Rows     Execution Plan
+-------  ---------------------------------------------------
+      0  SELECT STATEMENT   GOAL: CHOOSE
+      0   SORT (AGGREGATE)
+ 445545    INDEX (RANGE SCAN) OF 'ANALYZE_PK' (UNIQUE)
+
+********************************************************************************
+
+select count(*) 
+from
+ analyze where id = 4321
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        2      0.00       0.00          0          3          0           1
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        4      0.00       0.00          0          3          0           1
+
+Misses in library cache during parse: 1
+Optimizer goal: CHOOSE
+Parsing user id: 5  (SYSTEM)
+
+Rows     Execution Plan
+-------  ---------------------------------------------------
+      0  SELECT STATEMENT   GOAL: CHOOSE
+      0   SORT (AGGREGATE)
+      1    INDEX (UNIQUE SCAN) OF 'ANALYZE_PK' (UNIQUE)
+
+********************************************************************************
+
+After these results have been obtained, the index is rebuilt. The index is then validated and the results are show below: 
+
+REQ SQL> alter index analyze_pk rebuild;
+
+Index altered.
+
+REQ SQL> analyze index analyze_pk validate structure;
+
+Index analyzed.
+
+REQ SQL> select name,height,lf_rows,del_lf_rows,del_lf_rows/lf_rows from index_stats
+;
+
+NAME                               HEIGHT    LF_ROWS DEL_LF_ROWS DEL_LF_ROWS/LF_ROWS
+------------------------------ ---------- ---------- ----------- -------------------
+ANALYZE_PK                              3     712853           0                   0
+
+It is clear that the deleted leaf rows have been removed from the index. The four queries are run against the table once again. Again, SQL Trace is enabled and the queries are shown in the following excerpt from TKPROF: 
+
+********************************************************************************
+
+select count(*) 
+from
+ analyze where id between 250000 and 600000
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        2      0.23       0.23          0        679          0           1
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        4      0.23       0.23          0        679          0           1
+
+Misses in library cache during parse: 0
+Optimizer goal: CHOOSE
+Parsing user id: 5  (SYSTEM)
+
+Rows     Execution Plan
+-------  ---------------------------------------------------
+      0  SELECT STATEMENT   GOAL: CHOOSE
+      0   SORT (AGGREGATE)
+ 138614    INDEX (RANGE SCAN) OF 'ANALYZE_PK' (UNIQUE)
+
+********************************************************************************
+
+select count(*) 
+from
+ analyze where id in (50000,4321,698754)
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        2      0.00       0.00          0          9          0           1
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        4      0.00       0.00          0          9          0           1
+
+Misses in library cache during parse: 0
+Optimizer goal: CHOOSE
+Parsing user id: 5  (SYSTEM)
+
+Rows     Execution Plan
+-------  ---------------------------------------------------
+      0  SELECT STATEMENT   GOAL: CHOOSE
+      0   SORT (AGGREGATE)
+      0    CONCATENATION
+      1     INDEX (UNIQUE SCAN) OF 'ANALYZE_PK' (UNIQUE)
+      1     INDEX (UNIQUE SCAN) OF 'ANALYZE_PK' (UNIQUE)
+      1     INDEX (UNIQUE SCAN) OF 'ANALYZE_PK' (UNIQUE)
+
+********************************************************************************
+
+select count(*) 
+from
+ analyze where id > 500000
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        2      0.96       0.96          0        933          0           1
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        4      0.96       0.96          0        933          0           1
+
+Misses in library cache during parse: 0
+Optimizer goal: CHOOSE
+Parsing user id: 5  (SYSTEM)
+
+Rows     Execution Plan
+-------  ---------------------------------------------------
+      0  SELECT STATEMENT   GOAL: CHOOSE
+      0   SORT (AGGREGATE)
+ 445545    INDEX (RANGE SCAN) OF 'ANALYZE_PK' (UNIQUE)
+
+********************************************************************************
+
+select count(*) 
+from
+ analyze where id = 4321
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        2      0.00       0.00          0          3          0           1
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        4      0.00       0.00          0          3          0           1
+
+Misses in library cache during parse: 0
+Optimizer goal: CHOOSE
+Parsing user id: 5  (SYSTEM)
+
+Rows     Execution Plan
+-------  ---------------------------------------------------
+      0  SELECT STATEMENT   GOAL: CHOOSE
+      0   SORT (AGGREGATE)
+      1    INDEX (UNIQUE SCAN) OF 'ANALYZE_PK' (UNIQUE)
+
+The same queries have now been executed against the test table before and after rebuilding the index. The results are summarized in the following table:
+
+  Before index rebuild
+ After index rebuild
+ % Change
+ 
+  CPU
+ Elapsed
+ CPU
+ Elapsed
+ CPU
+ Elapsed
+ 
+Query 1
+ 0.47
+ 0.47
+ 0.23
+ 0.23
+ 51%
+ 51%
+ 
+Query 2
+ 0.00
+ 0.01
+ 0.00
+ 0.00
+ 0%
+ 0%
+ 
+Query 3
+ 1.11
+ 1.11
+ 0.96
+ 0.96
+ 13.5%
+ 13.5%
+ 
+Query 4
+ 0.00
+ 0.00
+ 0.00
+ 0.00
+ 0%
+ 0%
+ 
+
+The results in the above table show that queries 1 and 3 experienced up to 51% improvement in execution time. It should be noted that the queries were executed at least once prior to tracing the queries so that the data would reside in the buffer cache and first time executions of the queries would not skew the results. This fact explains why the CPU and elapsed times for a query are nearly identical. The data was read from the buffer cache. Queries 2 and 4 took minimal time to execute. These queries searched for specific values. Since the data was cached, the CPU and Elapsed times are minimal. Queries 1 and 3 took significantly longer. These queries returned a range of values. This paper does not attempt to generate any findings on the improvement of different types of queries when rebuilding an index. Rather it gives a broader statement that query execution times will improve after rebuilding substandard indexes.
+
+Script to find indexes to rebuild
+
+Below is a sample script that can be run to determine which indexes need to be rebuilt. For those indexes that need to be rebuilt, the ALTER INDEX REBUILD command is dynamically generated as output. The user can tailor the height and percentage of deleted leaf rows by altering the vMaxHeight and vMaxDel variables. The output of this script can be spooled to a file. This file can then be run to rebuild the indexes.
+
+-- validate_idx.sql
+-- by Brian Peasland
+-- Database Administrator
+-- Raytheon / EROS Data Center
+-- 3 February 2000
+--
+-- This script will check indexes to find candidates for rebuilding.
+-- Run this script in SQL*Plus as a user with SELECT ANY TABLE
+-- privileges.
+--
+-- This script can be used and modified without permission. Run this
+-- script at your own risk! The script author is not responsible for
+-- any problems that may arise from running this script.
+
+set serveroutput on size 100000
+
+DECLARE
+  vOwner   dba_indexes.owner%TYPE;            /* Index Owner            */
+  vIdxName dba_indexes.index_name%TYPE;       /* Index Name             */
+  vAnalyze VARCHAR2(100);                     /* String of Analyze Stmt */
+  vCursor  NUMBER;                            /* DBMS_SQL cursor        */
+  vNumRows INTEGER;                           /* DBMS_SQL return rows   */
+  vHeight  index_stats.height%TYPE;           /* Height of index tree   */
+  vLfRows  index_stats.lf_rows%TYPE;          /* Index Leaf Rows        */
+  vDLfRows index_stats.del_lf_rows%TYPE;      /* Deleted Leaf Rows      */
+  vDLfPerc   NUMBER;                          /* Del lf Percentage      */
+  vMaxHeight NUMBER;                          /* Max tree height        */
+  vMaxDel    NUMBER;                          /* Max del lf percentage  */
+  CURSOR cGetIdx IS SELECT owner,index_name
+     FROM dba_indexes WHERE OWNER NOT LIKE 'SYS%';
+BEGIN
+  /* Define maximums. This section can be customized. */
+  vMaxHeight := 3;
+  vMaxDel    := 20;
+
+  /* For every index, validate structure */
+  OPEN cGetIdx;
+  LOOP
+     FETCH cGetIdx INTO vOwner,vIdxName;
+     EXIT WHEN cGetIdx%NOTFOUND;
+     /* Open DBMS_SQL cursor */
+     vCursor := DBMS_SQL.OPEN_CURSOR;
+     /* Set up dynamic string to validate structure */
+     vAnalyze := 'ANALYZE INDEX ' || vOwner || '.' || vIdxName || ' VALIDATE STRUCTURE';
+     DBMS_SQL.PARSE(vCursor,vAnalyze,DBMS_SQL.V7);
+     vNumRows := DBMS_SQL.EXECUTE(vCursor);
+     /* Close DBMS_SQL cursor */
+     DBMS_SQL.CLOSE_CURSOR(vCursor);
+     /* Does index need rebuilding?  */
+     /* If so, then generate command */
+     SELECT height,lf_rows,del_lf_rows INTO vHeight,vLfRows,vDLfRows
+        FROM INDEX_STATS; 
+     IF vDLfRows = 0 THEN         /* handle case where div by zero */
+        vDLfPerc := 0;
+     ELSE
+        vDLfPerc := (vDLfRows / vLfRows) * 100;
+     END IF;
+     IF (vHeight > vMaxHeight) OR (vDLfPerc > vMaxDel) THEN 
+        DBMS_OUTPUT.PUT_LINE('ALTER INDEX ' || vOwner || '.' || vIdxName || ' REBUILD;');
+     END IF;
+
+  END LOOP;
+  CLOSE cGetIdx;
+END;
+/
+
+Summary
+
+One of the areas lacking in Oracle documentation pertains to rebuilding an index. Oracle’s ANALYZE INDEX VALIDATE STRUCTURE command provides a nice way to check an index to see if it is a candidate for rebuilding. This command does not affect the Oracle optimizer’s execution plan for queries that may use the index. The results in the INDEX_STATS are checked after issuing the VALIDATE STRUCTURE command. If an index has excessive height (greater than four) or a high number of deleted leaf rows (over 20% of the total), we rebuild the index.
+
+A test case was studied to show the potential for improvements after rebuilding an index. In one example, the query executed 51% faster after rebuilding the index. While this example is specific to the test case, it does show the potential for improvement after rebuilding an index.
+
+References
+
+Oracle 24x7, Venkat S. Devraj, Osborne/Mc-Graw Hill, Berkely, CA 
+Oracle DBA Exam Cram: Test 3 and 4, Michael R. Ault, Coriolis Press 
+Oracle Performance Tuning, Richard J. Niemiec, Osborne/Mc-Graw Hill, Berkely, CA 
+
+
+
+
+SQL/PLSQL
+
+31)	How can variables be passed to a SQL routine?
+
+:=
+
+&var
+select x from y where z=&k;
+
+
+
+32)	You want to include a carriage return/linefeed in your output from a SQL script, how can you do this?
+
+
+
+
+
+
+33)	How can you call a PL/SQL procedure from SQL?
+
+
+
+
+
+
+34)	How do you execute a host operating system command within SQL?
+
+
+
+
+
+
+35)	You want to use SQL to build SQL, what is this called and give an example?
+
+
+
+
+
+
+36)	What SQLPlus command is used format output from a select?
+
+
+
+
+
+
+
+37)	You want to group the following set of select returns, what can you group on?
+	MAX(sum_of_cost), min(sum_of_cost), count(item_no), item_no
+
+
+
+
+39)	What special Oracle feature allows you to specify how the cost based system treats a SQL statement?
+
+
+
+
+
+
+40)	You want to determine the location of identical rows in a table before attempting to place a unique index on the table, how can this be done?
+
+
+
+
+
+
+
+41)	What is a Cartesian product?
+
+
+
+
+
+42)	You are joining a local and a remote table, the network manager complains about the traffic involved, how can you reduce the network traffic?
+
+
+
+
+
+43)	What is the default ordering of an ORDER BY clause in a SELECT statement?
+
+
+
+
+
+44)	What is tkprof and how is it used?
+
+
+
+
+
+45)	What is explain plan and how is it used?
+
+
+
+
+
+46)	How do you set the number of lines on a page of output? The width?
+
+
+
+
+
+47)	How do you prevent output from coming to the screen?
+
+
+
+
+
+48)	How do you prevent Oracle from giving you informational messages during and after a SQL statement execution?
+
+
+
+
+
+
+49)	How do you generate file output from SQL?
+
+
+
+
+
+
+TUNING QUESTIONS:
+
+50)	A tables pace has a table with 30 extents in it. Is this bad? Why or why not.
+
+
+
+
+
+
+51)	How do you set up tablespaces during an Oracle installation?
+
+
+
+
+
+
+52)	You see multiple fragments in the SYSTEM tablespace, what should you check first?
+
+
+
+
+
+
+53)	What are some indications that you need to increase the SHARED_POOL_SIZE parameter?
+
+
+
+
+
+
+54)	What is the general guideline for sizing db_block_size and db_multi_block_read for an application that c many full table scans?
+
+
+
+
+
+
+55)	What is the fastest query method for a table?
+
+
+
+
+
+
+56)	Explain the use of TKPROF? What initialization parameter should be turned on to get full TKPROF 01
+
+
+
+
+
+
+
+57)	When looking at v$sysstat you see that sorts (disk) is high. Is this bad or good? If bad -how do you correct it?
+
+
+
+
+
+58)	When should you increase copy latches? What parameters control copy latches?
+
+
+
+
+
+
+59)	Where can you get a list of all initialization parameters for your instance? How about an indication if they arc default settings or have been changed?
+
+
+
+
+60)	Describe hit ratio as it pertains to the database buffers. What is the difference between instantaneous and cumulative hit ratio and which should be used for tuning?
+
+
+
+
+
+
+61)	Discuss row chaining, how does it happen? How can you reduce it? How do you correct it?
+
+
+
+
+
+
+62)	When looking at the estat events report you see that you are getting busy buffer waits. Is this bad? How can you find what is causing it?
+
+
+
+
+
+
+63)	If you see contention for library caches how can you fix it?
+
+
+
+
+
+
+64)	If you see statistics that deal with "undo" what are they really talking about?
+
+
+
+
+
+
+65)	If a tablespace has a default pctincrease of zero what will this cause (in relationship to the smon process)?
+
+
+
+
+
+
+66)	If a tables pace shows excessive fragmentation what are some methods to defragment the tablespace? (7.1,7.2 and 7.3 only)
+
+
+
+
+
+
+67)	How can you tell if a tablespace has excessive fragmentation?
+
+
+
+
+
+
+68)	You see the following on a status report:
+a.	redo log space requests     23
+b.	redo log space wait time   0
+
+Is this something to worry about? What if redo log space wait time is high? How can you fix this?
+
+
+
+
+
+
+69)	What can cause a high value for recursive calls? How can this be fixed?
+
+
+
+
+
+
+70)	If you see a pin hit ratio of less than 0.8 in the estat library cache report is this a problem? If so, how do you fix it?
+
+
+
+
+
+
+71)	If you see the value for reloads is high in the estat library cache report is this a matter for concern?
+
+
+
+
+
+
+72)	You look at the dba_rollback_segs view and see that there is a large number of shrinks and they are of relatively small size, is this a problem? How can it be fixed if it is a problem?
+
+
+
+
+
+73)	You look at the dba_rollback_segs view and see that you have a large number of wraps is this a problem?
+
+
+
+
+
+74)	In a system with an average of 40 concurrent users you get the following from a query on rollback extents:
+a.	ROLLBACK 			CUR EXTENTS
+b.	R01					11
+c.	R02 					8
+d.	R03 					12
+e.	R04 					9
+f.	SYSTEM				4
+You have room for each to grow by 20 more extents each. Is there a problem? Should you take any action?
+
+
+
+
+
+75)	You see multiple extents in the temporary tablespace. Is this a problem?
+
+
+
+
+
+
+INSTALLA TION/CONFIGURATION
+
+76)	Define OFA.
+
+
+
+
+
+77)	How do you set up your tablespace on installation?
+
+
+
+
+
+78)	What should be done prior to installing Oracle (for the OS and the disks)?
+
+
+
+
+
+79)	You have installed Oracle and you are now setting up the actual instance. You have been waiting an hour for the initialization script to finish, what should you check first to determine if there is a problem?
+
+
+
+
+
+80)	When con figuring SQLNET on the server what files must be set up?
+
+
+
+
+
+81)	When con figuring SQLNET on the client what f1les need to be set up?
+
+
+
+
+
+82)	What must be installed with ODBC on the client in order for it to work with Oracle?
+
+
+
+
+
+83)	You have just started a new instance with a large SGA on a busy existing server. Performance is terrible, what should you check for?
+
+
+
+
+
+84)	What OS user should be used for the first part of an Oracle installation (on UNIX)?
+
+
+
+
+
+85)	When should the default values for Oracle initialization parameters be used as is?
+
+
+
+
+
+86)	How many control files should you have? Where should they be located?
+
+
+
+
+
+87)	How many redo logs should you have and how should they be con figured for maximum recoverability?
+
+
+
+
+
+88)	You have a simple application with no "hot" tables (i.e. uniform 10 and access requirements). How many disks should you have assuming standard layout for SYSTEM, USER, TEMP and ROLLBACK tablespaces?
+
+
+
+
+
+DATA MODELER:
+
+89)	Describe third normal form?
+
+
+
+
+
+90)	Is the following statement true or false:
+"All relational databases must be in third normal form"
+Why or why not?
+
+
+
+
+
+
+91)	What is an ERD?
+
+
+
+
+
+92)	Why are recursive relationships bad? How do you resolve them?
+
+
+
+
+
+93)	What does a hard one-to-one relationship mean (one where the relationship on both ends is "must")?
+
+
+
+
+
+94)	How should a many-to-many relationship be handled?
+
+
+
+
+
+95)	What is an artificial (derived) primary key? When should an artificial (or derived) primary key be
+
+
+
+
+
+96)	When should you consider denormalization?
+
+
+
+
+
+
+UNIX:
+
+97)	How can you determine the space left in a file system?
+
+
+
+
+
+98)	How can you determine the number of SQLNET users logged in to the UNIX system?
+
+
+
+
+
+99)	What command is used to type files to the screen?
+
+
+
+
+
+100)	What command is used to remove a file? 
+
+
+
+
+
+101)	Can you remove an open file under UNIX?
+
+
+
+
+
+102)	How do you create a decision tree in a shell script?
+
+
+
+
+
+103)	What is the purpose of the GREP command?
+
+
+
+
+
+104)	The system has a program that always includes the word nocomp in its name, how can you determine the number of processes that are using this program?
+
+
+
+
+
+105)	What is an in ode?
+
+
+
+
+
+106)	The system administrator tells you that the system hasn't been rebooted in 6 months, should he be proud of this?
+
+
+
+
+
+107)	What is redirection and how is it used?
+
+
+
+
+
+108)	How can you find dead processes?
+
+
+
+
+
+109)	How can you find all the processes on your system?
+
+
+
+
+
+110)	How can you find your id on a system?
+
+
+
+
+
+111)	What is the finger command?
+
+
+
+
+
+112)	What is the easiest method to create a file on UNIX?
+
+
+
+
+
+113)	What does >> do?
+
+
+
+
+
+115)	If you aren't sure what command does a particular UNIX function what is the best way to determine the command?
+
+
+
+
+
+
+ORACLE TROUBLESHOOTING:
+
+114)	How can you determine if an Oracle instance is up from the operating system level?
+
+
+
+
+
+115)	Users from the PC clients are getting messages indicating:
+
+
+
+
+116)	What could the problem be?
+
+
+
+
+
+116)	Users from the PC clients are getting the following error stack:
+
+
+
+
+
+
+117)	What is the probable cause?
+
+
+
+
+
+117)	How can you determine if the SQLNET process is running for SQLNET V1? How about V2?
+
+
+
+
+
+118)	What file will give you Oracle instance status information? Where is it located?
+
+
+
+
+
+119)	Users aren't being allowed on the system. The following message is received: 
+
+
+
+118)	What is the problem?
+
+
+
+
+
+
+
+
+
+120)	Where would you look to find out if a redo log was corrupted assuming you are using Oracle mirrored redo logs?
+
+
+
+
+
+121)	You attempt to add a datafile and get:
+ORA-01118: cannot add anymore dataflow: limit of 40 exceeded
+What is the problem and how can you fix it?
+
+
+
+
+
+122)	You look at your fragmentation report and see that smon hasn't coalesced any of you tablespaces, even though you know several have large chunks of contiguous free extents. What is the problem?
+
+
+
+
+
+123)	Your users get the following error:
+ORA-00055 maximum number of DML locks exceeded
+What is the problem and how do you fix it?
+
+
+
+
+
+
+124)	You get a call from you backup DBA while you are on vacation. He has corrupted all of the control files while playing with the ALTER DATABASE BACKUP CONTROLFILE command. What do you do?
+
+
+
+
+

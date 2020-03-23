@@ -1,0 +1,152 @@
+<html>
+	<head>
+		<title>
+			Considering Nulls and Indexes
+		</title>
+		<style>
+			<!-- a:hover{color:#660066;} -->
+		</style>
+	</head>
+	<body background="../../images/bg.jpg" link="#FF6600" vlink="#FF6600" alink="#660066">
+		
+		<h2 align="center">
+			<font color="#990000">
+				Considering Nulls and Indexes
+			</font>
+		</h2>
+		<p>
+		It is common practice to allow columns
+		for which the corresponding attribute value may sometimes not be available to contain a null.
+		Null is not a value as such, but represents the absence of a value.
+		Columns that may contain nulls are sometimes called <em>nullable</em> columns.
+		</p>
+		<p>
+		Instead of allowing a column to be nullable, it is possible to make the column mandatory and to define one or more special constants
+		to be used in cases where the value is not available.
+		For example, one or both of the following special constants could be used in a column that has a character data type.
+		</p>
+		<div align="center">
+			<center>
+				<table border="1" width="300" cellspacing="0" bordercolordark="#3333CC" bordercolorlight="#6699FF">
+					<tr>
+						<td width="61" align="center">
+							'UN'
+						</td>
+						<td width="231" align="center">
+							Value Unknown
+						</td>
+					</tr>
+					<tr>
+						<td width="61" align="center">
+							'NA'
+						</td>
+						<td width="231" align="center">
+							Attribute Not Applicable
+						</td>
+					</tr>
+				</table>
+			</center>
+		</div>
+		<p>
+		Of course, you have to ensure that the special constants chosen fall outside the domain of valid values for the attribute.
+		</p>
+		
+		<p>
+		The primary reason for using special constants rather than nulls is so that searches for missing values can be performed via an index.
+		However, there are other factors that should be considered as well in each case.
+		These are the considerations.
+		</p>
+		<h4>
+			<font color="#990000">
+				Table Size
+			</font>
+		</h4>
+		<blockquote>
+			Nulls take very little storage space, and none at all if they occur at the end of a row.
+			Special constants increase the size of the table, and this may cause extra I/O to be required for table scans.
+		</blockquote>
+		<h4>
+			<font color="#990000">
+				Index Size
+			</font>
+		</h4>
+		<blockquote>
+			If only a small number of rows are expected to have values,
+			allowing the column to be nullable can greatly reduce the size of an index on the column
+			because null keys are not indexed (except in cluster key indexes).
+		</blockquote>
+		<h4>
+			<font color="#990000">
+				Searches for Available Values
+			</font>
+		</h4>
+		<blockquote>
+			The optimizer can evaluate IS NOT NULL predicates via an efficient fast full index scan.
+			If special constants are used instead of nulls, a less efficient index range scan access path must be used to search for the other values.
+		</blockquote>
+		<h4>
+			<font color="#990000">
+				Searches for Missing Values
+			</font>
+		</h4>
+		<blockquote>
+			Because null keys are not indexed, searches for nulls typically require a full table scan.
+			Special constants are indexed and so enable searches for missing values to be performed via an index.
+			In most cases the indexed access path is preferable to the full table scan.
+		</blockquote>
+		<h4>
+			<font color="#990000">
+				Outer Joins
+			</font>
+		</h4>
+		<blockquote>
+			Special constants eliminate the need for outer joins.
+			Outer joins constrain the optimizer's choice of join orders, whereas otherwise a full range of query plans is possible.
+			Commonly the query plans enabled by the use of special constants outperform their outer join alternatives significantly.
+		</blockquote>
+		<h4>
+			<font color="#990000">
+				Elegance
+			</font>
+		</h4>
+		<blockquote>
+			Some argue that the use of special constants rather than nulls leads to more readily understood code,
+			and prevents the confusion often experienced by users (not to mention developers and DBAs) in relation to nulls and outer joins.
+		</blockquote>
+		<h4>
+			<font color="#990000">
+				Inelegance
+			</font>
+		</h4>
+		<blockquote>
+			Conversely, others find the use of special constants inelegant,
+			for example when using a <nobr>-1</nobr> to represent an unknown quantity,
+			or when using an epoch such as <nobr>1-JAN-1900</nobr> to represent an unknown date.
+		</blockquote>
+		
+		<hr noshade align="left" width="300" size="2" color="black">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="1000">
+					<font size="2" color="#660066">
+						<strong>
+							Copyright © Ixora Pty Ltd
+						</strong>
+					</font>
+				</td>
+				<td valign="top" align="right">
+					<nobr>
+					<map name="email">
+						<area shape="rect" coords="0, 0, 32, 21" title="Feedback" href="mailto:feedback@ixora.com.au?SUBJECT=[Tip] nulls+indexes.htm">
+					</map>
+					<img ismap usemap="#email" border="0" alt="Send Email" src="../../images/email.gif" width="32" height="21">
+					<map name="home">
+						<area shape="rect" coords="0, 0, 28, 28" title="Home" href="/">
+					</map>
+					<img ismap usemap="#home" border="0" alt="Home" src="../../images/home.gif" width="28" height="28">
+					</nobr>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

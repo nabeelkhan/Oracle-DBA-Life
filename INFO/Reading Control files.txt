@@ -1,0 +1,9 @@
+Hi ! 
+
+What is the value of control_file_record_keep_time set to? This parameter determines the number of days the historical data to be kept in the control file. And you can dump the control file and see the contents. The syntax is 
+
+ALTER SESSION SET EVENTS 'immediate trace name controlf level 10' 
+
+This will dump the contents of the control file to udump and have a look .. 
+
+

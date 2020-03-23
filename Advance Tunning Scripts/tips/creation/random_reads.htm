@@ -1,0 +1,222 @@
+<html>
+	<head>
+		<title>
+			Disk Configuration for Pseudo-Random Reads
+		</title>
+		<style>
+			<!-- a:hover{color:#660066;} -->
+		</style>
+	</head>
+	<body background="../../images/bg.jpg" link="#FF6600" vlink="#FF6600" alink="#660066">
+		
+		<h2 align="center">
+			<font color="#990000">
+				Disk Configuration for<br>
+				Pseudo-Random Reads
+			</font>
+		</h2>
+		<p>
+		Most Oracle reads are pseudo-random.
+		They are not truly random, just pseudo-random, because some segments are accessed more heavily than others,
+		and within segments some data is normally accessed more heavily than the rest.
+		For example, in a sales database the orders table would be accessed more heavily than the cancellations table,
+		and more recent orders and more popular products would be accessed more frequently than others would.
+		The parts of the datafiles that are accessed most heavily are called hot spots.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				What should you do about hot spots?
+			</font>
+		</h3>
+		<p>
+		Hot spots are of concern because it is commonly necessary for multiple processes to access the hot spots concurrently.
+		For example, a key application index may need to be accessed by every concurrent transaction.
+		Read hot spots are typically not small.
+		If they were small, Oracle would be able to keep all the hot data in its cache, and there would be no hot spot on disk at all.
+		Write hot spots, on the other hand, can be as small as a few blocks.
+		The solution for hot spots is once again <em>striping</em>.
+		This is striping to improve concurrency, as opposed to striping to improve the transfer rate,
+		which we considered in an <b><a href="sequential_reads.htm#transfer_rate">earlier tip</a></b>.
+		</p>
+		<p>
+		When striping to improve concurrency, the choice of the stripe element size depends heavily on whether you have raw or file system based datafiles.
+		</p>
+		<h4>
+			<font color="#990000">
+				File Systems
+			</font>
+		</h4>
+		<p>
+		The database blocks of file system based datafiles cannot normally be aligned to stripe element boundaries.
+		So some single block reads must be serviced by two disks, rather than one.
+		Of course, concurrency is maximized if only one disk is needed to service most single block reads.
+		So for file system based datafiles, concurrency is maximized if the stripe element size is large relative to the database block size.
+		However, the stripe element size must not be so large that a single stripe element might contain an entire hot spot.
+		The optimal stripe element size for a database with an 8K database block size and file system based datafiles seems to be 128K.
+		Unfortunately, this is often too large to yield any significant improvement
+		in the multiblock read transfer rate, when full table scans are performed against the tablespace.
+		</p>
+		<h4>
+			<font color="#990000">
+				Raw
+			</font>
+		</h4>
+		<p>
+		For raw datafiles, the alignment of database blocks to stripe elements is affected by the size of the initial logical volume control block, if any.
+		If there is none, or if it is a multiple of the database block size,
+		then the stripe element size need only be a multiple of the database block size to ensure the alignment of database blocks to stripe elements.
+		Therefore, in such cases, the stripe element size can be chosen to optimize the transfer rate for multiblock reads.
+		There is no trade off between concurrency and transfer rate; you can have your cake and eat it too.
+		However, if the logical volume control block is smaller than the database block size,
+		misalignment cannot be avoided, and so a large stripe element size is required.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				What type of data protection should you use?
+			</font>
+		</h3>
+		<p>
+		The choice of a data protection method also affects the performance of high concurrency pseudo-random reads.
+		Specifically, if an unprotected or parity based protection scheme is chosen,
+		then there is only one copy of the data on disk from which reads can be serviced.
+		Whereas if <em>mirroring</em> is used, then there are two or more copies of the data from which reads can be serviced.
+		It is often possible to service multiple reads concurrently from the different copies of the data.
+		In many cases you will have a choice of mirror read service policies.
+		This is a complex issue, and highly dependent on your choice of technology.
+		However, in general dynamic load balancing policies perform better than fixed policies,
+		and hardware implementations perform better than software ones.
+		A good mirror read service policy can almost double the concurrency of pseudo-random access to hot data,
+		and therefore should not be overlooked when configuring disks for pseudo-random read intensive I/O.
+		</p>
+		<h4>
+			<font color="#990000">
+				A warning about RAID-S
+			</font>
+		</h4>
+		<p>
+		One form of data protection that deserves special mention is RAID-S.
+		RAID-S is a form of <b><a href="random_writes.htm#raid5">RAID-5</a></b> where the stripe element size is large (in the order of gigabytes)
+		and each non-parity stripe element is presented to the host system as a logical unit (LUN) to be used in place of a disk.
+		The fundamental point to grasp about RAID-S LUNs is that they reside on a single disk spindle; that is, <em>there is no striping</em>.
+		If RAID-S is to be used for random I/O datafiles,
+		it is imperative that you use an LVM product to stripe independent RAID-S LUNs together into striped logical volumes.
+		</p>
+		<p>
+		However, great care is needed when striping RAID-S LUNs,
+		because you need to ensure not only that the LUNs themselves are from distinct spindles,
+		but also that the corresponding parity disks are not represented in the stripe.
+		Otherwise, concurrent pseudo-random writes to the same striped logical volume may well contend for some of its underlying disks.
+		</p>
+		<p>
+		To ensure the independence of striped RAID-S LUNs, it is recommended that you adopt the following guidelines.
+		</p>
+		<ol>
+			<li>
+			All LUNs on the same disk must be in the same volume group.
+			<li>
+			No other disk from the same RAID-S group must be represented in that volume group.
+			<li>
+			Logical volumes must not use more than one LUN from any disk.
+		</ol>
+		<p>
+		For example, the LUNs from the four RAID-S groups in the diagram below would be grouped into four volume groups:
+		one for the LUNs from the A disks, one for the LUNs from the B disks, and so on;
+		and the logical volumes would be striped across the corresponding LUNs from the distinct RAID-S groups.
+		Backups should be configured so that only one backup stream is used for each volume group.
+		This guarantees complete I/O separation of the backup streams, and thus sequential I/O at the disks,
+		optimal transfer rates, and streaming at the tape drives.
+		Similarly, I/O separation between the volume groups is guaranteed for random reads,
+		which enables, say, table and index data to be separated physically, as well as logically.
+		However, even when these guidelines are followed,
+		great care is needed in disk load balancing to avoid contention between apparently unrelated logical volumes, when the workload is write-intensive.
+		</p>
+		<p align="center">
+		<img src="raid-s.gif" alt="RAID-S Groups" width="532" height="512">
+		</p>
+		<h3>
+			<font color="#660066">
+				What are disk zones?
+			</font>
+		</h3>
+		<p>
+		Another optimization that should be considered for pseudo-random reads is to place the hot data on the faster parts of the disk.
+		The outer cylinders of a disk are about 25% faster than the inner cylinders.
+		This is because disks are divided into zones, and the tracks in the outer zones are longer and contain more data than those in the inner zones,
+		and that data moves past the disk heads more quickly.
+		</p>
+		<p>
+		However, if you put your hottest data right at the beginning (outside edge) of the disks,
+		then the average seek time away from and back to that part of the disk will be unnecessarily long.
+		Therefore it is best to put very hot data about <font size="-1"><sup>1</sup></font>/<font size="-2">3</font> of the way into a disk,
+		and to reserve the last ¼ of the disk (the inner cylinders) for relatively cool data.
+		Even if you do not expect to go to such lengths,
+		you should recognize that not all logical volumes are equal, even though they may be of the same size.
+		It is recommended that you adopt a naming convention for your raw logical volumes that reflects this,
+		because it may well help you with disk load balancing later on.
+		For example, if creating four logical volumes out of a stripe of 4 physical disks,
+		you may add the letters F, H, W and S to the logical volume names to mean respectively Faster, Hot, Warm, Slower.
+		This is illustrated in the figure below.
+		</p>
+		<p align="center">
+		<img src="zones.gif" alt="Disk Zones" border="1" width="416" height="134">
+		</p>
+		<h3>
+			<font color="#660066">
+				What about data growth?
+			</font>
+		</h3>
+		<p>
+		We have seen that striping is vital to the performance of high concurrency pseudo-random reads.
+		However, an important consideration to bear in mind when planning striping is data growth.
+		When a datafile is added to a tablespace to allow for data growth,
+		that datafile should have the same I/O characteristics as its peers, otherwise a hot spot may be introduced.
+		That is, the stripe breadth should be the same, the hardware I/O path should be as broad,
+		the disk should be of the same type, and it should be on the same part of its disks.
+		The I/O characteristics of two datafiles might also differ
+		if either one shares a controller with a significantly slower device, such as a tape drive or an older disk.
+		In the same way, if mirroring is used for data protection, the two mirrors should have identical I/O characteristics as well.
+		</p>
+		<h3>
+			<font color="#660066">
+				A warning about request queuing
+			</font>
+		</h3>
+		<p>
+		One final consideration in maximizing the concurrency of access to hot data for pseudo-random reads is I/O request queuing.
+		If you are using a disk array that can service a hundred or more I/O requests concurrently,
+		you don't want the operating system queuing up I/O requests to prevent what it sees as a single device from being overloaded.
+		On HP-UX for example, you should use the <em>scsictl</em> command at system startup
+		to raise the number of I/O requests that the SCSI device driver will pass to the disk array.
+		The default of 8 concurrent requests is normally far too low.
+		However, beware of setting the queue depth too high also, because there are limits on what the disk arrays can manage
+		and if you attempt to exceed those limits some disk arrays will not handle the situation at all gracefully!
+		</p>
+		
+		<hr noshade align="left" width="300" size="2" color="black">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="1000">
+					<font size="2" color="#660066">
+						<strong>
+							Copyright © Ixora Pty Ltd
+						</strong>
+					</font>
+				</td>
+				<td valign="top" align="right">
+					<nobr>
+					<map name="email">
+						<area shape="rect" coords="0, 0, 32, 21" title="Feedback" href="mailto:feedback@ixora.com.au?SUBJECT=[Tip] random_reads.htm">
+					</map>
+					<img ismap usemap="#email" border="0" alt="Send Email" src="../../images/email.gif" width="32" height="21">
+					<map name="home">
+						<area shape="rect" coords="0, 0, 28, 28" title="Home" href="/">
+					</map>
+					<img ismap usemap="#home" border="0" alt="Home" src="../../images/home.gif" width="28" height="28">
+					</nobr>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

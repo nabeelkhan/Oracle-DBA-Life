@@ -1,0 +1,134 @@
+<html><head><title>
+Declare NOT NULL constraints
+</title>
+<style>
+body {background-image:url(/images/bg.jpg)}
+a:link {color:#FF6600}
+a:active {color:#660066}
+a:visited {color:#FF6600} 
+a:hover {color:#660066}
+a {font-weight:bold}
+h1 {color:#990000; font-size:150%; text-align:center}
+h2 {color:#660066; font-size:125%}
+ul {list-style-image:url(/images/li.gif); margin-left:16px}
+
+.orange {color:#FF6600}
+.purple {color:#660066}
+.brown {color:#990000}
+.h3 {font-weight:bold; color:#990000}
+</style>
+
+</head>
+<script language="javascript"><!--
+function email(addr) { return addr + '@ixora.com.au' }
+//--></script>
+
+<body>
+
+
+<div style="text-align:center; font-size:125%; font-weight:bold; color:#660066">Oracle Performance Tuning Tips</div>
+
+
+
+<h1>Declare NOT NULL constraints</h1>
+
+People sometimes do not bother to define columns as NOT NULL in the data dictionary,
+even though these columns should not contain nulls,
+and indeed never do contain nulls because the application ensures that a value is always supplied.
+You may think that this is a matter of indifference, but it is not.
+The optimizer sometimes needs to know that a column is not nullable,
+and without that knowledge it is constrained to choose a less than optimal execution plan.
+<ol>
+<li>
+An index on a nullable column cannot be used to drive access to a table
+unless the query contains one or more predicates against that column that exclude null values.
+Of course, it is not normally desirable to use an index based access path unless the query contains such predicates,
+but there are important exceptions.
+For example, if a full table scan would otherwise be required against the table
+and the query can be satisfied by a fast full scan against the index,
+then the latter plan will normally prove more efficient.
+<p>
+Another important case is sort elimination.
+If the best provisional execution plan requires a sort operation
+that could be eliminated by choosing a possibly unqualified index range scan earlier in the execution plan,
+then the optimizer will cost that alternative and make a decision based on total query execution cost
+despite that the index range scan might be a relatively expensive single table access path.
+This form of sort elimination is particularly attractive to the optimizer if the database block size is large
+(<a href=block_size.htm><b>here's why</b></a>).
+But, of course, it is not available to the optimizer
+unless it is known that no rows with unindexed null values might be missed by the index range scan.
+<p>
+<li>
+NOT IN subqueries cannot be unnested as anti-joins unless there are NOT NULL constraints on the join columns,
+or equivalent predicates in the query.
+This restriction is required because if the data were to contain nulls, the semantics of a NOT IN subquery would differ from those of an anti-join.
+For an anti-join the subquery is unnested and instantiated once in a temporary segment
+and then joined to the parent query block with inverse join semantics.
+That is, rows from the parent query block are returned if and only if there is no row of the instantiated subquery to which they can be equi-joined.
+If the instantiated subquery could contain null join keys, then parent rows that could not be equi-joined to any of the known values would be returned,
+whereas the semantics of a NOT IN predicate are that it should have the truth value of UNKNOWN for such rows,
+and that they should therefore not be returned.
+<p>
+<li>
+NOT NULL constraints also serve to guarantee that certain materialized view joins are lossless,
+and thus to validate join compatibility when considering using the materialized view to rewrite queries that do not include that join.
+<p>
+</ol>
+The optimizer is being improved with every Oracle release,
+and it is highly likely that there will be even more optimizer tricks in future versions
+that will be enabled or disabled by the presence of NOT NULL constraints.
+Therefore, it is advisable to make NOT NULL constrains explicit in the data dictionary now,
+even if you do not envisage any immediate benefit to query execution performance due to the above three factors.
+<p>
+There is a simple script on the Ixora web site,
+<a href=/scripts/query_opt.htm#consider_not_null><b>consider_not_null.sql</b></a>,
+that can identify columns that appear to be good candidates for NOT NULL constraints.
+<p>
+<hr noshade align=left width=300 size=2 color=black>
+<table cellspacing=0 cellpadding=0 width=100%><tr>
+<td valign=top>
+<div style="font-size:80%; font-weight:bold; color:#660066">
+© Ixora Pty Ltd. &nbsp; All rights reserved.<br>
+
+
+
+05-Apr-2002
+</div>
+</td>
+
+<map name=searches>
+<area coords=3,3,33,25 href=/search.html>
+</map>
+
+<script language=javascript><!--
+document.write('<map name=question><area coords=3,3,15,25 href="mailto:' + email('questions') + '?SUBJECT=About http://www.ixora.com.au/tips/not_null.htm"></map>')
+document.write('<map name=feedback><area coords=3,3,25,25 href="mailto:' + email('feedback') + '?SUBJECT=About http://www.ixora.com.au/tips/not_null.htm"></map>')
+// --></script>
+
+<map name=up1level>
+<area coords=3,3,25,25 href=./>
+</map>
+<map name=homepage>
+<area coords=3,3,25,25 href=/>
+</map>
+
+<td valign=top align=right>
+<nobr>
+
+<img ismap border=0 usemap=#searches src=/images/search.gif width=36 height=28 alt=Search>
+&nbsp;
+
+<img ismap border=0 usemap=#question src=/images/q.gif alt=Questions>
+&nbsp;
+<img ismap border=0 usemap=#feedback src=/images/feedback.gif alt=Feedback>
+&nbsp;
+
+<img ismap border=0 usemap=#up1level src=/images/up_one.gif alt=Up>
+&nbsp;
+<img ismap border=0 usemap=#homepage src=/images/home.gif alt=Home>
+
+</nobr>
+</td>
+</tr></table>
+</body></html>
+

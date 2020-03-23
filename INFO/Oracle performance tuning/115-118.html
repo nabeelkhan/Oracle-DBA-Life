@@ -1,0 +1,569 @@
+a6a
+<HTML>
+<HEAD>
+<META name=vsisbn content="067230886x">
+<META name=vstitle content="Oracle Performance Tuning and Optimization">
+<META name=vsauthor content="Edward Whalen">
+<META name=vsimprint content="Sams">
+<META name=vspublisher content="Macmillan Computer Publishing">
+<META name=vspubdate content="04/01/96">
+<META name=vscategory content="Archive,Databases: Relational Databases">
+
+
+
+
+<TITLE>Oracle Performance Tuning and Optimization:Oracle Instance Tuning</TITLE>
+
+<!-- HEADER -->
+
+<STYLE type="text/css"> 
+ <!--
+ A:hover  {
+ 	color : Red;
+ }
+ -->
+</STYLE>
+
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<script>
+<!--
+function displayWindow(url, width, height) {
+         var Win = window.open(url,"displayWindow",'width=' + width +',height=' + height + ',resizable=1,scrollbars=yes');
+	if (Win) {
+		Win.focus();
+	}
+}
+//-->
+</script>
+<SCRIPT>
+<!--
+function popUp(url) {
+        var Win = window.open(url,"displayWindow",'width=400,height=300,resizable=1,scrollbars=yes');
+	if (Win) {
+		Win.focus();
+	}
+}
+//-->
+</SCRIPT>
+
+<script language="JavaScript1.2">
+<!--
+function checkForQuery(fm) {
+  /* get the query value */
+  var i = escape(fm.query.value);
+  if (i == "") {
+      alert('Please enter a search word or phrase');
+      return false;
+  }                  /* query is blank, dont run the .jsp file */
+  else return true;  /* execute the .jsp file */
+}
+//-->
+</script>
+
+</HEAD>
+
+<body background="/images/back.jpg" bgcolor="#FFFFFF" link="#003399" alink="#FF0000" vlink="#003399" topmargin=0 leftmargin=0 marginheight=0 marginwidth=0>
+
+<table bgcolor="#003366" width="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td colspan="3">
+		
+		<table width="100%">
+			<tr valign="top">
+				<td bgcolor="#003366">&nbsp;&nbsp;<a href="http://www.earthweb.com" target="resource window"><img src="/images/ew_logo.jpg" width="109" height="93" vspace="5" alt="EarthWeb" border="0"></a>&nbsp;&nbsp;&nbsp;</td>
+				<td bgcolor="#003366" nowrap>
+
+<!--  Begin Ads ITK.BOOKS.DATABASE //-->
+
+<A HREF="/adclick.html/CID=00000349ba50285a00000000/site=corpitk/area=corpitk.books.database/aamsz=468x60" target="_blank"><IMG SRC="http://adimages.earthweb.com/images/ads/spidercatcher.gif?" %%HEIGHT%% %%WIDTH%% ALT="Click Here!"  BORDER="0"></A>
+
+
+<!-- ITK.BOOKS.DATABASE End Ads //--></td>
+				<td bgcolor="#003366" nowrap>
+
+<!--  Begin Ads ITKBAN.FRONT //-->
+
+<A HREF="/adclick.html/CID=00000ac5ba50285a00000000/site=corpitk/area=corpitk.books.database/aamsz=160x60/position=top" target="_blank"><IMG SRC="http://adimages.earthweb.com/images/ads/160x60/spider_catcher160x60.gif?" %%HEIGHT%% %%WIDTH%% ALT=""  BORDER="0"></A>
+
+
+<!-- ITKBAN.FRONT End Ads //-->
+990
+</td>
+<td><a href="CITK1a2b3c4d5e6f7g8h9idefcon4.html">
+<img src="/images/dotblue.gif" border="0" height="1" width="1" align="right"></a></td>
+			</tr>
+		</table>
+		
+		</td>
+	</tr>
+		
+	<tr>
+		<td height="1" colspan="3" bgcolor="#003366"><img src="/images/dotclear.gif" border=0 alt=""></td>
+	</tr>
+</table>
+
+<!-- END HEADER -->
+
+
+<!-- BEGIN SUB HEADER -->
+
+<table bgcolor="#003366" cellpadding="0" cellspacing="0" border="0" width="100%">
+
+<!-- ITK TOPNAV -->
+	
+	<tr>
+		<td align="left" valign="top" nowrap><a href="/"><img src="/images/top_tabs/home_off.gif" alt="Home" border="0"></a><a href="/content/corp.html"><img src="/images/top_tabs/subscribe.gif" alt="Subscribe" border="0"></a><a href="/search/"><img src="/images/top_tabs/search.gif" alt="Search" border="0"></a><a href="/faq/faq.html"><img src="/images/top_tabs/faq.gif" alt="FAQ" border="0"></a><a href="/sitemap.html"><img src="/images/top_tabs/sitemap.gif" alt="Sitemap" border="0"></a><a href="/contactus.html"><img src="/images/top_tabs/contact_us.gif" alt="Contact Us" border="0"></a></td> 
+	</tr>
+	
+<!-- END of ITK TOPNAV -->
+
+<!-- ITK LOGO and newsletter sign up -->
+
+</table>
+	
+<table cellpadding="0" cellspacing="0" border="0" width="100%">
+
+	<tr>
+		<td align="left" valign="top" nowrap><img src="/images/itk_logo_sm.jpg" alt="" border="0"></td>
+		<td align="right"><font face="verdana, sans-serif" size="1">
+
+<script language="JavaScript">
+<!-- 
+
+var days = new Array(8);
+days[1] = "Sunday";
+days[2] = "Monday";
+days[3] = "Tuesday";
+days[4] = "Wednesday";
+days[5] = "Thursday";
+days[6] = "Friday";
+days[7] = "Saturday";
+
+var months = new Array(13);
+months[1] = "January";
+months[2] = "February";
+months[3] = "March";
+months[4] = "April";
+months[5] = "May";
+months[6] = "June";
+months[7] = "July";
+months[8] = "August";
+months[9] = "September";
+months[10] = "October";
+months[11] = "November";
+months[12] = "December";
+
+var dateObj = new Date()
+var wday = days[dateObj.getDay() + 1]
+var lmonth = months[dateObj.getMonth() + 1]
+var date = dateObj.getDate()
+var fyear = dateObj.getYear()
+if (fyear <1000) fyear += 1900;
+document.write(wday + ", " + lmonth + " " + date + ", " + fyear)
+                
+//-->
+</script>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>
+<br><br>
+
+<!-- <img src="/images/enterprise_logo.gif" width="254" height="51" border="0"> --></td>
+	</tr>
+</table>
+
+<!-- END ITK LOGO and newsletter sign up-->
+	
+<!-- begin of ITK left NAV -->
+
+<!-- BEGIN LEFT NAVBAR -->
+
+
+1000
+
+<!-- BEGIN LEFT NAVBAR -->
+
+	<table border="0" cellpadding="0" cellspacing="0">
+	
+	
+		<tr>
+		<td width="145" valign="top" align="left" rowspan=8>
+		
+	<!-- KEYWORD SEARCH -->
+<script language="JavaScript1.2">
+<!--
+function checkForQuery(fm) {
+  /* get the query value */
+  var i = escape(fm.query.value);
+  if (i == "") {
+      alert('Please enter a search word or phrase');
+      return false;
+  }                  /* query is blank, dont run the .jsp file */
+  else return true;  /* execute the .jsp file */
+}
+//-->
+</script>
+ 
+	
+	<form name="keyword" method="POST" action="http://ewsearch.earthweb.com:80/jsp/k2search/ewkwk2search.jsp" onSubmit=" return checkForQuery(this); ">
+
+<img src="/images/keyword_searcha.gif" vspace="5" width="145" alt="" border="0">
+<INPUT type="hidden" name="collection" value="corpitk">
+<INPUT type="hidden" name="altcoll" value="bookscorpitk">
+<INPUT type="hidden" name="hl" value="on">
+<INPUT name="sortspec" type=hidden value="vspubdate desc score desc">
+<INPUT name=fields type=hidden value="vdkvgwkey score vstitle vsauthor vsisbn vspublisher vspubdate">		
+<INPUT name=imageprefix type=hidden value="http://corpitk.earthweb.com">
+<INPUT name=ssiFolder type=hidden value="corpitkads">
+		
+		<table width="145" border="0" cellpadding="0" cellspacing="0">
+		<tr>
+		<td width="145">&nbsp;&nbsp;<input type="text" name="query" value="" size="11">&nbsp;<input type="image" width=28 height=23 border=0 value="Go" name="Go" src="/images/go.gif" align=absmiddle><br>
+			<font face="arial, helvetica" size="2">
+			<img src="/images/dotclear.gif" width="1" height="5" alt="" border="0"><br>
+			
+			&nbsp;&nbsp;<a href="/search/search-tips.html"><img src="/images/arrows_blue.gif" alt="" border="0"><font size="1" color="#ffffff">Search Tips</font></a><br>
+			&nbsp;&nbsp;<a href="/search/"><img src="/images/arrows_blue.gif" alt="" border="0"><font size="1" color="#ffffff">Advanced Search</font></a><br>
+			
+			</font>
+			
+		</td>
+		<td width="5"><img src="/images/dotclear.gif" width=5 height=10 hspace="5" alt="" border="0"></td>
+		</tr>
+		</table>
+	</form>
+		
+		
+<!-- BROWSE BY TOPIC -->
+		
+
+<form name="meta" method="POST" action="http://ewsearch.earthweb.com:80/jsp/k2search/ewmetak2search.jsp" onSubmit=" return checkForQuery(this); ">
+
+
+
+<img src="/images/publication_searcha.gif" width="145" alt="" border="0">
+<INPUT type="hidden" name="collection" value="bookscorpitk">
+<INPUT type="hidden" name="altcoll" value="corpitk">
+<INPUT type="hidden" name="hl" value="on">
+<INPUT name="sortspec" type=hidden value="vspubdate desc score desc">
+<INPUT name=fields type=hidden value="vdkvgwkey score vstitle vsauthor vspublisher vspubdate">
+<INPUT name=imageprefix type=hidden value="http://corpitk.earthweb.com">
+<INPUT name=ssiFolder type=hidden value="corpitkads">
+		
+<table width="145" border="0" cellpadding="0" cellspacing="0">
+	
+			<tr>
+			<td valign="top">
+			&nbsp;&nbsp;<input type="text" name="query" value="" size="11">&nbsp;<input type="image" width=28 height=23 border=0 value="Go" name="Go" src="/images/go.gif" align=absmiddle><br><font face="arial, helvetica" size="2">
+			&nbsp;&nbsp;<SELECT NAME="metatags" style="font-size: 12; font-family: sans-serif;" size="1">
+			<option value="vstitle" SELECTED>Title
+			<option value="vsauthor">Author
+			<option value="vspublisher">Publisher
+			<option value="vsisbn">ISBN			
+			</SELECT><br><br></font>
+			</td>
+			</tr>
+</table>
+</form>
+
+<form action="" name="catlist">	
+<table width="145" border="0" cellpadding="0" cellspacing="0">				
+			<tr>
+			<td valign="top">
+			<img src="/images/jump_topica.gif" width="145" alt="" border="0">
+			</td>
+			</tr>
+			<tr>
+			<td width="145">
+				
+	        	<font face="Arial,helvetica" size="1">
+				&nbsp;&nbsp;<SELECT NAME="cat" onChange='top.location.href=this.options[selectedIndex].value;' style="font-size: 10; font-family: sans-serif;">
+                        <option value="" selected>Please Select
+                        <option value="">-----------
+						<option value="/reference/dir.ai.html">Artificial Intel
+						<option value="/reference/dir.busman.ht
+ad1
+ml">Business &amp; Mgmt
+                        <option value="/reference/dir.components.html">Components
+                        <option value="/reference/dir.contentmanagement.html">Content Mgmt
+                        <option value="/reference/dir.certification1.html">Certification
+                        <option value="/reference/dir.databases.html">Databases
+                        <option value="/reference/dir.enterprisemanagement1.html">Enterprise Mgmt
+                        <option value="/reference/dir.funandgames1.html">Fun/Games
+                        <option value="/reference/dir.groupwareandcollaboration1.html">Groupware
+                        <option value="/reference/dir.hardware1.html">Hardware
+                        <option value="/reference/dir.ibmredbooks.html">IBM Redbooks
+                        <option value="/reference/dir.intranetandextranetdevelopment1.html">Intranet Dev
+                        <option value="/reference/dir.middleware.html">Middleware
+                        <option value="/reference/dir.multimediaandgraphicdesign1.html">Multimedia
+                        <option value="/reference/dir.networkservices1.html">Networks 
+                        <option value="/reference/dir.operatingsystems.html">OS
+                        <option value="/reference/dir.productivityapplications1.html">Productivity Apps
+                        <option value="/reference/dir.programminglanguages.html">Programming Langs
+                        <option value="/reference/dir.security1.html">Security  
+						<option value="/reference/dir.softwareengineering1.html">Soft Engineering
+                        <!-- <option value="/reference/dir.ewtraining1.html">Training Guides -->
+                        <option value="/reference/dir.userinterfaces.html">UI
+                        <option value="/reference/dir.webservices.html">Web Services
+                        <option value="/reference/dir.webmasterskills1.html">Webmaster
+                        <option value="/reference/dir.y2k1.html">Y2K
+                        <option value="">-----------
+                        <option value="/reference/whatsnew.html">New Arrivals
+                        </SELECT>
+						</font>
+			
+		</td>
+		</tr>
+	</table>
+	</form>
+	
+<!-- LEFT NAV SEARCH END -->
+
+<table border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td>
+<a href="/desktop/"><img src="/images/desktop_icona.gif" border=0 alt="Go to ITKnowledge Enterprise"></a><br><br></td>
+	</tr>
+</table>
+
+<!-- END LEFT NAVBAR -->
+
+
+
+<!-- END LEFT NAVBAR -->
+	
+	<td width="15"><img src="/images/dotclear.gif" width="15" alt="" border="0"></td>
+
+<!-- end of ITK left NAV -->
+
+<!-- begin main content -->
+	
+	<td width="100%" valign="top" align="left">
+		<br>
+
+<!-- END SUB HEADER -->
+
+
+
+674
+<!-- Created by dB Page Builder.  http://www.pchelponline.com/bluestem -->
+
+<!--Begin Content Column -->
+
+<TABLE border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td width=75 valign=top>
+<img src="/images/sm_covers/067230886x.gif" width=60 height=73 alt="Oracle Performance Tuning and Optimization" border="1">
+</td>
+<td align="left">
+    <font face="arial, helvetica" size="-1" color="#336633"><b>Oracle Performance Tuning and Optimization</b></font>
+    <br>
+    <font face="arial, helvetica" size="-1"><i>by Edward Whalen</i>
+    <br>
+    Sams,&nbsp;Macmillan Computer Publishing
+    <br>
+    <b>ISBN:</b>&nbsp;067230886x<b>&nbsp;&nbsp;&nbsp;Pub Date:</b>&nbsp;04/01/96</font>
+</td>
+</tr>
+</table>
+<P>
+<FORM name= "search2" method="POST" action="http://ewsearch.earthweb.com:80/jsp/k2search/ewintrak2search.jsp" onSubmit=" return checkForQuery(this); ">
+<INPUT type="hidden" name="collection" value="corpitk">
+<INPUT type="hidden" name="altcoll" value="bookscorpitk">
+<INPUT type="hidden" name="hl" value="on">
+<INPUT name="sortspec" type=hidden value="score desc">
+<INPUT name="fields" type=hidden value="vdkvgwkey score vstitle vsisbn vsauthor vspublisher vspubdate">
+<INPUT name="imageprefix" type=hidden value="http://corpitk.earthweb.com">
+<INPUT name="ssiFolder" type=hidden value="corpitk">
+<INPUT type="hidden" name="bookid" value="corpitk.earthweb.comreferencepro067230886x">
+
+<font face="arial, helvetica" size=2><b>Search this book:</b></font><br>
+<INPUT NAME="query" size=25 VALUE="">&nbsp;<input type="image" width=28 height=23 border=0 value="Go" name="Go" src="/images/go.gif" align=absmiddle>
+
+</form>
+
+
+22 
+
+<!-- Empty Reference Subhead -->
+1000
+
+
+<!--ISBN=067230886x//-->
+<!--TITLE=Oracle Performance Tuning and Optimization//-->
+<!--AUTHOR=Edward Whalen//-->
+<!--PUBLISHER=Macmillan Computer Publishing//-->
+<!--IMPRINT=Sams//-->
+<!--CHAPTER=9//-->
+<!--PAGES=115-118//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="112-115.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="118-120.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<P><FONT SIZE="+1"><B><I>Review of Striping Options</I></B></FONT></P>
+<P>Whether you use Oracle striping, OS striping, or hardware striping, the goal is the same: distribute the random I/Os across as many disks as possible. In this way, you can keep the number of I/Os per second requested within the bounds of the physical disks.
+</P>
+<P>If you use Oracle striping or OS striping, you can usually monitor the performance of each disk individually to see how hard they are being driven. If you use hardware striping, remember that the OS monitoring facilities typically see the disk volume as one logical disk. You can easily determine how hard the disks are being driven by dividing the I/O rate by the number of drives.</P>
+<P>With hardware and OS striping, the stripes are small enough that the I/Os are usually divided among the drives fairly evenly. Be sure to monitor the drives periodically to verify that you are not up against I/O limits.</P>
+<P>Use this formula to calculate the I/O rate per drive:</P>
+<!-- CODE SNIP //-->
+<PRE>
+I/Os per disk = ( Number of I/Os per second per volume ) / (Number of drives in the
+volume)
+</PRE>
+<!-- END CODE SNIP //-->
+<P>Suppose that you have a disk array with four drives generating 120 I/Os per second. The number of I/Os per second per disk is calculated as follows:
+</P>
+<!-- CODE SNIP //-->
+<PRE>
+I/Os per disk = 120 / 4 = 30 I/Os per second per disk
+</PRE>
+<!-- END CODE SNIP //-->
+<P>For data volumes that are accessed randomly, you don&#146;t want to push the disks past 50 to 60 I/Os per second per disk. To estimate how many disks you need for data volumes, use this formula:
+</P>
+<!-- CODE SNIP //-->
+<PRE>
+Number of disks = I/Os per second needed / 60 I/Os per second per disk
+</PRE>
+<!-- END CODE SNIP //-->
+<P>If your application requires a certain data file to supply 500 I/Os per second (based on analysis and calculations), you can estimate the number of disk drives needed as follows:
+</P>
+<!-- CODE SNIP //-->
+<PRE>
+Number of disks = 500 I/Os per second / 60 I/Os per second per disk = 16 2/3 disks
+or 17 disks
+</PRE>
+<!-- END CODE SNIP //-->
+<P>This calculation gives you a good approximation for how large to build the data volumes with no fault tolerance. Chapter 15, &#147;Disk Arrays,&#148; looks at various RAID levels and additional I/Os that are incurred by adding disk fault tolerance.
+</P>
+<P><FONT SIZE="+1"><B>Separate Data and Indexes</B></FONT></P>
+<P>Another way to reduce disk contention is to separate the data files from their associated indexes. Remember that disk contention is caused by multiple processes trying to obtain the same resources. For a particularly &#147;hot&#148; table with data that many processes try to access, the indexes associated with that data will be &#147;hot&#148; also.
+</P>
+<P>Placing the data files and index files on different disks reduces the contention on particularly hot tables. Distributing the files also allows more concurrency by allowing simultaneous accesses to the data files and the indexes. Look at the Oracle dynamic performance tables to determine which tables and indexes are the most active.</P>
+<P><FONT SIZE="+1"><B>Eliminate Non-Oracle Disk I/Os</B></FONT></P>
+<P>Although it is not necessary to eliminate all non-Oracle I/Os, reducing significant I/Os will help performance. Most systems are tuned to handle a specific throughput requirement or response time requirement. Any additional I/Os that slow down Oracle can affect both these requirements.
+</P>
+<P>Another reason to reduce non-Oracle I/Os is to increase 
+f8e
+the accuracy of the Oracle dynamic performance table, V$FILESTAT. If only Oracle files are on the disks you are monitoring, the statistics in this table should be very accurate.</P>
+<H3><A NAME="Heading11"></A><FONT COLOR="#000077">Reducing Unnecessary I/O Overhead</FONT></H3>
+<P>Reducing unnecessary I/O overhead can increase the throughput available for user tasks. Unnecessary overhead such as <I>chaining</I> and <I>migrating</I> of rows hurts performance.</P>
+<P>Migrating and chaining occur when an <TT>UPDATE</TT> statement increases the size of a row so that it no longer fits in the data block. When this happens, Oracle tries to find space for this new row. If a block is available with enough room, Oracle moves the entire row to that new block. This is called <I>migrating</I>. If no data block is available with enough space, Oracle splits the row into multiple pieces and stores them in several data blocks. This is called <I>chaining</I>.</P>
+<H4 ALIGN="LEFT"><A NAME="Heading12"></A><FONT COLOR="#000077">Migrated and Chained Rows</FONT></H4>
+<P>Migrated rows cause overhead in the system because Oracle must spend the CPU time to find space for the row and then copy the row to the new data block. This takes both CPU time and I/Os. Therefore, any <TT>UPDATE</TT> statement that causes a migration incurs a performance penalty.</P>
+<P>Chained rows cause overhead in the system not only when they are created but each time they are accessed. A chained row requires more than one I/O to read the row. Remember that Oracle reads from the disk data blocks; each time the row is accessed, multiple blocks must be read into the SGA.</P>
+<P>You can check for chained rows with the <TT>LIST CHAINED ROWS</TT> option of the <TT>ANALYZE</TT> command. You can use these SQL statements to check for chained or migrated rows:</P>
+<!-- CODE //-->
+<PRE>
+SQL&gt; Rem
+SQL&gt; CREATE TABLE chained_rows (
+  2  owner_name    varchar2(30),
+  3  table_name    varchar2(30),
+  4  cluster_name  varchar2(30),
+  5  head_rowid    rowid,
+  6  timestamp     date);
+
+Table created.
+
+SQL&gt; Rem
+SQL&gt; Rem Analyze the Table in Question
+SQL&gt; Rem
+SQL&gt; ANALYZE
+  2   TABLE scott.emp LIST CHAINED ROWS;
+
+Table analyzed.
+
+SQL&gt; Rem
+SQL&gt; Rem Check the Results
+SQL&gt; Rem
+SQL&gt; SELECT * from chained_rows;
+
+no rows selected
+</PRE>
+<!-- END CODE //-->
+<P>If any rows are selected, you have either chained or migrated rows. To solve the problem of migrated rows, copy the rows in question to a temporary table, delete the rows from the initial table, and reinsert the rows into the original table from the temporary table.
+</P>
+<P>Run the chained-row command again to show only chained rows. If you see an abundance of chained rows, this is an indication that the Oracle database block size is too small. You may want to export the data and rebuild the database with a larger block size.</P>
+<P>You may not be able to avoid having chained rows, especially if your table has a LONG column or long CHAR or VARCHAR2 columns. If you are aware of very large columns, it can be advantageous to adjust the database block size before implementing the database.</P>
+<P>A properly sized block ensures that the blocks are used efficiently and I/Os are kept to a minimum. Don&#146;t over-build the blocks or you may end up wasting space. The block size is determined by the Oracle parameter <TT>DB_BLOCK_SIZE</TT>. Remember that the amount of memory used for database block buffers is calculated as follows:</P>
+<!-- CODE SNIP //-->
+<PRE>
+Memory used = DB_BLOCK_BUFFERS (number) * DB_BLOCK_SIZE (bytes)
+</PRE>
+<!-- END CODE SNIP //-->
+<P>Be careful to avoid paging or swapping caused by an SGA that doesn&#146;t fit into RAM.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="112-115.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="118-120.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+
+
+55e
+<!-- all of the reference materials (books) have the footer and subfoot reveresed -->
+<!-- reference_subfoot = footer -->
+<!-- reference_footer = subfoot -->
+
+<!-- BEGIN SUB FOOTER -->
+	<br>
+	<img src="/images/dotclear.gif" width="5" height="7" border="0">
+	</TD>
+    </TR>
+	</TABLE>
+	
+	<table width="100%" border=0 cellpadding=0 cellspacing=0>
+	<tr>
+		<td align="left" width="160"><img src="/images/bot_curve.jpg" width="160" alt="" border="0"></td>
+		<td align="left" valign="top" nowrap><a href="/"><img src="/images/top_tabs/home_bot.gif" alt="home" border="0"></a><a href="/content/corp.html"><img src="/images/top_tabs/subscribe_bot.gif" alt="subscribe" border="0"></a><a href="/search/"><img src="/images/top_tabs/search_bot.gif" alt="search" border="0"></a><a href="/faq/faq.html"><img src="/images/top_tabs/faq_bot.gif" alt="faq" border="0"></a><a href="/sitemap.html"><img src="/images/top_tabs/sitemap_bot.gif" alt="sitemap" border="0"></a><a href="/contactus.html"><img src="/images/top_tabs/contact_us_bot.gif" alt="contactus" border="0"></a><img src="/images/dotclear.gif" width=260 height="1" alt="" border="0"></td> 
+	</tr>
+	</table>
+		
+	<table width="100%" bgcolor="#003366" border=0 cellpadding=0 cellspacing=0>
+	<tr>
+		<td align="left" width=145><img src="/images/clear_pixel.gif" width=145 height="1" alt="" border="0"></td>
+				
+<!-- END SUB FOOTER -->
+
+702
+
+<!-- all of the books have the footer and subfoot reveresed -->
+<!-- reference_subfoot = footer -->
+<!-- reference_footer = subfoot -->
+
+<!-- FOOTER -->
+			
+<td align="left" bgcolor="#003366">
+<table border="0" cellspacing="10" cellpadding="5">
+<tr>
+<td align="center">
+<font face="arial, helvetica" size="1" color="#cccccc"><b><a href="/products.html"><font color="#0099CC">Products</font></a>&nbsp;|&nbsp; <a href="/contactus.html"><font color="#0099CC">Contact Us</font></a>&nbsp;|&nbsp; <a href="/aboutus.html"><font color="#0099CC">About Us</font></a>&nbsp;|&nbsp; <a href="http://www.earthweb.com/dlink.corp|privacy-jhtml.72.0.-.-.jhtml" target="resource window"><font color="#0099CC">Privacy</font></a> &nbsp;|&nbsp; <a href="http://www.itmarketer.com/" target="resource window"><font color="#0099CC">Ad Info</font></a> &nbsp;|&nbsp; <a href="/"><font color="#0099CC">Home</font></a></b>
+<br><br>Use of this site is subject to certain <a href="/agreement.html"><font color="#0099CC">Terms &amp; Conditions</font></a>, <a href="/copyright.html"><font color="#0099CC">Copyright &copy; 1996-2000 EarthWeb Inc.</font></a> All rights reserved.  Reproduction whole or in part in any form or medium without express written <a href="http://www.earthweb.com/dlink.corp|permissions-jhtml.72.0.-.-.jhtml" target="resource window"><font color="#0099CC">permission</font></a> of EarthWeb is prohibited. Read EarthWeb's <A HREF="http://www.earthweb.com/dlink.corp|privacy-jhtml.72.0.-.-.jhtml" target="resource window"><font color="#0099CC">privacy</font></A> statement.</font><br><br>
+</td>
+</tr>
+</table>
+
+<a href="CITK1a2b3c4d5e6f7g8h9idefcon4.html">
+<img src="/images/dotclear.gif" border="0" height="1" width="1" align="left"></a>
+</td>
+		</tr>
+</table>
+</BODY>
+</HTML>
+
+<!-- END FOOTER -->
+
+
+0
+

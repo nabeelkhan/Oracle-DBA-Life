@@ -1,0 +1,172 @@
+<html>
+	<head>
+		<title>
+			Disk Configuration for Pseudo-Random Writes
+		</title>
+		<style>
+			<!-- a:hover{color:#660066;} -->
+		</style>
+	</head>
+	<body background="../../images/bg.jpg" link="#FF6600" vlink="#FF6600" alink="#660066">
+		
+		<h2 align="center">
+			<font color="#990000">
+				Disk Configuration for<br>
+				Pseudo-Random Writes
+			</font>
+		</h2>
+		<p>
+		Most pseudo-random writes are performed in the background by DBWn.
+		So this is the least critical class of disk I/O to optimize.
+		However, poor write response times nevertheless degrade read performance, and compromise DBWn's ability to keep up with its workload.
+		</p>
+		<p>
+		The factors affecting pseudo-random reads, in particular striping to eliminate hot spots,
+		are also important for the optimization of pseudo-random writes.
+		If you have not already done so, it is recommended that you review our tip on
+		<b><a href="random_reads.htm">Disk Configuration for Pseudo-Random Reads</a></b> before continuing to read this tip.
+		The two additional factors to consider for pseudo-random writes are the impact of using RAID-5 for data protection,
+		and the impact of using a software-based implementation of data protection.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				<a name="raid5">Why should RAID-5 be avoided?</a>
+			</font>
+		</h3>
+		<p>
+		The ideal disk configuration choice for pseudo-random writes is striping with mirroring (also called RAID-1/0).
+		This gives you the best of both worlds.
+		Striping to improve concurrency and transfer rates, and mirroring for data protection.
+		Writes are more expensive than in an unprotected configuration, because two copies of the data must be written,
+		but reads are aided by having two copies of the data to read.
+		The main drawback of striping with mirroring is cost.
+		Half of the hardware is used for data protection, and that is something that the bean counters cannot abide if there is a cheaper alternative.
+		And there is.
+		</p>
+		<p>
+		The cheaper alternative is RAID-5.
+		RAID is an acronym for a Redundant Array of Inexpensive Disks.
+		Several different RAID configurations, known as RAID levels, have been defined.
+		Of these, RAID-1 (mirroring), RAID-1/0 (striping with mirroring) and RAID-5 are the most successful.
+		RAID-5 implements striping with distributed parity.
+		In each row of stripe elements, one stripe element is dedicated to storing parity data -
+		the bitwise exclusive-or of all the other stripe elements in that row.
+		The parity data for consecutive stripe element rows is distributed between the disks cyclically, as illustrated in the figure below.
+		The stripe breadth in RAID-5 is always one less that the number of disks used.
+		In this example, only a quarter of the storage capacity is being used for data protection.
+		</p>
+		<p align="center">
+		<img src="raid5.gif" border="1" alt="RAID-5" width="416" height="154">
+		</p>
+		<p>
+		Of course, while RAID-5 might be relatively inexpensive to buy, it has a well-known performance cost.
+		Firstly, reads do not have the benefit of selecting from two copies of the data.
+		But more significantly, writes need to keep the parity data up to date.
+		This involves an expensive three-step process.
+		</p>
+		<ol>
+			<li>
+			Read the old user and parity data from their respective disks.
+			<li>
+			Compute the new parity data - the exclusive-or of the old parity, the old user data and the new user data.
+			<li>
+			Write both the new user and parity data to their respective disks.
+		</ol>
+		<p>
+		The problem for random writes is that a full disk rotation is needed between steps 1 and 3.
+		This problem is not so severe for sequential writes because step 1 may be trivial if the data is already available in the track buffers,
+		and if the write is large enough to address all the disks in the stripe, then a full stripe write may be possible.
+		In a full stripe write it is not necessary to perform any preliminary reads,
+		because all the data needed to compute the correct parity data is already available because it is being written.
+		Some vendors use small default stripe element sizes for their disk arrays to make more full stripe writes possible,
+		despite that this reduces concurrency on file systems.
+		</p>
+		<p>
+		Another attempt that disk array manufacturers make to reduce the performance impact of RAID-5 writes is to provide a large battery backed cache.
+		Data is written to the cache and flushed asynchronously to disk.
+		This hides the RAID-5 write penalty, but pushes up the price once again, not to mention introducing a whole new set of tuning issues.
+		For example, write performance drops off dramatically if the cache is saturated by sustained writes.
+		To address this you may be able to specify how much of the cache memory can be used for particular logical or physical volumes
+		or what proportion of the cache should be dedicated to writes and not available for read caching.
+		You may even be able to control how writes are destaged from the cache.
+		More than that, the read caching of such disk arrays can be so effective that it can turn some hot spots into very cold ones,
+		and change your thinking about where data should be placed on disk.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				Why should software-based data protection be avoided?
+			</font>
+		</h3>
+		<p>
+		It is possible to configure both RAID-5 and striping with mirroring in software using stand-alone disks, instead of in hardware using a disk array.
+		We will consider striping with mirroring first.
+		In hardware mirroring, the operating system sees only one device and performs only one write to it.
+		The hardware is responsible for ensuring that the write is directed to all mirrors and is logically atomic.
+		But in software mirroring, there is the possibility of a system failure occurring
+		after a write has completed on one side of the mirror, but before it has reached the other(s).
+		</p>
+		<p>
+		This state of affairs cannot be tolerated.
+		Assuming that it was a datafile write, then during instance recovery Oracle may find this change in the redo log file and attempt to roll it back.
+		If Oracle's read to determine whether rollback is necessary is satisfied from the unchanged side(s) of the mirror, Oracle will do nothing.
+		Imagine what chaos will then ensue if the next read is serviced from the changed side of the mirror.
+		Therefore, in software mirroring it is imperative that the operating system has a way of ensuring
+		that all sides of a mirror are identical after a system crash.
+		Oracle does not really care which writes were completed.
+		It can cope, as long as there is mirror consistency.
+		</p>
+		<p>
+		The potential problem here is that mirror consistency can take a very long time to establish after a system crash.
+		To do so, the operating system has to copy the data from one side of the mirror onto the other(s), for <em>every block</em> of mirrored data.
+		That takes a good while just for one disk, not to mention a whole database.
+		Of course, there is a workaround - namely to maintain a <em>dirty region log</em> or <em>mirror consistency record</em> on disk.
+		This enumerates mirror regions that might be inconsistent,
+		which dramatically reduces the time required to re-establish mirror consistency after a system crash.
+		Some software mirroring products maintain such a log automatically, but in others it needs to be manually configured.
+		</p>
+		<p>
+		Unfortunately, the use of a dirty region log degrades pseudo-random write performance.
+		If a write addresses a region that is not currently enumerated in the dirty region log, then a preliminary write to the dirty region log is needed.
+		Needless to say, the dirty region log becomes a very small but incredibly hot spot on disk.
+		So with software mirroring for pseudo-random writes, you must choose between either poor write performance or abysmal recovery performance.
+		Of course, it's better to choose not to use software mirroring at all.
+		</p>
+		<p>
+		The same problem of non-atomic writes affects software RAID-5 as well.
+		However, in this case you don't have the option of copying the data between mirrors to restore consistency after a crash.
+		If the user data and parity data are inconsistent after a crash, there is no way of determining where the problem is.
+		So a dirty region log is essential for software RAID-5.
+		</p>
+		<p>
+		Unfortunately, the combined overhead of writes to the dirty region log and preliminary reads for RAID-5 parity calculation is staggering.
+		Therefore, software RAID-5 must not be used for any tablespace with a high proportion of pseudo-random writes.
+		</p>
+		
+		<hr noshade align="left" width="300" size="2" color="black">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="1000">
+					<font size="2" color="#660066">
+						<strong>
+							Copyright © Ixora Pty Ltd
+						</strong>
+					</font>
+				</td>
+				<td valign="top" align="right">
+					<nobr>
+					<map name="email">
+						<area shape="rect" coords="0, 0, 32, 21" title="Feedback" href="mailto:feedback@ixora.com.au?SUBJECT=[Tip] random_writes.htm">
+					</map>
+					<img ismap usemap="#email" border="0" alt="Send Email" src="../../images/email.gif" width="32" height="21">
+					<map name="home">
+						<area shape="rect" coords="0, 0, 28, 28" title="Home" href="/">
+					</map>
+					<img ismap usemap="#home" border="0" alt="Home" src="../../images/home.gif" width="28" height="28">
+					</nobr>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

@@ -1,0 +1,74 @@
+set autot traceonly explain
+set autot traceonly 
+set autot on
+
+SQL>explain plan for 
+select .....
+
+or
+
+For example:
+
+EXPLAIN PLAN
+    SET STATEMENT_ID = <<identifier>> FOR
+<<SQL Statement>>
+
+
+Specifically:
+
+EXPLAIN PLAN
+    SET STATEMENT_ID = 'bad1' FOR
+SELECT name FROM emp;
+
+then use these scripts....
+
+
+@?/rdbms/admin/utlxpls 
+
+or
+
+@D:\NABEEL\DBA\SCRIPTS\utlxpls
+
+or
+
+select * from table(dbms_xplan.display);
+
+or
+
+select plan_table_output from table(dbms_xplan.display('plan_table',null,'serial'))
+
+
+To Use different table for plan use
+
+SQL>explain plan into nk_plan_table for 
+select .....
+
+Then user following sqls
+
+SQL> @D:\NABEEL\DBA\SCRIPTS\nkxplancomp
+
+Use this for complete plan table for last explain statment
+
+OR
+
+SQL> @D:\NABEEL\DBA\SCRIPTS\utlnkxpls
+
+Use this for output same as @?/rdbms/admin/utlxpls for nk_plan_table, one more script do the same job for plan_table which is Xplan
+
+OR
+
+SQL> @D:\NABEEL\DBA\SCRIPTS\nkxplanonly
+
+Use this to see only the plan without rows count
+
+
+exec dbms_stats.set_table_stats( user, 'T1', numrows => 
+10000000, numblks => 100000 );
+ 
+PL/SQL procedure successfully completed.
+ 
+ops$tkyte@ORA9IR2> exec dbms_stats.set_table_stats( user, 'T2', numrows => 
+10000000, numblks => 100000 );
+
+
+dbms_stats.gather_schema_stats(owner,cascade=>true,method_opt=>'for all columns size 250');

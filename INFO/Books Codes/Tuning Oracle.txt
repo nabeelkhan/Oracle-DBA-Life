@@ -1,0 +1,582 @@
+/* 
+
+   Tuning Oracle : Corey, Abbey, Dechichio  ISBN 0-07-881181-3
+
+   These are the scripts from our book. Please use as you see fit! We 
+   appreciate your buying and using this book. We hope you find it useful
+   and as enjoyable as we did writing it!
+
+   They are broken out by chapter. We have included even the shortest and
+   simplest of the listings to suit the needs of all readers, regardless
+   of skill level.
+
+   (c) Osborne McGraw Hill / Oracle Press 1995
+
+   Note that some of these scripts appear as is and may require some
+   modifications to work properly for you. These mods are cosmetic and
+   entail perhaps changing a literal from OPS$FITZPAJ to some other
+   username.
+
+   Disclaimer: This text is provided as is with no warranty. The scripts
+               herein are used at your own risk, and there is no liability
+               assumed by any source stated or implied.
+
+   Mike Corey
+   Michael Abbey 
+   Dan Dechichio
+
+*/
+
+=================================
+Chapter 1
+=================================
+
+create database prod
+datafile 'disk01:[oradbf]systemp1.dbf' size 50m
+maxdatafiles 255;
+
+create database PROD
+logfile group 1 ('dsk1:[oradbf]redo1a.dbf', 'dsk2:[oradbf]redo1b.dbf') size 10M,
+logfile group 2 ('dsk1:[oradbf]redo2a.dbf', 'dsk2:[oradbf]redo2b.dbf') size 10M,
+logfile group 3 ('dsk1:[oradbf]redo3a.dbf', 'dsk2:[oradbf]redo3b.dbf') size 10M
+datafile 'disk01:[oradbf]systemp1.dbf' size 50M
+maxdatafiles 255;
+
+create tablespace rollback_segs
+datafile '/u01/oradbf/roll.dbf' size 100M
+default storage (initial 25K next 75K pctincrease 50);
+
+create table space users
+ datafile '/u01/oradbf/user.dbf' size 50M
+ default storage (initial 10K next 10K pctincrease 0);
+
+/* this is the create tablespace script for the production database */
+spool script_name.lis
+set echo on
+create tablespace temp datafile '/u01/oradbf/temp01.dbf' size 50M
+default storage (initial 25K next 75K pctincrease 50);
+spool off
+/*  */
+
+create tablespace user datafile '/u02/oradbf/user01.dbf' size 100M
+default storage (initial 10K next 10K pctincrease 0);
+spool off
+
+=================================
+Chapter 2
+=================================
+
+col "Percentage miss" format 990.00
+col "Gets" form 999,999,990
+col "Misses" form 999,999,990
+
+select unique parameter "Cache entry",
+       gets "Gets",             /*Read from memory */
+       getmisses "Misses",      /*Read from disk */
+       getmisses/(gets+getmisses)*100 "Percentage miss"
+  from v$rowcache
+ where gets+getmisses <> 0;
+
+select 250*trunc(indx/250)+1||
+       ' to '||250*(trunc(indx/250)+1) "Interval",
+       sum(count) "Buffer Cache Hits"
+from sys.x$kcbrbh
+group by trunc(indx/250);
+
+select 25*trunc(indx/25)+1||
+       ' to '||25*(trunc(indx/25)+1) "Interval",
+       sum(count) "Buffer Cache Hits"
+from sys.x$kcbcbh
+group by trunc(indx/25);
+
+=================================
+Chapter 3
+=================================
+
+greatest(4, ceil(ROW_COUNT /
+ ((round(((1958 - (initrans * 23)) * 
+ ((100-PCT_FREE)/100)) / ADJ_ROW_SIZE)))) * 2)
+
+greatest(4, ( 1.01 ) * ((ROW_COUNT /
+(( floor(((2048 - 113 - (initrans * 23)) * (1-(percent_free/100.))) /
+((10+uniqueness)+number_col_index+(total_col_length))))))*2))
+
+select a.blocks "Total Blocks Allocated",
+       ((a.blocks - b.empty_blocks)/a.blocks)*100. "%Blocks Used",
+       (b.empty_blocks/a.blocks)*100. "%Blocks Empty"
+from sys.dba_segments a, sys.dba_tables b
+where a.owner||'.'||a.segment_name = b.owner||'.'||b.table_name and
+      b.owner||'.'||b.table_name = (owner.table_name)
+
+=================================
+Chapter 4
+=================================
+
+alter system enable restricted session;
+
+alter system disable restricted session;
+
+alter system kill session '41,20898'
+
+select sid, serial#
+from v$session
+where username = 'OPS$FITZPAJ';
+
+create profile finusers limit
+     cpu_per_session       20
+     sessions_per_user      1
+     idle_time             30;
+
+create profile humanres limit
+     cpu_per_session       20
+     idle_time              8;
+
+=================================
+Chapter 5
+=================================
+
+select a.sid,b.name,a.value from v$sesstat a, v$statname b
+ where a.statistic# in (15,16)
+ and a.statistic# = b.statistic#
+ order by 1,3;
+
+sqldba @utlbstat.sql
+
+sqldba @utlestat
+
+logical reads = consistent gets + db block gets
+hit ratio = (logical reads - physical reads)/logical reads
+buffer busy waits ratio    = buffer busy waits/logical reads
+logical reads              = consistent gets + db block gets
+buffer busy waits ratio   = buffer busy waits/logical reads
+
+select class, sum(count) 'Total Waits'
+from sys.v$waitstat
+where class in ('undo header', undo block', 'data block')
+group by class;
+
+non-index lookups ratio = table scans (long tables)/table scans (long 
+tables)+table scans (short tables)
+
+rollback wait ratio  =  trans_tbl_waits/trans_tbl_gets * 100
+
+analyze table people list chained rows;
+
+=================================
+Chapter 6
+=================================
+
+# Step 1
+#
+# Start the database with the nomount option.  This is the only
+# mode the following create statement will run in since the database
+# does not yet exist
+connect internal
+startup nomount pfile=?/dbs/initdevel.ora
+# Step 2
+#
+# Create the database.  Notice how the "controlfile reuse" line
+# tells Oracle to reuse the current control files if it finds them
+# where they are specified in the initialization parameter file.
+# Even though we ask for 2 redo log files, Orace7 will actually create
+# 2 single-membered redo log groups.  The "maxdatafiles" and
+# "maxlogmembers" parameters are examples of database parameters
+# that can only be set in when the database is created (or a new
+# control file created as we discuss in Chapter 8.
+# The default for this statement is "noarchivelog",
+# we put it here just as a reminder.  You do not want the database
+# to archive redo logs when you do the full database import.
+create database devel
+       controlfile reuse
+       datafile '?/dbs/dbs1devel.dbf'          size 20M
+       logfile '/sys1/ora/log1devel.dbf'       size 2M,
+               '/sys2/ora/log2dvel.dbf'        size 2M
+       maxdatafiles 40,
+       maxlogmembers 6,
+       noarchivelog;
+# Step 3
+#
+# Open the database and create the first non-system rollback
+# segment.  You need at least one non-system rollback segment before
+# you can create a tablespace.  We always make this rollback segment
+# small - based on these storage parameters, it will never grow over
+# 500K (512,000 bytes).
+alter database open;
+create rollback segment temp
+      tablespace system
+      storage (initial 100K next 100K minextents 1 maxextents 5);
+alter rollback segment temp online;
+# Step 5
+#
+# Set up the data dictionary which ends up in the SYS account.  Then
+# run the script "catproc.sql" that installs the procedural option.
+# Then set up the views required to run the export and import utilities
+# that should end up as part of your system backups.
+@?/rdbms/admin/catalog.sql
+@?/rdbms/admin/catproc.sql
+@?/rdbms/admin/catexp.sql
+@?/rdbms/admin/catldr.sql
+# Step 6
+#
+# As the SYSTEM user, set up private synonyms pointing at all the
+# data dictionary views prefixed with the characters "dba_".  Then
+
+# run the script to build the PRODUCT_USER_PROFILE table.  This
+# table can be used to restrict certain SQL or SQL*Plus commands
+# for individual or classes of Oracle users.  Without at least
+# building this table, any user other than SYSTEM that enters
+# SQL*Plus is told "Warning! Product user profile information
+# not loaded".
+connect system/manager
+@?/rdbms/admin/catdbsyn
+@?/sqlplus/admin/pupbld
+     
+     
+select class,count from v$waitstat where class = 'free list';
+
+select name,value from v$sysstat where name in 
+      ('db_block_gets','consistent gets');
+
+freelist wait events = (free list count) / (db block gets +
+                                            consistent gets) * 100
+
+select maxextents from sys.dba_tables
+where table_name = 'MY_TABLE' and owner = 'ITSME';
+ select count(*) from sys.dba_extents
+ where segment_name = 'MY_TABLE' and
+ segment_owner = 'ITSME';
+
+select lf_rows,lf_rows_len,del_lf_rows,del_lf_rows_len
+ from index_stats where name = 'PRODUCT_1';
+     
+=================================
+Chapter 7
+=================================
+
+set echo off term off feed off ver off
+spool xpl
+select decode(id,0,'',
+   lpad(' ',2*(level-1))||level||'.'||position)||' '||
+   operation||' '||options||' '||object_name||' '||
+   object_type||' '||
+   decode(id,0,'Cost = '||position) Query_plan
+  from plan_table
+connect by prior id = parent_id
+and statement_id = upper('&1')
+start with id = 0 and statement_id = upper('&1');
+spool off
+set term on
+prompt
+prompt Output from EXPLAIN PLAN is in file called "xpl.lst" . . .
+prompt
+
+=================================
+Chapter 8
+=================================
+
+select tablespace_name,sum(bytes) from sys.dba_free_space
+    group by tablespace_name;
+select tablespace_name,max(bytes) from sys,dba_free_space
+    group by tablespace_name;
+
+rem *  Create rows in FSPACE for today
+
+insert into fspace
+select a.tablespace_name,
+       sum(a.bytes),             /*  Allocated from DBA_DATA_FILES  */
+       round(sum(b.bytes)),      /*  Free bytes from DBA_FREE_SPACE */
+       '','',sysdate
+  from sys.dba_data_files a,sys.dba_free_space b
+ where a.tablespace_name = b.tablespace_name
+ group by a.tablespace_name,'','',sysdate;
+
+rem *  Yesterday's free space is in the rows from yesterday FREE_TODAY
+rem *  column.  The FREE_TODAY column values from yesterday are moved into the
+rem *  FREE_YESTERDAY columns for today's rows.
+
+update fspace a
+set free_yesterday =
+    (select free_today
+       from fspace b
+      where a.tablespace_name = b.tablespace_name
+        and to_char(b.system_date) = to_char(sysdate - 1))
+where to_char(system_date) = to_char(sysdate);
+
+rem *  The PERCENT_CHANGED is set to represent the following:
+rem *  % change = free_today - free_yesterday / free_yesterday expressed
+rem *  as a percentage.  The calculation has to use a DECODE in case the amount
+rem *  of free space has not changed.  This avoids dividing by 0.
+
+update fspace
+   set percent_changed = round(decode(free_today-free_yesterday,
+                         0,0,  /* If no change, set PERCENT_CHANGED to zero  */
+                         100*(free_today-free_yesterday)/
+                         (free_yesterday)),2)
+ where to_char(system_date) = to_char(sysdate);
+
+rem *  Print changed free space report for today.
+
+col tablespace_name heading 'Tablespace'
+col allocated heading 'Allocated' 999,999,990
+col free_today heading 'Free today' form 999,999,990
+col free_yesterday heading 'Yesterday form 999,999,990
+col percent_changed heading 'Pct Ch' form 90.00
+
+select tablespace_name, allocated, free_today, free_yesterday, percent_changed
+  from fspace
+ where to_char(system_date) = to_char(sysdate);
+
+=================================
+Chapter 9
+=================================
+
+select owner "Owner", segment_name "Segment Name",
+    segment_type "Type", tablespace_name "Tablespace",
+    extents "#Ext", max_extents "Max"
+    from sys.dba_extents
+    where extents > 5
+    and owner not in ('SYS','SYSTEM')
+    order by owner,segment_name;
+
+ttitle center 'Report of Next Extent Within ' &1 ' of maxextents' skip -
+       center 'Date: ' datevar skip -
+       left '(T/I - Table or Index)' skip 2
+column bsize new_value max_ext
+column today new_value datevar format a1 noprint
+select sysdate today, decode(value,2048,121,240) bsize 
+/* You get 121 max extents if block   */
+/* size is 2048 and 240 if it is 4096 */
+  from v$parameter                                     
+ where name = 'db_block_size';
+select a.owner, table_name "object", 
+       a.tablespace_name "tablespace",
+       'T' "T/I", 
+       a.max_extents max_extents,
+       b.extents current_extent
+ from sys.dba_tables a, sys.dba_segments b
+where table_name = segment_name and
+      (a.max_extents < extents + &1 or &max_ext < extents + &1)
+union
+select a.owner, index_name, a.tablespace_name,
+       'I' indicator, 
+       a.max_extents max_extents,
+       b.extents current_extent
+  from sys.dba_indexes a, sys.dba_segments b
+ where index_name = segment_name and
+       (a.max_extents < extents + &1 or &max_ext < extents + &1);
+If the program is called using the following command
+list
+select * from sys.dba_free_space 
+ where tablespace_name = 'USERS7'
+ order by block_id;
+
+
+select b.file_id "File #" 
+         b.tablespace_name "Tablespace name", 
+         b.bytes "# bytes",
+         (b.bytes - sum(nvl(a.bytes,0))) "# used",
+         sum(nvl(a.bytes,0)) "# free", 
+         (sum(nvl(a.bytes,0))/(b.bytes))*100 "%free"
+    from sys.dba_free_space a, sys.dba_data_files b 
+   where a.file_id(+) = b.file_id
+   group by b.tablespace_name, b.file_id, b.bytes 
+   order by b.tablespace_name
+
+set echo off feed off pages 0
+spool veedollar_dba.sql
+select 'grant select on '||table_name||' to public;'
+  from user_views
+ where view_name like 'V_$%'
+    or view name like 'DBA_%;
+set echo on feed on
+@veedollar_dba
+
+set echo off ver off feed off pages 0
+
+rem * You are prompted for the Oracle ID of someone currently 
+rem * logged on. That person's memory consumption will be used 
+rem * as a sample amount. You are also asked for the # of 
+rem * concurrent users to base this calculation on.
+
+accept username prompt 'User to use?? '
+accept numusers prompt '# of users ?? '
+
+rem * Get that user's session identifier by joining v$process
+rem * and v$session matching the ADDR column from v$process
+rem * against the PADDR column from v$session, and matching 
+rem * the USERNAME column from v$session against the username
+rem * entered before
+
+set term off
+col a new_value snum
+select sid a
+  from v$process p, v$session s
+ where p.addr = s.paddr
+   and s.username = 'OPS$'||upper('&username');
+
+rem * Now that we have the sample user's session
+rem * ID, we can go to v$sesstat for the amount of memory 
+rem * that user is consuming.  We use STATISTIC# = 16 which is
+rem * the MAX SESSION MEMORY per user maintained in
+rem * v$sesstat for each user connected to the database.
+
+col b new_value pumem
+select value b
+  from v$sesstat
+ where statistic# = 16
+   and sid = &snum;
+
+rem * Get the amount of memory in the shared pool that is
+rem * currently in use (i.e., the size of the SQL sitting in the
+rem * shared pool).
+col c new_value spl
+select sum(sharable_mem) c
+  from v$sqlarea;
+rem * Using the following formula, make the optimal shared
+rem * pool size calculation.
+rem * optimal size = 1.3 * (per_user_memory * number _users +
+                            size_of_sql_in_pool)
+col d new_value size1
+col e new_value size2
+select (&pumem*&numusers+&spl) d,
+       (&pumem*&numusers+&spl)+3/10*(&pumem*&numusers+&spl) e
+  from dual;
+
+col pmem form 99,999,990
+col nu   like pmem
+col sss  like pmem
+col tmu  like pmem
+col s1   like pmem
+col s2   like pmem
+set term on
+prompt
+prompt
+prompt
+prompt ===================================================
+select 'Per user memory requirement:  ', &pumem pmem
+  from dual;
+select 'Number of users            :  ', &numusers nu
+  from dual;
+prompt ===================================================
+select 'Total memory for users     :  ', &numusers*&pumem tmu
+  from dual;
+select 'Size of stuff in shared SQL:  ', &spl sss
+  from dual;
+prompt ===================================================
+select 'Base shared pool size      :  ', &size1 s1
+  from dual;
+select 'Pool size with 30% free    :  ', &size2 s2
+  from dual;
+prompt ===================================================
+
+
+select decode(state,0,'FREE',
+                    1,'Read and Modified',
+                    2,'Read and Non-Modified',
+                    4,'Current Block Read','Other'),count(*)
+  from x$bh
+ group by decode(state,0,'FREE',
+                       1,'Read and Modified',
+                       2,'Read and Non-Modified',
+                       4,'Current Block Read','Other');
+
+
+# The following commands will create a new control file and use it
+# to open the database.
+# No data other than log history will be lost. Additional logs may
+# be required for media recovery of offline data files. Use this
+# only if the current version of all online logs are available.
+STARTUP NOMOUNT
+CREATE CONTROLFILE REUSE DATABASE PRD NORESETLOGS ARCHIVELOG
+    MAXLOGFILES 20
+    MAXLOGMEMBERS 4
+    MAXDATAFILES 30
+    MAXINSTANCES 1
+    MAXLOGHISTORY 100
+LOGFILE
+  GROUP 1 (
+    '/disk2/prd_log/log1prd_g1.dbf',
+    '/data/log_shadow/log2prd_g1.dbf',
+    '/disk1/log_shadow/log3prd_g1.dbf'
+  ) SIZE 2M,
+  GROUP 2 (
+    '/oracle/dbs/log1prd_g2.dbf',
+    '/disk3/log_shadow/log2prd_g2.dbf',
+    '/disk1/log_shadow/log3prd_g2.dbf'
+  ) SIZE 2M,
+
+DATAFILE
+  '/disk1/oracle_prd/dbs1prd.dbf' SIZE 30M,
+  '/oracle/dbs/finance.dbf' SIZE 120M,
+  '/disk1/oracle_prd/audit.dbf' SIZE 20M,
+  '/disk2/oracle_prd/dba_stats.dbf' SIZE 18M;
+# Recovery is required if any of the datafiles are restored backups,
+# or if the last shutdown was not normal or immediate.
+RECOVER DATABASE
+# All logs need archiving and a log switch is needed.
+ALTER SYSTEM ARCHIVE LOG ALL;
+# Database can now be opened normally.
+ALTER DATABASE OPEN;
+
+
+set echo off feed off pages 0
+spool regrant_jobs.sql
+select 'grant ' || privilege || ' on ' || table_name || ' to ' ||
+       20  20grantee 20 20 || decode (grantable,'YES',' with grant option;',';')
+   from user_tab_privs_made
+  where table_name = 'JOBS';
+spool off
+
+set pages 0 feed off echo off
+spool jobs_idrop.sql
+select 'drop index ' || INDEX_NAME || ';'
+  from user_indexes
+ where table_name = 'JOBS';
+spool off
+
+set echo off pages 0 feed off
+spool nukeuser.sql
+select 'drop ' || object_type || ' ' || owner || '.' || object_name || ';'
+  from sys.dba_objects
+ where object_type in ('TABLE','VIEW','SEQUENCE','SYNONYM') and
+       owner = 'OPS$FRANCISL';
+spool off
+
+spool ts_quotas.sql
+select 'alter user quota ' || max_bytes || ' on ' || tablespace_name || ';'
+  from sys.dba_ts_quotas
+ where nvl(max_bytes,0) > 0;
+spool off
+
+set pages 0 feed off echo off
+spool yr_trans.parfile
+prompt userid=system/manager
+prompt file=yr_trans
+prompt buffer=10240000
+prompt indexes=y
+prompt grants=y
+prompt owner=(
+select unique owner || ','
+  from sys.dba_tables
+ where tablespace_name = 'YR_TRANS'
+    and  owner <>
+   (select max(owner)
+     from sys.dba_tables 
+   where tablespace_name = 'YR_TRANS');
+select max(owner) || ')'
+  from sys.dba_tables 
+where tablespace_name = 'YR_TRANS';
+spool off
+
+select 'create rollback segment ' || segment_name || chr(10),
+       '       tablespace ' || tablespace_name || chr(10),
+       '       storage ( initial     ' || initial_extent || chr(10),
+       '                 next        ' || next_extent || chr(10),
+       '                 minextents  ' || min_extents || chr(10),
+       '                 maxextents  ' || max_extents || chr(10) ||
+       '                 optimal     ' || optsize || ');'
+  from sys.dba_rollback_segs a,v$rollstat b,v$rollname c
+ where segment_name <> 'SYSTEM'
+   and b.usn = c.usn
+   and a.segment_name = c.name;
+

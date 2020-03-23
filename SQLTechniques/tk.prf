@@ -1,0 +1,401 @@
+
+TKPROF: Release 10.1.0.3.0 - Production on Tue Jun 21 19:46:10 2005
+
+Copyright (c) 1982, 2004, Oracle.  All rights reserved.
+
+Trace file: /home/ora10gr1/OraHome_3/admin/ora10gr1/udump/ora10gr1_ora_6083.trc
+Sort options: default
+
+********************************************************************************
+count    = number of times OCI procedure was executed
+cpu      = cpu time in seconds executing 
+elapsed  = elapsed time in seconds executing
+disk     = number of physical reads of buffers from disk
+query    = number of buffers gotten for consistent read
+current  = number of buffers gotten in current mode (usually for update)
+rows     = number of rows processed by the fetch or execute call
+********************************************************************************
+
+alter session set events '10046 trace name context forever, level 12'
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        0      0.00       0.00          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        0      0.00       0.00          0          0          0           0
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        1      0.00       0.00          0          0          0           0
+
+Misses in library cache during parse: 0
+Optimizer mode: ALL_ROWS
+Parsing user id: 74  
+
+Elapsed times include waiting on following events:
+  Event waited on                             Times   Max. Wait  Total Waited
+  ----------------------------------------   Waited  ----------  ------------
+  SQL*Net message to client                       1        0.00          0.00
+  SQL*Net message from client                     1        0.00          0.00
+********************************************************************************
+
+BEGIN DBMS_OUTPUT.GET_LINES(:LINES, :NUMLINES); END;
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        4      0.00       0.00          0          0          0           0
+Execute      4      0.00       0.00          0          0          0           4
+Fetch        0      0.00       0.00          0          0          0           0
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        8      0.00       0.00          0          0          0           4
+
+Misses in library cache during parse: 0
+Optimizer mode: ALL_ROWS
+Parsing user id: 74  
+
+Elapsed times include waiting on following events:
+  Event waited on                             Times   Max. Wait  Total Waited
+  ----------------------------------------   Waited  ----------  ------------
+  SQL*Net message to client                       4        0.00          0.00
+  SQL*Net message from client                     4        1.43          1.54
+********************************************************************************
+
+SELECT DECODE('A','A','1','2') 
+FROM
+ DUAL
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        2      0.02       0.01          0          0          0           0
+Execute      2      0.00       0.00          0          0          0           0
+Fetch        2      0.00       0.00          0          0          0           2
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        6      0.02       0.02          0          0          0           2
+
+Misses in library cache during parse: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 74  
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      1  FAST DUAL  (cr=0 pr=0 pw=0 time=2471 us)
+
+
+Elapsed times include waiting on following events:
+  Event waited on                             Times   Max. Wait  Total Waited
+  ----------------------------------------   Waited  ----------  ------------
+  SQL*Net message to client                       2        0.00          0.00
+  SQL*Net message from client                     2        0.15          0.15
+********************************************************************************
+
+SELECT DISTINCT SID 
+FROM
+ V$MYSTAT
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.03       0.17          0          3          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        1      0.00       0.00          0          0          0           1
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        3      0.03       0.17          0          3          0           1
+
+Misses in library cache during parse: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 74  
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      1  SORT UNIQUE (cr=0 pr=0 pw=0 time=765 us)
+    332   FIXED TABLE FULL X$KSUMYSTA (cr=0 pr=0 pw=0 time=2087 us)
+
+
+Elapsed times include waiting on following events:
+  Event waited on                             Times   Max. Wait  Total Waited
+  ----------------------------------------   Waited  ----------  ------------
+  SQL*Net message to client                       1        0.00          0.00
+  SQL*Net message from client                     1        0.00          0.00
+********************************************************************************
+
+SELECT STATISTIC# S, NAME 
+FROM
+ SYS.V_$STATNAME WHERE NAME IN ('recursive calls','db block gets','consistent 
+  gets','physical reads','redo size','bytes sent via SQL*Net to client',
+  'bytes received via SQL*Net from client','SQL*Net roundtrips to/from 
+  client','sorts (memory)','sorts (disk)') ORDER BY S
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.01          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        2      0.00       0.00          0          0          0          10
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        4      0.00       0.01          0          0          0          10
+
+Misses in library cache during parse: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 74  
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+     10  FIXED TABLE FULL X$KSUSD (cr=0 pr=0 pw=0 time=140 us)
+
+
+Elapsed times include waiting on following events:
+  Event waited on                             Times   Max. Wait  Total Waited
+  ----------------------------------------   Waited  ----------  ------------
+  SQL*Net message to client                       2        0.00          0.00
+  SQL*Net message from client                     2        0.00          0.00
+********************************************************************************
+
+select * 
+from
+ (select * from all_objects order by object_id) where rownum <= 10
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.07       0.07          0         12          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        2      0.01       0.00          0         56          0          10
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        4      0.08       0.07          0         68          0          10
+
+Misses in library cache during parse: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 74  
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+     10  COUNT STOPKEY (cr=56 pr=0 pw=0 time=551 us)
+     10   VIEW  (cr=56 pr=0 pw=0 time=528 us)
+     10    FILTER  (cr=56 pr=0 pw=0 time=468 us)
+     10     NESTED LOOPS  (cr=26 pr=0 pw=0 time=1333 us)
+     10      TABLE ACCESS BY INDEX ROWID OBJ$ (cr=5 pr=0 pw=0 time=366 us)
+     11       INDEX FULL SCAN I_OBJ1 (cr=3 pr=0 pw=0 time=94 us)(object id 36)
+     10      TABLE ACCESS CLUSTER USER$ (cr=21 pr=0 pw=0 time=594 us)
+     10       INDEX UNIQUE SCAN I_USER# (cr=2 pr=0 pw=0 time=168 us)(object id 11)
+      4     TABLE ACCESS BY INDEX ROWID IND$ (cr=10 pr=0 pw=0 time=269 us)
+      4      INDEX UNIQUE SCAN I_IND1 (cr=6 pr=0 pw=0 time=121 us)(object id 39)
+      0     NESTED LOOPS  (cr=20 pr=0 pw=0 time=439 us)
+      2      INDEX RANGE SCAN I_OBJAUTH1 (cr=20 pr=0 pw=0 time=174 us)(object id 102)
+      0      FIXED TABLE FULL X$KZSRO (cr=0 pr=0 pw=0 time=122 us)
+      1     FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=122 us)
+      0     FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=0 us)
+      0     FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=0 us)
+      0     FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=0 us)
+      0     FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=0 us)
+      0     FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=0 us)
+      0     FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=0 us)
+      0     FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=0 us)
+      0     FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=0 us)
+      0     FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=0 us)
+      0     FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=0 us)
+      0     FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=0 us)
+      0     FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=0 us)
+      0     FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=0 us)
+      0     FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=0 us)
+      0     FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=0 us)
+      0     FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=0 us)
+      0     FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=0 us)
+      0     FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=0 us)
+      0     FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=0 us)
+      0     VIEW  (cr=0 pr=0 pw=0 time=0 us)
+      0      FAST DUAL  (cr=0 pr=0 pw=0 time=0 us)
+
+
+Elapsed times include waiting on following events:
+  Event waited on                             Times   Max. Wait  Total Waited
+  ----------------------------------------   Waited  ----------  ------------
+  SQL*Net message to client                       2        0.00          0.00
+  SQL*Net message from client                     2        0.00          0.00
+********************************************************************************
+
+declare
+   cursor c is
+      select * from all_objects order by object_id;
+   l_rec all_objects%rowtype;
+begin
+   open c;
+   for i in 1 .. 10
+   loop
+       fetch c into l_rec;
+   end loop;
+   close c;
+end;
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.01       0.01          0          0          0           0
+Execute      1      5.52       5.81        870      81954          0           1
+Fetch        0      0.00       0.00          0          0          0           0
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        2      5.53       5.83        870      81954          0           1
+
+Misses in library cache during parse: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 74  
+
+Elapsed times include waiting on following events:
+  Event waited on                             Times   Max. Wait  Total Waited
+  ----------------------------------------   Waited  ----------  ------------
+  SQL*Net message to client                       1        0.00          0.00
+  SQL*Net message from client                     1        0.00          0.00
+********************************************************************************
+
+SELECT * 
+FROM
+ ALL_OBJECTS ORDER BY OBJECT_ID
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.02       0.02          0          0          0           0
+Execute      2      0.00       0.00          0          0          0           0
+Fetch       10      5.49       5.78        870      81951          4          10
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total       13      5.51       5.81        870      81951          4          10
+
+Misses in library cache during parse: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 74     (recursive depth: 1)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+     10  SORT ORDER BY (cr=81951 pr=870 pw=664 time=5786184 us)
+  47667   FILTER  (cr=81951 pr=828 pw=0 time=2862117 us)
+  49304    HASH JOIN  (cr=601 pr=556 pw=0 time=1037198 us)
+     78     TABLE ACCESS FULL USER$ (cr=6 pr=0 pw=0 time=481 us)
+  49304     TABLE ACCESS FULL OBJ$ (cr=595 pr=556 pw=0 time=297632 us)
+   1741    TABLE ACCESS BY INDEX ROWID IND$ (cr=4508 pr=76 pw=0 time=124854 us)
+   2250     INDEX UNIQUE SCAN I_IND1 (cr=2252 pr=0 pw=0 time=58867 us)(object id 39)
+  21811    NESTED LOOPS  (cr=56261 pr=71 pw=0 time=1456569 us)
+  22095     INDEX RANGE SCAN I_OBJAUTH1 (cr=56261 pr=71 pw=0 time=487967 us)(object id 102)
+  21811     FIXED TABLE FULL X$KZSRO (cr=0 pr=0 pw=0 time=341221 us)
+      1    FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=82 us)
+      1    FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=62 us)
+      1    FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=95 us)
+      1    FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=75 us)
+      1    FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=68 us)
+      1    FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=65 us)
+      1    FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=73 us)
+      1    FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=121 us)
+      1    FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=125 us)
+      1    FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=123 us)
+      1    FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=119 us)
+      0    FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=0 us)
+      1    FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=87 us)
+      0    FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=84 us)
+      1    FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=157 us)
+      1    FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=93 us)
+     13    VIEW  (cr=0 pr=0 pw=0 time=449 us)
+     13     FAST DUAL  (cr=0 pr=0 pw=0 time=168 us)
+      1    FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=72 us)
+      1    FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=100 us)
+      1    FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=133 us)
+      0    FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=0 us)
+
+
+Elapsed times include waiting on following events:
+  Event waited on                             Times   Max. Wait  Total Waited
+  ----------------------------------------   Waited  ----------  ------------
+  db file scattered read                         73        0.00          0.03
+  db file sequential read                       161        0.00          0.01
+  direct path write temp                        102        0.00          0.00
+  direct path read temp                           9        0.00          0.00
+********************************************************************************
+
+select * 
+from
+ dual
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.01       0.01          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        2      0.00       0.00          2          3          0           1
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        4      0.01       0.01          2          3          0           1
+
+Misses in library cache during parse: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 74  
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      1  TABLE ACCESS FULL OBJ#(217) (cr=3 pr=2 pw=0 time=261 us)
+
+
+Elapsed times include waiting on following events:
+  Event waited on                             Times   Max. Wait  Total Waited
+  ----------------------------------------   Waited  ----------  ------------
+  SQL*Net message to client                       2        0.00          0.00
+  db file sequential read                         2        0.00          0.00
+  SQL*Net message from client                     2        0.00          0.00
+
+
+
+********************************************************************************
+
+OVERALL TOTALS FOR ALL NON-RECURSIVE STATEMENTS
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse       11      0.14       0.30          0         15          0           0
+Execute     12      5.52       5.82        870      81954          0           5
+Fetch        9      0.01       0.00          2         59          0          24
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total       32      5.67       6.13        872      82028          0          29
+
+Misses in library cache during parse: 6
+
+Elapsed times include waiting on following events:
+  Event waited on                             Times   Max. Wait  Total Waited
+  ----------------------------------------   Waited  ----------  ------------
+  SQL*Net message to client                      15        0.00          0.00
+  SQL*Net message from client                    15        1.43          1.71
+  db file sequential read                         5        0.00          0.00
+
+
+OVERALL TOTALS FOR ALL RECURSIVE STATEMENTS
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse      923      0.71       0.91          2       3121          0           0
+Execute   2494      1.45       1.72          2       3480          0           0
+Fetch     5365      7.42       8.42       1051      97184          4        5548
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total     8782      9.58      11.06       1055     103785          4        5548
+
+Misses in library cache during parse: 51
+Misses in library cache during execute: 46
+
+Elapsed times include waiting on following events:
+  Event waited on                             Times   Max. Wait  Total Waited
+  ----------------------------------------   Waited  ----------  ------------
+  db file sequential read                       335        0.10          0.64
+  db file scattered read                         74        0.00          0.03
+  direct path write temp                        102        0.00          0.00
+  direct path read temp                           9        0.00          0.00
+
+   13  user  SQL statements in session.
+  922  internal SQL statements in session.
+  935  SQL statements in session.
+********************************************************************************
+Trace file: /home/ora10gr1/OraHome_3/admin/ora10gr1/udump/ora10gr1_ora_6083.trc
+Trace file compatibility: 10.01.00
+Sort options: default
+
+       5  sessions in tracefile.
+      36  user  SQL statements in trace file.
+    1187  internal SQL statements in trace file.
+     935  SQL statements in trace file.
+      74  unique SQL statements in trace file.
+   32265  lines in trace file.
+      86  elapsed seconds in trace file.
+
+

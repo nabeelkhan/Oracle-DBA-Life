@@ -1,0 +1,296 @@
+Press <Enter> to continue...Date: 10/07/03                                          Kuwait Insurance Co.                                         Page:   1      
+Time: 01:26 PM                                    Primary Key - Foreign Key Report                                   PREMPROD       
+                                                        orakic database                                                             
+                                                                                                                                    
+Pri Table Pri Table      Pri Key             For Table For Table      For Key                                                       
+Owner     Name           Columns             Owner     Name           Columns                                                       
+--------- -------------- ------------------- --------- -------------- -------------------                                           
+PREMPROD  DIS_DOCS_      DOCUMENT_ID         PREMPROD  DIS_GRANTS_    DOCUMENT_ID                                                   
+PREMPROD  EVT_PROFILE    PROFILE_ID          PREMPROD  EVT_DEST_PROFI PROFILE_ID                                                    
+                                                       LE                                                                           
+                                                                                                                                    
+PREMPROD  EVT_PROFILE    PROFILE_ID          PREMPROD  EVT_INSTANCE   PROFILE_ID                                                    
+PREMPROD  KM_BANDS       BAND_FORMAT_ID      PREMPROD  KM_BANDS_RANGE BAND_FORMAT_ID                                                
+PREMPROD  PM_CLASS       CLASS_CODE          PREMPROD  PM_CUST_COMM   CC_CLASS_CODE                                                 
+PREMPROD  PM_CLASS       CLASS_CODE          PREMPROD  PM_DEPT_CLASS  DC_CLASS_CODE                                                 
+PREMPROD  PM_CLASS       CLASS_CODE          PREMPROD  PM_ENDT_CLASS_ ECS_CLASS_CODE                                                
+                                                       SETUP                                                                        
+                                                                                                                                    
+PREMPROD  PM_CLASS       CLASS_CODE          PREMPROD  PM_SUB_CLASS   SC_CLASS_CODE                                                 
+PREMPROD  PM_CLASS       CLASS_CODE          PREMPROD  PM_XL_TREATY   XT_CLASS_CODE                                                 
+PREMPROD  PM_CLM_DOC_SET CDS_CODE            PREMPROD  PM_CLM_APPL_BL CABS_CDS_CODE                                                 
+          UP                                           K_SETUP                                                                      
+                                                                                                                                    
+PREMPROD  PM_CLM_DOC_SET CDS_CODE            PREMPROD  PM_CLM_DOC_SCH CDSS_CDS_CODE                                                 
+          UP                                           _SETUP                                                                       
+                                                                                                                                    
+PREMPROD  PM_CLM_DOC_SET CDS_CODE            PREMPROD  PT_CLAIM       CLM_CDS_CODE                                                  
+          UP                                                                                                                        
+                                                                                                                                    
+PREMPROD  PM_COMPANY     COMP_CODE           PREMPROD  PM_DIVISION    DIVN_COMP_CODE                                                
+PREMPROD  PM_COVER       COVER_CODE          PREMPROD  PM_COVER_SUB_C CSC_COVER_CODE                                                
+                                                       LASS                                                                         
+                                                                                                                                    
+PREMPROD  PM_COVER       COVER_CODE          PREMPROD  PT_CLAIM       CLM_COVER_CODE                                                
+PREMPROD  PM_COVER       COVER_CODE          PREMPROD  PT_POL_COVER   PCVR_CODE                                                     
+PREMPROD  PM_COVER       COVER_CODE          PREMPROD  PT_QUOT_COVER  QCVR_CODE                                                     
+PREMPROD  PM_CURRENCY    CURR_CODE           PREMPROD  PM_XL_TREATY   XT_CURR_CODE                                                  
+PREMPROD  PM_CURRENCY    CURR_CODE           PREMPROD  PS_FAC_CLAIM_P FCPC_CLM_CURR_CODE                                            
+                                                       ART_CUST                                                                     
+                                                                                                                                    
+PREMPROD  PM_CURRENCY    CURR_CODE           PREMPROD  PT_FAC_OUT     FO_SI_CURR_CODE                                               
+PREMPROD  PM_CURRENCY    CURR_CODE           PREMPROD  PT_POLICY      POL_CUST_PREM_CURR_                                           
+                                                                      CODE                                                          
+                                                                                                                                    
+PREMPROD  PM_CURRENCY    CURR_CODE           PREMPROD  PT_POLICY      POL_DFLT_SI_CURR_CO                                           
+                                                                      DE                                                            
+                                                                                                                                    
+PREMPROD  PM_CURRENCY    CURR_CODE           PREMPROD  PT_POLICY_APPL PAC_CURR_CODE                                                 
+Press <Enter> to continue...Date: 10/07/03                                          Kuwait Insurance Co.                                         Page:   2      
+Time: 01:26 PM                                    Primary Key - Foreign Key Report                                   PREMPROD       
+                                                        orakic database                                                             
+                                                                                                                                    
+Pri Table Pri Table      Pri Key             For Table For Table      For Key                                                       
+Owner     Name           Columns             Owner     Name           Columns                                                       
+--------- -------------- ------------------- --------- -------------- -------------------                                           
+                                                       _CURR                                                                        
+                                                                                                                                    
+PREMPROD  PM_CURRENCY    CURR_CODE           PREMPROD  PT_POL_COVER   PCVR_SI_CURR_CODE                                             
+PREMPROD  PM_CURRENCY    CURR_CODE           PREMPROD  PT_QUOTATION   QUOT_DFLT_SI_CURR_C                                           
+                                                                      ODE                                                           
+                                                                                                                                    
+PREMPROD  PM_CURRENCY    CURR_CODE           PREMPROD  PT_QUOTATION   QUOT_CUST_PREM_CURR                                           
+                                                                      _CODE                                                         
+                                                                                                                                    
+PREMPROD  PM_CURRENCY    CURR_CODE           PREMPROD  PT_QUOT_APPL_C QAC_CURR_CODE                                                 
+                                                       URR                                                                          
+                                                                                                                                    
+PREMPROD  PM_CURRENCY    CURR_CODE           PREMPROD  PT_QUOT_COVER  QCVR_SI_CURR_CODE                                             
+PREMPROD  PM_CUSTOMER    CUST_CODE           PREMPROD  PM_ASSURED     ASSR_CUST_CODE                                                
+PREMPROD  PM_CUSTOMER    CUST_CODE           PREMPROD  PM_CUST_COMM   CC_CUST_CODE                                                  
+PREMPROD  PM_CUSTOMER    CUST_CODE           PREMPROD  PM_CUST_CURR   CCUR_CUST_CODE                                                
+PREMPROD  PM_CUSTOMER    CUST_CODE           PREMPROD  PM_CUST_DIVN   CDIV_CUST_CODE                                                
+PREMPROD  PM_CUSTOMER    CUST_CODE           PREMPROD  PM_FAC_POOL_CU FPC_CUST_CODE                                                 
+                                                       ST                                                                           
+                                                                                                                                    
+PREMPROD  PM_CUSTOMER    CUST_CODE           PREMPROD  PS_DRCR        DRCR_CUST_CODE                                                
+PREMPROD  PM_CUSTOMER    CUST_CODE           PREMPROD  PS_FAC_CLAIM_P FCPC_CUST_CODE                                                
+                                                       ART_CUST                                                                     
+                                                                                                                                    
+PREMPROD  PM_CUSTOMER    CUST_CODE           PREMPROD  PT_POLICY      POL_CUST_CODE                                                 
+PREMPROD  PM_CUSTOMER    CUST_CODE           PREMPROD  PT_QOP_APPL_CU QOPAC_CUST_CODE                                               
+                                                       ST                                                                           
+                                                                                                                                    
+PREMPROD  PM_CUSTOMER    CUST_CODE           PREMPROD  PT_QUOTATION   QUOT_CUST_CODE                                                
+PREMPROD  PM_DEPARTMENT  DEPT_CODE,          PREMPROD  PM_APPR_DEPT_S ADS_DEPT_CODE,                                                
+                         DEPT_DIVN_CODE                ETUP           ADS_DIVN_CODE                                                 
+                                                                                                                                    
+PREMPROD  PM_DEPARTMENT  DEPT_CODE,          PREMPROD  PM_DEPT_CLASS  DC_DEPT_CODE,                                                 
+                         DEPT_DIVN_CODE                               DC_DIVN_CODE                                                  
+                                                                                                                                    
+PREMPROD  PM_DEPARTMENT  DEPT_CODE,          PREMPROD  PT_POLICY      POL_DEPT_CODE,                                                
+                         DEPT_DIVN_CODE                               POL_DIVN_CODE                                                 
+                                                                                                                                    
+PREMPROD  PM_DIVISION    DIVN_CODE           PREMPROD  PM_CUST_DIVN   CDIV_DIVN_CODE                                                
+PREMPROD  PM_DIVISION    DIVN_CODE           PREMPROD  PM_DEPARTMENT  DEPT_DIVN_CODE                                                
+PREMPROD  PM_ENDT_SETUP  ES_CODE             PREMPROD  PM_ENDT_CLASS_ ECS_ES_CODE                                                   
+Press <Enter> to continue...Date: 10/07/03                                          Kuwait Insurance Co.                                         Page:   3      
+Time: 01:26 PM                                    Primary Key - Foreign Key Report                                   PREMPROD       
+                                                        orakic database                                                             
+                                                                                                                                    
+Pri Table Pri Table      Pri Key             For Table For Table      For Key                                                       
+Owner     Name           Columns             Owner     Name           Columns                                                       
+--------- -------------- ------------------- --------- -------------- -------------------                                           
+                                                       SETUP                                                                        
+                                                                                                                                    
+PREMPROD  PM_ENDT_SETUP  ES_CODE             PREMPROD  PT_POLICY      POL_ES_CODE                                                   
+PREMPROD  PM_FAC_POOL    FP_CODE             PREMPROD  PM_FAC_POOL_CU FPC_FP_CODE                                                   
+                                                       ST                                                                           
+                                                                                                                                    
+PREMPROD  PM_FAC_POOL    FP_CODE             PREMPROD  PT_POLICY      POL_FAC_POOL_CODE                                             
+PREMPROD  PM_POL_DOC_SET PDS_CODE            PREMPROD  PM_POL_APPL_BL PABS_PDS_CODE                                                 
+          UP                                           K_SETUP                                                                      
+                                                                                                                                    
+PREMPROD  PM_POL_DOC_SET PDS_CODE            PREMPROD  PM_POL_SUB_CLA PSCS_PDS_CODE                                                 
+          UP                                           SS_SETUP                                                                     
+                                                                                                                                    
+PREMPROD  PM_POL_DOC_SET PDS_CODE            PREMPROD  PT_POLICY      POL_PDS_CODE                                                  
+          UP                                                                                                                        
+                                                                                                                                    
+PREMPROD  PM_POL_DOC_SET PDS_CODE            PREMPROD  PT_QUOTATION   QUOT_PDS_CODE                                                 
+          UP                                                                                                                        
+                                                                                                                                    
+PREMPROD  PM_PROP_TREATY PTPC_SYS_ID         PREMPROD  PM_PROP_TREATY PTPCR_PTPC_SYS_ID                                             
+          _PART_CUST                                   _PART_CUST_REI                                                               
+                                                       NS                                                                           
+                                                                                                                                    
+PREMPROD  PM_SPARE_PARTS SP_CODE             PREMPROD  PT_CLAIM_LPO_D CLD_SPARE_CODE                                                
+                                                       ETAIL                                                                        
+                                                                                                                                    
+PREMPROD  PM_SUB_CLASS   SC_CODE             PREMPROD  PM_CLM_SUB_CLA CSCS_SC_CODE                                                  
+                                                       SS_SETUP                                                                     
+                                                                                                                                    
+PREMPROD  PM_SUB_CLASS   SC_CODE             PREMPROD  PM_COVER_SUB_C CSC_SC_CODE                                                   
+                                                       LASS                                                                         
+                                                                                                                                    
+PREMPROD  PM_SUB_CLASS   SC_CODE             PREMPROD  PM_FAC_POOL    FP_SC_CODE                                                    
+PREMPROD  PM_SUB_CLASS   SC_CODE             PREMPROD  PM_POL_SUB_CLA PSCS_SC_CODE                                                  
+                                                       SS_SETUP                                                                     
+                                                                                                                                    
+PREMPROD  PM_SUB_CLASS   SC_CODE             PREMPROD  PM_SUB_CLASS_C SCCS_SC_CODE                                                  
+                                                       OND_SETUP                                                                    
+                                                                                                                                    
+PREMPROD  PM_SUB_CLASS   SC_CODE             PREMPROD  PT_POLICY      POL_SC_CODE                                                   
+PREMPROD  PM_SUB_CLASS   SC_CODE             PREMPROD  PT_QUOTATION   QUOT_SC_CODE                                                  
+Press <Enter> to continue...Date: 10/07/03                                          Kuwait Insurance Co.                                         Page:   4      
+Time: 01:26 PM                                    Primary Key - Foreign Key Report                                   PREMPROD       
+                                                        orakic database                                                             
+                                                                                                                                    
+Pri Table Pri Table      Pri Key             For Table For Table      For Key                                                       
+Owner     Name           Columns             Owner     Name           Columns                                                       
+--------- -------------- ------------------- --------- -------------- -------------------                                           
+PREMPROD  PM_XL_TREATY   XT_SYS_ID           PREMPROD  PM_XL_TREATY_T XTT_XT_SYS_ID                                                 
+                                                       YPE                                                                          
+                                                                                                                                    
+PREMPROD  PM_XL_TREATY_P XTPC_SYS_ID         PREMPROD  PM_XL_TREATY_P XTPCR_XTPC_SYS_ID                                             
+          ART_CUST                                     ART_CUST_REINS                                                               
+                                                                                                                                    
+PREMPROD  PM_XL_TREATY_T XTT_SYS_ID          PREMPROD  PM_XL_TREATY_I XTID_XTT_SYS_ID                                               
+          YPE                                          NST_DTL                                                                      
+                                                                                                                                    
+PREMPROD  PM_XL_TREATY_T XTT_SYS_ID          PREMPROD  PM_XL_TREATY_P XTPC_XTT_SYS_ID                                               
+          YPE                                          ART_CUST                                                                     
+                                                                                                                                    
+PREMPROD  PM_XL_TREATY_T XTT_SYS_ID          PREMPROD  PM_XL_TREATY_S XTC_XTT_SYS_ID                                                
+          YPE                                          UB_CLASS                                                                     
+                                                                                                                                    
+PREMPROD  PT_1XS_LOSS    XSL_SYS_ID          PREMPROD  PT_1XS_LOSS_CL XSLD_XLS_SYS_ID                                               
+                                                       AIMANT_DTLS                                                                  
+                                                                                                                                    
+PREMPROD  PT_CLAIM       CLM_SYS_ID          PREMPROD  PS_RI_CLAIM_RE RCR_CLM_SYS_ID                                                
+                                                       G_EIC                                                                        
+                                                                                                                                    
+PREMPROD  PT_CLAIM       CLM_SYS_ID          PREMPROD  PT_CLAIM_ESTIM CE_CLM_SYS_ID                                                 
+                                                       ATE                                                                          
+                                                                                                                                    
+PREMPROD  PT_CLAIM       CLM_SYS_ID          PREMPROD  PT_CLAIM_LPO_H CLH_CLM_SYS_ID                                                
+                                                       EAD                                                                          
+                                                                                                                                    
+PREMPROD  PT_CLAIM_INVOI CIH_SYS_ID          PREMPROD  PT_CLAIM_INVOI CID_CIH_SYS_ID                                                
+          CE_HEAD                                      CE_DETAIL                                                                    
+                                                                                                                                    
+PREMPROD  PT_CLAIM_LPO_H CLH_SYS_ID          PREMPROD  PT_CLAIM_INVOI CID_CLH_SYS_ID                                                
+          EAD                                          CE_DETAIL                                                                    
+                                                                                                                                    
+PREMPROD  PT_CLAIM_LPO_H CLH_SYS_ID          PREMPROD  PT_CLAIM_LPO_D CLD_CLH_SYS_ID                                                
+          EAD                                          ETAIL                                                                        
+                                                                                                                                    
+PREMPROD  PT_ENG_CONTRAC EC_SYS_ID           PREMPROD  PT_ENG_SUB_CON ESCT_EC_SYS_ID                                                
+          T                                            TRACT                                                                        
+                                                                                                                                    
+PREMPROD  PT_FAC_IN      FI_SYS_ID           PREMPROD  PT_FAC_IN_COMM FICT_FI_SYS_ID                                                
+                                                       _TAX                                                                         
+Press <Enter> to continue...Date: 10/07/03                                          Kuwait Insurance Co.                                         Page:   5      
+Time: 01:26 PM                                    Primary Key - Foreign Key Report                                   PREMPROD       
+                                                        orakic database                                                             
+                                                                                                                                    
+Pri Table Pri Table      Pri Key             For Table For Table      For Key                                                       
+Owner     Name           Columns             Owner     Name           Columns                                                       
+--------- -------------- ------------------- --------- -------------- -------------------                                           
+                                                                                                                                    
+PREMPROD  PT_INST_HDR    IH_SYS_ID           PREMPROD  PT_INST_DTLS   ID_IH_SYS_ID                                                  
+PREMPROD  PT_POLICY_APPL PAC_POL_SYS_ID,     PREMPROD  PT_FAC_OUT     FO_POL_SYS_ID,                                                
+          _CURR          PAC_CURR_CODE                                FO_SI_CURR_CODE                                               
+                                                                                                                                    
+PREMPROD  PT_POLICY_APPL PAC_POL_SYS_ID,     PREMPROD  PT_POL_COVER   PCVR_POL_SYS_ID,                                              
+          _CURR          PAC_CURR_CODE                                PCVR_SI_CURR_CODE                                             
+                                                                                                                                    
+PREMPROD  PT_POL_COVER   PCVR_SYS_ID         PREMPROD  PT_COVER_DISCO CD_COVER_SYS_ID                                               
+                                                       UNT                                                                          
+                                                                                                                                    
+PREMPROD  PT_POL_COVER   PCVR_SYS_ID         PREMPROD  PT_DED_LOSS    DL_COVER_SYS_ID                                               
+PREMPROD  PT_QUOTATION   QUOT_SYS_ID         PREMPROD  PT_QOP_APPL_CU QOPAC_QUOT_SYS_ID                                             
+                                                       ST                                                                           
+                                                                                                                                    
+PREMPROD  PT_QUOTATION   QUOT_SYS_ID         PREMPROD  PT_QUOT_AIRCRA QAIR_QUOT_SYS_ID                                              
+                                                       FT                                                                           
+                                                                                                                                    
+PREMPROD  PT_QUOTATION   QUOT_SYS_ID         PREMPROD  PT_QUOT_APPL_C QAC_QUOT_SYS_ID                                               
+                                                       URR                                                                          
+                                                                                                                                    
+PREMPROD  PT_QUOTATION   QUOT_SYS_ID         PREMPROD  PT_QUOT_BROKER QB_QUOT_SYS_ID                                                
+PREMPROD  PT_QUOTATION   QUOT_SYS_ID         PREMPROD  PT_QUOT_CHARGE QCHG_QUOT_SYS_ID                                              
+PREMPROD  PT_QUOTATION   QUOT_SYS_ID         PREMPROD  PT_QUOT_CONDIT QCOND_QUOT_SYS_ID                                             
+                                                       ION                                                                          
+                                                                                                                                    
+PREMPROD  PT_QUOTATION   QUOT_SYS_ID         PREMPROD  PT_QUOT_COVER  QCVR_QUOT_SYS_ID                                              
+PREMPROD  PT_QUOTATION   QUOT_SYS_ID         PREMPROD  PT_QUOT_DED_LO QDL_QUOT_SYS_ID                                               
+                                                       SS                                                                           
+                                                                                                                                    
+PREMPROD  PT_QUOTATION   QUOT_SYS_ID         PREMPROD  PT_QUOT_SCHEDU QSC_QUOT_SYS_ID                                               
+                                                       LE                                                                           
+                                                                                                                                    
+PREMPROD  PT_QUOTATION   QUOT_SYS_ID         PREMPROD  PT_QUOT_VEHICL QVEH_QUOT_SYS_ID                                              
+                                                       E                                                                            
+                                                                                                                                    
+PREMPROD  PT_QUOTATION   QUOT_SYS_ID         PREMPROD  PT_QUOT_VESSEL QVES_QUOT_SYS_ID                                              
+PREMPROD  PT_QUOT_COVER  QCVR_SYS_ID         PREMPROD  PT_QUOT_DED_LO QDL_COVER_SYS_ID                                              
+                                                       SS                                                                           
+                                                                                                                                    
+PREMPROD  PT_QUOT_COVER  QCVR_SYS_ID         PREMPROD  PT_QUOT_DISCOU QD_COVER_SYS_ID                                               
+Press <Enter> to continue...Date: 10/07/03                                          Kuwait Insurance Co.                                         Page:   6      
+Time: 01:26 PM                                    Primary Key - Foreign Key Report                                   PREMPROD       
+                                                        orakic database                                                             
+                                                                                                                                    
+Pri Table Pri Table      Pri Key             For Table For Table      For Key                                                       
+Owner     Name           Columns             Owner     Name           Columns                                                       
+--------- -------------- ------------------- --------- -------------- -------------------                                           
+                                                       NT                                                                           
+                                                                                                                                    
+PREMPROD  PT_RI_ALLOC    RIA_SYS_ID          PREMPROD  PT_RI_PART_CUS RIPCA_RIA_SYS_ID                                              
+                                                       T_ALLOC                                                                      
+                                                                                                                                    
+PREMPROD  SMP_JOB_       ID                  PREMPROD  SMP_JOB_TASK_I ID                                                            
+                                                       NSTANCE_                                                                     
+                                                                                                                                    
+PREMPROD  VMQ_DATABASE_I DATABASE_ID         PREMPROD  VMQ_DATABASE_P DATABASE_ID                                                   
+          TEM                                          ARAMS_DYNAMIC                                                                
+                                                                                                                                    
+PREMPROD  VMQ_DATABASE_I DATABASE_ID         PREMPROD  VMQ_DATABASE_P DATABASE_ID                                                   
+          TEM                                          ARAMS_STATIC                                                                 
+                                                                                                                                    
+PREMPROD  VMQ_DATABASE_I DATABASE_ID         PREMPROD  VMQ_SQL_ITEM   DATABASE_ID                                                   
+          TEM                                                                                                                       
+                                                                                                                                    
+PREMPROD  VMQ_SQL_ITEM   SQLID               PREMPROD  VMQ_SQL_IMPORT SQLID                                                         
+                                                       _STATS                                                                       
+                                                                                                                                    
+PREMPROD  VMQ_SQL_ITEM   SQLID               PREMPROD  VMQ_SQL_PLAN_C SQLID                                                         
+                                                       OST_ALL                                                                      
+                                                                                                                                    
+PREMPROD  VMQ_SQL_ITEM   SQLID               PREMPROD  VMQ_SQL_PLAN_C SQLID                                                         
+                                                       OST_FIRST                                                                    
+                                                                                                                                    
+PREMPROD  VMQ_SQL_ITEM   SQLID               PREMPROD  VMQ_SQL_PLAN_R SQLID                                                         
+                                                       ULE                                                                          
+                                                                                                                                    
+PREMPROD  VMQ_SQL_ITEM   SQLID               PREMPROD  VMQ_SQL_STATS_ SQLID                                                         
+                                                       COST_ALL                                                                     
+                                                                                                                                    
+PREMPROD  VMQ_SQL_ITEM   SQLID               PREMPROD  VMQ_SQL_STATS_ SQLID                                                         
+                                                       COST_FIRST                                                                   
+                                                                                                                                    
+PREMPROD  VMQ_SQL_ITEM   SQLID               PREMPROD  VMQ_SQL_STATS_ SQLID                                                         
+                                                       RULE                                                                         
+                                                                                                                                    
+PREMPROD  VMQ_SQL_ITEM   SQLID               PREMPROD  VMQ_SQL_TEXT   SQLID                                                         
+PREMPROD  VMQ_SQL_ITEM   SQLID               PREMPROD  VMQ_SQL_UNQUAL SQLID                                                         
+                                                       IFIED_NAMES                                                                  
+Press <Enter> to continue...Date: 10/07/03                                          Kuwait Insurance Co.                                         Page:   7      
+Time: 01:26 PM                                    Primary Key - Foreign Key Report                                   PREMPROD       
+                                                        orakic database                                                             
+                                                                                                                                    
+Pri Table Pri Table      Pri Key             For Table For Table      For Key                                                       
+Owner     Name           Columns             Owner     Name           Columns                                                       
+--------- -------------- ------------------- --------- -------------- -------------------                                           
+                                                                                                                                    

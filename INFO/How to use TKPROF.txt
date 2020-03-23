@@ -1,0 +1,135 @@
+sqlplus /nolog
+
+
+SQL> conn nk_dba/dba@dig
+SQL> SET AUTOT ON
+SQL> ALTER SESSION SET SQL_TRACE = TRUE;
+SQL> 
+SQL> SELECT * FROM EMP;
+
+SQL> ALTER SESSION SET SQL_TRACE = FALSE;
+Session altered.
+
+====
+OR
+====
+
+SQL> alter session set events '10046 trace name context forever, 
+  2  level 12';
+
+Session altered.
+
+SQL> 
+
+
+-------------------------------------------------------------------------
+EXAMPLE
+-------------------------------------------------------------------------
+
+
+SQL>show user
+USER is "PERFSTAT"
+SQL>ALTER SESSION SET SQL_TRACE = TRUE;
+
+Session altered.
+
+SQL>EXECUTE statspack.snap;
+
+PL/SQL procedure successfully completed.
+
+SQL>SELECT SNAP_ID FROM STATS$SNAPSHOT
+  2  /
+   SNAP_ID
+----------
+         4
+         5
+         3
+
+SQL>set autot off
+
+SQL>-- To ge the trace file name;
+
+SQL>select c.value || '/' || d.instance_name || '_ora_' || a.spid
+|| '.trc' trace
+from v$process a, v$session b, v$parameter c, v$instance d
+where a.addr = b.paddr
+and b.audsid = userenv('sessionid')
+and c.name = 'user_dump_dest';
+
+TRACE
+------------------------------------------------------------------------------
+/ora/oracle/admin/orakic/udump/orakic_ora_298552.trc
+
+SQL>ALTER SESSION SET SQL_TRACE = FALSE;
+
+Session altered.
+
+SQL>spool off;
+
+
+--Find out ur trace file and from os level run following:
+
+$ tkprof orakic_ora_298552.trc sp-traced.lst
+
+==================================================
+OR 
+
+use this from os level to generate the insert statement from 
+tkprod
+==================================================
+
+$ tkprof orakic_ora_369130.trc civilid_TIMMED_EXP.lst EXPLAIN=PREMPROD/PREMPROD TABLE=PREMPROD.nk_plan_table INSERT=STOREA.SQL SYS=NO
+
+====================================================
+More example
+====================================================
+
+For us to use TKPROF, we want to trace sessions, which one should be used?
+
+SQL> ALTER SESSION SET SQL_TRACE = TRUE;
+
+(This one could be stopped by this statement
+
+SQL> ALTER SESSION SET SQL_TRACE = FALSE;
+Session altered.)
+
+====
+OR
+====
+
+SQL> alter session set events '10046 trace name context forever, level 12';
+
+Session altered.
+
+(How can we stop this one?)
+
+If we want to trace other session how can we do that? or instance level tracing?
+
+Could you please help me in understand this...
+
+Many Many Thanks 
+
+
+Followup:  
+if you want waits and binds, you need to use the second method (or 
+dbms_system.set_sql_trace_in_session package or in 10g dbms_monitor)
+
+ops$tkyte@ORA10G> @traceon
+ops$tkyte@ORA10G> alter session set events '10046 trace name context forever, 
+level 12';
+ 
+Session altered.
+ 
+Elapsed: 00:00:00.10
+ops$tkyte@ORA10G> @traceoff
+ops$tkyte@ORA10G> alter session set events '10046 trace name context off';
+ 
+Session altered.
+ 
+
+
+turn it on, turn it off
+
+
+the packages turn it on/off for other sessions. 
+ 

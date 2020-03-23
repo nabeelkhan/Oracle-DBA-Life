@@ -1,0 +1,119 @@
+<html>
+	<head>
+		<title>
+			Considering Introduced Redundancy (Denormalization)
+		</title>
+		<style>
+			<!-- a:hover{color:#660066;} -->
+		</style>
+	</head>
+	<body background="../../images/bg.jpg" link="#FF6600" vlink="#FF6600" alink="#660066">
+		
+		<h2 align="center">
+			<font color="#990000">
+				Considering Introduced Redundancy<br>
+				(Denormalization)
+			</font>
+		</h2>
+		<p>
+		By definition, a fully normalized data model involves no redundancy.
+		If some redundancy is introduced, so is the possibility of inconsistency,
+		and triggers need to be used to ensure that consistency is maintained when data is inserted, updated or deleted.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				Why introduce redundancy?
+			</font>
+		</h3>
+		<p>
+		Given the performance cost of executing such triggers, why would you want to introduce redundant information to a nice logical data model?
+		The answer is, If the cost of determining that information from the related data would be significantly greater than the cost of maintaining it.
+		</p>
+		<p>
+		Of course, the measure of cost used here must account for the relative frequency
+		of the respective data manipulation and query operations, the timing of these operations, and their response time targets,
+		rather than just the I/O and CPU costs of the respective operations.
+		</p>
+		<p>
+		The potential benefits of introduced redundancy (or denormalization) are as diverse as query execution plans themselves.
+		Nevertheless, the following examples illustrate much of the scope of this technique.
+		</p>
+		
+		<h4>
+			<font color="#990000">
+				Avoiding Joins for Lookups
+			</font>
+		</h4>
+		<blockquote>
+			<p>
+			Code tables are used in many applications to validate the codes used in data entry, and to provide full descriptions for queries.
+			You may choose to keep the description in the parent record, instead of the code, in order to avoid a join during queries.
+			</p>
+			<p>
+			Or consider hierarchical data, such as a hierarchy of corporate entities.
+			If you commonly need to relate entities to their ultimate parent,
+			then storing the key for the ultimate parent in each record will improve performance (and simplify the SQL).
+			</p>
+		</blockquote>
+		
+		<h4>
+			<font color="#990000">
+				Avoiding Joins for Aggregations
+			</font>
+		</h4>
+		<blockquote>
+			<p>
+			In an order entry system, you may choose to redundantly store the total value of each order in the orders table,
+			to avoid a join to and sum over the line items table.
+			</p>
+			<p>
+			Or in a financial system, you may choose to redundantly store year-to-date running totals for each general ledger account,
+			in order to avoid a join to and sum over the transactions table.
+			</p>
+		</blockquote>
+		
+		<h4>
+			<font color="#990000">
+				Avoiding Correlated Subqueries
+			</font>
+		</h4>
+		<blockquote>
+			<p>
+			In time-series data, where each record represents a period, you may choose to store both the start and end dates for the period in each record.
+			This enables simple BETWEEN predicates to be used against the table,
+			instead of resource-hungry correlated subqueries that would need to be executed for each row processed.
+			</p>
+		</blockquote>
+		
+		<p>
+		The benefits of such redundancy can be impressive.
+		However, given the costs, you should only adopt such strategies if there is a clear performance advantage to be gained.
+		</p>
+		
+		<hr noshade align="left" width="300" size="2" color="black">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="1000">
+					<font size="2" color="#660066">
+						<strong>
+							Copyright © Ixora Pty Ltd
+						</strong>
+					</font>
+				</td>
+				<td valign="top" align="right">
+					<nobr>
+					<map name="email">
+						<area shape="rect" coords="0, 0, 32, 21" title="Feedback" href="mailto:feedback@ixora.com.au?SUBJECT=[Tip] redundancy.htm">
+					</map>
+					<img ismap usemap="#email" border="0" alt="Send Email" src="../../images/email.gif" width="32" height="21">
+					<map name="home">
+						<area shape="rect" coords="0, 0, 28, 28" title="Home" href="/">
+					</map>
+					<img ismap usemap="#home" border="0" alt="Home" src="../../images/home.gif" width="28" height="28">
+					</nobr>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

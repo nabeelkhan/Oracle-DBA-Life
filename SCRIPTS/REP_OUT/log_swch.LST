@@ -1,0 +1,23 @@
+SYSTEM@orakic> REM
+SYSTEM@orakic> SELECT a.recid, a.thread#, a.sequence#, a.first_change#, a.next_change#,
+  2         TO_CHAR (a.first_time, 'DD-MON-YYYY HH24:MI:SS') first_time, x.NAME
+  3    FROM v$log_history a, v$archived_log x
+  4   WHERE a.first_time > (SELECT   b.first_time
+  5                                - 1
+  6                           FROM v$log_history b
+  7                          WHERE b.next_change# = (SELECT MAX (c.next_change#)
+  8                                                    FROM v$log_history c))
+  9     AND a.recid = x.sequence#(+);
+Date: 04/06/05                                                                                                       Page:   1      
+Time: 12:44 PM                                        Log Switch History Report                                      SYSTEM         
+                                                        orakic database                                                             
+                                                                                                                                    
+     RECID Thrd#   Seq#   SCN Low#  SCN High# Switch Time          Archive Log                                                      
+---------- ----- ------ ---------- ---------- -------------------- ------------------------------                                   
+      2581     1   2581  346818625  346876981 05-APR-2005 13:29:03 /u02/ARCH/2581-orakic.arc                                        
+      2582     1   2582  346876981  346905548 05-APR-2005 15:29:04 /u02/ARCH/2582-orakic.arc                                        
+      2583     1   2583  346905548  346961701 05-APR-2005 17:29:03 /u02/ARCH/2583-orakic.arc                                        
+      2584     1   2584  346961701  347055274 05-APR-2005 23:00:08 /u02/ARCH/2584-orakic.arc                                        
+      2585     1   2585  347055274  347111242 06-APR-2005 09:29:05 /u02/ARCH/2585-orakic.arc                                        
+      2586     1   2586  347111242  347141494 06-APR-2005 11:29:06 /u02/ARCH/2586-orakic.arc                                        
+SYSTEM@orakic> SPOOL off

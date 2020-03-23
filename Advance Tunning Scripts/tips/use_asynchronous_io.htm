@@ -1,0 +1,131 @@
+<html><head><title>
+Use asynchronous I/O
+</title>
+<style>
+body {background-image:url(/images/bg.jpg)}
+a:link {color:#FF6600}
+a:active {color:#660066}
+a:visited {color:#FF6600} 
+a:hover {color:#660066}
+a {font-weight:bold}
+h1 {color:#990000; font-size:150%; text-align:center}
+h2 {color:#660066; font-size:125%}
+ul {list-style-image:url(/images/li.gif); margin-left:16px}
+
+.orange {color:#FF6600}
+.purple {color:#660066}
+.brown {color:#990000}
+.h3 {font-weight:bold; color:#990000}
+</style>
+
+</head>
+<script language="javascript"><!--
+function email(addr) { return addr + '@ixora.com.au' }
+//--></script>
+
+<body>
+
+
+<div style="text-align:center; font-size:125%; font-weight:bold; color:#660066">Oracle Performance Tuning Tips</div>
+
+
+
+<h1>Use asynchronous I/O</h1>
+
+The default value of the <i>disk_asynch_io</i> parameter is TRUE.
+This means that Oracle will attempt to use <a href=/notes/asynchronous_io.htm>asynchronous I/O</a> if possible.
+Asynchronous I/O is important to DBWn to allow it to make effective use of the hardware's I/O bandwidth.
+LGWR also needs asynchronous I/O to parallelize writes to multiple log file members
+and to overlap redo writes when transactions are committed in quick succession.
+Asynchronous I/O is important to foreground processes
+so that they can prefetch blocks for full table scans and fast full index scans before they are required.
+Foreground processes also use asynchronous I/O for direct reads and direct writes, normally to temporary segments.
+This enables the I/O to be done in parallel with other, CPU intensive work such as comparisons for sorts and hash joins.
+<p>
+The availability of asynchronous I/O to log files and tempfiles is much less problematic than the availability of asynchronous I/O to datafiles.
+This is because log files and tempfiles do not need to be backed up.
+So there is no impediment to using raw log files and tempfiles, and several other compelling reason for doing so
+(see <a href=use_raw_log_files.htm>here</a> and <a href=use_raw_tempfiles.htm>here</a>).
+As a consequence of using raw log files and tempfiles,
+the most efficient form of asynchronous I/O, namely kernelized asynchronous I/O, is almost always available for I/O to these files.
+However, the availability of asynchronous I/O to datafiles is a more taxing question.
+<p>
+The availability of asynchronous I/O to datafiles affects DBWn's ability to make use of the hardware I/O bandwidth,
+and it affects the the prefetching of data for sequential reads by foregrounds.
+Prefetching has an obvious performance impact that is particularly important in environments like data warehouses.
+However, because DBWn does its work in the background,
+the benefit of asynchronous I/O for DBWn is better scalability, not better performance as such.
+That is, asynchronous I/O allows DBWn to work more efficiently
+and thus manage higher workloads without foreground processes needing to wait for its services.
+<p>
+If the datafiles are file system based,
+Oracle's attempts to use asynchronous I/O to the datafiles will result in the use of
+<a href=/notes/fs_asynchronous_io.htm>threaded asynchronous I/O</a> --
+but only if the operating system supports threaded asynchronous I/O to file system files,
+and assuming that the values of the <i>disk_asynch_io</i> and
+<a href=/notes/filesystemio_options.htm><i>_filesystemio_options</i></a>
+parameters have not been changed from their defaults to disable asynchronous I/O.
+The performance of threaded asynchronous I/O to datafiles is acceptable in many environments.
+It enables asynchronous prefetching, and does not result in a proliferation of I/O threads unless the DBWn workload is moderately intensive.
+<p>
+If DBWn workload is an issue,
+the maximum number of asynchronous I/O threads used by the DBWn processes can be limited with the <i>_db_writer_max_writes</i> parameter.
+Alternatively, asynchronous I/O can be disabled for DBWn only using the <i>_dbwr_async_io</i> parameter,
+and explicit I/O slave processes can be configured instead using the <i>dbwr_io_slaves</i> parameter.
+These options are preferable to disabling asynchronous I/O entirely using <i>disk_asynch_io</i>
+or just threaded asynchronous I/O using <i>_filesystemio_options</i>,
+because the ability to use asynchronous I/O against raw files and for asynchronous prefetching from filesystem based datafiles is preserved.
+Unfortunately, the physical write bandwidth may not be fully used if DBWn's write bandwidth has to be constrained. 
+<p>
+Of course, for performance critical databases constraining the write bandwidth in this way to avoid wasting CPU time is unacceptable.
+Instead, raw datafiles or Quick I/O must be used
+to enable the use of efficient <a href=/notes/raw_asynchronous_io.htm>kernelized asynchronous I/O</a>.
+<p>
+<hr noshade align=left width=300 size=2 color=black>
+<table cellspacing=0 cellpadding=0 width=100%><tr>
+<td valign=top>
+<div style="font-size:80%; font-weight:bold; color:#660066">
+© Ixora Pty Ltd. &nbsp; All rights reserved.<br>
+
+
+
+05-Apr-2002
+</div>
+</td>
+
+<map name=searches>
+<area coords=3,3,33,25 href=/search.html>
+</map>
+
+<script language=javascript><!--
+document.write('<map name=question><area coords=3,3,15,25 href="mailto:' + email('questions') + '?SUBJECT=About http://www.ixora.com.au/tips/use_asynchronous_io.htm"></map>')
+document.write('<map name=feedback><area coords=3,3,25,25 href="mailto:' + email('feedback') + '?SUBJECT=About http://www.ixora.com.au/tips/use_asynchronous_io.htm"></map>')
+// --></script>
+
+<map name=up1level>
+<area coords=3,3,25,25 href=./>
+</map>
+<map name=homepage>
+<area coords=3,3,25,25 href=/>
+</map>
+
+<td valign=top align=right>
+<nobr>
+
+<img ismap border=0 usemap=#searches src=/images/search.gif width=36 height=28 alt=Search>
+&nbsp;
+
+<img ismap border=0 usemap=#question src=/images/q.gif alt=Questions>
+&nbsp;
+<img ismap border=0 usemap=#feedback src=/images/feedback.gif alt=Feedback>
+&nbsp;
+
+<img ismap border=0 usemap=#up1level src=/images/up_one.gif alt=Up>
+&nbsp;
+<img ismap border=0 usemap=#homepage src=/images/home.gif alt=Home>
+
+</nobr>
+</td>
+</tr></table>
+</body></html>
+

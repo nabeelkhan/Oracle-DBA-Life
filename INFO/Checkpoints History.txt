@@ -1,0 +1,44 @@
+We have set LOG_CHECKPOINTS_TO_ALERT = TRUE and have set LOG_CHECKPOINT_INTERVAL to a nonzero value OR set LOG_CHECKPOINT_TIMEOUT to a nonzero value. Now we want to find out that the checkpoint has occurred at the correct time or after the correct interval, is there any sql script or something which could tell me this.... other then goin back to alert file and checking it out?
+
+In other words, Is there a way to find out the checkpoint occurrence other than the LOG_CHECKPOINTS_TO_ALERT = TRUE?
+
+Answer: 
+
+Setting LOG_CHECKPOINTS_TO_ALERT = TRUE logs all the checkpoints to the Alert file, which could be viewed when ever needed. And in case if the LOG_CHECKPOINTS_TO_ALERT is set to FALSE, checkpoints progress and occurrence could be viewed from V$THREAD, V$DATAFILE,X$KCCRT and X$KCCCP.
+
+A) SELECT  DISTINCT 
+CHECKPOINT_CHANGE#,
+CHECKPOINT_TIME
+FROM V$DATAFILE
+
+B)SELECT
+CHECKPOINT_CHANGE#,
+CHECKPOINT_TIME
+FROM V$THREAD
+
+C)SELECT
+RTCKP_SCN,
+RTCKP_TIM
+FROM X$KCCRT
+
+-The results should be the same from all above queries to ensure the consistency of the database.
+-This will provide us the last CHECKPOINT OCCURENCE on the database.
+
+To know the total number of CHECKPOINT(S) occurred on the database since the instance startup use the following query 
+
+SELECT NAME, VALUE FROM  V$SYSSTAT
+WHERE NAME LIKE '%checkpoint%'
+
+This will provide the total number of checkpoints occured since the last startup
+
+To monitor the incremental checkpoint use the following query:
+
+SELECT
+CPODS,
+CPODT,
+CPSDR_SEQ
+FROM X$KCCCP
+
+If we want to inquire about the CHECKPOINT HISTORY we can do that by ALTER SESSION SET EVENTS 'immediate trace name controlf level 10' 
+
+This will dump the contents of the control file to udump for us to have a look.

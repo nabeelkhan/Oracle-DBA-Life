@@ -1,0 +1,4986 @@
+a59
+<HTML>
+<HEAD>
+<META name=vsisbn content="067230886x">
+<META name=vstitle content="Oracle Performance Tuning and Optimization">
+<META name=vsauthor content="Edward Whalen">
+<META name=vsimprint content="Sams">
+<META name=vspublisher content="Macmillan Computer Publishing">
+<META name=vspubdate content="04/01/96">
+<META name=vscategory content="Archive,Databases: Relational Databases">
+
+
+
+
+<TITLE>Oracle Performance Tuning and Optimization:Index</TITLE>
+
+<!-- HEADER -->
+
+<STYLE type="text/css"> 
+ <!--
+ A:hover  {
+ 	color : Red;
+ }
+ -->
+</STYLE>
+
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<script>
+<!--
+function displayWindow(url, width, height) {
+         var Win = window.open(url,"displayWindow",'width=' + width +',height=' + height + ',resizable=1,scrollbars=yes');
+	if (Win) {
+		Win.focus();
+	}
+}
+//-->
+</script>
+<SCRIPT>
+<!--
+function popUp(url) {
+        var Win = window.open(url,"displayWindow",'width=400,height=300,resizable=1,scrollbars=yes');
+	if (Win) {
+		Win.focus();
+	}
+}
+//-->
+</SCRIPT>
+
+<script language="JavaScript1.2">
+<!--
+function checkForQuery(fm) {
+  /* get the query value */
+  var i = escape(fm.query.value);
+  if (i == "") {
+      alert('Please enter a search word or phrase');
+      return false;
+  }                  /* query is blank, dont run the .jsp file */
+  else return true;  /* execute the .jsp file */
+}
+//-->
+</script>
+
+</HEAD>
+
+<body background="/images/back.jpg" bgcolor="#FFFFFF" link="#003399" alink="#FF0000" vlink="#003399" topmargin=0 leftmargin=0 marginheight=0 marginwidth=0>
+
+<table bgcolor="#003366" width="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td colspan="3">
+		
+		<table width="100%">
+			<tr valign="top">
+				<td bgcolor="#003366">&nbsp;&nbsp;<a href="http://www.earthweb.com" target="resource window"><img src="/images/ew_logo.jpg" width="109" height="93" vspace="5" alt="EarthWeb" border="0"></a>&nbsp;&nbsp;&nbsp;</td>
+				<td bgcolor="#003366" nowrap>
+
+<!--  Begin Ads ITK.BOOKS.DATABASE //-->
+
+<A HREF="/adclick.html/CID=00000349ba50285a00000000/site=corpitk/area=corpitk.books.database/aamsz=468x60" target="_blank"><IMG SRC="http://adimages.earthweb.com/images/ads/spidercatcher.gif?" %%HEIGHT%% %%WIDTH%% ALT="Click Here!"  BORDER="0"></A>
+
+
+<!-- ITK.BOOKS.DATABASE End Ads //--></td>
+				<td bgcolor="#003366" nowrap>
+
+<!--  Begin Ads ITKBAN.FRONT //-->
+
+<A HREF="/adclick.html/CID=00000ac5ba50285a00000000/site=corpitk/area=corpitk.books.database/aamsz=160x60/position=top" target="_blank"><IMG SRC="http://adimages.earthweb.com/images/ads/160x60/spider_catcher160x60.gif?" %%HEIGHT%% %%WIDTH%% ALT=""  BORDER="0"></A>
+
+
+<!-- ITKBAN.FRONT End Ads //-->
+990
+</td>
+<td><a href="CITK1a2b3c4d5e6f7g8h9idefcon4.html">
+<img src="/images/dotblue.gif" border="0" height="1" width="1" align="right"></a></td>
+			</tr>
+		</table>
+		
+		</td>
+	</tr>
+		
+	<tr>
+		<td height="1" colspan="3" bgcolor="#003366"><img src="/images/dotclear.gif" border=0 alt=""></td>
+	</tr>
+</table>
+
+<!-- END HEADER -->
+
+
+<!-- BEGIN SUB HEADER -->
+
+<table bgcolor="#003366" cellpadding="0" cellspacing="0" border="0" width="100%">
+
+<!-- ITK TOPNAV -->
+	
+	<tr>
+		<td align="left" valign="top" nowrap><a href="/"><img src="/images/top_tabs/home_off.gif" alt="Home" border="0"></a><a href="/content/corp.html"><img src="/images/top_tabs/subscribe.gif" alt="Subscribe" border="0"></a><a href="/search/"><img src="/images/top_tabs/search.gif" alt="Search" border="0"></a><a href="/faq/faq.html"><img src="/images/top_tabs/faq.gif" alt="FAQ" border="0"></a><a href="/sitemap.html"><img src="/images/top_tabs/sitemap.gif" alt="Sitemap" border="0"></a><a href="/contactus.html"><img src="/images/top_tabs/contact_us.gif" alt="Contact Us" border="0"></a></td> 
+	</tr>
+	
+<!-- END of ITK TOPNAV -->
+
+<!-- ITK LOGO and newsletter sign up -->
+
+</table>
+	
+<table cellpadding="0" cellspacing="0" border="0" width="100%">
+
+	<tr>
+		<td align="left" valign="top" nowrap><img src="/images/itk_logo_sm.jpg" alt="" border="0"></td>
+		<td align="right"><font face="verdana, sans-serif" size="1">
+
+<script language="JavaScript">
+<!-- 
+
+var days = new Array(8);
+days[1] = "Sunday";
+days[2] = "Monday";
+days[3] = "Tuesday";
+days[4] = "Wednesday";
+days[5] = "Thursday";
+days[6] = "Friday";
+days[7] = "Saturday";
+
+var months = new Array(13);
+months[1] = "January";
+months[2] = "February";
+months[3] = "March";
+months[4] = "April";
+months[5] = "May";
+months[6] = "June";
+months[7] = "July";
+months[8] = "August";
+months[9] = "September";
+months[10] = "October";
+months[11] = "November";
+months[12] = "December";
+
+var dateObj = new Date()
+var wday = days[dateObj.getDay() + 1]
+var lmonth = months[dateObj.getMonth() + 1]
+var date = dateObj.getDate()
+var fyear = dateObj.getYear()
+if (fyear <1000) fyear += 1900;
+document.write(wday + ", " + lmonth + " " + date + ", " + fyear)
+                
+//-->
+</script>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>
+<br><br>
+
+<!-- <img src="/images/enterprise_logo.gif" width="254" height="51" border="0"> --></td>
+	</tr>
+</table>
+
+<!-- END ITK LOGO and newsletter sign up-->
+	
+<!-- begin of ITK left NAV -->
+
+<!-- BEGIN LEFT NAVBAR -->
+
+
+1000
+
+<!-- BEGIN LEFT NAVBAR -->
+
+	<table border="0" cellpadding="0" cellspacing="0">
+	
+	
+		<tr>
+		<td width="145" valign="top" align="left" rowspan=8>
+		
+	<!-- KEYWORD SEARCH -->
+<script language="JavaScript1.2">
+<!--
+function checkForQuery(fm) {
+  /* get the query value */
+  var i = escape(fm.query.value);
+  if (i == "") {
+      alert('Please enter a search word or phrase');
+      return false;
+  }                  /* query is blank, dont run the .jsp file */
+  else return true;  /* execute the .jsp file */
+}
+//-->
+</script>
+ 
+	
+	<form name="keyword" method="POST" action="http://ewsearch.earthweb.com:80/jsp/k2search/ewkwk2search.jsp" onSubmit=" return checkForQuery(this); ">
+
+<img src="/images/keyword_searcha.gif" vspace="5" width="145" alt="" border="0">
+<INPUT type="hidden" name="collection" value="corpitk">
+<INPUT type="hidden" name="altcoll" value="bookscorpitk">
+<INPUT type="hidden" name="hl" value="on">
+<INPUT name="sortspec" type=hidden value="vspubdate desc score desc">
+<INPUT name=fields type=hidden value="vdkvgwkey score vstitle vsauthor vsisbn vspublisher vspubdate">		
+<INPUT name=imageprefix type=hidden value="http://corpitk.earthweb.com">
+<INPUT name=ssiFolder type=hidden value="corpitkads">
+		
+		<table width="145" border="0" cellpadding="0" cellspacing="0">
+		<tr>
+		<td width="145">&nbsp;&nbsp;<input type="text" name="query" value="" size="11">&nbsp;<input type="image" width=28 height=23 border=0 value="Go" name="Go" src="/images/go.gif" align=absmiddle><br>
+			<font face="arial, helvetica" size="2">
+			<img src="/images/dotclear.gif" width="1" height="5" alt="" border="0"><br>
+			
+			&nbsp;&nbsp;<a href="/search/search-tips.html"><img src="/images/arrows_blue.gif" alt="" border="0"><font size="1" color="#ffffff">Search Tips</font></a><br>
+			&nbsp;&nbsp;<a href="/search/"><img src="/images/arrows_blue.gif" alt="" border="0"><font size="1" color="#ffffff">Advanced Search</font></a><br>
+			
+			</font>
+			
+		</td>
+		<td width="5"><img src="/images/dotclear.gif" width=5 height=10 hspace="5" alt="" border="0"></td>
+		</tr>
+		</table>
+	</form>
+		
+		
+<!-- BROWSE BY TOPIC -->
+		
+
+<form name="meta" method="POST" action="http://ewsearch.earthweb.com:80/jsp/k2search/ewmetak2search.jsp" onSubmit=" return checkForQuery(this); ">
+
+
+
+<img src="/images/publication_searcha.gif" width="145" alt="" border="0">
+<INPUT type="hidden" name="collection" value="bookscorpitk">
+<INPUT type="hidden" name="altcoll" value="corpitk">
+<INPUT type="hidden" name="hl" value="on">
+<INPUT name="sortspec" type=hidden value="vspubdate desc score desc">
+<INPUT name=fields type=hidden value="vdkvgwkey score vstitle vsauthor vspublisher vspubdate">
+<INPUT name=imageprefix type=hidden value="http://corpitk.earthweb.com">
+<INPUT name=ssiFolder type=hidden value="corpitkads">
+		
+<table width="145" border="0" cellpadding="0" cellspacing="0">
+	
+			<tr>
+			<td valign="top">
+			&nbsp;&nbsp;<input type="text" name="query" value="" size="11">&nbsp;<input type="image" width=28 height=23 border=0 value="Go" name="Go" src="/images/go.gif" align=absmiddle><br><font face="arial, helvetica" size="2">
+			&nbsp;&nbsp;<SELECT NAME="metatags" style="font-size: 12; font-family: sans-serif;" size="1">
+			<option value="vstitle" SELECTED>Title
+			<option value="vsauthor">Author
+			<option value="vspublisher">Publisher
+			<option value="vsisbn">ISBN			
+			</SELECT><br><br></font>
+			</td>
+			</tr>
+</table>
+</form>
+
+<form action="" name="catlist">	
+<table width="145" border="0" cellpadding="0" cellspacing="0">				
+			<tr>
+			<td valign="top">
+			<img src="/images/jump_topica.gif" width="145" alt="" border="0">
+			</td>
+			</tr>
+			<tr>
+			<td width="145">
+				
+	        	<font face="Arial,helvetica" size="1">
+				&nbsp;&nbsp;<SELECT NAME="cat" onChange='top.location.href=this.options[selectedIndex].value;' style="font-size: 10; font-family: sans-serif;">
+                        <option value="" selected>Please Select
+                        <option value="">-----------
+						<option value="/reference/dir.ai.html">Artificial Intel
+						<option value="/reference/dir.busman.ht
+ad1
+ml">Business &amp; Mgmt
+                        <option value="/reference/dir.components.html">Components
+                        <option value="/reference/dir.contentmanagement.html">Content Mgmt
+                        <option value="/reference/dir.certification1.html">Certification
+                        <option value="/reference/dir.databases.html">Databases
+                        <option value="/reference/dir.enterprisemanagement1.html">Enterprise Mgmt
+                        <option value="/reference/dir.funandgames1.html">Fun/Games
+                        <option value="/reference/dir.groupwareandcollaboration1.html">Groupware
+                        <option value="/reference/dir.hardware1.html">Hardware
+                        <option value="/reference/dir.ibmredbooks.html">IBM Redbooks
+                        <option value="/reference/dir.intranetandextranetdevelopment1.html">Intranet Dev
+                        <option value="/reference/dir.middleware.html">Middleware
+                        <option value="/reference/dir.multimediaandgraphicdesign1.html">Multimedia
+                        <option value="/reference/dir.networkservices1.html">Networks 
+                        <option value="/reference/dir.operatingsystems.html">OS
+                        <option value="/reference/dir.productivityapplications1.html">Productivity Apps
+                        <option value="/reference/dir.programminglanguages.html">Programming Langs
+                        <option value="/reference/dir.security1.html">Security  
+						<option value="/reference/dir.softwareengineering1.html">Soft Engineering
+                        <!-- <option value="/reference/dir.ewtraining1.html">Training Guides -->
+                        <option value="/reference/dir.userinterfaces.html">UI
+                        <option value="/reference/dir.webservices.html">Web Services
+                        <option value="/reference/dir.webmasterskills1.html">Webmaster
+                        <option value="/reference/dir.y2k1.html">Y2K
+                        <option value="">-----------
+                        <option value="/reference/whatsnew.html">New Arrivals
+                        </SELECT>
+						</font>
+			
+		</td>
+		</tr>
+	</table>
+	</form>
+	
+<!-- LEFT NAV SEARCH END -->
+
+<table border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td>
+<a href="/desktop/"><img src="/images/desktop_icona.gif" border=0 alt="Go to ITKnowledge Enterprise"></a><br><br></td>
+	</tr>
+</table>
+
+<!-- END LEFT NAVBAR -->
+
+
+
+<!-- END LEFT NAVBAR -->
+	
+	<td width="15"><img src="/images/dotclear.gif" width="15" alt="" border="0"></td>
+
+<!-- end of ITK left NAV -->
+
+<!-- begin main content -->
+	
+	<td width="100%" valign="top" align="left">
+		<br>
+
+<!-- END SUB HEADER -->
+
+
+
+674
+<!-- Created by dB Page Builder.  http://www.pchelponline.com/bluestem -->
+
+<!--Begin Content Column -->
+
+<TABLE border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td width=75 valign=top>
+<img src="/images/sm_covers/067230886x.gif" width=60 height=73 alt="Oracle Performance Tuning and Optimization" border="1">
+</td>
+<td align="left">
+    <font face="arial, helvetica" size="-1" color="#336633"><b>Oracle Performance Tuning and Optimization</b></font>
+    <br>
+    <font face="arial, helvetica" size="-1"><i>by Edward Whalen</i>
+    <br>
+    Sams,&nbsp;Macmillan Computer Publishing
+    <br>
+    <b>ISBN:</b>&nbsp;067230886x<b>&nbsp;&nbsp;&nbsp;Pub Date:</b>&nbsp;04/01/96</font>
+</td>
+</tr>
+</table>
+<P>
+<FORM name= "search2" method="POST" action="http://ewsearch.earthweb.com:80/jsp/k2search/ewintrak2search.jsp" onSubmit=" return checkForQuery(this); ">
+<INPUT type="hidden" name="collection" value="corpitk">
+<INPUT type="hidden" name="altcoll" value="bookscorpitk">
+<INPUT type="hidden" name="hl" value="on">
+<INPUT name="sortspec" type=hidden value="score desc">
+<INPUT name="fields" type=hidden value="vdkvgwkey score vstitle vsisbn vsauthor vspublisher vspubdate">
+<INPUT name="imageprefix" type=hidden value="http://corpitk.earthweb.com">
+<INPUT name="ssiFolder" type=hidden value="corpitk">
+<INPUT type="hidden" name="bookid" value="corpitk.earthweb.comreferencepro067230886x">
+
+<font face="arial, helvetica" size=2><b>Search this book:</b></font><br>
+<INPUT NAME="query" size=25 VALUE="">&nbsp;<input type="image" width=28 height=23 border=0 value="Go" name="Go" src="/images/go.gif" align=absmiddle>
+
+</form>
+
+
+22 
+
+<!-- Empty Reference Subhead -->
+1000
+
+
+<!--ISBN=067230886x//-->
+<!--TITLE=Oracle Performance Tuning and Optimization//-->
+<!--AUTHOR=Edward Whalen//-->
+<!--PUBLISHER=Macmillan Computer Publishing//-->
+<!--IMPRINT=Sams//-->
+<!--CHAPTER=0//-->
+<!--PAGES=649-682//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="ewtoc.html">Table of Contents</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H2><A NAME="Heading1"></A><FONT COLOR="#000077">Index</FONT></H2>
+<P><FONT SIZE="+1"><B>A</B></FONT></P>
+<DL>
+<DD><B>ACID tests (Atomicity, Consistency, Isolation, and Durability), 55-58</B>
+<DD><B>ad-hoc, 22, 608</B>
+<DD><B>add-ons, <I>see</I> Parallel Query option; Parallel Server option</B>
+<DD><B>AdHawk tool, 498</B>
+<DD><B>administrator (database administrator), 23, 610</B>
+<DD><B>agents, SNMP agents, 76</B>
+<DD><B>aggregate functions, 608</B>
+<DD><B>AIO, <I>see</I> Asynchronous I/O</B>
+<DD><B>alerts, triggers, 470</B>
+<DD><B>alias, <I>see</I> synonyms</B>
+<DD><B>ALL_CONS_COLUMNS view, 467</B>
+<DD><B>ALL_CONSTRAINTS view, 467</B>
+<DD><B>ALL_ROWS hint, 479</B>
+<DD><B>ALL_TRIGGERS view, 471</B>
+<DD><B>ALTER TABLE command, 466</B>
+<DD><B>analysis tools, 496</B>
+<DL>
+<DD>defined, 490
+<DD>Oracle Mission Control, 496-497
+<DD>Oracle Trace, 497
+<DD>parameters, list of, 627-629
+<DD>summary, 499
+<DD>third-party tools, 497
+<DL>
+<DD><I>AdHawk, 498</I>
+<DD><I>DATA-XPERT, 498</I>
+<DD><I>DBGENERAL, 498</I>
+<DD><I>Patrol, 498-499</I>
+<DD><I>Precise/SQL suite, 498</I>
+<DD><I>TSreorg, 498</I>
+</DL>
+</DL>
+<DD><B>ANALYZE command, 441-442</B>
+<DL>
+<DD>checking structural integrity, 444
+<DD>data dictionary statistics, 445-447
+<DD>gathering chained-row statistics, 444-445
+<DD>gathering statistics, 442-443
+</DL>
+<DD><B>Analyze/SQL tool, 498</B>
+<DD><B>AND_EQUAL hint, 481</B>
+<DD><B>application development tools, 494, 534</B>
+<DL>
+<DD>advantages, 534
+<DD>defined, 490
+<DD>first-generation tools, 534-535
+<DD>modern tools, 535
+<DD>Oracle tools, 494, 536
+<DL>
+<DD><I>Developer/2000, 495, 536-544</I>
+<DD><I>Power Objects, 495, 544-546</I>
+</DL>
+<DD>third-party tools, 495, 546
+<DL>
+<DD><I>Delphi, 495-496, 547-548</I>
+<DD><I>PowerBuilder, 495, 552</I>
+<DD><I>ReportSmith, 548-549</I>
+<DD><I>SQL Windows, 495, 550-552</I>
+</DL>
+<DD>tuning automatically generated SQL statements, 535-536
+</DL>
+<DD><B>application servers</B>
+<DL>
+<DD>defined, 557-558
+<DD>tuning, 559
+</DL>
+<DD><B>applications, 17</B>
+<DL>
+<DD>client, bottlenecks, 523
+<DD>ConText, 18
+<DD>designing, 83, 426
+<DL>
+<DD><I>clusters, 430</I>
+<DD><I>discrete transactions, 435-436</I>
+<DD><I>functions, 432-433</I>
+<DD><I>hash clusters, 431-432</I>
+<DD><I>indexes, 426-429</I>
+<DD><I>optimization techniques, 433-434</I>
+<DD><I>packages, 432-433</I>
+<DD><I>procedures, 432-433</I>
+</DL>
+<DD>Media Server, 18
+<DD>Oracle Financial Applications, 17
+<DD>Oracle Office, 17-18
+<DD>Oracle WebServer, 18
+<DD>registering, 417
+<DD>tuning considerations, 420
+<DL>
+<DD><I>analyzing effects of SQL statements, 424-425</I>
+<DD><I>analyzing SQL statements, 422-424</I>
+<DD><I>problem analysis, 420-421</I>
+<DD><I>summary, 425, 591-592</I>
+</DL>
+</DL>
+<DD><B>ARCH (Archiver Process), 12, 26-27</B>
+<DD><B>architectures</B>
+<DL>
+<DD>buses, 211-212
+<DD>memory, 210
+<DL>
+<DD><I>virtual memory system, 211</I>
+</DL>
+<DD>microkernel architecture, 183
+<DD>networks
+<DL>
+<DD><I>hardware components, 566-570</I>
+<DD><I>protcols, 570-572</I>
+</DL>
+<DD>operating systems
+<DL>
+<DD><I>NetWare, 178-179</I>
+<DD><I>OS/2, 188</I>
+<DD><I>UNIX, 192</I>
+<DD><I>Windows NT, 183-184</I>
+</DL>
+<DD>Parallel Server option, 340-343
+<DD>three-tiered system architecture, 557-558
+<DL>
+<DD><I>tuning, 559</I>
+</DL>
+<DD>two-tiered system architecture, 556
+</DL>
+<DD><B>archive logs</B>
+<DL>
+<DD>batch processing systems, 276
+<DD>BLOB systems, 332
+<DD>data warehouses, 314
+<DD>decision support systems, 295
+<DD>defined, 26-27, 134-135
+<DD>financial systems, 372
+<DD>office systems, 385
+<DD>OLTP systems, 255
+<DD>TextServer 3.0 systems
+1000
+, 381
+<DD>WebServer systems, 389
+</DL>
+<DD><B>ARCHIVELOG mode, backup and recovery process, 351</B>
+<DD><B>Archiver process (ARCH), 12, 26-27</B>
+<DD><B>arrays</B>
+<DL>
+<DD>disk arrays, 611
+<DD>processing, 510
+</DL>
+<DD><B>Asynchronous I/O (AIO)</B>
+<DL>
+<DD>defined, 22, 171-172, 608
+<DD>operating systems, 589
+<DL>
+<DD><I>UNIX, 198-200</I>
+</DL>
+</DL>
+<DD><B>ATM networks, 570</B>
+<DD><B>atomicity, 55</B>
+<DD><B>Atomicity, Consistency, Isolation, and Durability (ACID tests), 55-58</B>
+<DD><B>AUDIT command, 472-473</B>
+<DD><B>audit trails, 472-473</B>
+<DD><B>AUDIT_TRAIL parameter, 641</B>
+<DD><B>AUTO_MOUNTING parameter, 642</B>
+</DL>
+<P><FONT SIZE="+1"><B>B</B></FONT></P>
+<DL>
+<DD><B>B*-Tree index structure, 149</B>
+<DD><B>background processes</B>
+<DL>
+<DD>ARCH (Archiver), 12
+<DD>CKPT (Checkpoint), 11
+<DL>
+<DD><I>fast checkpoints, 26</I>
+<DD><I>normal checkpoints, 26</I>
+</DL>
+<DD>DBWR (Database Writer), 11
+<DD>defined, 11-12
+<DD>Dnnn (Dispatcher), 12
+<DD>LCK (Parallel Server Lock), 12
+<DD>LGWR (Log Writer), 11
+<DD>PMON (Process Monitor), 11
+<DD>RECO (Recovery process), 12
+<DD>SMON (System Monitor), 12
+</DL>
+<DD><B>BACKGROUND_DUMP_DEST parameter, 629</B>
+<DD><B>backups</B>
+<DL>
+<DD>characteristics, 352
+<DL>
+<DD><I>cold (offline) backups, 352</I>
+<DD><I>data access patterns during backup, 353</I>
+<DD><I>goals of backups, 353-354</I>
+<DD><I>hot (online) backups, 352-353</I>
+<DD><I>loads during backups, 353</I>
+</DL>
+<DD>cold (offline) backups
+<DL>
+<DD><I>defined, 350, 354</I>
+<DD><I>hardware considerations, 355-356</I>
+<DD><I>physical data access, 354-355</I>
+<DD><I>software considerations, 355-356</I>
+</DL>
+<DD>design considerations, summary, 358
+<DD>enhancements, 359
+<DL>
+<DD><I>CPU, 359</I>
+<DD><I>I/O, 359-360</I>
+<DD><I>networks, 360</I>
+<DD><I>segmenting backups, 360-362</I>
+<DD><I>summary, 361-362</I>
+<DD><I>testing database, 362</I>
+<DD><I>testing operating system, 363-365</I>
+<DD><I>verifying performance, 362-365</I>
+</DL>
+<DD>exports, 350
+<DD>full backups, 350
+<DD>hot (online) backups
+<DL>
+<DD><I>defined, 350, 355-356</I>
+<DD><I>hardware considerations, 357-358</I>
+<DD><I>physical data access, 356-357</I>
+<DD><I>software considerations, 357-358</I>
+</DL>
+<DD>offline backups, 350
+<DD>online tablespace backups, defined, 350
+<DD>processes, 351
+<DL>
+<DD><I>recovery process, 351-352</I>
+</DL>
+<DD>software testing, 364-365
+<DD>tuning considerations, 358-359
+</DL>
+<DD><B>bandwidth</B>
+<DL>
+<DD>buses, 212
+<DD>defined, 608
+<DD>network design, 576-577
+</DL>
+<DD><B>batch processing systems</B>
+<DL>
+<DD>archive logs, 276
+<DD>block
+<DL>
+<DD><I>buffers, 274</I>
+<DD><I>size, 277</I>
+</DL>
+<DD>characteristics, 266-267
+<DL>
+<DD><I>data access patterns, 267</I>
+<DD><I>goals of optimally tuned systems, 268-269</I>
+<DD><I>loads, 267-268</I>
+<DD><I>summary, 269</I>
+</DL>
+<DD>checkpoints, 276
+<DD>clusters, 277
+<DD>comparisons to OLTP systems, 265
+<DD>contention, latch contention, 275
+<DD>defined, 27, 608
+<DD>design considerations, 270
+<DD>direct write sorts, 277
+<DD>enhancements, 590
+<DL>
+<DD><I>benchmarks, 282-283</I>
+<DD><I>CPU, 279</I>
+<DD><I>hardware, 279-281</I>
+<DD><I>high-speed compression, 280-281</I>
+<DD><I>high-speed tape, 280-281</I>
+<DD><I>I/O, 279-280</I>
+<DD><I>list of, 277</I>
+<DD><I>networks, 280</I>
+<DD><I>Parallel Query option, 277-278</I>
+<DD><I>Parallel Server option, 278</I>
+<DD><I>summary, 281</I>
+<DD><I>testing database, 281</I>
+<DD><I>testing operating system, 282</I>
+<DD><I>verifying performance, 281-283</I>
+</DL>
+<DD>hardware considerations, 274
+<DD>hash clusters, 277
+<DD>indexes, 277
+<DD>library cache, 275
+<DD>performance criteria of system, 38
+<DL>
+<DD><I>checklist, 39</I>
+</DL>
+<DD>physical data layouts, 270-271
+<DL>
+<DD><I>disk arrays, 272-273</I>
+<DD><I>traditional disks, 271-272</I>
+</DL>
+<DD>segments, rollback segments, 275
+<DD>tuning considerations
+<DL>
+<DD><I>Oracle, 274-276</I>
+<DD><I>server operating systems, 276-277</I>
+</DL>
+</DL>
+<DD><B>bench
+1000
+marks</B>
+<DL>
+<DD>batch processing systems, 282-283
+<DD>BLOB systems, 336-337
+<DD>custom benchmarks, 70
+<DL>
+<DD><I>defined, 51-52</I>
+<DD><I>writing benchmarks, 70-72</I>
+</DL>
+<DD>data warehouses, 320-321
+<DD>decision support systems, 301-302
+<DD>defined, 51-52
+<DD>OLTP systems, 262
+<DD>publications, 69
+<DD>standard benchmarks
+<DL>
+<DD><I>defined, 51-53</I>
+<DD><I>TPC (Transaction Processing Performance Council), 53- 57</I>
+</DL>
+<DD>testing, 69
+<DD>UNIX features, 200-203
+</DL>
+<DD><B>Binary Large Objects, <I>see</I> BLOB systems</B>
+<DD><B>binding variables, 401</B>
+<DD><B>bits, 29</B>
+<DD><B>BLANK_TRIMMING parameter, 629</B>
+<DD><B>BLOB systems (Binary Large Objects)</B>
+<DL>
+<DD>archive logs, 332
+<DD>block
+<DL>
+<DD><I>buffers, 332</I>
+<DD><I>size, 333</I>
+</DL>
+<DD>checkpoints, 332
+<DD>characteristics, 324
+<DL>
+<DD><I>data access patterns, 324</I>
+<DD><I>goals of optimally tuned systems, 325-326</I>
+<DD><I>loads, 324-325</I>
+<DD><I>summary, 326-327</I>
+</DL>
+<DD>clusters, 333
+<DD>contention, latch contention, 332
+<DD>defined, 28, 323-324, 608
+<DD>design considerations, 327
+<DD>enhancements, 333, 590
+<DL>
+<DD><I>benchmarks, 336-337</I>
+<DD><I>CPU, 334</I>
+<DD><I>hardware, 334-335</I>
+<DD><I>I/O, 334-335</I>
+<DD><I>networks, 335</I>
+<DD><I>Parallel Query option, 333</I>
+<DD><I>summary, 335</I>
+<DD><I>testing database, 336</I>
+<DD><I>testing server operating system, 336</I>
+<DD><I>verifying performance, 335-337</I>
+</DL>
+<DD>hardware considerations, 331
+<DD>indexes, 333
+<DD>library cache, 332
+<DD>mutiblock reads, 332
+<DD>physical data layout, 328
+<DL>
+<DD><I>disk arrays, 329-331</I>
+<DD><I>traditional disks, 328-329</I>
+</DL>
+<DD>segments, rollback segments, 332
+<DD>tuning considerations
+<DL>
+<DD><I>Oracle, 332</I>
+<DD><I>server operating systems, 333</I>
+</DL>
+</DL>
+<DD><B>blocks</B>
+<DL>
+<DD>buffers
+<DL>
+<DD><I>batch operating systems, 274</I>
+<DD><I>BLOB systems, 332</I>
+<DD><I>cache, 583</I>
+<DD><I>data warehouses, 313</I>
+<DD><I>decision support systems, 294</I>
+<DD><I>defined, 22</I>
+<DD><I>financial systems, 371</I>
+<DD><I>office systems, 384</I>
+<DD><I>OLTP systems, 254</I>
+<DD><I>replicated systems, 376</I>
+<DD><I>TextServer 3.0 systems, 381</I>
+<DD><I>WebServer systems, 388</I>
+</DL>
+<DD>defined, 22, 608
+<DD>indexes, 149
+<DD>multiblock reads or writes, 152-153
+<DD>size, 584
+<DL>
+<DD><I>batch processing systems, 277</I>
+<DD><I>BLOB systems, 333</I>
+<DD><I>changing, 140-141</I>
+<DD><I>data warehouses, 315</I>
+<DD><I>decision support systems, 296</I>
+<DD><I>financial systems, 372</I>
+<DD><I>OLTP systems, 256</I>
+<DD><I>testing disk block size in backup process, 363</I>
+<DD><I>testing tape drives for backup process, 363</I>
+<DD><I>TextServer 3.0 systems, 381</I>
+<DD><I>WebServer systems, 389</I>
+</DL>
+</DL>
+<DD><B>body</B>
+<DL>
+<DD>functions, 454
+<DD>packages, 458
+<DD>procedures, 453
+</DL>
+<DD><B>bottlenecks</B>
+<DL>
+<DD>clients, performance, 522
+<DL>
+<DD><I>application, 523</I>
+<DD><I>hardware, 524</I>
+<DD><I>network, 523</I>
+<DD><I>presentation, 524</I>
+</DL>
+<DD>defined, 92
+<DD>finding, 92
+<DD>removing, 93
+</DL>
+<DD><B>branch blocks, indexes, 149</B>
+<DD><B>bridges, networks, 577</B>
+<DD><B>buffer</B>
+<DD><B>buffers</B>
+<DL>
+<DD>block buffers, 608
+<DL>
+<DD><I>batch operating systems, 274</I>
+<DD><I>BLOB systems, 332</I>
+<DD><I>cache, 583</I>
+<DD><I>data warehouses, 313</I>
+<DD><I>decision support systems, 294</I>
+<DD><I>defined, 22</I>
+<DD><I>financial systems, 371</I>
+<DD><I>office systems, 384</I>
+<DD><I>OLTP systems, 254</I>
+<DD><I>replicated systems, 376</I>
+<DD><I>TextServer 3.0 systems, 381</I>
+<DD><I>WebServer systems, 388</I>
+</DL>
+<DD>cache, 9, 22, 608
+<DL>
+<DD><I>cache-hits ratio, 107-108</I>
+<DD><I>SQL statement, 597</I>
+<DD><I>tuning, 107-108</I>
+<DD><I>UNIX operating systems, 193</I>
+</DL>
+<DD>clean buffers, 22, 608
+<DD>defined, 22, 608
+<DD>dirty buffers, 22, 608
+<DD>disk drive, 215
+<DD>redo log buffer, 10, 608
+<DL>
+<DD><I>contention, 60
+1000
+0-601</I>
+<DD><I>latch contention, 131-132</I>
+</DL>
+</DL>
+<DD><B>buses</B>
+<DL>
+<DD>architecture, 211-212
+<DD>bandwidth, 212, 608
+<DD>defined, 211
+</DL>
+<DD><B>business models, 27-28</B>
+<DL>
+<DD><I>see also</I> financial systems
+</DL>
+<DD><B>bytes, 29</B>
+</DL>
+<P><FONT SIZE="+1"><B>C</B></FONT></P>
+<DL>
+<DD><B>cache</B>
+<DL>
+<DD>buffer cache, 9, 22, 583
+<DL>
+<DD><I>cache-hits ratio, 107-108</I>
+<DD><I>SQL statement, 597</I>
+<DD><I>tuning, 107-108</I>
+<DD><I>UNIX operating systems, 193</I>
+</DL>
+<DD>CPU cache, 206-207, 210
+<DD>data dictionary cache, 582
+<DL>
+<DD><I>SQL statement, 596-597</I>
+</DL>
+<DD>defined, 22, 608
+<DD>disk arrays
+<DL>
+<DD><I>controller caches, 228</I>
+<DD><I>read/write caches, 229</I>
+<DD><I>write caches, 228-229</I>
+</DL>
+<DD>hits, 609
+<DL>
+<DD><I>increasing in library cache, 100-102</I>
+<DD><I>ratio in buffer cache, 107-108</I>
+</DL>
+<DD>library cache, 450-452, 582
+<DL>
+<DD><I>batch processing systems, 275</I>
+<DD><I>BLOB systems, 332</I>
+<DD><I>decision support systems, 295</I>
+<DD><I>financial systems, 371</I>
+<DD><I>hits, 451</I>
+<DD><I>misses, 451</I>
+<DD><I>office systems, 384</I>
+<DD><I>replicated systems, 376</I>
+<DD><I>SQL statement, 596</I>
+<DD><I>stored functions and procedures, 456-457</I>
+<DD><I>TextServer 3.0 systems, 381</I>
+<DD><I>WebServer systems, 388</I>
+</DL>
+</DL>
+<DD><B>cache affinity, 174</B>
+<DL>
+<DD>batch processing systems, 276
+<DD>BLOB systems, 333
+<DD>data warehouses, 314
+<DD>decision support systems, 296
+<DD>OLTP systems, 255
+<DD>operating systems, 589
+<DD>UNIX
+<DL>
+<DD><I>disabling preemptive scheduling, 202</I>
+<DD><I>summary of tuning guidelines, 202-203</I>
+</DL>
+</DL>
+<DD><B>CACHE hint, 485</B>
+<DD><B>cache miss, shared pool, 101</B>
+<DD><B>CACHE_SIZE_THRESHOLD parameter, 347, 639</B>
+<DD><B>calls, recursive calls, 118</B>
+<DD><B>Cartesian products, 505-506, 609</B>
+<DD><B>CD-ROM, SQL scripts on, 646-648</B>
+<DD><B>Central Processing Unit, <I>see</I> CPU</B>
+<DD><B>chaining rows, 117-118</B>
+<DL>
+<DD>gathering chained-row statistics, 444-445
+<DD>SQL statement, 599
+</DL>
+<DD><B>CHAR data type, 510</B>
+<DD><B>CHECK constraint, 465</B>
+<DD><B>CHECKPOINT_PROCESS parameter, 629</B>
+<DD><B>checkpoints, 11, 26, 133-134</B>
+<DL>
+<DD>batch processing systems, 276
+<DD>BLOB systems, 332
+<DD>data warehouses, 314
+<DD>decision support systems, 295
+<DD>defined, 26
+<DD>fast checkpoints, 26, 134
+<DD>financial systems, 372
+<DD>normal checkpoints, 26, 133
+<DD>office systems, 385
+<DD>OLTP systems, 255
+<DD>TextServer 3.0 systems, 381
+<DD>WebServer systems, 389
+</DL>
+<DD><B>checksums, 23, 609</B>
+<DD><B>CHOOSE hint, 479</B>
+<DD><B>CISC processors (Complex Instruction Set Computer), 207-208</B>
+<DD><B>CKPT, <I>see</I> checkpoints</B>
+<DD><B>classes, Oracle Power Objects, 545-546</B>
+<DD><B>classroom training, 19</B>
+<DD><B>CLEANUP_ROLLBACK_ENTRIES parameter, 630</B>
+<DD><B>client processes, 10</B>
+<DD><B>client/server systems</B>
+<DL>
+<DD>defined, 519-520
+<DD>performance criteria, 32-33
+<DL>
+<DD><I>checklist, 35-36</I>
+<DD><I>client component, 33</I>
+<DD><I>network, 35</I>
+<DD><I>server component, 33-35</I>
+</DL>
+<DD>transactions, running, 32
+</DL>
+<DD><B>clients</B>
+<DL>
+<DD>bottlenecks, performance, 522
+<DL>
+<DD><I>application, 523</I>
+<DD><I>hardware, 524</I>
+<DD><I>network, 523</I>
+<DD><I>presentation, 524</I>
+</DL>
+<DD>computing models, 520
+<DL>
+<DD><I>three-tiered system, 521-522</I>
+<DD><I>two-tiered system, 520-521</I>
+</DL>
+<DD>defined, 32, 516
+<DD>development of
+<DL>
+<DD><I>client/server model, 519-520</I>
+<DD><I>GUI/Server model, 517-519</I>
+<DD><I>network computing model, 517</I>
+<DD><I>traditional computing model, 516-517</I>
+</DL>
+<DD>performance criteria, 33
+<DD>tuning considerations, 85
+<DL>
+<DD><I>summary, 592</I>
+</DL>
+</DL>
+<DD><B>CLOSE_CACHED_OPEN_ CURSORS parameter, 630</B>
+<DD><B>CLUSTER hint, 481</B>
+<DD><B>cluster key, 609</B>
+<DD><B>clusters, 584</B>
+<DL>
+<DD>advantages, 141-143
+<DD>batch processing systems
+1000
+, 277
+<DD>BLOB systems, 333
+<DD>computers, 609
+<DD>creating, 430
+<DD>data warehouses, 315
+<DD>decision support systems, 296
+<DD>defined, 6
+<DD>design stage, 83
+<DD>disadvantages, 142-143
+<DD>financial systems, 372
+<DD>index clusters, 141, 427, 609
+<DD>OLTP systems, 256
+<DD>Parallel Server option, 340
+<DD>tables, 609
+<DD>TextServer 3.0 systems, 381
+<DD>views, data in, 446
+<DD>WebServer systems, 389
+<DD><I>see also</I> hash clusters
+</DL>
+<DD><B>cold (offline) backups</B>
+<DL>
+<DD>defined, 350, 352-354
+<DD>hardware/software considerations, 355-356
+<DD>physical data access, 354-355
+</DL>
+<DD><B>cold data, 609</B>
+<DD><B>cold databases, 609</B>
+<DD><B>collisions, 609</B>
+<DD><B>columns</B>
+<DL>
+<DD>indexes, choosing columns to index, 428
+<DD>indexing, data selection guidelines, 151
+<DD>tables, 6
+<DD>views, data in, 447
+</DL>
+<DD><B>commands</B>
+<DL>
+<DD>ALTER TABLE, 466
+<DD>ANALYZE, 441-442
+<DL>
+<DD><I>checking structural integrity, 444</I>
+<DD><I>data dictionary statistics, 445-447</I>
+<DD><I>gathering chained-row statistics, 444-445</I>
+<DD><I>gathering statistics, 442-443</I>
+</DL>
+<DD>AUDIT, 472-473
+<DD>CREATE SEQUENCE, parameters, 502-503
+<DD>CREATE TABLE, 466
+<DD>CREATE TRIGGER, 469
+<DD>DDL (Data Definition Language), 23, 610
+<DD>DML (Data Manipulation Language), 23, 611
+<DD>EXPLAIN PLAN
+<DL>
+<DD><I>analyzing SQL statement execution, 424</I>
+<DD><I>defined, 394-395, 404, 414</I>
+<DD><I>extracting results of, 416</I>
+<DD><I>initialization, 414-415</I>
+<DD><I>invoking, 415-416</I>
+</DL>
+<DD>NOAUDIT, 472-473
+</DL>
+<DD><B>COMMIT_POINT_STRENGTH parameter, 638</B>
+<DD><B>COMPATABLE parameter, 630</B>
+<DD><B>COMPATABLE_NO_ RECOVERY parameter, 630</B>
+<DD><B>Complex Instruction Set Computer (CISC processors), 207-208</B>
+<DD><B>complex statements, 609</B>
+<DD><B>component queries, 609</B>
+<DD><B>composite indexes, 149</B>
+<DL>
+<DD>advantages, 151
+<DD>creating, 428-429
+<DD>defined, 427
+</DL>
+<DD><B>compound queries, 609</B>
+<DD><B>compression, high- performance com- pression, 365</B>
+<DD><B>computing</B>
+<DL>
+<DD>client/server models, 519-520
+<DL>
+<DD><I>three-tiered system, 521-522</I>
+<DD><I>two-tiered system, 520-521</I>
+</DL>
+<DD>development of, 516-520
+<DL>
+<DD><I>GUI/Server model, 517-519</I>
+<DD><I>network computing model, 517</I>
+<DD><I>traditional computing model, 516-517</I>
+</DL>
+</DL>
+<DD><B>concurrency, 23, 610</B>
+<DD><B>configuring disk array systems, 240</B>
+<DD><B>connectivity, 43</B>
+<DD><B>consistency, 55</B>
+<DD><B>consistent mode, 610</B>
+<DD><B>consistent read, 610</B>
+<DD><B>constraints, 466</B>
+<DL>
+<DD>CHECK, 465
+<DD>defined, 610
+<DD>FOREIGN, 465
+<DD>implementing
+<DL>
+<DD><I>at table creation, 466</I>
+<DD><I>at table modification, 466-467</I>
+</DL>
+<DD>integrity constraints, list of, 465
+<DD>NOT NULL, 465
+<DD>PRIMARY, 465
+<DD>summary, 469
+<DD>UNIQUE, 465
+<DD>viewing, 467-469
+</DL>
+<DD><B>consulting services, 18</B>
+<DD><B>contention</B>
+<DL>
+<DD>defined, 23, 610
+<DD>disk contention, 109-110
+<DL>
+<DD><I>identifying problems, 110-111</I>
+<DD><I>isolating sequential I/Os, 112</I>
+<DD><I>separating data from index, 116</I>
+<DD><I>striping random I/Os, 112-116</I>
+</DL>
+<DD>free list contention, 136-137
+<DL>
+<DD><I>SQL statement, 602</I>
+</DL>
+<DD>latch contention, 130-131, 314
+<DL>
+<DD><I>batch processing systems, 275</I>
+<DD><I>BLOB systems, 332</I>
+<DD><I>data warehouses, 314</I>
+<DD><I>decision support systems, 295</I>
+<DD><I>financial systems, 371</I>
+<DD><I>office systems, 385</I>
+<DD><I>OLTP systems, 255</I>
+<DD><I>redo log buffer, 131-132</I>
+<DD><I>replicated systems, 376</I>
+<DD><I>SQL statement, 601</I>
+<DD><I>TextServer 3.0 systems, 381</I>
+<DD><I>WebServer systems, 389</I>
+</DL>
+<DD>redo log buffer contention, 130-131
+<DD>rollback contention, 123
+<DL>
+<DD><I>financial systems, 371</I>
+<DD><I>office systems, 385</I>
+<DD><I>OLTP systems, 254</I>
+<DD><I>replicated systems, 376</I>
+<DD><I>SQL statement, 599-600</I>
+<DD><I>WebServer systems, 389</I>
+<D
+1000
+D><I>SQL statement, 600-601</I>
+</DL>
+</DL>
+<DD><B>ConText, 18</B>
+<DD><B>control files, 5</B>
+<DD><B>CONTROL_FILES parameter, 630</B>
+<DD><B>controller, 227</B>
+<DL>
+<DD>caches, 228
+<DD>fiber optic networks, 569
+<DD>read/write caches, 229
+<DD>write caches, 228
+</DL>
+<DD><B>conversions, 28</B>
+<DL>
+<DD>binary storage units, 29-30
+<DD>powers of 10, 29
+</DL>
+<DD><B>copying databases, <I>see</I> replicated systems</B>
+<DD><B>core</B>
+<DL>
+<DD>OS/2, 188
+<DD>Windows NT, 183
+</DL>
+<DD><B>cost-based optimization method</B>
+<DL>
+<DD>ANALYZE command, 441-442
+<DL>
+<DD><I>checking structural integrity, 444</I>
+<DD><I>data dictionary statistics, 445-447</I>
+<DD><I>gathering chained-row statistics, 444-445</I>
+<DD><I>gathering statistics, 442-443</I>
+</DL>
+<DD>choosing, 438-439
+<DD>defined, 434, 441, 610
+<DD>hints, 447
+</DL>
+<DD><B>count parameter, SQL Trace, 409</B>
+<DD><B>CPU (Central Processing Unit), 206</B>
+<DL>
+<DD>cache, 206-207, 210
+<DD>CISC processors (Complex Instruction Set Computer), 207-208
+<DD>defined, 206-207
+<DD>enhancements
+<DL>
+<DD><I>backup process, 359</I>
+<DD><I>batch processing system, 279</I>
+<DD><I>BLOB system , 334</I>
+<DD><I>data warehouse, 317</I>
+<DD><I>decision support system, 298-299</I>
+<DD><I>OLTP, 257-258</I>
+<DD><I>replicated system, 377</I>
+</DL>
+<DD>multiprocessor systems, 209
+<DL>
+<DD><I>MPP (Massively Parallel Processor), 209-210</I>
+<DD><I>SMP (Symmetric Multiprocessor), 209</I>
+</DL>
+<DD>RISC processors (Reduced Instruction Set Computer), 208
+</DL>
+<DD><B>cpu parameter, SQL Trace, 409</B>
+<DD><B>CREATE SEQUENCE command, parameters, 502-503</B>
+<DD><B>CREATE TABLE command, 466</B>
+<DD><B>CREATE TRIGGER command, 469</B>
+<DD><B>current mode, 610</B>
+<DD><B>current parameter, SQL Trace, 409</B>
+<DD><B>current read, 610</B>
+<DD><B>cursor, 23, 610</B>
+<DD><B>CURSOR SPACE FOR TIME parameter, 254</B>
+<DD><B>custom benchmarks</B>
+<DL>
+<DD>defined, 51-52
+<DD>writing benchmarks, 70-71
+<DL>
+<DD><I>analysis, 72</I>
+<DD><I>design, 71</I>
+<DD><I>implementation, 71-72</I>
+</DL>
+</DL>
+<DD><B>Customer-Demographics transactions, OLTP, 65</B>
+<DD><B>Customer-Inquiry transactions, OLTP, 65</B>
+<DD><B>Customer-Status transactions, OLTP, 65</B>
+<DD><B>cylinders (platters), 215</B>
+</DL>
+<P><FONT SIZE="+1"><B>D</B></FONT></P>
+<DL>
+<DD><B>data access patterns</B>
+<DL>
+<DD>backup process, 353
+<DD>batch processing systems, 267
+<DD>BLOB systems, 324
+<DD>consistent read, 610
+<DD>data warehouses, 305-306
+<DD>decision support systems, 287-288
+<DD>OLTP systems, 246-247
+</DL>
+<DD><B>data blocks, 8</B>
+<DL>
+<DD><I>see also</I> extents; segments
+</DL>
+<DD><B>Data Definition Language, <I>see</I> DDL</B>
+<DD><B>data dictionary</B>
+<DL>
+<DD>cache, 103-104, 582
+<DD>defined, 5, 23, 610
+</DL>
+<DD><B>data files</B>
+<DL>
+<DD>defined, 5
+<DD>logical layer, 5-6
+</DL>
+<DD><B>data generation, triggers, 469</B>
+<DD><B>data integrity, <I>see</I> integrity</B>
+<DD><B>Data Manipulation Language, <I>see</I> DML</B>
+<DD><B>data segments, 8</B>
+<DD><B>data transfer rate, 217-218</B>
+<DD><B>data validation, triggers, 469</B>
+<DD><B>data warehouses</B>
+<DL>
+<DD>archive logs, 314
+<DD>block
+<DL>
+<DD><I>buffers, 313</I>
+<DD><I>size, 315</I>
+</DL>
+<DD>characteristics, 304-305
+<DL>
+<DD><I>data access patterns, 305-308</I>
+<DD><I>loads, 306-307</I>
+<DD><I>summary, 307-308</I>
+</DL>
+<DD>checkpoints, 314
+<DD>clusters, 315
+<DD>contention, latch contention, 314
+<DD>defined, 28, 610
+<DD>design considerations, 308
+<DL>
+<DD><I>fault tolerance, 311</I>
+<DD><I>hardware, 312</I>
+<DD><I>physical data layout, 308-311</I>
+</DL>
+<DD>direct-write sorts, 315
+<DD>enhancements, 590
+<DL>
+<DD><I>benchmarks, 320-321</I>
+<DD><I>CPU, 317</I>
+<DD><I>hardware, 317-319</I>
+<DD><I>I/O, 317-318</I>
+<DD><I>list of, 315</I>
+<DD><I>networks, 319</I>
+<DD><I>Parallel Query option, 316</I>
+<DD><I>Parallel Server option, 316-317</I>
+<DD><I>summary, 319</I>
+<DD><I>testing database, 320</I>
+<DD><I>testing operating system, 320</I>
+<DD><I>ve
+1000
+rifying performance, 319-321</I>
+</DL>
+<DD>fault tolerance considerations, 311
+<DD>hardware considerations, 312
+<DD>hash clusters, 315
+<DD>indexes, 315
+<DD>library cache, 313
+<DD>multiblock reads, 313
+<DD>physical data layout
+<DL>
+<DD><I>disk arrays, 310-311</I>
+<DD><I>traditional disks, 309-310</I>
+</DL>
+<DD>segments, rollback segments, 313
+<DD>tuning considerations
+<DL>
+<DD><I>Oracle, 312-314</I>
+<DD><I>server operating systems, 314-315</I>
+</DL>
+</DL>
+<DD><B>DATA-XPERT tool, 498</B>
+<DD><B>database administrator (DBA), 610</B>
+<DD><B>database design tools</B>
+<DL>
+<DD>defined, 490
+<DD>Designer/2000, 490-492
+<DL>
+<DD><I>generators, 492</I>
+<DD><I>Process Modeller, 491</I>
+<DD><I>Systems Designer, 491-492</I>
+<DD><I>Systems Modeller, 491</I>
+</DL>
+<DD>third-party tools, 492-493
+<DL>
+<DD><I>ERwin/ERX, 493</I>
+<DD><I>S-Designor, 493</I>
+<DD><I>SQL Coder, 493-494</I>
+</DL>
+</DL>
+<DD><B>database replication, <I>see</I> replicated systems</B>
+<DD><B>Database Trigger Editor (Procedure Builder tool), 542</B>
+<DD><B>Database Writer (DBWR), 11</B>
+<DD><B>databases</B>
+<DL>
+<DD>blocks, 608
+<DD>cold databases, 609
+<DD>design stage, layout considerations, 82
+<DD>hot databases, 611
+<DD>logical layer
+<DL>
+<DD><I>data blocks, 8</I>
+<DD><I>data dictionary, 5</I>
+<DD><I>data files, 5-6</I>
+<DD><I>defined, 5</I>
+<DD><I>extents, 8</I>
+<DD><I>schemas, 25</I>
+<DD><I>segments, 7</I>
+<DD><I>tablespaces, 5-6</I>
+</DL>
+<DD>offline databases, 613
+<DD>online databases, 613
+<DD>physical layer
+<DL>
+<DD><I>control files, 5</I>
+<DD><I>data files, 5</I>
+<DD><I>defined, 4</I>
+<DD><I>redo log files, 5</I>
+</DL>
+<DD>schema
+<DL>
+<DD><I>defined, 6-7</I>
+<DD><I>objects, 6</I>
+</DL>
+</DL>
+<DD><B>data dictionary cache, SQL statement, 596-597</B>
+<DD><B>DB_BLOCK_BUFFERS parameter, 620</B>
+<DD><B>DB_BLOCK_CHECKPOINT_ BATCH parameter, 620-621</B>
+<DD><B>DB_BLOCK_CHECKSUM parameter, 628</B>
+<DD><B>DB_BLOCK_LRU_EXTENDED_ STATISTICS para- meter, 628</B>
+<DD><B>DB_BLOCK_LRU_STATISTICS parameter, 628</B>
+<DD><B>DB_DOMAIN parameter, 630</B>
+<DD><B>DB_FILE_MULTIBLOCK_ READ_COUNT para-meter, 621</B>
+<DD><B>DB_FILE_SIMULTANEOUS_ WRITES parameter, 621</B>
+<DD><B>DB_FILES parameter, 631</B>
+<DD><B>DB_LOG_CHECKSUM parameter, 628</B>
+<DD><B>DB_MOUNT_MODE parameter, 642</B>
+<DD><B>DB_NAME parameter, 631</B>
+<DD><B>DBA (Database Adminstrator), 23, 610</B>
+<DD><B>DBA_CONS_COLUMNS view, 467</B>
+<DD><B>DBA_CONSTRAINTS view, 467</B>
+<DD><B>DBA_TRIGGERS view, 471</B>
+<DD><B>DBGENERAL tool, 498</B>
+<DD><B>DBLINK_ENCRYPT_LOGIN parameter, 631</B>
+<DD><B>DBWR (Database Writer), 11</B>
+<DD><B>DDL (Data Definition Language) commands, 23, 610</B>
+<DD><B>deadlocks, 510, 611</B>
+<DD><B>decision support systems</B>
+<DL>
+<DD>archive logs, 295
+<DD>block size, 296
+<DD>characteristics, 287
+<DL>
+<DD><I>data access patterns, 287-288</I>
+<DD><I>goals of optimally tuned systems, 289</I>
+<DD><I>loads, 288-289</I>
+<DD><I>summary, 289-290</I>
+</DL>
+<DD>checkpoint, 295
+<DD>clusters, 296
+<DD>contention, latch contention, 295
+<DD>defined, 28, 611
+<DD>design considerations, 290
+<DL>
+<DD><I>physical data layout, 291-293</I>
+</DL>
+<DD>direct write sorts, 296
+<DD>enhancements, 296-297, 590
+<DL>
+<DD><I>benchmarks, 301-302</I>
+<DD><I>CPU, 298-299</I>
+<DD><I>hardware, 298-300</I>
+<DD><I>I/O, 299-300</I>
+<DD><I>networks, 300</I>
+<DD><I>Parallel Query option, 297</I>
+<DD><I>Parallel Server option, 297-298</I>
+<DD><I>summary, 300</I>
+<DD><I>testing database, 301</I>
+<DD><I>testing operating system, 301</I>
+<DD><I>verifying performance, 300-302</I>
+</DL>
+<DD>hardware considerations, 294
+<DD>hash clusters, 296
+<DD>indexes, 296
+<DD>library cache, 295
+<DD>multiblock reads, 295
+<DD>physical data layout, 291
+<DL>
+<DD><I>disk arrays, 292-293</I>
+<DD><I>traditional disks, 291-292</I>
+</DL>
+<DD>segments, rollback segments, 295
+<DD>tuning considerations
+<DL>
+<DD><I>Oracle, 294-295</I>
+<DD><I>server operating system, 295-296</I>
+</DL>
+</DL>
+<DD><B>declarations</B>
+<DL>
+<DD>functi
+1000
+ons, 454
+<DD>packages, 458
+<DD>procedures, 453
+</DL>
+<DD><B>deferred frames, 611</B>
+<DD><B>DELETE statement, 611</B>
+<DL>
+<DD>displaying execution plan with EXPLAIN PLAN command, 414-416
+</DL>
+<DD><B>Delivery transaction (TPC-C benchmark), 62</B>
+<DD><B>Delphi, 495-496, 547</B>
+<DL>
+<DD>Delphi Forms Developer, 547-548
+</DL>
+<DD><B>design considerations, 82</B>
+<DL>
+<DD>applications, 83, 426
+<DL>
+<DD><I>clusters, 430</I>
+<DD><I>discrete transactions, 435-436</I>
+<DD><I>functions, 432-433</I>
+<DD><I>hash clusters, 431-432</I>
+<DD><I>indexes, 426-429</I>
+<DD><I>optimization techniques, 433-434</I>
+<DD><I>packages, 432-433</I>
+<DD><I>procedures, 432-433</I>
+</DL>
+<DD>backup process, 354
+<DL>
+<DD><I>cold (offline) backups, 354-355</I>
+<DD><I>hot (online) backups, 355-358</I>
+<DD><I>summary, 358</I>
+</DL>
+<DD>batch processing systems
+<DL>
+<DD><I>hardware, 274</I>
+<DD><I>physical data layout, 270-273</I>
+</DL>
+<DD>BLOB systems, 327
+<DL>
+<DD><I>hardware, 331</I>
+<DD><I>physical data layout, 328-331</I>
+</DL>
+<DD>clusters, 83
+<DD>data warehouses, 308
+<DD>database layout, 82
+<DD>decision support systems, 290
+<DL>
+<DD><I>hardware, 294</I>
+</DL>
+<DD>distributed systems, 378-379
+<DD>financial systems, 369-371
+<DD>hardware selection, 83-84
+<DD>indexes, 83
+<DD>networks, 84, 576
+<DL>
+<DD><I>bandwidth, 576-577</I>
+<DD><I>bridges, 577</I>
+<DD><I>hubs, 577</I>
+<DD><I>routers, 577</I>
+<DD><I>segmenting networks, 577</I>
+</DL>
+<DD>office systems, 384
+<DD>Parallel Server option, 343
+<DL>
+<DD><I>goals, 343-345</I>
+</DL>
+<DD>physical data layout, 308-309
+<DD>replicated systems, 375-377
+<DL>
+<DD><I>goals of optimally tuned systems, 375</I>
+</DL>
+<DD>systems, list of, 590-591
+<DD>TextServer 3.0 systems, 380-381
+<DD>WebServer systems, 387-388
+<DL>
+<DD><I>goals of optimally tuned systems, 387</I>
+</DL>
+</DL>
+<DD><B>Designer/2000, 16, 82, 490-492</B>
+<DL>
+<DD>generators, 492
+<DD>Process Modeller, 491
+<DD>Systems Designer, 491-492
+<DD>Systems Modeller, 491
+</DL>
+<DD><B>Developer/2000, 16, 82, 495</B>
+<DL>
+<DD>features, 536-544
+<DD>Forms Designer tool, 536-538
+<DD>Graphics Designer tool, 537, 540-542
+<DD>Procedure Builder tool, 537, 542-544
+<DD>Reports Designer tool, 536, 538-540
+</DL>
+<DD><B>development tools, <I>see</I> application development tools</B>
+<DD><B>device drivers, 611</B>
+<DD><B>Dircect FS interface, 171</B>
+<DD><B>direct I/O, <I>see</I> synchronous I/O</B>
+<DD><B>Direct Write Sort option (Parallel Query option), 158</B>
+<DD><B>direct write sorts, 143, 158</B>
+<DL>
+<DD>batch processing systems, 277
+<DD>data warehouses, 315
+<DD>decision support systems, 296
+</DL>
+<DD><B>disabling</B>
+<DL>
+<DD>SQL Trace
+<DL>
+<DD><I>for an instance, 406</I>
+<DD><I>per-session basis, 405-406</I>
+</DL>
+<DD>SQL Trace command, 410
+</DL>
+<DD><B>discrete transactions, 435-436</B>
+<DD><B>DISCRETE_TRANSACTIONS_ ENABLED parameter, 621</B>
+<DD><B>disk arrays</B>
+<DL>
+<DD>advantages, 226
+<DD>batch processing systems, 272-273
+<DD>BLOB systems, 329-331
+<DD>configuring RAID, 235-236
+<DL>
+<DD><I>distributing random I/Os, 237-238</I>
+<DD><I>isolating sequential I/Os, 236-237</I>
+<DD><I>sizing logical volume, 238-239</I>
+</DL>
+<DD>configuring systems, 240
+<DD>data warehouses, 310-311
+<DD>decision support systems, 292-293
+<DD>defined, 24, 225-226, 611
+<DD>fault-tolerance concerns, 233
+<DL>
+<DD><I>Full Data Protection mode, 233-234</I>
+<DD><I>No Data Protection mode, 233</I>
+<DD><I>Partial Data Protection mode, 233-235</I>
+<DD><I>summary, 235</I>
+</DL>
+<DD>hardware arrays
+<DL>
+<DD><I>controller, 227-228</I>
+<DD><I>controller caches, 228</I>
+<DD><I>read/write caches, 229</I>
+<DD><I>write caches, 228-229</I>
+</DL>
+<DD>hot-swappable disk drives, 228
+<DD>I/O rates, 234
+<DD>logical disks, defined, 24
+<DD>OLTP systems, 252-253
+<DD>operations, 226
+<DD>RAID, 229
+<DL>
+<DD><I>comparing RAID levels, 240-241</I>
+<DD><I>RAID-0, 230</I>
+<DD><I>RAID-1, 230-231</I>
+<DD><I>RAID-2, 231</I>
+<DD><I>RAID-3, 231</I>
+<DD><I>RAID-4, 232</I>
+<D
+1000
+D><I>RAID-5, 232</I>
+<DD><I>summarizing RAID levels, 232</I>
+</DL>
+<DD>software arrays, 227
+</DL>
+<DD><B>disk bound systems, 108</B>
+<DD><B>disk I/O, 108-109</B>
+<DL>
+<DD>contention, 109-110
+<DL>
+<DD><I>checkpoints, 133-134</I>
+<DD><I>free list contention, 136-137</I>
+<DD><I>identifying problems, 110-111</I>
+<DD><I>isolating sequential I/Os, 112</I>
+<DD><I>latch contention, 130-132</I>
+<DD><I>rollback segments, 123-130</I>
+<DD><I>separating data from indexes, 116</I>
+<DD><I>striping random I/Os, 112-116</I>
+</DL>
+<DD>data transfer rate, 217-218
+<DD>disk operation, 214-215
+<DD>interfaces, list of, 171
+<DD>queue time, 218
+<DD>random I/Os, 220
+<DD>rotational latency, 217
+<DL>
+<DD><I>averages, 219</I>
+</DL>
+<DD>seek time, 216-217
+<DL>
+<DD><I>averages, 219</I>
+</DL>
+<DD>sequential I/Os, 220-222
+<DD>SQL statement, 597-598
+</DL>
+<DD><B>disk parameter, SQL Trace, 409</B>
+<DD><B>disks</B>
+<DL>
+<DD>block size, testing in backup process, 363
+<DD>defined, 214
+<DD>drive, 214
+<DL>
+<DD><I>buffer, 215</I>
+<DD><I>cylinder, 215</I>
+<DD><I>data transfer rate, 217-218</I>
+<DD><I>hot-swappable disk drives, 228</I>
+<DD><I>platters, 214</I>
+<DD><I>queue time, 218</I>
+<DD><I>rotational latency, 217</I>
+<DD><I>tracks, 214</I>
+</DL>
+<DD>fragmentation, 144-146
+<DD>hot spots, 108
+<DD>logical disks, 24, 612
+<DD>storage capacity, 98
+</DL>
+<DD><B>Dispatcher processes (Dnnn process), 12</B>
+<DD><B>Distributed Lock Manager, <I>see</I> DLM</B>
+<DD><B>distributed option</B>
+<DL>
+<DD>defined, 14
+<DD>parameters, list of, 638-639
+</DL>
+<DD><B>distributed systems</B>
+<DL>
+<DD>characteristics, 378
+<DD>defined, 368, 377-378
+<DD>design considerations, 378-379
+<DD>summary of, 379
+<DD>transactions, 378
+<DD>tuning considerations, 378-379
+</DL>
+<DD><B>DISTRIBUTED_LOCK_ TIMEOUT parameter, 638</B>
+<DD><B>DISTRIBUTED_ RECOVERY_CONNECTION_ HOLD_TIME para- meter, 638</B>
+<DD><B>DISTRIBUTED_ TRANSACTIONS parameter, 639</B>
+<DD><B>DLM (Distributed Lock Manager), 162</B>
+<DL>
+<DD>Parallel Server option, 341-342
+</DL>
+<DD><B>DML (Data Manipulation Language) commands, 23, 611</B>
+<DD><B>DML_LOCKS parameter, 622</B>
+<DD><B>Dnnn process (Dispatcher processes), 12</B>
+<DD><B>drivers, device drivers, 611</B>
+<DD><B>drives, disk drives</B>
+<DL>
+<DD>buffer, 215
+<DD>cylinder, 215
+<DD>data transfer rate, 217-218
+<DD>defined, 214
+<DD>hot-swappable disk drives, 228
+<DD>platters, 214
+<DD>queue time, 218
+<DD>rotational latency, 217
+<DD>testing block size for backup process, 363
+<DD>tracks, 214
+</DL>
+<DD><B>DSS, <I>see</I> decision support systems</B>
+<DD><B>durability, 56</B>
+<DD><B>dynamic performance tables</B>
+<DL>
+<DD>buffer cache statistics, 107
+<DD>defined, 24, 611
+<DD>V$FILESTAT, disk access information, 597
+<DD>V$LATCH, latch contention data, 601
+<DD>V$ROLLSTAT, dynamic rollback growth data, 600
+<DD>V$ROLLSTAT table, rollback segment data, 129
+<DD>V$SYSSTAT, recursive calls data, 599
+<DD>V$WAITSTAT
+<DL>
+<DD><I>rollback contention data, 599</I>
+<DD><I>rollback segment data, 127</I>
+</DL>
+<DD>views, table of, 74-75
+</DL>
+</DL>
+<P><FONT SIZE="+1"><B>E</B></FONT></P>
+<DL>
+<DD><B>educational services, 19</B>
+<DD><B>elapsed parameter, SQL Trace, 409</B>
+<DD><B>elapsed time, SQL Trace, 412</B>
+<DD><B>enabling</B>
+<DL>
+<DD>SQL Trace
+<DL>
+<DD><I>for an instance, 406</I>
+<DD><I>per-session basis, 405</I>
+</DL>
+<DD>SQL Trace command, 409
+</DL>
+<DD><B>enhancements, 583</B>
+<DL>
+<DD>block size, 584
+<DD>clusters, 584
+<DD>fragmentation reductions, 584-585
+<DD>hash clusters, 585
+<DD>indexes, 585
+<DD>multiblock reads and writes, 586
+<DD>Parallel Query option, 586-587
+<DD>Parallel Server option, 587-588
+<DD>spin counts, 588
+</DL>
+<DD><B>ENQUEUE_RESOURCES parameter, 631</B>
+<DD><B>equijoins, 505, 611</B>
+<DD><B>errors, hints, 477-478</B>
+<DD><B>ERwin/ERX tool, 493</B>
+<DD><B>Ethernet, 566-568, 611</B>
+<DL>
+<DD>packets, 567
+</DL>
+<DD><B>Etherplex board, OLTP enhancements, 259</B>
+<DD><B>EVENT parameter, 628</B>
+<DD><B>events, logging triggers, 469</B>
+1000
+
+<DD><B>exception handlers, 455</B>
+<DD><B>EXCEPTION statement, 455</B>
+<DD><B>Exclusive Lock mode, Parallel Server option, 342</B>
+<DD><B>executing SQL statements, 401</B>
+<DD><B>execution plans, displaying, 414-416</B>
+<DD><B>EXPLAIN PLAN command</B>
+<DL>
+<DD>analyzing SQL statement execution, 424
+<DD>defined, 77, 394-395, 404, 414
+<DD>extracting results of, 416
+<DD>initialization, 414-415
+<DD>invoking, 415-416
+</DL>
+<DD><B>explicit locking, 509</B>
+<DD><B>exports, 350</B>
+<DD><B>extents, 8, 611</B>
+<DL>
+<DD><I>see also</I> data blocks; segments
+</DL>
+</DL>
+<P><FONT SIZE="+1"><B>F</B></FONT></P>
+<DL>
+<DD><B>fast checkpoints, 26, 134</B>
+<DD><B>fault-tolerance</B>
+<DL>
+<DD>comparisons for disk array RAID levels, 240-241
+<DD>data warehouses, 311
+<DD>disk arrays, 233
+<DL>
+<DD><I>Full Data Protection mode, 233-234</I>
+<DD><I>No Data Protection mode, 233</I>
+<DD><I>Partial Data Protection mode, 233-235</I>
+<DD><I>summary, 235</I>
+</DL>
+<DD>goals, 43
+<DD>Parallel Server option, 340
+</DL>
+<DD><B>FDR (Full Disclosure Report), TPC benchmarks, 56-57</B>
+<DD><B>fiber optic networks (FDDI networks), 569-570</B>
+<DD><B>Fibre Channel networks, 570</B>
+<DD><B>file systems, UNIX, 198</B>
+<DD><B>files</B>
+<DL>
+<DD>logical layer, data files, 5-6
+<DD>physical layer, 5
+<DD>redo log files, 614
+</DL>
+<DD><B>financial systems, 17</B>
+<DL>
+<DD>archive logs, 372
+<DD>block
+<DL>
+<DD><I>buffers, 371</I>
+<DD><I>size, 372</I>
+</DL>
+<DD>characteristics, 369
+<DD>checkpoints, 372
+<DD>clusters, 372
+<DD>contention
+<DL>
+<DD><I>latch contention, 371</I>
+<DD><I>rollback contention, 371</I>
+</DL>
+<DD>defined, 368
+<DD>design considerations, 369-371
+<DL>
+<DD><I>goals for optimally tuned systems, 369</I>
+</DL>
+<DD>enhancements, 372-373
+<DD>hash clusters, 372
+<DD>indexes, 372
+<DD>library cache, 371
+<DD>reads and writes, 372
+<DD>Parallel Query option, 372
+<DD>segments, rollback segments, 371
+<DD>spin counts, 371
+<DD>summary of, 373
+<DD>tuning considerations, 371-372
+</DL>
+<DD><B>FIRST_ROWS hint, 479-480</B>
+<DD><B>FIXED_DATE parameter, 628</B>
+<DD><B>flowcharts</B>
+<DL>
+<DD>Oracle optimizer, 605
+<DD>problem-solving methodology, 604
+<DD>SQL statement processing, 605
+<DD>user-transaction profile, 605
+</DL>
+<DD><B>FOREIGN constraint, 465</B>
+<DD><B>foreign keys, 611</B>
+<DD><B>Forms Designer tool</B>
+<DL>
+<DD>Designer/2000, 536-538
+<DD>Oracle Power Objects, 544-545
+</DL>
+<DD><B>Forms Developer (Delphi), 547-548</B>
+<DD><B>Forms Generator tool, 492</B>
+<DD><B>formulas, checksums, 23, 609</B>
+<DD><B>fragmentation, 144-146</B>
+<DL>
+<DD>reducing, 584-585
+</DL>
+<DD><B>frames</B>
+<DL>
+<DD>deferred frames, 611
+<DD>defined, 613
+</DL>
+<DD><B>free list contention, 136-137</B>
+<DL>
+<DL>
+<DD><I>SQL statement, 602</I>
+</DL>
+</DL>
+<DD><B>front-end computer, <I>see</I> clients</B>
+<DD><B>full backups, 350</B>
+<DD><B>Full Data Protection mode (fault-tolerance), 234</B>
+<DD><B>Full Disclosure Report (FDR), 67-69</B>
+<DL>
+<DD>TPC benchmarks, 56-57
+</DL>
+<DD><B>FULL hint, 481</B>
+<DD><B>functions, 432-433</B>
+<DL>
+<DD>aggregate functions, 608
+<DD>body, 454
+<DD>comparisons to, 452
+<DD>declarations, 454
+<DD>defined, 24, 452-454, 611
+<DD>EXCEPTION, 455
+<DD>packages, 24
+<DD>parameters, 454
+<DD>PL/SQL language, 454-455
+<DD>RDBMS_OUTPUT package, 456
+<DD>RETURN, 454-455
+<DD>return values, 454
+<DD>stored functions
+<DL>
+<DD><I>creating, 456-457</I>
+<DD><I>defined, 452</I>
+<DD><I>properties, 452</I>
+<DD><I>replacing, 457</I>
+</DL>
+<DD>syntax, 453
+<DD><I>see also</I> procedures
+</DL>
+</DL>
+<P><FONT SIZE="+1"><B>G</B></FONT></P>
+<DL>
+<DD><B>GB (gigabyte), 30</B>
+<DD><B>GC_DB_LOCKS parameter, 347, 639</B>
+<DD><B>GC_FILES_TO_LOCKS parameter, 347, 640</B>
+<DD><B>GC_LCK_PROCS parameter, 347, 640</B>
+<DD><B>GC_ROLLBACK_LOCKS parameter, 347, 640</B>
+<DD><B>GC_ROLLBACK_SEGMENTS parameter, 640</B>
+<DD><B>GC_SAVE_ROLLBACK_LOCKS parameter, 640</B>
+<DD><B>GC_SEGMENTS parameter, 640</B>
+<DD><B>GC_TABLESPACES parameter, 640</B>
+<DD><B>generating data, t
+1000
+riggers, 469</B>
+<DD><B>generators, 492</B>
+<DD><B>gigabyte (GB), 30</B>
+<DD><B>GLOBAL_NAMES parameter, 632</B>
+<DD><B>goals (tuning), 42</B>
+<DL>
+<DD>backup process, 353-354
+<DD>connectivity, 43
+<DD>design goals
+<DL>
+<DD><I>financial systems, 369</I>
+<DD><I>Parallel Server option, 343-345</I>
+<DD><I>replicated systems, 375</I>
+<DD><I>WebServer systems, 387</I>
+</DL>
+<DD>fault tolerance, 43
+<DD>load time, 44
+<DD>response time, 42-43
+<DD>setting goals for optimal performance, 48-50
+<DD>throughput, 42
+<DD>tuning considerations
+<DL>
+<DD><I>batch processing systems, 268-269</I>
+<DD><I>BLOB systems, 325-326</I>
+<DD><I>data warehouses, 307-308</I>
+<DD><I>decision support systems, 289</I>
+<DD><I>OLTP systems, 248-249</I>
+<DD><I>operating systems, 589</I>
+</DL>
+</DL>
+<DD><B>Graphics Designer tool (Designer/2000), 537, 540-542</B>
+</DL>
+<P><FONT SIZE="+1"><B>H</B></FONT></P>
+<DL>
+<DD><B>HAL (Hardware Abstraction Layer), 184</B>
+<DD><B>hardware</B>
+<DL>
+<DD>backup process
+<DL>
+<DD><I>cold (offline) backups, 355</I>
+<DD><I>hot (online) backups, 357-358</I>
+</DL>
+<DD>batch processing systems, 274
+<DL>
+<DD><I>enhancements, 279-281</I>
+</DL>
+<DD>BLOB systems, 331
+<DL>
+<DD><I>enhancements, 334</I>
+</DL>
+<DD>bottlenecks
+<DL>
+<DD><I>client, 524</I>
+<DD><I>finding, 93</I>
+</DL>
+<DD>buying considerations, 83-84
+<DD>CPU (Central Processing Unit), 206-207
+<DD>data warehouses, 312
+<DL>
+<DD><I>enhancements, 317-319</I>
+</DL>
+<DD>decision support systems, 294
+<DL>
+<DD><I>enhancements, 298-300</I>
+</DL>
+<DD>network components, 566
+<DL>
+<DD><I>Ethernet networks, 566-568</I>
+<DD><I>fiber optic networks, 569-570</I>
+<DD><I>new technologies, 570</I>
+<DD><I>Token Ring networks, 568-569</I>
+</DL>
+<DD>OLTP systems, 253, 257
+<DL>
+<DD><I>CPU enhancements, 257-258</I>
+<DD><I>Etherplex board, 259</I>
+<DD><I>I/O enhancements, 258-259</I>
+<DD><I>network enhancements, 259</I>
+</DL>
+<DD>striping, 114-115
+<DD>tuning, 531-532
+<DL>
+<DD><I>resources, 94</I>
+</DL>
+</DL>
+<DD><B>Hardware Abstraction Layer (HAL), 184</B>
+<DD><B>hardware disk arrays, controller, 227-228</B>
+<DL>
+<DD>caches, 228
+<DD>read/write caches, 229
+<DD>write caches, 228-229
+</DL>
+<DD><B>hash clusters, 146-147, 585</B>
+<DL>
+<DD>advantages, 147-148
+<DD>batch processing systems, 277
+<DD>creating, 431-432
+<DD>data warehouses, 315
+<DD>decision support systems, 296
+<DD>disadvantages, 147-148
+<DD>financial systems, 372
+<DD>OLTP systems, 256
+<DD>TextServer 3.0 systems, 381
+<DD>WebServer systems, 389
+<DD><I>see also</I> clusters
+</DL>
+<DD><B>HASH hint, 482</B>
+<DD><B>hierarchy</B>
+<DL>
+<DD>databases
+<DL>
+<DD><I>logical layer, 5-8</I>
+<DD><I>physical layer, 4-5</I>
+</DL>
+<DD>instance, 8
+<DL>
+<DD><I>memory structure, 8-10</I>
+<DD><I>processes, 10-13</I>
+<DD><I>transactions, 12-13</I>
+</DL>
+</DL>
+<DD><B>high-performance compression, backup process, 365</B>
+<DD><B>high-speed compression, batch processing systems, 280-281</B>
+<DD><B>high-speed tape, batch processing systems, 280-281</B>
+<DD><B>hints</B>
+<DL>
+<DD>access methods, 481
+<DL>
+<DD><I>AND_EQUAL hint, 481</I>
+<DD><I>CLUSTER hint, 481</I>
+<DD><I>FULL hint, 481</I>
+<DD><I>HASH hint, 482</I>
+<DD><I>INDEX hint, 482</I>
+<DD><I>INDEX_ASC hint, 483</I>
+<DD><I>INDEX_DESC hint, 483</I>
+<DD><I>ORDERED hint, 484</I>
+<DD><I>ROWID hint, 483</I>
+<DD><I>USE_CONCAT hint, 483-484</I>
+<DD><I>USE_MERGE hint, 484</I>
+<DD><I>USE_NL hint, 485</I>
+</DL>
+<DD>advantages, 476
+<DD>errors, 477-478
+<DD>examples, 477-478
+<DD>implementing, 476-478
+<DD>multiple, 478
+<DD>optimization techniques, 447-478
+<DL>
+<DD><I>ALL_ROWS hint, 479</I>
+<DD><I>CHOOSE hint, 479</I>
+<DD><I>FIRST_ROWS hint, 479-480</I>
+<DD><I>RULE hint, 480-481</I>
+</DL>
+<DD>Parallel Query option, 485
+<DL>
+<DD><I>CACHE hint, 485</I>
+<DD><I>NOCACHE hint, 486</I>
+<DD><I>NOPARALLEL hint, 486</I>
+<DD><I>PARALLEL hint, 485-486</I>
+<DD><I>PUSH_SUBQ hint, 486</I>
+</DL>
+<DD>syntax, 477
+</DL>
+<DD><B>host-based systems, <I>see</I> terminal-based systems</B>
+<DD><B>hot 
+1000
+(online) backups, 350-353, 355-356</B>
+<DL>
+<DD>hardware considerations, 357-358
+<DD>physical data access, 356
+<DL>
+<DD><I>isolating networks, 357</I>
+<DD><I>isolating tablespaces, 356</I>
+<DD><I>temporary backup space, 357</I>
+</DL>
+<DD>software considerations, 357-358
+</DL>
+<DD><B>hot data, 611</B>
+<DD><B>hot databases, 611</B>
+<DD><B>hot spots, 108</B>
+<DD><B>hot-swappable disk drives, 228</B>
+<DD><B>HPPI (High Performance Parallel Interface) networks, 570</B>
+<DD><B>hubs, network design considerations, 577</B>
+</DL>
+<P><FONT SIZE="+1"><B>I</B></FONT></P>
+<DL>
+<DD><B>I/O (Input/Output)</B>
+<DL>
+<DD>asynchronous I/O, 171-172
+<DD>backup process, enhancements, 359-360
+<DD>batch processing systems, 276
+<DL>
+<DD><I>enhancements, 279-280</I>
+</DL>
+<DD>BLOB systems, 333
+<DL>
+<DD><I>enhancements, 334-335</I>
+</DL>
+<DD>checkpoints, 133-134
+<DD>contention, 109-110
+<DL>
+<DD><I>free list contention, 136-137</I>
+<DD><I>identifying contention problems, 110-111</I>
+<DD><I>latch contention, 130-132</I>
+</DL>
+<DD>data transfer rate, 217-218
+<DD>data warehouses, 314
+<DL>
+<DD><I>enhancements, 317-318</I>
+</DL>
+<DD>decision support systems, 296
+<DL>
+<DD><I>enhancements, 299-300</I>
+</DL>
+<DD>defined, 108-109, 170-171, 612
+<DD>Dircect FS interface, 171
+<DD>disk arrays, 234
+<DD>interfaces, list of, 171
+<DD>OLTP systems, 255
+<DL>
+<DD><I>enhancements, 258-259</I>
+</DL>
+<DD>operating systems, 589
+<DL>
+<DD><I>NetWare, 182-183</I>
+<DD><I>OS/2, 190-191</I>
+<DD><I>UNIX, 197-200</I>
+<DD><I>Windows NT, 186-187, 528</I>
+</DL>
+<DD>operation, 214-215
+<DD>queue time, 218
+<DD>random I/O
+<DL>
+<DD><I>defined, 24, 220, 598, 614</I>
+<DD><I>disk rates, 598</I>
+<DD><I>distributing in disk arrays, 237-238</I>
+<DD><I>spreading out, 590, 598</I>
+<DD><I>striping data, 112-116</I>
+</DL>
+<DD>raw devices, 171
+<DD>reducing overhead, 117
+<DL>
+<DD><I>chaining rows, 117-118</I>
+<DD><I>checking for recursive calls, 118-119</I>
+<DD><I>dynamic extensions, 118-119</I>
+<DD><I>migrating rows, 117-118</I>
+<DD><I>PCTFREE command option, 119-122</I>
+<DD><I>PCTUSED command option, 119-122</I>
+<DD><I>techniques, 122</I>
+</DL>
+<DD>replicated system enhancement, 377
+<DD>rotational latency, 217-219
+<DD>seek time, 216-217, 219
+<DD>separating data from indexes, 116
+<DD>sequential I/O
+<DL>
+<DD><I>defined, 25, 111, 220-222, 598, 615</I>
+<DD><I>disk rates, 598</I>
+<DD><I>isolating, 112, 590, 598</I>
+<DD><I>isolating for disk arrays, 236-237</I>
+</DL>
+<DD>SQL statement, 597-598
+<DD>synchronous I/O, 171-172
+<DD>tuning considerations, 590
+</DL>
+<DD><B>I/O bound systems, 108</B>
+<DD><B>IFILE parameter, 632</B>
+<DD><B>INDEX hint, 482</B>
+<DD><B>index segments, 8</B>
+<DD><B>INDEX_ASC hint, 483</B>
+<DD><B>INDEX_DESC hint, 483</B>
+<DD><B>indexes, 585</B>
+<DL>
+<DD>avoiding, 429
+<DD>B*-Tree structure, 149
+<DD>batch processing systems, 277
+<DD>BLOB systems, 333
+<DD>blocks, 149
+<DD>choosing
+<DL>
+<DD><I>columns to index, 428</I>
+<DD><I>tables to index, 427-428</I>
+</DL>
+<DD>cluster indexes
+<DL>
+<DD><I>advantages, 141-165</I>
+<DD><I>creating, 430</I>
+<DD><I>defined, 141, 427, 584</I>
+<DD><I>disadvantages, 142-143</I>
+<DD><I>see also</I> hash clusters
+</DL>
+<DD>composite indexes
+<DL>
+<DD><I>advantages, 151</I>
+<DD><I>creating, 428-429</I>
+<DD><I>defined, 149, 427</I>
+</DL>
+<DD>creating, 149-150, 426-429
+<DL>
+<DD><I>parallel index creation, 159</I>
+</DL>
+<DD>data selection guidelines, 150-152
+<DD>data warehouses, 315
+<DD>decision support systems, 296
+<DD>defined, 6, 148-152, 612
+<DD>design stage, 83
+<DD>financial systems, 372
+<DD>nonunique indexes, defined, 149, 427
+<DD>OLTP systems, 256
+<DD>separating data from, 116
+<DD>TextServer 3.0 system, 381
+<DD>types, 149
+<DD>unique indexes, 149, 427
+</DL>
+<DD><B>INIT_SQL_FILES parameter, 632</B>
+<DD><B>initialization parameters, 612</B>
+<DD><B>initializing</B>
+<DL>
+<DD>EXPLAIN PLAN command, 414-415
+<DD>SQL Trace parameters, 404-405
+</DL>
+<DD><B>Input/Output, <I>see</I> I/O</B>
+<DD><B>INSERT statement</B>
+<DL>
+1000
+
+<DD>defined, 612
+<DD>execution plan, displaying with EXPLAIN PLAN command, 414-416
+</DL>
+<DD><B>Inspect/SQL tool, 498</B>
+<DD><B>instance</B>
+<DL>
+<DD>archive logs, 134-135
+<DD>buffer cache, SQL statement, 597
+<DD>chained rows, SQL statement, 599
+<DD>checkpoints, 133-134
+<DD>data dictionary cache, SQL statement, 596-597
+<DD>defined, 4, 8, 612
+<DD>disk I/O
+<DL>
+<DD><I>SQL statement, 597-598</I>
+<DD><I>storing data, 98</I>
+</DL>
+<DD>free list contention, 136-137
+<DL>
+<DD><I>SQL statement, 602</I>
+</DL>
+<DD>latch contention, 130-131
+<DL>
+<DD><I>SQL statement, 601</I>
+</DL>
+<DD>library cache, SQL statement, 596
+<DD>memory
+<DL>
+<DD><I>buffer cache, 107-108</I>
+<DD><I>operating system, 99</I>
+<DD><I>private PL/SQL area, 100</I>
+<DD><I>private SQL area, 100</I>
+<DD><I>shared pool, 100-106</I>
+<DD><I>sorts, 135-136</I>
+<DD><I>storing data, 98</I>
+</DL>
+<DD>migrated rows, SQL statement, 599
+<DD>processes
+<DL>
+<DD><I>background processes, 11-12</I>
+<DD><I>defined, 10</I>
+<DD><I>server (shadow) processes, 11</I>
+<DD><I>user (client) processes, 10</I>
+</DL>
+<DD>recursive calls, SQL statement, 599
+<DD>redo log buffer contention, 130-131, 600-601
+<DL>
+<DD><I>latch contention, 131-132</I>
+</DL>
+<DD>rollback contention, SQL statement, 599-600
+<DD>rollback segments, 123-126
+<DL>
+<DD><I>avoiding dynamic growth, 129</I>
+<DD><I>contention, 123-130</I>
+<DD><I>dynamic growth of, 600</I>
+<DD><I>extent size and number, 128-129</I>
+<DD><I>number of, 127-128</I>
+<DD><I>optimizing, 130</I>
+<DD><I>size, 128</I>
+</DL>
+<DD>shared memory structure, 8
+<DL>
+<DD><I>PGA (Program Global Area), 10</I>
+<DD><I>SGA (System Global Area), 9-10</I>
+</DL>
+<DD>sorts, SQL statement, 601-602
+<DD>transactions, 25
+</DL>
+<DD><B>INSTANCE_NUMBER parameter, 641</B>
+<DD><B>integrity, 462</B>
+<DL>
+<DD>constraints, 466
+<DL>
+<DD><I>implementing at table creation, 466</I>
+<DD><I>implementing at table modification, 466-467</I>
+<DD><I>list of, 465</I>
+<DD><I>summary, 469</I>
+<DD><I>viewing, 467-469</I>
+</DL>
+<DD>referential integrity
+<DL>
+<DD><I>defined, 462, 614</I>
+<DD><I>tables, 463-464</I>
+</DL>
+<DD>serial reads, 473
+<DD><I>see also</I> triggers
+</DL>
+<DD><B>interfaces</B>
+<DL>
+<DD>I/O, list of interfaces, 171
+<DD>raw device interface, UNIX, 198
+</DL>
+<DD><B>IP/SQL statements, procedures, 24</B>
+<DD><B>ISM (Intimate Shared Memory), UNIX operating systems, 201</B>
+<DD><B>isolation, 56</B>
+</DL>
+<P><FONT SIZE="+1"><B>J</B></FONT></P>
+<DL>
+<DD><B>JOB_QUEUE_INTERVAL parameter, 632</B>
+<DD><B>JOB_QUEUE_KEEP_ CONNECTIONS parameter, 632</B>
+<DD><B>JOB_QUEUE_PROCESSES parameter, 632</B>
+<DD><B>joins</B>
+<DL>
+<DD>Cartesian products, 505, 609
+<DD>defined, 505, 612
+<DD>equijoins, 505, 611
+<DD>join conditions, 612
+<DD>nonequijoins, 613
+<DD>operations, hints, 484-485
+<DD>orders, hints, 484
+<DD>outer joins, 505, 507, 613
+<DD>self joins, 505-506, 615
+<DD>summary, 507
+<DD>tuning for response time or throughput, 507
+</DL>
+</DL>
+<P><FONT SIZE="+1"><B>K</B></FONT></P>
+<DL>
+<DD><B>KB (kilobyte), 30</B>
+<DD><B>kernels</B>
+<DL>
+<DD>OS/2, 188
+<DD>Windows NT, 183
+</DL>
+<DD><B>keys</B>
+<DL>
+<DD>foreign keys, 611
+<DD>primary keys 614
+</DL>
+<DD><B>keywords, triggers, 470</B>
+</DL>
+<P><FONT SIZE="+1"><B>L</B></FONT></P>
+<DL>
+<DD><B>LABEL_CACHE_SIZE parameter, 642</B>
+<DD><B>LANs (Local Area Networks), 612</B>
+<DD><B>latch contention, 130-131</B>
+<DL>
+<DD>batch processing systems, 275
+<DD>BLOB systems, 332
+<DD>decision support systems, 295
+<DD>financial systems, 371
+<DD>office systems, 385
+<DD>OLTP systems, 255
+<DD>redo log buffer contention, 130-131
+<DL>
+<DD><I>latch contention, 131-132</I>
+</DL>
+<DD>replicated systems, 376
+<DD>SQL statement, 601
+<DD>TextServer 3.0 systems, 381
+<DD>WebServer systems, 389
+</DL>
+<DD><B>latency, 214</B>
+<DL>
+<DD>rotational latency, 217
+<DL>
+<DD><I>averages, 219</I>
+</DL>
+</DL>
+<DD><B>layers</B>
+<DL>
+<DD>HAL (Hardware Abstraction Layer), 611
+<DD>logical layer
+<DL>
+<DD><I>data blocks, 8</I>
+<DD><I>data dictiona
+1000
+ry, 5</I>
+<DD><I>data files, 5-6</I>
+<DD><I>defined, 5</I>
+<DD><I>extents, 8</I>
+<DD><I>schemas, 25</I>
+<DD><I>segments, 7</I>
+<DD><I>tablespaces, 5-6</I>
+</DL>
+<DD>physical layer
+<DL>
+<DD><I>control files, 5</I>
+<DD><I>data files, 5</I>
+<DD><I>defined, 4</I>
+<DD><I>redo log files, 5</I>
+</DL>
+</DL>
+<DD><B>layouts, 82</B>
+<DL>
+<DD>batch processing systems, 270-271
+<DL>
+<DD><I>disk arrays, 272-273</I>
+<DD><I>traditional disks, 271-272</I>
+</DL>
+<DD>BLOB system, 328
+<DL>
+<DD><I>disk arrays, 329-331</I>
+<DD><I>traditional disks, 328-329</I>
+</DL>
+<DD>data warehouses, 308-309
+<DL>
+<DD><I>disk arrays, 310-311</I>
+<DD><I>traditional disks, 309-310</I>
+</DL>
+<DD>decision support system, 291
+<DL>
+<DD><I>disk arrays, 292-293</I>
+<DD><I>traditional disks, 291-292</I>
+</DL>
+<DD>OLTP system, 250
+<DL>
+<DD><I>disk arrays, 252-253</I>
+<DD><I>traditional disks, 250-252</I>
+</DL>
+</DL>
+<DD><B>LCK (Parallel Server Lock processes), 12</B>
+<DD><B>leaf blocks, indexes, 149</B>
+<DD><B>Level 1 cache, 206</B>
+<DD><B>Level 2 cache, 206</B>
+<DD><B>LGWR process (Log Writer), 11</B>
+<DD><B>library cache, 100-102, 450-452, 582</B>
+<DL>
+<DD>batch processing systems, 275
+<DD>BLOB systems, 332
+<DD>cache hits, 451
+<DL>
+<DD><I>increasing, 100-102</I>
+</DL>
+<DD>data warehouses, 313
+<DD>decision support systems, 295
+<DD>financial systems, 371
+<DD>misses, 451
+<DD>office systems, 384
+<DD>OLTP systems, 254
+<DD>replicated systems, 376
+<DD>SQL statement, 596
+<DD>SQL Trace, statistics on library cache, 413
+<DD>stored functions or procedures
+<DL>
+<DD><I>creating, 456-457</I>
+<DD><I>replacing, 457</I>
+</DL>
+<DD>TextServer 3.0 systems, 381
+<DD>WebServer systems, 388
+</DL>
+<DD><B>LICENSE_MAX_SESSIONS parameter, 632</B>
+<DD><B>LICENSE_MAX_USERS parameter, 633</B>
+<DD><B>LICENSE_SESSIONS_ WARNING parameter, 633</B>
+<DD><B>lightweight process, 612</B>
+<DL>
+<DD><I>see also</I> processes; threads
+</DL>
+<DD><B>load balancing, disabling in UNIX, 202</B>
+<DD><B>load time, goals, 44</B>
+<DD><B>loads</B>
+<DL>
+<DD>backup process, 353
+<DD>batch processing systems, 267-268
+<DD>BLOB systems, 324-325
+<DD>data warehouses, 306-307
+<DD>decision support systems, 288-289
+<DD>OLTP systems, 247-248
+<DD>parallel loading, 159
+</DL>
+<DD><B>Local Area Networks, <I>see</I> LANs</B>
+<DD><B>local transactions, distributed systems, 378</B>
+<DD><B>locking</B>
+<DL>
+<DD>deadlocks, 510
+<DD>defined, 508
+<DD>DLM (Distributed Lock Manager), 162
+<DD>explicit locking, 509
+<DD>Parallel Server option, 342
+<DL>
+<DD><I>DLM (Distributed Lock Manager), 341</I>
+<DD><I>PCM (Parallel Cache Management), 162, 342-343</I>
+</DL>
+<DD>row-level locking, 508
+<DD>SELECT&#133;FOR UPDATE statement, 509
+<DD>serial reads, 508-509
+<DD>summary, 510
+<DD>table-level locking, 508
+</DL>
+<DD><B>log files, redo log files, 614</B>
+<DD><B>Log Writer, <I>see</I> LGWR</B>
+<DD><B>LOG_ARCHIVE_BUFFER_SIZE parameter, 622</B>
+<DD><B>LOG_ARCHIVE_BUFFERS parameter, 622</B>
+<DD><B>LOG_ARCHIVE_DEST parameter, 633</B>
+<DD><B>LOG_ARCHIVE_FORMAT parameter, 633</B>
+<DD><B>LOG_ARCHIVE_START parameter, 634</B>
+<DD><B>LOG_BUFFER parameter, 622</B>
+<DD><B>LOG_CHECKPOINT_ INTERVAL parameter, 622</B>
+<DD><B>LOG_CHECKPOINT_TIMEOUT parameter, 623</B>
+<DD><B>LOG_CHECKPOINTS_TO_ ALERT parameter, 634</B>
+<DD><B>LOG_FILES parameter, 634</B>
+<DD><B>LOG_SIMULTANEOUS_ COPIES parameter, 623</B>
+<DD><B>LOG_SMALL_ENTRY_MAX_ SIZE parameter, 623</B>
+<DD><B>logging</B>
+<DL>
+<DD>archive logs, 134-135
+<DL>
+<DD><I>batch processing systems, 276</I>
+<DD><I>BLOB systems, 332</I>
+<DD><I>data warehouses, 314</I>
+<DD><I>decision support systems, 295</I>
+<DD><I>financial systems, 372</I>
+<DD><I>office systems, 385</I>
+<DD><I>TextServer 3.0 systems, 381</I>
+<DD><I>WebServer systems, 389</I>
+</DL>
+<DD>events, triggers, 469
+<DD>redo log files, 26-27
+</DL>
+<DD><B>logical disks, 24, 612</B>
+<DD><B>logical layer</B>
+<DL>
+<DD>data blocks, 8
+<DD>data dictionary, 5
+<DD>defined, 5
+<DD>extents, 8
+<DD>schema, 25
+<DL>
+<DD><I>objects, 25</I>
+</
+1000
+DL>
+<DD>segments, 7
+<DD>tablespaces
+<DL>
+<DD><I>data files, 5-6</I>
+<DD><I>defined, 5-6</I>
+<DD><I>SYSTEM tablespace, 5-6</I>
+</DL>
+</DL>
+<DD><B>logical volumes</B>
+<DL>
+<DD>defined, 226
+<DD>sizing, 238-239
+<DD>stripes, 226
+</DL>
+<DD><B>logs, archive logs in OLTP systems, 255</B>
+</DL>
+<P><FONT SIZE="+1"><B>M</B></FONT></P>
+<DL>
+<DD><B>main memory, 612</B>
+<DD><B>Massively Parallel Processor, <I>see</I> MPP</B>
+<DD><B>master/slave architecture, NetWare, 179</B>
+<DD><B>MAX_COMMIT_ PROPAGATION_DELAY parameter, 641</B>
+<DD><B>MAX_DUMP_FILE_SIZE parameter, 405, 634</B>
+<DD><B>MAX_ENABLED_ROLES parameter, 634</B>
+<DD><B>MAX_ROLLBACK_SEGMENTS parameter, 634</B>
+<DD><B>MB (megabyte), 30</B>
+<DD><B>measurement conversions, 28</B>
+<DL>
+<DD>binary storage units, 29-30
+<DD>powers of 10, 29
+</DL>
+<DD><B>Media Server, 18</B>
+<DD><B>megabyte (MB), 30</B>
+<DD><B>memory</B>
+<DL>
+<DD>architecture, 210
+<DD>batch processing systems, 276
+<DD>BLOB systems, 333
+<DD>buffers
+<DL>
+<DD><I>block buffers, 22, 608</I>
+<DD><I>cache, 107-108, 608</I>
+<DD><I>clean buffers, 22, 608</I>
+<DD><I>defined, 22, 608</I>
+<DD><I>dirty buffers, 22, 608</I>
+<DD><I>redo log buffers, 608</I>
+</DL>
+<DD>cache
+<DL>
+<DD><I>defined, 22, 608</I>
+<DD><I>hits, 609</I>
+</DL>
+<DD>data warehouses, 314
+<DD>decision support systems, 296
+<DD>main memory, defined, 612
+<DD>OLTP systems, 255
+<DD>operating systems, 170, 589
+<DL>
+<DD><I>NetWare, 179-181</I>
+<DD><I>OS/2, 188-189</I>
+<DD><I>UNIX, 192-196, 531</I>
+<DD><I>Windows 3.11, 528</I>
+<DD><I>Windows 95, 530</I>
+<DD><I>Windows for Workgroups 3.11, 528</I>
+<DD><I>Windows NT, 185-186, 527</I>
+</DL>
+<DD>physical memory, defined, 24, 614
+<DD>private PL/SQL areas, 100
+<DD>private SQL areas, 100
+<DD>PSE (Page Size Extension) memory, 170
+<DD>SGA
+<DL>
+<DD><I>defined, 616</I>
+<DD><I>shared pool, 582</I>
+</DL>
+<DD>shared memory, 8
+<DL>
+<DD><I>PGA (Program Global Area), 10</I>
+<DD><I>SGA (System Global Area), 9-10</I>
+</DL>
+<DD>shared pool, 100
+<DL>
+<DD><I>cache miss, 101</I>
+<DD><I>data dictionary cache, 103-104</I>
+<DD><I>library cache, 100-102</I>
+<DD><I>shared session, 104-106</I>
+</DL>
+<DD>sorts, 135-136
+<DD>storage capacity, 98
+<DD>tuning operating system, 99
+<DD>virtual memory
+<DL>
+<DD><I>defined, 25, 617</I>
+<DD><I>paging, 211</I>
+<DD><I>swapping, 211</I>
+</DL>
+</DL>
+<DD><B>methodologies (performance tuning), 44</B>
+<DL>
+<DD>analyzing results, 50
+<DD>defined, 41
+<DD>determining solution to problems, 48
+<DL>
+<DD><I>testing solutions, 49</I>
+</DL>
+<DD>examining systems for problems, 45-46
+<DD>finding cause of performance problems, 47-48
+<DD>goal setting for optimal performance, 48-50
+<DD>problem-solving methodology, flowchart, 604
+</DL>
+<DD><B>microkernel architecture</B>
+<DL>
+<DD>defined, 183, 612
+<DD>Windows NT, 183-184
+</DL>
+<DD><B>middleware</B>
+<DL>
+<DD>defined, 556
+<DD>three-tiered system architecture, 557-558
+<DL>
+<DD><I>tuning, 559</I>
+</DL>
+<DD>TM (Transaction Monitors)
+<DL>
+<DD><I>client-side code, 560</I>
+<DD><I>defined, 559-561</I>
+<DD><I>server-side code, 560</I>
+<DD><I>tuning operating systems for, 561</I>
+</DL>
+<DD>two-tiered system architecture, 556
+</DL>
+<DD><B>migrating rows, 117-118</B>
+<DL>
+<DD>SQL statement, 599
+</DL>
+<DD><B>Mission Control, 496-497</B>
+<DD><B>MLS_LABEL_FORMAT parameter, 643</B>
+<DD><B>modes, current mode, 610</B>
+<DD><B>monitoring systems</B>
+<DL>
+<DD>buying performance monitoring tools, 79
+<DD>third-party tools, 78
+<DL>
+<DD><I>real-time monitors, 79</I>
+<DD><I>threshold monitors, 79-80</I>
+</DL>
+<DD>tools, 74-75, 75
+<DL>
+<DD><I>EXPLAIN PLAN command, 77</I>
+<DD><I>operating systems, 77-78</I>
+<DD><I>Server Manager, 76</I>
+<DD><I>SNMP agents, 76</I>
+<DD><I>SQL Trace, 76-77</I>
+<DD><I>SQL*DBA Monitor, 76</I>
+</DL>
+</DL>
+<DD><B>MPP (Massively Parallel Processor), 209-210, 612</B>
+<DD><B>MTS_DISPATCHERS parameter, 637</B>
+<DD><B>MTS_LISTENER_ADDRESS parameter, 637</B>
+<DD><B>MTS_MAX_DISPATCHERS parameter, 637</B>
+<DD><B>MTS_MAX_SERVERS paramet
+1000
+er, 637</B>
+<DD><B>MTS_SERVERS parameter, 638</B>
+<DD><B>MTS_SERVICE parameter, 638</B>
+<DD><B>multiblock reads, 152, 586</B>
+<DL>
+<DD>batch processing systems, 275
+<DD>BLOB systems, 332
+<DD>data warehouses, 313
+<DD>decision support systems, 295
+<DD>financial systems, 372
+<DD>TextServer 3.0 systems, 381
+<DD>WebServer systems, 389
+</DL>
+<DD><B>multiblock writes, 152-153, 586</B>
+<DL>
+<DD>financial systems, 372
+</DL>
+<DD><B>multimedia systems, performance criteria, 39</B>
+<DD><B>multiprocessor systems, 209</B>
+<DL>
+<DD>defined, 612
+<DD>MPP (Massively Parallel Processor), 209-210, 612
+<DD>SMP (Symmetric Multiprocessor), 209, 615
+</DL>
+<DD><B>multithreaded servers, list of parameters, 637-638</B>
+</DL>
+<P><FONT SIZE="+1"><B>N</B></FONT></P>
+<DL>
+<DD><B>National Language Support, list of parameters, 643-644</B>
+<DD><B>NetWare, 178</B>
+<DL>
+<DD>architecture, 178-179
+<DD>I/O subsystem, 182-183
+<DD>master/slave mode, 179
+<DD>memory, 179
+<DL>
+<DD><I>reducing unnecessary memory usage, 179-180</I>
+<DD><I>SGA tuning, 180</I>
+<DD><I>user capacity, 180-181</I>
+</DL>
+<DD>networks, 181
+<DL>
+<DD><I>SPX/IPX, 181-182</I>
+<DD><I>TCP/IP, 182</I>
+<DD><I>tuning, 574-575</I>
+</DL>
+<DD>summary of tuning guidelines, 182-183
+</DL>
+<DD><B>network frames, <I>see</I> frames</B>
+<DD><B>Network Interface Cards (NICs), 613</B>
+<DD><B>network packets, 613</B>
+<DL>
+<DD><I>see also</I> frames
+</DL>
+<DD><B>networks</B>
+<DL>
+<DD>backup process enhancements, 360
+<DD>bandwidth, defined, 608
+<DD>batch processing systems, 276
+<DL>
+<DD><I>enhancements, 280</I>
+</DL>
+<DD>BLOB system enhancements, 335
+<DD>client, bottlenecks, 523
+<DD>collisions, 609
+<DD>data warehouse enhancements, 319
+<DD>decision support system enhancements, 300
+<DD>design considerations, 576
+<DL>
+<DD><I>bandwidth, 576-577</I>
+<DD><I>bridges, 577</I>
+<DD><I>hubs, 577</I>
+<DD><I>routers, 577</I>
+<DD><I>segmenting networks, 577</I>
+</DL>
+<DD>design stage considerations, 84
+<DD>Ethernet, 611
+<DD>hardware components, 566
+<DL>
+<DD><I>Ethernet networks, 566-568</I>
+<DD><I>fiber optic networks, 569-570</I>
+<DD><I>new technologies, 570</I>
+<DD><I>Token Ring networks, 568-569</I>
+</DL>
+<DD>OLTP systems, 255
+<DL>
+<DD><I>enhancements, 259</I>
+</DL>
+<DD>operating systems
+<DL>
+<DD><I>NetWare, 181-182, 574-575</I>
+<DD><I>OS/2, 190 575</I>
+<DD><I>UNIX, 196-197, 531, 575</I>
+<DD><I>Windows 3.11, 528-529</I>
+<DD><I>Windows 95, 530</I>
+<DD><I>Windows for Workgroups 3.11, 528-529</I>
+<DD><I>Windows NT, 186, 575</I>
+</DL>
+<DD>packets, testing size for backup process, 364
+<DD>performance criteria, client-server systems, 35
+<DD>protocols, 570
+<DL>
+<DD><I>SPX/IPX, 571</I>
+<DD><I>TCP/IP, 571</I>
+</DL>
+<DD>replicated system enhancements, 377
+<DD>software tuning, 574-576
+<DD>Token Ring, 617
+<DD>tuning considerations, 85-86
+<DL>
+<DD><I>summary, 593</I>
+</DL>
+</DL>
+<DD><B>New-Order transaction (TPC-C benchmark), 61</B>
+<DD><B>nibbles, 29</B>
+<DD><B>NICs (Network Interface Cards), 613</B>
+<DD><B>NLS_CURRENCY parameter, 643</B>
+<DD><B>NLS_DATE_FORMAT parameter, 643</B>
+<DD><B>NLS_DATE_LANGUAGE parameter, 643</B>
+<DD><B>NLS_ISO_CURRENCY parameter, 643</B>
+<DD><B>NLS_LANGUAGE parameter, 644</B>
+<DD><B>NLS_NUMERIC_CHARACTERS parameter, 644</B>
+<DD><B>NLS_SORT parameter, 644</B>
+<DD><B>NLS_TERRITORY parameter, 644</B>
+<DD><B>No Data Protection mode (fault-tolerance), 233</B>
+<DD><B>NOAUDIT command, 472-473</B>
+<DD><B>NOCACHE hint, 486</B>
+<DD><B>nonequijoins, 613</B>
+<DD><B>nonunique indexes, 149, 427</B>
+<DD><B>NOPARALLEL hint, 486</B>
+<DD><B>normal checkpoints, 26, 133</B>
+<DD><B>NOT NULL constraint, 465</B>
+</DL>
+<P><FONT SIZE="+1"><B>O</B></FONT></P>
+<DL>
+<DD><B>objects, schema objects, 6, 25, 615</B>
+<DD><B>Objects for OLE: (development tool), 17</B>
+<DD><B>OCI (Oracle Call Interface), defined, 613</B>
+<DD><B>Office Server system, defined, 368</B>
+<DD><B>office system</B>
+<DL>
+<DD>archive logs, 385
+<DD>block buffers, 384
+<DD>characteristics, 383
+<DD>checkpoints, 385
+<DD>contention, 
+1000
+385
+<DD>defined, 382-383
+<DD>design considerations, 384
+<DD>library cache, 384
+<DD>spin counts, 385
+<DD>summary of, 385-386
+<DD>tuning considerations, 384-385
+</DL>
+<DD><B>offline, 613</B>
+<DD><B>offline backups, <I>see</I> cold backups</B>
+<DD><B>OLTP (OnLine Transaction Processing)</B>
+<DL>
+<DD>archive logs, 255
+<DD>block buffers, 254
+<DD>characteristics of system, 246
+<DL>
+<DD><I>data access patterns, 246-247</I>
+<DD><I>goals of optimally tuned system, 248-249</I>
+<DD><I>loads, 247-248</I>
+<DD><I>summary, 249</I>
+</DL>
+<DD>checkpoints, 255
+<DD>comparisons to batch processing systems, 265
+<DD>contention
+<DL>
+<DD><I>latch contention, 255</I>
+<DD><I>rollback, 254</I>
+</DL>
+<DD>defined, 27, 590, 613
+<DD>design considerations, 249-250
+<DD>enhancements, 256-257, 590
+<DL>
+<DD><I>benchmarks, 262</I>
+<DD><I>clusters, 256-257</I>
+<DD><I>CPU, 257, 257-258</I>
+<DD><I>Etherplex board, 259</I>
+<DD><I>hash clusters, 256</I>
+<DD><I>I/O enhancements, 258-259</I>
+<DD><I>indexes, 256</I>
+<DD><I>load testing, 260-261</I>
+<DD><I>network enhancements, 259</I>
+<DD><I>Parallel Server option, 257</I>
+<DD><I>testing operating system, 261-262</I>
+<DD><I>testing RDBMS, 261</I>
+<DD><I>Transaction Monitors, 259-260</I>
+<DD><I>verifying performance, 260-261</I>
+</DL>
+<DD>hardware considerations, 253
+<DD>library cache, 254
+<DD>physical data layout, 250
+<DL>
+<DD><I>disk arrays, 252-253</I>
+<DD><I>traditional disks, 250-252</I>
+</DL>
+<DD>rollback segments, 128
+<DD>transactions, 65
+<DD>tuning considerations, 253
+<DL>
+<DD><I>Oracle, 254-255</I>
+<DD><I>server operating system, 255-256</I>
+</DL>
+</DL>
+<DD><B>online, 613</B>
+<DD><B>online tablespace backups, <I>see</I> hot backups</B>
+<DD><B>OPEN_CURSORS parameter, 254, 634</B>
+<DD><B>OPEN_LINKS parameter, 635</B>
+<DD><B>OPEN_MOUNTS parameter, 643</B>
+<DD><B>operating systems</B>
+<DL>
+<DD>asynchronous I/O, 589
+<DD>batch processing systems
+<DL>
+<DD><I>testing, 282, 363-365</I>
+<DD><I>tuning considerations, 276-277</I>
+</DL>
+<DD>BLOB systems
+<DL>
+<DD><I>testing, 336</I>
+<DD><I>tuning considerations, 333</I>
+</DL>
+<DD>bottlenecks, finding, 93
+<DD>data warehouses
+<DL>
+<DD><I>testing, 320</I>
+<DD><I>tuning considerations, 314-315</I>
+</DL>
+<DD>decision support systems, 295-296
+<DL>
+<DD><I>testing, 301</I>
+</DL>
+<DD>I/O, 170-172
+<DD>memory, 170
+<DD>microkernel, 612
+<DD>monitoring performance, tools, 77-78
+<DD>NetWare, 178
+<DL>
+<DD><I>architecture, 178-179</I>
+<DD><I>I/O subsystem, 182-183</I>
+<DD><I>master/slave mode, 179</I>
+<DD><I>memory, 179-181</I>
+<DD><I>networks, 181-182</I>
+<DD><I>summary of tuning guidelines, 182-183</I>
+</DL>
+<DD>new features
+<DL>
+<DD><I>cache affinity, 174, 589</I>
+<DD><I>post-wait semaphore, 173, 589</I>
+<DD><I>preemption, 173-174</I>
+<DD><I>scheduling processes, 173-174</I>
+</DL>
+<DD>OLTP systems, tuning considerations, 255-256
+<DD>Oracle, network tuning, 575-576
+<DD>OS/2, 188
+<DL>
+<DD><I>architecture, 188</I>
+<DD><I>I/O subsystem, 190-191</I>
+<DD><I>memory, 188-189</I>
+<DD><I>networks, 190, 575</I>
+<DD><I>summary of tuning guidelines, 190-191</I>
+</DL>
+<DD>processes, 169
+<DD>scheduling parameters, 589
+<DD>striping, 113-114
+<DD>tuning considerations, 94, 99
+<DL>
+<DD><I>goals of optimally tuned systems, 168-169, 589</I>
+</DL>
+<DD>UNIX, 530-531
+<DL>
+<DD><I>architecture, 192</I>
+<DD><I>benchmarking new features, 200-203</I>
+<DD><I>development of, 191</I>
+<DD><I>disabling preemptive scheduling, 201</I>
+<DD><I>I/O subsystem, 197-200</I>
+<DD><I>ISM (Intimate Shared Memory), 201-203</I>
+<DD><I>load balancing, 202</I>
+<DD><I>memory, 192-196, 531</I>
+<DD><I>networks, 196-197, 531, 575</I>
+<DD><I>new features, 201-203</I>
+<DD><I>post-wait semaphores, 201-203</I>
+</DL>
+<DD>Windows 3.1
+<DL>
+<DD><I>memory, 528</I>
+<DD><I>networks, 528-529</I>
+</DL>
+<DD>Windows 95
+<DL>
+<DD><I>32-bit support, 529-530</I>
+<DD><I>memory, 530</I>
+<DD><I>networks, 530</I>
+<DD><I>Oracle support, 530</I>
+</DL>
+<DD>Windows for Workgroups 3.11
+<DL>
+<DD><I>memory, 528</I>
+1000
+
+<DD><I>networks, 528-529</I>
+</DL>
+<DD>Windows NT, 183
+<DL>
+<DD><I>16-bit applications, 527</I>
+<DD><I>architecture, 183-184</I>
+<DD><I>defined, 527</I>
+<DD><I>I/O performance, 528</I>
+<DD><I>I/O subsystem, 186-187</I>
+<DD><I>memory, 185-186, 527</I>
+<DD><I>networks, 186, 575</I>
+<DD><I>summary of tuning guidelines, 187</I>
+<DD><I>threads, 184</I>
+</DL>
+</DL>
+<DD><B>optimal backups, enhancements, 591</B>
+<DD><B>optimization techniques</B>
+<DL>
+<DD>ANALYZE command, 441-442
+<DL>
+<DD><I>checking structural integrity, 444</I>
+<DD><I>data dictionary statistics, 445-447</I>
+<DD><I>gathering chained-row statistics, 444-445</I>
+<DD><I>gathering statistics, 442-443</I>
+</DL>
+<DD>choosing, 438-439
+<DD>cost-based approach, 434, 441, 610
+<DD>defined, 433, 438-440, 613
+<DD>flowcharts (Oracle optimizer), 605
+<DD>hints, 447, 478
+<DL>
+<DD><I>ALL_ROWS hint, 479</I>
+<DD><I>CHOOSE hint, 479</I>
+<DD><I>FIRST_ROWS hint, 479-480</I>
+<DD><I>RULE hint, 480-481</I>
+</DL>
+<DD>rule-based approach, 433-434, 440, 614
+</DL>
+<DD><B>OPTIMIZER_MODE parameter, 623</B>
+<DD><B>Oracle, network tuning, 575-576</B>
+<DD><B>Oracle Call Interface (OCI), 613</B>
+<DD><B>Oracle Corporation, 3</B>
+<DD><B>Oracle Financials, <I>see</I> financial systems</B>
+<DD><B>Oracle Mission Control, 496-497</B>
+<DD><B>Oracle Office, 17-18</B>
+<DD><B>Oracle Office Server, <I>see</I> Office Server system</B>
+<DD><B>Oracle optimizer, flowchart, 605</B>
+<DD><B>Oracle Power Objects, 495</B>
+<DL>
+<DD><I>see also</I> Power Objects
+</DL>
+<DD><B>Oracle TextServer 3.0, <I>see</I> TextServer 3.0 system</B>
+<DD><B>Oracle Trace, 497</B>
+<DD><B>Oracle WebServer, <I>see</I> WebServer system</B>
+<DD><B>Order-Status transaction (TPC-C benchmark), 62</B>
+<DD><B>ORDERED hint, 484</B>
+<DD><B>OS/2, 188</B>
+<DL>
+<DD>architecture, 188
+<DD>I/O subsystem, 190-191
+<DD>memory, 188
+<DL>
+<DD><I>reducing unnecessary memory usage, 189</I>
+<DD><I>SGA tuning, 189</I>
+<DD><I>user capacity, 189</I>
+</DL>
+<DD>networks, 190
+<DL>
+<DD><I>tuning, 575</I>
+</DL>
+<DD>summary of tuning guidelines, 190-191
+</DL>
+<DD><B>OS_AUTHENT_PREFIX parameter, 642</B>
+<DD><B>OS_ROLES parameter, 642</B>
+<DD><B>outer joins, 505, 507, 613</B>
+<DD><B>overhead, I/O overhead, 117</B>
+<DL>
+<DD>chaining rows, 117-118
+<DD>checking for recursive calls, 118-119
+<DD>dynamic extensions, 118-119
+<DD>migrating rows, 117-118
+<DD>PCTFREE command option, 119-122
+<DD>PCTUSED command option, 119-122
+<DD>reduction techniques, 122
+</DL>
+</DL>
+<P><FONT SIZE="+1"><B>P</B></FONT></P>
+<DL>
+<DD><B>packages, 432-433, 457-458</B>
+<DL>
+<DD>advantages, 458
+<DD>body, 458
+<DD>declarations, 458
+<DD>defined, 24, 450, 613
+<DD>program units, defined, 614
+<DD>RDBMS_ALERT package, 470
+<DD>RDBMS_OUTPUT package, 456
+<DD>syntax, 458
+<DD><I>see also</I> functions; procedures
+</DL>
+<DD><B>packets (network packets), 613</B>
+<DL>
+<DD>Ethernet, 567
+<DD>testing for backup process, 364
+</DL>
+<DD><B>Page Size Extension (PSE) memory, 170</B>
+<DD><B>paging, 24, 211, 613</B>
+<DL>
+<DD><I>see also</I> swapping
+</DL>
+<DD><B>Parallel Cache Management, <I>see</I> PCM</B>
+<DD><B>PARALLEL hint, 485-486</B>
+<DD><B>Parallel Query option (add-on), 586-587, 613</B>
+<DL>
+<DD>batch processing systems, 277-278
+<DD>BLOB systems, 333
+<DD>data warehouses, 316
+<DD>decision support systems, 297
+<DD>defined, 15, 153
+<DD>Direct Write Sorts option, 158
+<DD>financial systems, 372
+<DD>hints
+<DL>
+<DD><I>CACHE, 485</I>
+<DD><I>NOCACHE, 486</I>
+<DD><I>NOPARALLEL, 486</I>
+<DD><I>PARALLEL, 485-486</I>
+<DD><I>PUSH_SUBQ, 486</I>
+</DL>
+<DD>parallel index creation, 159
+<DD>parallel loading, 159
+<DD>parallel query operation, 153-155
+<DL>
+<DD><I>degree of parallelism, 156-158</I>
+<DD><I>I/O configuration, 156</I>
+</DL>
+<DD>parallel recovery, 160-161
+<DD>parameters, list of, 626-627
+<DD>SQL statement processing, 401
+<DD>TextServer 3.0 systems, 381
+<DD>WebServer systems, 389
+</DL>
+<DD><B>Parallel Server Lock processes (LCK), 12</B>
+<DD><B>Parallel Server option (add-on), 161-164, 587
+1000
+-588, 613</B>
+<DL>
+<DD>architecture, 340-343
+<DD>batch processing systems, 278
+<DD>clusters, 339, 340
+<DD>data warehouses, 316-317
+<DD>decision support systems, 297-298
+<DD>defined, 14, 339
+<DD>design considerations, 343
+<DL>
+<DD><I>goals, 343-345</I>
+</DL>
+<DD>enhancements, 590
+<DD>locks, 162-163, 342
+<DL>
+<DD><I>DLM (Distributed Lock Manager), 341</I>
+<DD><I>PCM (Parallel Cache Management), 342-343</I>
+</DL>
+<DD>OLTP enhancement, 257
+<DD>parameters, 346-347
+<DL>
+<DD><I>list of, 639-641</I>
+</DL>
+<DD>server interconnect, 162
+<DD>system design, 346
+<DD>WebServer systems, 389
+</DL>
+<DD><B>PARALLEL_DEFAULT_ MAX_INSTANCES parameter, 347, 641</B>
+<DD><B>PARALLEL_DEFAULT_ MAX_SCANS parameter, 587, 626</B>
+<DD><B>PARALLEL_DEFAULT_ SCANSIZE parameter, 587, 627</B>
+<DD><B>PARALLEL_MAX_SERVERS parameter, 587, 627</B>
+<DD><B>PARALLEL_MIN_SERVERS parameter, 627</B>
+<DD><B>PARALLEL_SERVER_IDLE_ TIME parameter, 627</B>
+<DD><B>parameters</B>
+<DL>
+<DD>analysis tools, list of parameters, 627-629
+<DD>AUDIT_TRAIL, 641
+<DD>AUTO_MOUNTING, 642
+<DD>BACKGROUND_DUMP_ DEST, 629
+<DD>BLANK_TRIMMING, 629
+<DD>CACHE_SIZE_THRESHOLD, 639
+<DD>CHECKPOINT_PROCESS, 629
+<DD>CLEANUP_ROLLBACK_ ENTRIES, 630
+<DD>CLOSE_CACHED_OPEN_ CURSORS, 630
+<DD>COMMIT_POINT_STRENGTH, 638
+<DD>COMPATABLE, 630
+<DD>COMPATIBLE_NO_ RECOVERY, 630
+<DD>CONTROL_FILES, 630
+<DD>CREATE SEQUENCE command, 502-503
+<DD>DB_BLOCK_BUFFERS, 620
+<DD>DB_BLOCK_CHECKPOINT_ BATCH, 620-621
+<DD>DB_BLOCK_CHECKSUM, 628
+<DD>DB_BLOCK_LRU_ EXTENDED_ STATISTICS, 628
+<DD>DB_BLOCK_LRU_ STATISTICS, 628
+<DD>DB_BLOCK_SIZE, 621
+<DD>DB_DOMAIN, 630
+<DD>DB_FILE_MULTIBLOCK_ READ_COUNT, 621
+<DD>DB_FILE_SIMULTANEOUS_ WRITES, 621
+<DD>DB_FILES, 631
+<DD>DB_LOG_CHECKSUM, 628
+<DD>DB_MOUNT_MODE, 642
+<DD>DB_NAME, 631
+<DD>DBLINK_ENCRYPT_LOGIN, 631
+<DD>DISCRETE_TRANSACTIONS_ ENABLED, 621
+<DD>distributed option, list of parameters, 638-639
+<DD>DISTRIBUTED_LOCK_ TIME-OUT, 638
+<DD>DISTRIBUTED_RECOVERY_ CONNECTION_ HOLD_TIME, 638
+<DD>DISTRIBUTED_ TRANSACTIONS, 639
+<DD>DML_LOCKS, 622
+<DD>ENQUEUE_RESOURCES, 631
+<DD>EVENT, 628
+<DD>FIXED_DATE, 628
+<DD>functions, 454
+<DD>GC_DB_LOCKS, 639
+<DD>GC_FILES_TO_LOCKS, 640
+<DD>GC_LCK_PROCS, 640
+<DD>GC_ROLLBACK_LOCKS, 640
+<DD>GC_ROLLBACK_ SEGMENTS, 640
+<DD>GC_SAVE_ROLLBACK_ LOCKS, 640
+<DD>GC_SEGMENTS, 640
+<DD>GC_TABLESPACES, 640
+<DD>general, list of parameters, 629-637
+<DD>GLOBAL_NAMES, 632
+<DD>IFILE, 632
+<DD>INIT_SQL_FILES, 632
+<DD>initialization para- meters, 612
+<DD>INSTANCE_NUMBER, 641
+<DD>JOB_QUEUE_INTERVAL, 632
+<DD>JOB_QUEUE_KEEP_ CONNECTIONS, 632
+<DD>JOB_QUEUE_PROCESSES, 632
+<DD>LABEL_CACHE_SIZE, 642
+<DD>LICENSE_MAX_SESSIONS, 632
+<DD>LICENSE_MAX_USERS, 633
+<DD>LICENSE_SESSIONS_ WARNING, 633
+<DD>LOG_ARCHIVE_BUFFER_ SIZE, 622
+<DD>LOG_ARCHIVE_BUFFERS, 622
+<DD>LOG_ARCHIVE_DEST, 633
+<DD>LOG_ARCHIVE_FORMAT, 633
+<DD>LOG_ARCHIVE_START, 634
+<DD>LOG_BUFFER, 622
+<DD>LOG_CHECKPOINT_ TIMEOUT, 623
+<DD>LOG_CHECKPOINTS_TO_ ALERT, 634
+<DD>LOG_CHECPOINT_ INTERVAL, 622
+<DD>LOG_FILES, 634
+<DD>LOG_SIMULTANEOUS_ COPIES, 623
+<DD>LOG_SMALL_ENTRY_ MAX_SIZE, 623
+<DD>MAX_COMMIT_ PROPAGATION_ DELAY, 641
+<DD>MAX_DUMP_FILE_SIZE, 634
+<DD>MAX_ENABLED_ROLES, 634
+<DD>MAX_ROLLBACK_ SEGMENTS, 634
+<DD>MLS_LABEL_FORMAT, 643
+<DD>MTS_DISPATCHERS, 637
+<DD>MTS_LISTENER_ADDRESS, 637
+<DD>MTS_MAX_DISPATCHERS, 637
+<DD>MTS_MAX_SERVERS, 637
+<DD>MTS_SERVERS, 638
+<DD>MTS_SERVICE, 638
+<DD>multithreaded servers, list of parameters, 637-638
+<DD>National Language Support, list of parameters, 643, 644
+<DD>NLS_CURRENCY, 643
+<DD>NLS_DATE_FORMAT, 643
+<DD>NLS_DATE_LANGUAGE, 643
+<DD>NLS_ISO_CURRENCY, 643
+<DD>NLS_LANGUAGE, 644
+<DD>NLS_NUMERIC_ CHARACTERS, 644
+<DD>NLS_SORT, 644
+<DD>NLS_TERRITORY, 644
+<DD>OLTP systems, 254
+<DD>OPEN_CURSORS, 634
+<DD>OPEN_LINKS, 635
+<DD>OPEN_MOUNTS, 643
+<DD>OPTIMIZER_MODE, 623
+<DD>OS_AUTHENT_PREFIX, 642
+<DD>OS_ROLES, 642
+<DD>Parallel Query option, list of parameters, 626-627
+<DD>Parallel Server option, list of parameters, 639-641
+<DD>PARALLEL_DEFAULT_ MAX_INSTANCES, 641
+<DD>PARALLEL_DEF
+1000
+AULT_ MAX_SCANS, 626
+<DD>PARALLEL_DEFAULT_ SCAN-SIZE, 627
+<DD>PARALLEL_MAX_SERVERS, 627
+<DD>PARALLEL_MIN_SERVERS, 627
+<DD>PARALLEL_SERVER_ IDLE_TIME, 627
+<DD>performance, list of parameters, 620-626
+<DD>PRE_PAGE_SGA, 623
+<DD>PROCESSES, 635
+<DD>RECOVERY_PARALLELISM, 627
+<DD>REMOTE_LOGIN_ PASSWORDFILE, 635
+<DD>REMOTE_OS_AUTHENT, 639
+<DD>REMOTE_OS_ROLES, 639
+<DD>ROLLBACK_SEGMENTS, 624
+<DD>ROW_CACHE_CURSORS, 624
+<DD>ROW_LOCKING, 624
+<DD>SCO UNIX, asynchronous I/O, 199
+<DD>security, list of parameters, 641-642
+<DD>SEQUENCE_CACHE_ ENTRIES, 624
+<DD>SEQUENCE_CACHE_HASH_ BUCKETS, 624
+<DD>SERIALIZABLE, 624-625
+<DD>SESSION_CACHED_ CURSOR, 625
+<DD>SESSIONS, 635
+<DD>SHARED_POOL_SIZE, 625
+<DD>SINGLE_PROCESS, 636
+<DD>SMALL_TABLE_ THRESHOLD, 625
+<DD>SNAPSHOT_REFRESH_ INTERVAL, 635
+<DD>SNAPSHOT_REFRESH_ KEEP_CONNECTION, 635
+<DD>SNAPSHOT_REFRESH_ PROCESS, 636
+<DD>SORT_AREA_RETAINED_ SIZE, 625
+<DD>SORT_AREA_SIZE, 626
+<DD>SORT_SPACEMAP_SIZE, 626
+<DD>SQL Trace, 404-405
+<DL>
+<DD><I>interpreting, 409</I>
+<DD><I>TKPROF program, 407-409</I>
+</DL>
+<DD>SQL_TRACE, 629
+<DD>SQL92_SECURITY, 642
+<DD>TEMPORARY_TABLE_ LOCKS, 636
+<DD>THREAD, 641
+<DD>TIMED_STATISTICS, 629
+<DD>TRANSACTIONS, 636
+<DD>TRANSACTIONS_PER_ ROLLBACK_SEGMENT, 636
+<DD>Trusted Oracle7 option, list of parameters, 642-643
+<DD>UNIX
+<DL>
+<DD><I>asynchronous I/O, 198</I>
+<DD><I>SHMMAX, 194</I>
+<DD><I>SHMSEG, 194</I>
+</DL>
+<DD>UnixWare, asynchronous I/O, 199
+<DD>USER_DUMP_DEST, 637
+</DL>
+<DD><B>parsing SQL statements, 399-400</B>
+<DD><B>Partial Data Protection mode (fault-tolerance), 234-235</B>
+<DD><B>Patrol tool, 498-499</B>
+<DD><B>Payment transaction (TPC-C benchmark), 62</B>
+<DD><B>PCM locks (Parallel Cache Management), 162</B>
+<DL>
+<DD>Parallel Server option, 342-343
+</DL>
+<DD><B>PCTFREE command option, 119-122</B>
+<DD><B>PCTUSED command option, 119-122</B>
+<DD><B>performance criteria</B>
+<DL>
+<DD>batch-processing systems, 38
+<DL>
+<DD><I>checklist, 39</I>
+</DL>
+<DD>client/server systems, 32-33
+<DL>
+<DD><I>checklist, 35-36</I>
+<DD><I>client component, 33</I>
+<DD><I>network, 35</I>
+<DD><I>server component, 33-35</I>
+</DL>
+<DD>determing problems, 46
+<DD>multimedia systems, 39
+<DD>terminal-based systems (host-based), 36
+<DL>
+<DD><I>checklist, 37-38</I>
+<DD><I>database, 36-37</I>
+<DD><I>front-end applications, 36</I>
+</DL>
+</DL>
+<DD><B>performance monitoring tools, 73-75</B>
+<DL>
+<DD>buying, 79
+<DD>EXPLAIN PLAN command, 77
+<DD>operating systems, 77-78
+<DD>Server Manager, 76
+<DD>SNMP agents, 76
+<DD>SQL Trace, 76-77
+<DD>SQL*DBA Monitor, 76
+<DD>third-party tools, 78-79
+<DL>
+<DD><I>real-time monitors, 79</I>
+<DD><I>threshold monitors, 79-80</I>
+</DL>
+</DL>
+<DD><B>performance problems</B>
+<DL>
+<DD>finding, 92-93
+<DD>methodology
+<DL>
+<DD><I>analyzing results, 50</I>
+<DD><I>examing systems for, 45-46</I>
+<DD><I>finding cause of, 47-48</I>
+<DD><I>goal setting for optimal performance, 48-50</I>
+<DD><I>solutions for, 48-49</I>
+</DL>
+</DL>
+<DD><B>persistent areas (private SQL area), 100</B>
+<DD><B>Personal Oracle for Windows, 16</B>
+<DD><B>PGA, 10</B>
+<DD><B>physical data layout</B>
+<DL>
+<DD>batch processing systems, 270-271
+<DL>
+<DD><I>disk arrays, 272-273</I>
+<DD><I>traditional disks, 271-272</I>
+</DL>
+<DD>BLOB systems
+<DL>
+<DD><I>disk arrays, 329-331</I>
+<DD><I>traditional disks, 328-329</I>
+</DL>
+<DD>data warehouses, 308-309
+<DL>
+<DD><I>disk arrays, 310-311</I>
+<DD><I>traditional disks, 309-310</I>
+</DL>
+<DD>decision support systems
+<DL>
+<DD><I>disk arrays, 292-293</I>
+<DD><I>traditional disks, 291-292</I>
+</DL>
+<DD>OLTP (OnLine Transaction Processing), 250
+<DL>
+<DD><I>disk arrays, 252-253</I>
+<DD><I>traditional disks, 250-252</I>
+</DL>
+</DL>
+<DD><B>physical layer</B>
+<DL>
+<DD>control files, 5
+<DD>data files, 5
+<DD>defined, 4
+<DD>redo log files, 5
+</DL>
+<DD><B>physical memory, 24, 614</B>
+<DD><B>PL/SQL</B>
+<DL>
+<DD>defined, 14, 614
+<DD>functions, 24, 454-455
+<DD>private PL/SQL areas, 100
+<DD>procedures, 454-455
+<DD>properties, 454-455
+</DL>
+
+1000
+<DD><B>PL/SQL Interpreter (Procedure Builder tool), 542</B>
+<DD><B>platters (disk drive), 214</B>
+<DL>
+<DD>cylinders, 215
+<DD>tracks, 214
+</DL>
+<DD><B>PMON (Process Monitor), 11</B>
+<DD><B>post-wait semaphore feature, 173</B>
+<DL>
+<DD>operating systems, 589
+<DL>
+<DD><I>UNIX, 201</I>
+</DL>
+</DL>
+<DD><B>Power Objects (development tool), 17, 495</B>
+<DL>
+<DD>classes, 545-546
+<DD>features, 544-546
+<DD>Forms Designer tool, 544-545
+</DL>
+<DD><B>PowerBuilder, 495, 552</B>
+<DD><B>PRE_PAGE_SGA parameter, 623</B>
+<DD><B>Precise/SQL suite, 498</B>
+<DD><B>preempting processes, 173-174</B>
+<DD><B>preemptive scheduling, UNIX</B>
+<DL>
+<DD>cache affinity, 202
+<DD>disabling, 201
+</DL>
+<DD><B>PRIMARY constraint, 465</B>
+<DD><B>primary keys, 614</B>
+<DD><B>private SQL area (memory), 10</B>
+<DL>
+<DD>persistent areas, 100
+<DD>runtime areas, 100
+</DL>
+<DD><B>problem-solving methodology, flowchart, 604</B>
+<DD><B>Procecural option, <I>see</I> PL/SQL</B>
+<DD><B>Procedure Builder tool (Designer/2000), 537, 542-544</B>
+<DD><B>procedures, 432-433</B>
+<DL>
+<DD>body, 453
+<DD>comparisons to functions, 452
+<DD>declarations, 453
+<DD>defined, 24, 452-453, 614
+<DD>EXCEPTION, 455
+<DD>packages, 24
+<DD>PL/SQL language, 454-455
+<DD>RDBMS_OUTPUT package, 456
+<DD>RDBMS_OUTPUT.DISABLE, 456
+<DD>RDBMS_OUTPUT.ENABLE, 456
+<DD>RDBMS_OUTPUT.GET_LINE, 456
+<DD>RDBMS_OUTPUT.GET_LINES, 456
+<DD>RDBMS_OUTPUT.PUT, 456
+<DD>RDBMS_OUTPUT.PUT_LINE, 456
+<DD>READ_CLIENT_INFO, 417
+<DD>READ_MODULE, 417
+<DD>SET_ACTION, 417
+<DD>SET_CLIENT_INFO, 417
+<DD>SET_MODULE, 417
+<DD>stored procedures
+<DL>
+<DD><I>creating, 456-457</I>
+<DD><I>defined, 7, 452</I>
+<DD><I>program units, 614</I>
+<DD><I>properties, 452</I>
+<DD><I>replacing, 457</I>
+</DL>
+<DD>syntax, 453
+<DD><I>see also</I> functions
+</DL>
+<DD><B>Process Modeller tool, 491</B>
+<DD><B>Process Monitor (PMON), 11</B>
+<DD><B>PROCESSES parameter, 635</B>
+<DD><B>processes</B>
+<DL>
+<DD>ARCH, 26-27
+<DD>background
+<DL>
+<DD><I>ARCH (Archiver), 12</I>
+<DD><I>CKPT (Checkpoint), 11, 26</I>
+<DD><I>DBWR (Database Writer), 11</I>
+<DD><I>Dnnn (Dispatcher), 12</I>
+<DD><I>LCK (Parallel Server Lock), 12</I>
+<DD><I>LGWR (Log Writer), 11</I>
+<DD><I>PMON (Process Monitor), 11</I>
+<DD><I>RECO (Recovery), 12</I>
+<DD><I>SMON (System Monitor), 12</I>
+</DL>
+<DD>calculating number for system, 169
+<DD>defined, 10
+<DD>operating systems, 169
+<DD>prioritizing, 169
+<DD>scheduling, 173-174
+<DD>server (shadow), 11
+<DD>user (client), 10
+<DD><I>see also</I> lightweight processes; threads; traditional processes
+</DL>
+<DD><B>processing</B>
+<DL>
+<DD>array processing, 510
+<DD>queries, 400
+<DD>SQL statements, 397
+<DL>
+<DD><I>bind variables, 401</I>
+<DD><I>cursor creation, 398</I>
+<DD><I>executing statements, 401</I>
+<DD><I>fetching returned rows, 401-402</I>
+<DD><I>parallelization, 401</I>
+<DD><I>parsing statement, 399-400</I>
+<DD><I>query processing, 400</I>
+<DD><I>summary, 402</I>
+</DL>
+<DD>transactions, 395-396
+</DL>
+<DD><B>processors</B>
+<DL>
+<DD>CPU
+<DL>
+<DD><I>backup process enhancements, 359</I>
+<DD><I>batch processing system enhancements, 279</I>
+<DD><I>BLOB system enhancements, 334</I>
+<DD><I>cache, 210</I>
+<DD><I>CISC (Complex Instruction Set Computer), 207-208</I>
+<DD><I>data warehouse enhancements, 317</I>
+<DD><I>decision support system enhancements, 298-299</I>
+<DD><I>OLTP enhancements, 257-258</I>
+<DD><I>replicated system enhancements, 377</I>
+<DD><I>RISC (Reduced Instruction Set Computer), 207-208</I>
+</DL>
+<DD>multiprocessor systems, 209
+<DL>
+<DD><I>MPP (Massively Parallel Processor), 209-210</I>
+<DD><I>SMP (Symmetric Multiprocessor), 209</I>
+</DL>
+</DL>
+<DD><B>products</B>
+<DL>
+<DD>applications, 17
+<DL>
+<DD><I>ConText, 18</I>
+<DD><I>Media Server, 18</I>
+<DD><I>Oracle Financial Applications, 17</I>
+<DD><I>Oracle Office, 17-18</I>
+<DD><I>Oracle WebServer, 18</I>
+</DL>
+<DD>development tools, 16-17
+<DD>Oracle RDBMS, 13
+<DL>
+<DD><I>Distributed option, 14</I>
+<DD><I>Parallel Query option, 15</I>
+<DD><I>Parallel Server 
+1000
+option, 14</I>
+<DD><I>PL/SQL, 14</I>
+<DD><I>Server Manager, 15</I>
+<DD><I>SQL*Net, 14</I>
+<DD><I>Symmetric Replication, 15</I>
+<DD><I>Trusted Oracle, 15</I>
+</DL>
+<DD>Personal Oracle for Windows, 16
+<DD>services
+<DL>
+<DD><I>consulting, 18</I>
+<DD><I>education, 19</I>
+<DD><I>support, 19</I>
+</DL>
+<DD>Workgroup Server, 15-16
+</DL>
+<DD><B>Program Unit Editor (Procedure Builder tool), 542</B>
+<DD><B>program units, 24, 614</B>
+<DD><B>protocols, 570-571</B>
+<DL>
+<DD>SPX/IPX, 571, 615
+<DD>TCP/IP (Transmission Control Protocol/Internet Protocol), 571, 616
+</DL>
+<DD><B>PSE (Page Size Extension) memory, 170</B>
+<DD><B>PUSH_SUBQ hint, 486</B>
+</DL>
+<P><FONT SIZE="+1"><B>Q</B></FONT></P>
+<DL>
+<DD><B>queries</B>
+<DL>
+<DD>ad-hoc, 22, 608
+<DD>business support systems, 611
+<DD>component queries, 609
+<DD>compound queries, 609
+<DD>decision support systems, 28
+<DD>defined, 614
+<DD>joins
+<DL>
+<DD><I>defined, 612</I>
+<DD><I>join conditions, 612</I>
+<DD><I>nonequijoins, 613</I>
+<DD><I>outer joins, 613</I>
+<DD><I>self joins, 615</I>
+</DL>
+<DD>Parallel Query option, 153
+<DL>
+<DD><I>degree of parallelism, 156-158</I>
+<DD><I>Direct Write Sorts option, 158</I>
+<DD><I>I/O configuration, 156</I>
+<DD><I>parallel index creation, 159</I>
+<DD><I>parallel loading, 159</I>
+<DD><I>parallel query operation, 153-158</I>
+<DD><I>parallel recovery, 160-161</I>
+</DL>
+<DD>processing, 400
+<DD>rollback segments, 128
+<DD>subqueries, 609, 616
+</DL>
+<DD><B>query parameter, SQL Trace, 409</B>
+<DD><B>queueing, 218</B>
+</DL>
+<P><FONT SIZE="+1"><B>R</B></FONT></P>
+<DL>
+<DD><B>RAID (Redundant Array of Inexpensive Disks), 229</B>
+<DL>
+<DD>comparing RAID levels, 240-241
+<DD>configuration issues, 235-236
+<DL>
+<DD><I>distributing random I/Os, 237-238</I>
+<DD><I>isolating sequential I/Os, 236-237</I>
+<DD><I>sizing logical volume, 238-239</I>
+</DL>
+<DD>RAID-0, 230
+<DD>RAID-1, 230-231
+<DD>RAID-2, 231
+<DD>RAID-3, 231
+<DD>RAID-4, 232
+<DD>RAID-5, 232
+<DD>summarizing RAID levels, 232
+</DL>
+<DD><B>RAM (Random Access Memory), 612</B>
+<DD><B>random I/Os, 220</B>
+<DL>
+<DD>defined, 24, 111, 598, 614
+<DD>disk arrays, distributing random I/Os, 237-238
+<DD>disk rates, 598
+<DD>spreading out, 590, 598
+<DD>striping data, 112-113
+<DL>
+<DD><I>hardware, 114-115</I>
+<DD><I>operating system, 113-114</I>
+<DD><I>options, 115-116</I>
+</DL>
+</DL>
+<DD><B>raw device interface, UNIX, 198</B>
+<DD><B>RDBMS (Relational Database Management Systems)</B>
+<DL>
+<DD>databases, 4
+<DD>defined, 4
+<DD>instance, 4
+<DD>products, 13
+<DL>
+<DD><I>Distributed option, 14</I>
+<DD><I>Parallel Query option, 15</I>
+<DD><I>Parallel Server option, 14</I>
+<DD><I>PL/SQL, 14</I>
+<DD><I>Server Manager, 15</I>
+<DD><I>SQL*Net, 14</I>
+<DD><I>Symmetric Replication, 15</I>
+<DD><I>Trusted Oracle, 15</I>
+</DL>
+</DL>
+<DD><B>RDBMS_ALERT package, 470</B>
+<DD><B>RDBMS_OUTPUT package, 456</B>
+<DD><B>RDBMS_OUTPUT.DISABLE procedure, 456</B>
+<DD><B>RDBMS_OUTPUT.ENABLE procedure, 456</B>
+<DD><B>RDBMS_OUTPUT.GET_LINE procedure, 456</B>
+<DD><B>RDBMS_OUTPUT.PUT procedure, 456</B>
+<DD><B>RDBMS_OUTPUT.PUT_LINE procedure, 456</B>
+<DD><B>read consistency, 24, 614</B>
+<DD><B>Read Lock mode (Parallel Server option), 342</B>
+<DD><B>read-only snapshots, 374</B>
+<DD><B>read/write caches, disk arrays, 229</B>
+<DD><B>READ_CLIENT_INFO procedure, 417</B>
+<DD><B>READ_MODULE procedure, 417</B>
+<DD><B>real-time monitoring tools, 79</B>
+<DD><B>recovery process (RECO), 12, 351-352</B>
+<DD><B>RECOVERY_PARALLELISM parameter, 587, 627</B>
+<DD><B>recursive calls</B>
+<DL>
+<DD>checking, 118
+<DD>defined, 118, 614
+<DD>SQL statement, 599
+</DL>
+<DD><B>redo log buffer, 10, 608</B>
+<DL>
+<DD>contention
+<DL>
+<DD><I>latch contention, 131-132</I>
+<DD><I>SQL statement, 600-601</I>
+</DL>
+</DL>
+<DD><B>redo log files, 5, 26-27, 614</B>
+<DD><B>Reduced Instruction Set Computer, <I>see</I> RISC processors</B>
+<DD><B>Redundant Array of Inexpensive Disks, <I>see</I> RAID</B>
+<DD><B>referential integrity</B>
+<DL>
+<DD>defined, 462, 614
+<DD>tables, 463-4
+1000
+64
+</DL>
+<DD><B>registering applications, 417</B>
+<DD><B>Relational Database Management System, <I>see</I> RDBMS</B>
+<DD><B>remote transactions, distributed systems, 378</B>
+<DD><B>REMOTE_LOGIN_ PASSWORDFILE parameter, 635</B>
+<DD><B>REMOTE_OS_AUTHENT parameter, 639</B>
+<DD><B>REMOTE_OS_ROLES parameter, 639</B>
+<DD><B>replicated systems</B>
+<DL>
+<DD>block buffers, 376
+<DD>characteristics, 374-375
+<DD>contention, 376
+<DD>defined, 368, 374
+<DD>design considerations, 375-377
+<DL>
+<DD><I>goals of optimally tuned systems, 375</I>
+</DL>
+<DD>library cache, 376
+<DD>read-only snapshots, 374
+<DD>snapshots, 615
+<DD>summary of, 377
+<DD>symmetric replication, 15, 374
+<DD>updatable, 374
+</DL>
+<DD><B>replication, 614</B>
+<DD><B>Reports Designer tool</B>
+<DL>
+<DD>Designer/2000, 536, 538-540
+<DD>Oracle Power Objects, 545
+</DL>
+<DD><B>Reports Generator tool, 492</B>
+<DD><B>ReportSmith, 548-549</B>
+<DD><B>response time</B>
+<DL>
+<DD>analyzing problems, 47-48
+<DD>defined, 42
+<DD>goals, 42-43
+<DD>performance criteria, terminal-based systems, 37
+</DL>
+<DD><B>RETURN function, 454, 455</B>
+<DD><B>RISC processors (Reduced Instruction Set Computer), 208</B>
+<DD><B>rollback contention</B>
+<DL>
+<DD>defined, 123-126, 130, 614
+<DD>financial systems, 371
+<DD>office systems, 385
+<DD>OLTP systems, 254
+<DD>replicated systems, 376
+<DD>SQL statements, 599-600
+<DD>WebServer systems, 389
+</DL>
+<DD><B>rollback segments</B>
+<DL>
+<DD>avoiding dynamic growth of, 129
+<DD>batch processing systems, 275
+<DD>BLOB systems, 332
+<DD>data warehouses, 313
+<DD>decision support systems, 295
+<DD>defined, 8, 614
+<DD>dynamic growth of, 600
+<DD>extent size and number, 128-129
+<DD>financial systems, 371
+<DD>number of, 127-128
+<DD>size, 128
+<DD>TextServer 3.0 systems, 381
+<DD>transaction tables, 124
+</DL>
+<DD><B>ROLLBACK_SEGMENTS parameter, 624</B>
+<DD><B>rotational latency, 217</B>
+<DL>
+<DD>averages, 219
+</DL>
+<DD><B>routers, network design considerations, 577</B>
+<DD><B>row cache, <I>see</I> data dictionary, cache</B>
+<DD><B>row-level locking, 508</B>
+<DD><B>ROW_CACHE_CURSORS parameter, 624</B>
+<DD><B>ROW_LOCKING parameter, 624</B>
+<DD><B>ROWID hint, 483</B>
+<DD><B>rows</B>
+<DL>
+<DD>chaining, 117-118
+<DL>
+<DD><I>SQL statement, 599</I>
+</DL>
+<DD>migrating, 117-118
+<DL>
+<DD><I>SQL statement, 599</I>
+</DL>
+</DL>
+<DD><B>rows parameter, SQL Trace, 409</B>
+<DD><B>RULE hint, 480-481</B>
+<DD><B>rule-based optimization approach, 433-434, 440</B>
+<DL>
+<DD>choosing, 438-439
+<DD>defined, 614
+<DD>hints, 447
+</DL>
+<DD><B>runtime areas (private SQL area), 100</B>
+</DL>
+<P><FONT SIZE="+1"><B>S</B></FONT></P>
+<DL>
+<DD><B>S-Designor tool, 493</B>
+<DD><B>scalability, 24, 615</B>
+<DD><B>Scheduler</B>
+<DL>
+<DD>batch processing systems, 276
+<DD>BLOB systems, 333
+<DD>data warehouses, 314
+<DD>decision support systems, 296
+<DD>OLTP systems, 255
+</DL>
+<DD><B>scheduling</B>
+<DL>
+<DD>operating systems
+<DL>
+<DD><I>parameters, 589</I>
+<DD><I>UNIX options, 201-203</I>
+</DL>
+<DD>processes, 173-174
+</DL>
+<DD><B>schemas</B>
+<DL>
+<DD>defined, 6-7, 25, 615
+<DD>objects, 6, 25, 615
+</DL>
+<DD><B>SCO UNIX</B>
+<DL>
+<DD>buffer cache, tuning, 193
+<DD>networks, 196-197
+<DD>parameters
+<DL>
+<DD><I>asynchronous I/O, 199</I>
+<DD><I>shared memory, 195</I>
+</DL>
+</DL>
+<DD><B>scripts, CD-ROM, 646-648</B>
+<DD><B>searches, <I>see</I> TextServer 3.0 systems</B>
+<DD><B>security, list of parameters, 641-642</B>
+<DD><B>seek time, 216-217</B>
+<DL>
+<DD>averages, 219
+</DL>
+<DD><B>segments</B>
+<DL>
+<DD>backups, 360-362
+<DD>data segments, 8
+<DD>defined, 7, 118, 615
+<DD>index segments, 8
+<DD>networks, 577
+<DD>rollback segments, 123-126
+<DL>
+<DD><I>avoiding dynamic growth of, 129</I>
+<DD><I>batch processing systems, 275</I>
+<DD><I>BLOB systems, 332</I>
+<DD><I>contention, 123-130</I>
+<DD><I>data warehouses, 313</I>
+<DD><I>decision support systems, 295</I>
+<DD><I>defined, 8</I>
+<DD><I>dynamic growth of, 600</I>
+<DD><I>extent size and number, 128-129</I>
+<DD><I>financial systems, 371</I
+1000
+>
+<DD><I>number of, 127-128</I>
+<DD><I>optimizing, 130</I>
+<DD><I>size, 128</I>
+<DD><I>SQL statement, 599-600</I>
+<DD><I>TextServer 3.0 systems, 381</I>
+<DD><I>transaction tables, 124</I>
+</DL>
+<DD>temporary segments, 8
+<DD><I>see also</I> data blocks; extents
+</DL>
+<DD><B>SELECT statement, displaying execution plan, 414-416</B>
+<DD><B>SELECT&#133;FOR UPDATE statement, 509</B>
+<DD><B>self joins, 505-506, 615</B>
+<DD><B>SEQUENCE_CACHE_ENTRIES parameter, 624</B>
+<DD><B>SEQUENCE_CACHE_HASH_ BUCKETS parameter, 624</B>
+<DD><B>sequences</B>
+<DL>
+<DD>defined, 615
+<DD>program units, 614
+<DD>table sequences
+<DL>
+<DD><I>creating, 502-503</I>
+<DD><I>defined, 502</I>
+<DD><I>generating primary key values, 504-505</I>
+<DD><I>generating sequence values, 503-504</I>
+<DD><I>summary, 504-505</I>
+<DD><I>tuning considerations, 503</I>
+</DL>
+</DL>
+<DD><B>sequential I/O</B>
+<DL>
+<DD>defined, 25, 111, 220-222, 598, 615
+<DD>disk arrays, isolating sequential I/Os, 236-237
+<DD>disk rates, 598
+<DD>isolating, 112, 590, 598
+</DL>
+<DD><B>serial reads, 473</B>
+<DL>
+<DD>joins, 508-509
+</DL>
+<DD><B>SERIALIZABLE parameter, 624-625</B>
+<DD><B>Server Generator tool, 492</B>
+<DD><B>server interconnect, 162</B>
+<DD><B>Server Manager, 15, 76, 615</B>
+<DD><B>server processes (shadow processes), 11</B>
+<DD><B>servers</B>
+<DL>
+<DD>multithreaded servers, parameters, 637-638
+<DD>performance criteria, 33-35
+<DD>tuning performance, 85
+</DL>
+<DD><B>services (Oracle)</B>
+<DL>
+<DD>consulting, 18
+<DD>education, 19
+<DD>support, 19
+</DL>
+<DD><B>session information (PGA), 10</B>
+<DD><B>SESSION_CACHED_CURSORS parameter, 625</B>
+<DD><B>SESSIONS parameter, 635</B>
+<DD><B>sessions, 615</B>
+<DD><B>SET_ACTION procedure, 417</B>
+<DD><B>SET_CLIENT_INFO procedure, 417</B>
+<DD><B>SET_MODULE procedure, 417</B>
+<DD><B>SGA (System Global Area)</B>
+<DL>
+<DD>buffer cache, 9
+<DD>defined, 9-10, 25, 615
+<DD>redo log buffer, 10
+<DD>shared pool, 10, 582
+<DL>
+<DD><I>buffer cache, 583</I>
+<DD><I>data dictionary cache, 582</I>
+<DD><I>library cache, 582</I>
+<DD><I>shared session information, 583</I>
+</DL>
+</DL>
+<DD><B>shadow processes, <I>see</I> server processes</B>
+<DD><B>shared memory, 8</B>
+<DL>
+<DD>PGA (Program Global Area), 10
+<DD>SGA (System Global Area)
+<DL>
+<DD><I>buffer cache, 9</I>
+<DD><I>redo log buffer, 10</I>
+<DD><I>shared pool, 10</I>
+</DL>
+<DD>UNIX, parameters, 194
+</DL>
+<DD><B>shared pool</B>
+<DL>
+<DD>buffer cache, 583
+<DL>
+<DD><I>cache hit ratio, 107-108</I>
+</DL>
+<DD>cache miss, 101
+<DD>data dictionary cache, 103-104, 582
+<DD>defined, 10, 100, 582
+<DD>library cache, 100-102, 582
+<DL>
+<DD><I>increasing cache hits, 100-102</I>
+</DL>
+</DL>
+<DD><B>shared session area, 104-106, 583</B>
+<DD><B>SHARED_POOL_SIZE parameter, 625</B>
+<DD><B>shareware, middleware</B>
+<DL>
+<DD>defined, 556
+<DD>three-tiered system, 557-559
+<DD>two-tiered system architecture, 556
+</DL>
+<DD><B>shipping industry systems, performance criteria, 39</B>
+<DD><B>SHMMAX parameter, 194</B>
+<DD><B>SHMSEG parameter, 194</B>
+<DD><B>Simple Network Management Protocol (SNMP), agents, 76</B>
+<DD><B>simple statements, 615</B>
+<DD><B>SINGLE_PROCESS parameter, 636</B>
+<DD><B>SMALL_TABLE_THRESHOLD parameter, 625</B>
+<DD><B>SMON (System Monitor), 12</B>
+<DD><B>SMP (Symmetric Multiprocessor), 209, 615</B>
+<DD><B>SNAPSHOT_REFRESH_ INTERVAL parameter, 635</B>
+<DD><B>SNAPSHOT_REFRESH_KEEP_ CONNECTION para-meter, 635</B>
+<DD><B>SNAPSHOT_REFRESH_ PROCESS parameter, 636</B>
+<DD><B>snapshots</B>
+<DL>
+<DD>defined, 615
+<DD>read-only snapshots, 374
+<DD>updatable snapshots, 374
+</DL>
+<DD><B>SNMP (Simple Network Management Protocol), agents, 76</B>
+<DD><B>software</B>
+<DL>
+<DD>backup process
+<DL>
+<DD><I>cold (offline) backups, 355</I>
+<DD><I>hot (online) backups, 357-358</I>
+<DD><I>testing, 364-365</I>
+</DL>
+<DD>networks, 574
+<DL>
+<DD><I>NetWare, 574-575</I>
+<DD><I>Oracle tuning, 575-576</I>
+<DD><I>OS/2, 575</I>
+<DD><I>UNIX, 575</I>
+<DD><I>Windows NT, 575</I>
+</DL>
+</DL>
+<DD><B>software disk array
+1000
+s, 227</B>
+<DD><B>Solaris</B>
+<DL>
+<DD>buffer cache, tuning, 193
+<DD>networks, 197
+<DD>shared memory, parameters, 194-195
+</DL>
+<DD><B>SORT_AREA_RETAINED_SIZE parameter, 625</B>
+<DD><B>SORT_AREA_SIZE parameter, 626</B>
+<DD><B>SORT_SPACEMAP_SIZE parameter, 626</B>
+<DD><B>sorts</B>
+<DL>
+<DD>direct write sorts, 143, 158
+<DL>
+<DD><I>batch processing systems, 277</I>
+<DD><I>data warehouses, 315</I>
+<DD><I>decision support systems, 296</I>
+</DL>
+<DD>memory, 135-136
+<DD>SQL statement, 601-602
+</DL>
+<DD><B>Source Code Control (Procedure Builder tool), 542</B>
+<DD><B>spin counts, 164, 588</B>
+<DL>
+<DD>financial systems, 371
+<DD>office systems, 385
+<DD>WebServer systems, 388
+</DL>
+<DD><B>SPX/IPX protocol</B>
+<DL>
+<DD>defined, 571, 615
+<DD>operating systems, NetWare, 181-182
+</DL>
+<DD><B>SQL (Structured Query Language)</B>
+<DL>
+<DD>cursors, 610
+<DD>queries
+<DL>
+<DD><I>defined, 614</I>
+<DD><I>joins, 612</I>
+<DD><I>subqueries, 609, 616</I>
+</DL>
+<DD>scripts on CD-ROM, 646-648
+<DD>statements
+<DL>
+<DD><I>analyzing effects of, 424-425</I>
+<DD><I>analyzing with EXPLAIN PLAN command, 424</I>
+<DD><I>analyzing with SQL Trace, 423-424</I>
+<DD><I>buffer cache, 597</I>
+<DD><I>chained rows, 599</I>
+<DD><I>characteristics of optimized statements, 394</I>
+<DD><I>complex statements, 609</I>
+<DD><I>data dictionary cache, 596-597</I>
+<DD><I>determining dynamic rollback growth, 600</I>
+<DD><I>executing, 401</I>
+<DD><I>flowchart of statement processing, 605</I>
+<DD><I>free list contention, 602</I>
+<DD><I>functions, 24</I>
+<DD><I>hints, 394</I>
+<DD><I>identifying badly formed statements, 394-395</I>
+<DD><I>I/O usage, 597-598</I>
+<DD><I>latch contention, 601</I>
+<DD><I>library cache, 596</I>
+<DD><I>migrated rows, 599</I>
+<DD><I>packages, 394</I>
+<DD><I>procedures, 24, 394, 614</I>
+<DD><I>processing, 397-402</I>
+<DD><I>recursive calls, 599, 614</I>
+<DD><I>redo log buffer contention, 600-601</I>
+<DD><I>rollback contention, 599-600</I>
+<DD><I>simple statements, 615</I>
+<DD><I>sort performance, 601-602</I>
+<DD><I>transaction processing, 395-396</I>
+<DD><I>tuning, 422-424</I>
+<DD><I>UPDATE statement, 617</I>
+</DL>
+<DD>tuning private SQL areas, 100
+</DL>
+<DD><B>SQL Coder tool, 493-494</B>
+<DD><B>SQL DBA, <I>see</I> Server Manager</B>
+<DD><B>SQL Trace feature</B>
+<DL>
+<DD>anaylyzing SQL statements, 423-424
+<DD>defined, 76-77, 404
+<DL>
+<DD><I>initialization parameters, 404-405</I>
+</DL>
+<DD>disabling
+<DL>
+<DD><I>command, 410</I>
+<DD><I>for an instance, 406</I>
+<DD><I>per-session basis, 405-406</I>
+</DL>
+<DD>elapsed time, 412
+<DD>enabling
+<DL>
+<DD><I>command, 409</I>
+<DD><I>for an instance, 406</I>
+<DD><I>per-session basis, 405</I>
+</DL>
+<DD>functionality, 406
+<DD>interpreting information, 409-414
+<DD>library cache statistics, 413
+<DD>summary of, 414
+<DD>TKPROF program
+<DL>
+<DD><I>functionality, 407-409</I>
+<DD><I>output file, 410-414</I>
+<DD><I>parameters, 407-409</I>
+</DL>
+</DL>
+<DD><B>SQL Windows, 495, 550-552</B>
+<DD><B>SQL*DBA Monitor, 76</B>
+<DD><B>SQL*Loader, 616</B>
+<DD><B>SQL*Net, 14, 616</B>
+<DD><B>SQL*Plus, 616</B>
+<DD><B>SQL/DBA, 616</B>
+<DD><B>SQL_TRACE parameter, 629</B>
+<DD><B>SQL92_SECURITY parameter, 642</B>
+<DD><B>stack space (PGA), 10</B>
+<DD><B>standard benchmarks</B>
+<DL>
+<DD>batch processing systems, 282-283
+<DD>BLOB systems, 336-337
+<DD>data warehouses, 320-321
+<DD>decision support systems, 301-302
+<DD>defined, 51-53
+<DD>OLTP systems, 262
+<DD>TPC (Transaction Processing Performance Council), 53-54
+<DL>
+<DD><I>ACID tests (Atomicity, Consistency, Isolation, and Durability), 55-58</I>
+<DD><I>interpreting spreadsheet of results, 67-69</I>
+<DD><I>members, 53-54</I>
+<DD><I>publishing benchmarks, 57-58</I>
+<DD><I>results of benchmarks, 56-58, 67-69</I>
+<DD><I>rules, 55</I>
+<DD><I>steering committee, 54</I>
+<DD><I>Technical Advisory Board (TAB), 54</I>
+<DD><I>TPC-A benchmark, 59-60</I>
+<DD><I>TPC-B benchmark, 60-61</I>
+<DD><I>TPC-C benchmark, 61-63</I>
+<DD><I>TPC-C/S (client/server) benchmark, 66-67</I>
+<DD>
+1000
+<I>TPC-D benchmark, 63-64</I>
+<DD><I>TPC-E benchmark, 64-66</I>
+</DL>
+</DL>
+<DD><B>statements</B>
+<DL>
+<DD>anaylyzing effects of, 424-425
+<DD>cache
+<DL>
+<DD><I>buffer cache, 597</I>
+<DD><I>data dictionary cache, 596-597</I>
+<DD><I>library cache, 596</I>
+</DL>
+<DD>characteristics of optimized, 394
+<DD>complex, 609
+<DD>contention
+<DL>
+<DD><I>free list, 602</I>
+<DD><I>latch, 601</I>
+<DD><I>redo log buffer, 600-601</I>
+<DD><I>rollback, 599-600</I>
+</DL>
+<DD>DELETE, 611
+<DD>determining dynamic rollback growth, 600
+<DD>EXPLAIN PLAN
+<DL>
+<DD><I>analyzing statement execution, 424</I>
+<DD><I>defined, 414</I>
+<DD><I>extracting results of, 416</I>
+<DD><I>initialization, 414-415</I>
+<DD><I>invoking, 415-416</I>
+</DL>
+<DD>flowchart of statement processing, 605
+<DD>functions, 24
+<DD>hints, 394
+<DL>
+<DD><I>errors, 477-478</I>
+<DD><I>examples, 477-478</I>
+<DD><I>implementing, 476-478</I>
+<DD><I>multiple, 478</I>
+<DD><I>optimization techniques, 478-481</I>
+<DD><I>syntax, 477</I>
+</DL>
+<DD>identifying badly formed statements, 394-395
+<DD>INSERT, 612
+<DD>I/O usage, 597-598
+<DD>joins, equijoins, 611
+<DD>optimizing, 438
+<DD>packages, 394
+<DD>procedures, 24, 394, 614
+<DD>processing, 397
+<DL>
+<DD><I>bind variables, 401</I>
+<DD><I>cursor creation, 398</I>
+<DD><I>executing statements, 401</I>
+<DD><I>fetching returned rows, 401-402</I>
+<DD><I>parallelization, 401</I>
+<DD><I>query processing, 400</I>
+<DD><I>statement parsing, 399-400</I>
+<DD><I>summary, 402</I>
+</DL>
+<DD>recursive calls, 599, 614
+<DD>rows, chained or migrated, 599
+<DD>simple statements, 615
+<DD>sort performance, 601-602
+<DD>SQL Trace feature
+<DL>
+<DD><I>analyzing statements, 423-424</I>
+<DD><I>defined, 404</I>
+<DD><I>disabling, 405-406, 410</I>
+<DD><I>elapsed time, 412</I>
+<DD><I>enabling, 405-406, 409</I>
+<DD><I>functionality, 406</I>
+<DD><I>initialization parameters, 404-405</I>
+<DD><I>interpreting information, 409-414</I>
+<DD><I>library cache statistics, 413</I>
+<DD><I>summary, 414</I>
+<DD><I>TKPROF output file, 410-414</I>
+<DD><I>TKPROF program, 407-409</I>
+</DL>
+<DD>transaction processing, 395-396
+<DD>tuning, 422-424
+<DD>UPDATE, 617
+</DL>
+<DD><B>steering committee (TPC), 54</B>
+<DD><B>Stock-Level transaction (TPC-C benchmark), 62</B>
+<DD><B>stored functions</B>
+<DL>
+<DD>creating, 456-457
+<DD>defined, 452
+<DD>properties, 452
+<DD>replacing, 457
+<DD><I>see also</I> functions
+</DL>
+<DD><B>stored procedures</B>
+<DL>
+<DD>creating, 456-457
+<DD>defined, 7, 452
+<DD>program units, 614
+<DD>properties, 452
+<DD>replacing, 457
+<DD><I>see also</I> procedures
+</DL>
+<DD><B>Stored Program Unit Editor (Procedure Builder tool), 542</B>
+<DD><B>storing tables, <I>see</I> clusters</B>
+<DD><B>streaming, 616</B>
+<DD><B>stripes, 226</B>
+<DD><B>striping data</B>
+<DL>
+<DD>defined, 112
+<DD>hardware, 114-115
+<DD>operating system, 113-114
+<DD>options, 115-116
+<DD>Oracle, 112-113
+</DL>
+<DD><B>striping factor, 226</B>
+<DD><B>Structured Query Language, <I>see</I> SQL</B>
+<DD><B>subnetting networks, 576</B>
+<DD><B>subqueries, 609, 616</B>
+<DD><B>suites, Oracle Office, 17-18</B>
+<DD><B>support services, 19</B>
+<DD><B>swapping, 25, 211, 616</B>
+<DL>
+<DD><I>see also</I> paging
+</DL>
+<DD><B>Symmetric Multiprocessor, <I>see</I> SMP</B>
+<DD><B>Symmetric Replication, 15, 374</B>
+<DD><B>synchronous I/O, 171-172</B>
+<DD><B>synonyms, 616</B>
+<DD><B>syntax</B>
+<DL>
+<DD>functions, 453
+<DD>hints, 477
+<DD>packages, 458
+<DD>procedures, 453
+<DD>triggers, 470
+</DL>
+<DD><B>System Global Area, <I>see</I> SGA</B>
+<DD><B>system memory</B>
+<DL>
+<DD>architecture, 210
+<DL>
+<DD><I>virtual memory, 211</I>
+</DL>
+<DD>defined, 210
+<DD>speed, 206
+</DL>
+<DD><B>System Monitor, <I>see</I> SMON</B>
+<DD><B>SYSTEM tablespace, 5</B>
+<DD><B>systems, limitations, 95</B>
+<DD><B>Systems Designer tool, 491-492</B>
+<DD><B>Systems Modeller tool, 491</B>
+</DL>
+<P><FONT SIZE="+1"><B>T</B></FONT></P>
+<DL>
+<DD><B>table sequences</B>
+<DL>
+<DD>creating, 502-503
+<DD>defined, 502
+<DD>generating primary ke
+1000
+y values, 504-505
+<DD>generating sequence values, 503-504
+<DD>summary, 504-505
+<DD>tuning considerations, 503
+</DL>
+<DD><B>table-level locking, 508</B>
+<DD><B>tables</B>
+<DL>
+<DD>Cartesian products, 609
+<DD>clusters, 6, 609
+<DD>columns, 6
+<DD>data dictionary, 610
+<DD>defined, 6, 616
+<DD>dynamic performance tables
+<DL>
+<DD><I>defined, 24, 611</I>
+<DD><I>views (table of), 74-75</I>
+</DL>
+<DD>indexes, choosing tables to index, 427-428
+<DD>integrity, referential, 463-464
+<DD>transaction tables, rollback segments, 124
+<DD>V$ROLLSTAT, rollback segment data, 129
+<DD>V$ROWCACHE, data dictionary statistics, 103
+<DD>V$SYSSTAT, buffer cache statistics, 107
+<DD>V$WAITSTAT, rollback segment data, 127
+<DD>views, data in, 446
+</DL>
+<DD><B>tablespaces</B>
+<DL>
+<DD>data files, 5-6
+<DD>defined, 5-6, 616
+<DD>fragmentation, 144-146
+<DD>SYSTEM tablespace, 5-6
+</DL>
+<DD><B>tape drive, testing block size for backup process, 363</B>
+<DD><B>tapes, streaming, 616</B>
+<DD><B>TB (terabyte), 30</B>
+<DD><B>TCP/IP (Transmission Control Protocol/Internet Protocol), 571</B>
+<DL>
+<DD>defined, 616
+<DD>operating systems, NetWare, 182
+</DL>
+<DD><B>temporary segments, 8</B>
+<DD><B>TEMPORARY_TABLE_LOCKS parameter, 636</B>
+<DD><B>terabyte (TB), 30</B>
+<DD><B>terminal-based systems (host-based systems), performance criteria, 36</B>
+<DL>
+<DD>checklist, 37-38
+<DD>database, 36-37
+<DD>front-end application, 36
+</DL>
+<DD><B>testing performance, <I>see</I> benchmarks</B>
+<DD><B>testing stage, 84</B>
+<DL>
+<DD>clients, 85
+<DD>networks, 85-86
+<DD>servers, 85
+</DL>
+<DD><B>TextServer 3.0 system</B>
+<DL>
+<DD>archive logs, 381
+<DD>block buffers and size, 381
+<DD>characteristics, 379-380
+<DD>checkpoints, 381
+<DD>clusters, 381
+<DD>contention, latch contention, 381
+<DD>defined, 368, 379
+<DD>design considerations, 380-381
+<DD>enhancements, 381-382
+<DD>hash clusters, 381
+<DD>indexes, 381
+<DD>library cache, 381
+<DD>multiblock reads, 381
+<DD>Parallel Query, 381
+<DD>segments, rollback, 381
+<DD>summary, 382
+<DD>tuning considerations, 381
+</DL>
+<DD><B>third-party tools</B>
+<DL>
+<DD>analysis tools, 497
+<DL>
+<DD><I>AdHawk, 498</I>
+<DD><I>DATA-XPERT, 498</I>
+<DD><I>DBGENERAL, 498</I>
+<DD><I>Patrol, 498-499</I>
+<DD><I>Precise/SQL suite, 498</I>
+<DD><I>TSreorg, 498</I>
+</DL>
+<DD>application development tools, 495, 546
+<DL>
+<DD><I>Delphi, 495-496, 547-548</I>
+<DD><I>PowerBuilder, 495, 552</I>
+<DD><I>ReportSmith, 548-549</I>
+<DD><I>SQL Windows, 495, 550-552</I>
+</DL>
+<DD>database design tools, 492-493
+<DL>
+<DD><I>ERwin/ERX, 493</I>
+<DD><I>S-Designor, 493</I>
+<DD><I>SQL Coder, 493-494</I>
+</DL>
+<DD>monitoring tools, 78
+<DL>
+<DD><I>real-time monitors, 79</I>
+<DD><I>threshold monitors, 79-80</I>
+</DL>
+</DL>
+<DD><B>THREAD parameter, 641</B>
+<DD><B>threads</B>
+<DL>
+<DD>defined, 616
+<DD>operating systems, Windows NT, 184
+<DD><I>see also</I> lightweight processes; processes; traditional processes
+</DL>
+<DD><B>three-tiered system architecture, 557-558</B>
+<DD><B>threshold monitoring tools, 79-80</B>
+<DD><B>throughput, 42</B>
+<DD><B>TIMED_STATISTICS parameter, 404, 629</B>
+<DD><B>TKPROF program, 407-409</B>
+<DL>
+<DD>output file (listing), 410-414
+<DD>parameters, 407-409
+</DL>
+<DD><B>TM (Transaction Monitors)</B>
+<DL>
+<DD>client-side code, 560
+<DD>defined, 559-561
+<DD>OLTP enhancement, 259-260
+<DD>server-side code, 560
+<DD>tuning, 561
+</DL>
+<DD><B>Token Ring networks, 568-569, 617</B>
+<DD><B>tools</B>
+<DL>
+<DD>analysis tools, 496
+<DL>
+<DD><I>defined, 490</I>
+<DD><I>Oracle Mission Control, 496-497</I>
+<DD><I>Oracle Trace, 497</I>
+<DD><I>summary, 499</I>
+<DD><I>third-party tools, 497-499</I>
+</DL>
+<DD>application development tools, 494, 534-536
+<DL>
+<DD><I>advantages, 534</I>
+<DD><I>defined, 490</I>
+<DD><I>Developer/2000, 495, 536-544</I>
+<DD><I>first-generation tools, 534-535</I>
+<DD><I>modern tools, 535</I>
+<DD><I>Oracle Power Objects, 544-546</I>
+<DD><I>Power Objects, 495</I>
+<DD><I>third-party tools, 495-496, 546-552</I>
+<DD><I>tuning automatically
+1000
+ generated SQL statements, 535-536</I>
+</DL>
+<DD>buying performance monitoring tools, 79
+<DD>database design tools
+<DL>
+<DD><I>defined, 490</I>
+<DD><I>Designer/2000, 490-492</I>
+<DD><I>third-party tools, 492-494</I>
+</DL>
+<DD>monitoring performance, 75
+<DL>
+<DD><I>EXPLAIN PLAN command, 77</I>
+<DD><I>Server Manager, 76</I>
+<DD><I>SNMP agents, 76</I>
+<DD><I>SQL Trace, 76-77</I>
+<DD><I>SQL*DBA Monitor, 76</I>
+</DL>
+<DD>operating systems, 77-78
+<DD>third-party monitoring tools, 78-79
+<DL>
+<DD><I>real-time monitors, 79</I>
+<DD><I>threshold monitors, 79-80</I>
+</DL>
+</DL>
+<DD><B>TPC (Transaction Processing Performance Council)</B>
+<DL>
+<DD>ACID tests (Atomicity, Consistency, Isolation, and Durability), 55-58
+<DD>defined, 52-54
+<DD>members, 53-54
+<DD>publishing benchmarks, 57-58
+<DD>results of benchmarks, 67-69
+<DL>
+<DD><I>Full Disclosure Report, 56-58</I>
+<DD><I>interpreting spreadsheet, 67-69</I>
+</DL>
+<DD>rules, 55
+<DD>standard benchmarks, objectives, 53
+<DD>steering committee, 54
+<DD>Technical Advisory Board (TAB), 54
+<DD>TPC-A benchmark, 59-60
+<DD>TPC-B benchmark, 60-61
+<DD>TPC-C benchmark, 61-63
+<DD>TPC-C/S (client/server) benchmark, 66-67
+<DD>TPC-D benchmark, 63-64
+<DD>TPC-E benchmark, 64-66
+</DL>
+<DD><B>trace files, <I>see</I> SQL Trace</B>
+<DD><B>tracks (platters), 214</B>
+<DD><B>traditional disk drives</B>
+<DL>
+<DD>batch processing systems, 271-272
+<DD>BLOB systems, 328-329
+<DD>data warehouses, 309-310
+<DD>decision support systems, 291-292
+<DD>OLTP systems, 250-252
+</DL>
+<DD><B>traditional processes, <I>see</I> processes</B>
+<DD><B>training services, 19</B>
+<DD><B>Transaction Monitors (TM)</B>
+<DL>
+<DD>client-side code, 560
+<DD>defined, 559-561
+<DD>OLTP enhancements, 259-260
+<DD>server-side code, 560
+<DD>tuning, 561
+</DL>
+<DD><B>Transaction Processing Performance Council, <I>see</I> TPC</B>
+<DD><B>transaction tables, rollback segments, 124</B>
+<DD><B>TRANSACTIONS parameter, 636</B>
+<DD><B>transactions</B>
+<DL>
+<DD>benchmarks, TPC-C, 61-62
+<DD>committed transactions, 13
+<DD>completing, 12-13
+<DD>defined, 12-13, 25, 617
+<DD>discrete transactions, 435-436
+<DD>distributed transactions, distributed systems, 378
+<DD>latency, 214
+<DD>local transactions, distributed systems, 378
+<DD>OLTP (OnLine Transaction Processing), 65
+<DD>processing, 395-396
+<DD>remote transactions, distributed systems, 378
+<DD>rollback segments, 123-126
+<DD>user-transaction profile, flowchart, 605
+</DL>
+<DD><B>TRANSACTIONS_PER_ ROLLBACK_SEGMENT parameter, 636</B>
+<DD><B>Transmission Control Protocol/Internet Protocol, <I>see</I> TCP/IP</B>
+<DD><B>triggers</B>
+<DL>
+<DD>alerts, 470
+<DD>creating, 469, 470-471
+<DD>defined, 25, 469, 617
+<DD>event logging, 469
+<DD>generating data, 469
+<DD>keywords, 470
+<DD>qualifying statements, 470
+<DD>summary, 472
+<DD>syntax, 470
+<DD>validating data, 469
+<DD>viewing, 471-472
+<DD><I>see also</I> integrity
+</DL>
+<DD><B>Trusted Oracle7 option</B>
+<DL>
+<DD>defined, 15
+<DD>parameters, list of, 642-643
+</DL>
+<DD><B>TSreorg, 498</B>
+<DD><B>tuning</B>
+<DL>
+<DD>goals
+<DL>
+<DD><I>connectivity, 43</I>
+<DD><I>fault tolerance, 43</I>
+<DD><I>load time, 44</I>
+<DD><I>response time, 42-43</I>
+<DD><I>throughput, 42</I>
+</DL>
+<DD>memory
+<DL>
+<DD><I>buffer cache, 107-108</I>
+<DD><I>operating system, 99</I>
+<DD><I>private PL/SQL areas, 100</I>
+<DD><I>private SQL areas, 100</I>
+<DD><I>shared pool, 100-106</I>
+</DL>
+<DD>methodology, 44
+<DL>
+<DD><I>analyzing results, 50</I>
+<DD><I>determing solution to problems, 48-49</I>
+<DD><I>examining system for problems, 45-46</I>
+<DD><I>finding cause or performance problems, 47-48</I>
+<DD><I>goal setting for optimal performance, 48-50</I>
+</DL>
+<DD>performance
+<DL>
+<DD><I>clients, 85</I>
+<DD><I>networks, 85-86</I>
+<DD><I>servers, 85</I>
+</DL>
+</DL>
+<DD><B>Tuxedo systems, features, 344</B>
+<DD><B>two-phase commit, 617</B>
+<DD><B>two-tiered system architecture, 556</B>
+</DL>
+<P><FONT SIZE="+1"><B>U</B></FONT></P>
+<DL>
+<DD><B>UNIQUE constraint, 465</B>
+<DD><B>uniqu
+1000
+e indexes, 149, 427</B>
+<DD><B>units of measurements, conversions, 28</B>
+<DL>
+<DD>binary storage units, 29-30
+<DD>powers of 10, 29
+</DL>
+<DD><B>UNIX, 530-531</B>
+<DL>
+<DD>architecture, 192
+<DD>development of, 191
+<DD>I/O subsystem, 197-198
+<DL>
+<DD><I>asynchronous I/O, 198-200</I>
+<DD><I>file system, 198</I>
+<DD><I>raw device interface, 198</I>
+</DL>
+<DD>memory, 192-193, 531
+<DL>
+<DD><I>reducing unnecessary memory usage, 193</I>
+<DD><I>SGA tuning, 194-195</I>
+<DD><I>user capacity, 195-196</I>
+</DL>
+<DD>networks, 196, 531
+<DL>
+<DD><I>SCO UNIX, 196-197</I>
+<DD><I>Solaris, 197</I>
+<DD><I>tuning, 575</I>
+<DD><I>UnixWare, 197</I>
+</DL>
+<DD>new features
+<DL>
+<DD><I>benchmarking, 200</I>
+<DD><I>cache affinity, 202</I>
+<DD><I>disabling preemptive scheduling, 201</I>
+<DD><I>ISM (Intimate Shared Memory), 201</I>
+<DD><I>load balancing, 202</I>
+<DD><I>post-wait semaphores, 201</I>
+</DL>
+<DD>parameters
+<DL>
+<DD><I>asynchronous I/O, 198</I>
+<DD><I>SHMMAX, 194</I>
+<DD><I>SHMSEG, 194</I>
+</DL>
+<DD>summary of tuning guidelines, 202-203
+</DL>
+<DD><B>UNIX SVR4, 191</B>
+<DD><B>UnixWare</B>
+<DL>
+<DD>buffer cache, tuning, 193
+<DD>networks, 197
+<DD>parameters
+<DL>
+<DD><I>asynchronous I/O, 199</I>
+<DD><I>shared memory, 194-195</I>
+</DL>
+</DL>
+<DD><B>updatable snapshots, 374</B>
+<DD><B>UPDATE statement</B>
+<DL>
+<DD>defined, 617
+<DD>execution plan, displaying with EXPLAIN PLAN command, 414-416
+</DL>
+<DD><B>updating rollback segments, 128</B>
+<DD><B>USE_CONCAT hint, 483-484</B>
+<DD><B>USE_MERGE hint, 484</B>
+<DD><B>USE_NL hint, 485</B>
+<DD><B>user processes (client processes), 10</B>
+<DD><B>user-transaction profile, flowchart, 605</B>
+<DD><B>USER_CONS_COLUMNS view, 467</B>
+<DD><B>USER_CONSTRAINTS view, 467</B>
+<DD><B>USER_DUMP_DEST parameter, 405, 637</B>
+<DD><B>USER_TRIGGERS view, 471</B>
+</DL>
+<P><FONT SIZE="+1"><B>V</B></FONT></P>
+<DL>
+<DD><B>V$FILESTAT dynamic performance table, disk access information, 597</B>
+<DD><B>V$LATCH dynamic performance table, latch contention data, 601</B>
+<DD><B>V$ROLLSTAT dynamic performance table, dynamic rollback growth data, 600</B>
+<DD><B>V$ROLLSTAT table, rollback segment data, 129</B>
+<DD><B>V$ROWCACHE table, data dictionary statistics, 103</B>
+<DD><B>V$SYSSTAT dynamic performance table, recursive calls data, 599</B>
+<DD><B>V$SYSSTAT table, buffer cache statistics, 107</B>
+<DD><B>V$WAITSTAT dynamic performance table, rollback contention data, 599</B>
+<DD><B>V$WAITSTAT table, rollback segment data, 127</B>
+<DD><B>validating data, triggers, 469</B>
+<DD><B>VARCHAR2 data type, 510</B>
+<DD><B>variables, binding, 401</B>
+<DD><B>viewing</B>
+<DL>
+<DD>constraints, 467-469
+<DD>triggers, 471-472
+</DL>
+<DD><B>views</B>
+<DL>
+<DD>defined, 6, 617
+<DD>dynamic performance tables, 74-75
+</DL>
+<DD><B>virtual memory</B>
+<DL>
+<DD>defined, 25, 211, 617
+<DD>paging, 24, 211
+<DD>swapping, 25, 211
+</DL>
+</DL>
+<P><FONT SIZE="+1"><B>W-X-Y-Z</B></FONT></P>
+<DL>
+<DD><B>warehouses, <I>see</I> data warehouses</B>
+<DD><B>WebServer system</B>
+<DL>
+<DD>archive logs, 389
+<DD>block
+<DL>
+<DD><I>buffers, 388</I>
+<DD><I>size, 389</I>
+</DL>
+<DD>characteristics, 386-387
+<DD>checkpoints, 389
+<DD>clusters, 389
+<DD>contention, latch and rollback, 389
+<DD>defined, 18, 368, 386
+<DD>design considerations, 387-388
+<DD>enhancements, 389-390
+<DD>hash clusters, 389
+<DD>library cache, 388
+<DD>multiblock reads, 389
+<DD>Parallel Query option, 389
+<DD>Parallel Server option, 389
+<DD>spin counts, 388
+<DD>summary, 390
+<DD>tuning considerations, 388-389
+</DL>
+<DD><B>Windows 3.1</B>
+<DL>
+<DD>memory, 528
+<DD>networks, 528-529
+</DL>
+<DD><B>Windows 95</B>
+<DL>
+<DD>32-bit support, 529-530
+<DD>memory, 530
+<DD>networks, 530
+<DD>Oracle support, 530
+</DL>
+<DD><B>Windows for Workgroups 3.11</B>
+<DL>
+<DD>memory, 528
+<DD>networks, 528-529
+</DL>
+<DD><B>Windows NT, 183</B>
+<DL>
+<DD>16-bit applications, 527
+<DD>architecture, 183-184
+<DD>defined, 527
+<DD>I/O performance, 528
+<DD>I/O subsystem, 186-187
+<DD>memory, 185, 527
+<DL>
+e44
+
+<DD><I>reducing unnecessary memory usage, 185</I>
+<DD><I>SGA tuning, 185-186</I>
+<DD><I>user capacity, 186</I>
+</DL>
+<DD>networks, 186
+<DL>
+<DD><I>tuning, 575</I>
+</DL>
+<DD>summary of tuning guidelines, 187
+<DD>threads, 184
+</DL>
+<DD><B>words, 29</B>
+<DD><B>Workgroup Server, 15-16</B>
+<DD><B>write caches, disk arrays, 228-229</B>
+</DL>
+<P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="ewtoc.html">Table of Contents</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+
+<!-- all of the reference materials (books) have the footer and subfoot reveresed -->
+<!-- reference_subfoot = footer -->
+<!-- reference_footer = subfoot -->
+
+<!-- BEGIN SUB FOOTER -->
+	<br>
+	<img src="/images/dotclear.gif" width="5" height="7" border="0">
+	</TD>
+    </TR>
+	</TABLE>
+	
+	<table width="100%" border=0 cellpadding=0 cellspacing=0>
+	<tr>
+		<td align="left" width="160"><img src="/images/bot_curve.jpg" width="160" alt="" border="0"></td>
+		<td align="left" valign="top" nowrap><a href="/"><img src="/images/top_tabs/home_bot.gif" alt="home" border="0"></a><a href="/content/corp.html"><img src="/images/top_tabs/subscribe_bot.gif" alt="subscribe" border="0"></a><a href="/search/"><img src="/images/top_tabs/search_bot.gif" alt="search" border="0"></a><a href="/faq/faq.html"><img src="/images/top_tabs/faq_bot.gif" alt="faq" border="0"></a><a href="/sitemap.html"><img src="/images/top_tabs/sitemap_bot.gif" alt="sitemap" border="0"></a><a href="/contactus.html"><img src="/images/top_tabs/contact_us_bot.gif" alt="contactus" border="0"></a><img src="/images/dotclear.gif" width=260 height="1" alt="" border="0"></td> 
+	</tr>
+	</table>
+		
+	<table width="100%" bgcolor="#003366" border=0 cellpadding=0 cellspacing=0>
+	<tr>
+		<td align="left" width=145><img src="/images/clear_pixel.gif" width=145 height="1" alt="" border="0"></td>
+				
+<!-- END SUB FOOTER -->
+
+<!-- all of the books have the footer and subfoot reveresed -->
+<!-- reference_subfoot = footer -->
+<!-- reference_footer = subfoot -->
+
+<!-- FOOTER -->
+			
+<td align="left" bgcolor="#003366">
+<table border="0" cellspacing="10" cellpadding="5">
+<tr>
+<td align="center">
+<font face="arial, helvetica" size="1" color="#cccccc"><b><a href="/products.html"><font color="#0099CC">Products</font></a>&nbsp;|&nbsp; <a href="/contactus.html"><font color="#0099CC">Contact Us</font></a>&nbsp;|&nbsp; <a href="/aboutus.html"><font color="#0099CC">About Us</font></a>&nbsp;|&nbsp; <a href="http://www.earthweb.com/dlink.corp|privacy-jhtml.72.0.-.-.jhtml" target="resource window"><font color="#0099CC">Privacy</font></a> &nbsp;|&nbsp; <a href="http://www.itmarketer.com/" target="resource window"><font color="#0099CC">Ad Info</font></a> &nbsp;|&nbsp; <a href="/"><font color="#0099CC">Home</font></a></b>
+<br><br>Use of this site is subject to certain <a href="/agreement.html"><font color="#0099CC">Terms &amp; Conditions</font></a>, <a href="/copyright.html"><font color="#0099CC">Copyright &copy; 1996-2000 EarthWeb Inc.</font></a> All rights reserved.  Reproduction whole or in part in any form or medium without express written <a href="http://www.earthweb.com/dlink.corp|permissions-jhtml.72.0.-.-.jhtml" target="resource window"><font color="#0099CC">permission</font></a> of EarthWeb is prohibited. Read EarthWeb's <A HREF="http://www.earthweb.com/dlink.corp|privacy-jhtml.72.0.-.-.jhtml" target="resource window"><font color="#0099CC">privacy</font></A> statement.</font><br><br>
+</td>
+</tr>
+</table>
+
+<a href="CITK1a2b3c4d5e6f7g8h9idefcon4.html">
+<img src="/images/dotclear.gif" border="0" height="1" width="1" align="left"></a>
+</td>
+		</tr>
+</table>
+</BODY>
+</HTML>
+
+<!-- END FOOTER -->
+
+
+0
+

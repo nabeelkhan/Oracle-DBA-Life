@@ -1,0 +1,251 @@
+<html>
+	<head>
+		<title>
+			Considering Partitioning
+		</title>
+		<style>
+			<!-- a:hover{color:#660066;} -->
+		</style>
+	</head>
+	<body background="../../images/bg.jpg" link="#FF6600" vlink="#FF6600" alink="#660066">
+		
+		<h2 align="center">
+			<font color="#990000">
+				Considering Partitioning
+			</font>
+		</h2>
+		<p>
+		The mapping of logical entities to physical tables is too often just allowed to default to a direct mapping, without considering any alternatives.
+		The performance and scalability of your application will relate directly to the care you take at this point.
+		Partitioning is one of the main strategies to consider.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				Why partition by columns?
+			</font>
+		</h3>
+		<p>
+		If an entity has some attributes which are relatively large, and seldom or never used in WHERE clause predicates,
+		then there may be considerable benefit in partitioning the entity into two sibling tables.
+		</p>
+		<p>
+		For example, an entity representing a legal document may be implemented using two sibling tables -
+		one containing columns for the synthetic key, the matter, parties, dates and so on -
+		the other containing just the synthetic key, and the full text of the document (a CLOB column).
+		</p>
+		<p>
+		The benefit of partitioning by columns is that when a full table scan is required, it will be performed against a relatively small table.
+		Partitioning by columns may be implemented using index-organized tables.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				Why partition by rows?
+			</font>
+		</h3>
+		<p>
+		Partitioning by rows, which is often just called partitioning, has a wide variety of uses and benefits.
+		These are the main benefits to consider:
+		</p>
+		<h4>
+			<font color="#990000">
+				Ease of Maintenance
+			</font>
+		</h4>
+		<blockquote>
+			<p>
+			Much as you may strive to avoid it, it is sometimes necessary to perform recovery or data maintenance operations on large entities.
+			Partitioning reduces the unit of recovery and data maintenance,
+			thereby making it possible to perform such operations within a modest timeframe, possibly in parallel.
+			</p>
+			<p>
+			The partitioning key should be chosen so that the number of rows in each partition is limited.
+			In this way it is possible to ensure that the required maintenance operations can be accomplished comfortably within the available window.
+			</p>
+		</blockquote>
+		<h4>
+			<font color="#990000">
+				Concurrency
+			</font>
+		</h4>
+		<blockquote>
+			<p>
+			Partitioning can be used to improve concurrency on entities that have high insert and delete rates.
+			Although multiple process freelists can be used to reduce the risk of data block contention,
+			there is still the risk of contention for the block in which the freelist headers are stored
+			when blocks are removed from and returned to the process freelists very quickly.
+			In a parallel server environment multiple freelist groups can be used to reduce this risk as well.
+			However, using multiple freelist groups is undesirable because it can compromise data density.
+			</p>
+			<p>
+			Partitioning offers a simpler and more certain defense against the risk of freelist header block contention.
+			Activity can be distributed evenly across the partitions using a hash partitioning algorithm.
+			</p>
+		</blockquote>
+		<h4>
+			<font color="#990000">
+				Archival and Purging
+			</font>
+		</h4>
+		<blockquote>
+			<p>
+			Many entities contain records that need to be archived and purged periodically.
+			The best way of purging archived data is to drop or truncate a partition, rather than delete the rows.
+			In order to permit this,  such entities should be partitioned in such a way that
+			the rows that must be purged together are stored together in their own partition.
+			</p>
+		</blockquote>
+		<h4>
+			<font color="#990000">
+				Partition Elimination
+			</font>
+		</h4>
+		<blockquote>
+			<p>
+			Another benefit of range partitioning, is automatic partition elimination during the formulation of query execution plans.
+			The optimizer compares the WHERE clause predicates with the partitioning range for each partition and eliminates from the execution plan
+			those partitions which can be guaranteed not to contain rows satisfying the query.
+			Of course, partition elimination normally relies on not using bind variables,
+			so that the optimizer can determine which partitions can be eliminated.
+			However, in the case of equality predicates on the partitioning key,
+			the optimizer is content in the knowledge that at most one partition will be required.
+			</p>
+		</blockquote>
+		<h4>
+			<font color="#990000">
+				Partition Parallel Execution Plans
+			</font>
+		</h4>
+		<blockquote>
+			<p>
+			Without partitioning Oracle can only use parallel execution plans for queries that are driven by a full table scan or fast full index scan.
+			Partitioning by rows enables both queries and DML statements using index based access methods to be executed in parallel.
+			</p>
+		</blockquote>
+		<p>
+		If several of these benefits of partitioning are required for a particular entity,
+		a composite partitioning key, possibly using a hybrid partitioning algorithm, can normally be devised.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				Why only equi-partitioning?
+			</font>
+		</h3>
+		<p>
+		Two related tables, or a table and its index, are said to be equi-partitioned if there is a one to one correspondence between their partitions.
+		Equi-partitioning should be your standard for the following reasons:
+		</p>
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="42" align="center">
+					<img src="../../images/ball.gif" width="13" height="14" vspace="2">
+				</td>
+				<td>
+					Partition independence is maximized.
+					That is, while maintenance operations are being performed on some partitions, the other partitions can still be used.<br>&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td valign="top" width="42" align="center">
+					<img src="../../images/ball.gif" width="13" height="14" vspace="2">
+				</td>
+				<td>
+					The full range of partition-parallel execution plans is made available.<br>&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td valign="top" width="42" align="center">
+					<img src="../../images/ball.gif" width="13" height="14" vspace="2">
+				</td>
+				<td>
+					Large sorts and joins are minimized.
+				</td>
+			</tr>
+		</table>
+		<p>
+		In particular, global indexes should be avoided, because they have to be entirely rebuilt after numerous maintenance operations.
+		</p>
+		<p>
+		It is commonly thought that global indexes are unavoidably needed
+		to implement uniqueness constraints on keys other than (a leading portion of) the partitioning key.
+		However, it is equally possible to use equi-partitioned non-unique indexes, and enforce uniqueness across the partitions using triggers.
+		Despite the cost of trigger execution, this option should be carefully considered
+		if frequent large global index rebuilds would otherwise be required.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				What about manual partitioning?
+			</font>
+		</h3>
+		<p>
+		In manual partitioning a set of tables are used as partitions, a UNION ALL view is used to encapsulate the partitions,
+		and INSTEAD OF triggers are defined on the view to direct DML operations to the appropriate base tables.
+		There are major drawbacks to manual partitioning, namely:
+		</p>
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="42" align="centre">
+					<img src="../../images/ball.gif" width="13" height="14" vspace="2">
+				</td>
+				<td>
+					It increases the database administration complexity.<br>&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td valign="top" width="42" align="centre">
+					<img src="../../images/ball.gif" width="13" height="14" vspace="2">
+				</td>
+				<td>
+					Memory and CPU resources are less efficiently used during parsing.<br>&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td valign="top" width="42" align="centre">
+					<img src="../../images/ball.gif" width="13" height="14" vspace="2">
+				</td>
+				<td>
+					Partition elimination may not be possible.<br>&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td valign="top" width="42" align="centre">
+					<img src="../../images/ball.gif" width="13" height="14" vspace="2">
+				</td>
+				<td>
+					Partition-parallel index scans, are not available to the query optimizer.
+				</td>
+			</tr>
+		</table>
+		<p>
+		In view of this, manual partitioning should only be used when it is needed to overcome a limitation in Oracle's native partitioning functionality.
+		</p>
+		
+		<hr noshade align="left" width="300" size="2" color="black">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="1000">
+					<font size="2" color="#660066">
+						<strong>
+							Copyright © Ixora Pty Ltd
+						</strong>
+					</font>
+				</td>
+				<td valign="top" align="right">
+					<nobr>
+					<map name="email">
+						<area shape="rect" coords="0, 0, 32, 21" title="Feedback" href="mailto:feedback@ixora.com.au?SUBJECT=[Tip] partitioning.htm">
+					</map>
+					<img ismap usemap="#email" border="0" alt="Send Email" src="../../images/email.gif" width="32" height="21">
+					<map name="home">
+						<area shape="rect" coords="0, 0, 28, 28" title="Home" href="/">
+					</map>
+					<img ismap usemap="#home" border="0" alt="Home" src="../../images/home.gif" width="28" height="28">
+					</nobr>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

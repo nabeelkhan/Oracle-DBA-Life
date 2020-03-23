@@ -1,0 +1,361 @@
+Recovering an Oracle database is a wonderfully complex task. Data files, log files, control files, full backups, hot backups and point-in-time recoveries all combine to make many administrators lie awake nights wondering if their databases can be easily recovered. Oracle10G contains numerous enhancments to the RMAN backup utility. As a result, a thorough testing of 10G RMAN is warranted.
+
+In part 1 of this 2 part series, I'll provide you with a few backup and recovery tips, tricks and techniques that I think will help both beginners and experts alike. Since we are RMAN aficionados here at Giant Eagle, I'll finish the blog with an introduction to RMAN. In part 2, I'll highlight a few of the 10G RMAN new features we are interested in and provide you with Giant Eagle's detailed 10G RMAN test plan.
+
+It's the Little Things That Bite You
+Most botched recoveries can be attributed to human error. Make sure all tapes have proper retention periods, verify that all backups are executing correctly and run test recoveries on a regular basis. Don't let missing tapes or backups cause you to lose data. You don't want to hear UNIX support say "the retention on that tape was supposed to be how long?" in the middle of a recovery. COMMUNICATE with others that are responsible for all other pieces of the recovery "pie" (system admins, operators) on a regular basis to ensure you have everything you need to recover a crashed database.
+
+Keep Your Skills Sharp
+Don't let your recovery skills get rusty. Create one database that you and your fellow administrators can trash on a regular basis. Take turns and make a game out of it. DBAs can be pretty creative when causing problems for others when it's all in fun. Spend dedicated time keeping your recovery skills sharp. If you are a senior-level DBA, make sure you keep the junior folks on their toes. A staff that has up-to-date recovery experience means less calls to you at 2AM.
+
+RELAX and Plan Your Attack
+When you are notified of a database failure, take a deep breath and relax. Don't immediately begin to paste the database back together without a plan. Create a recovery plan, put it on paper, have others review it if you can, and then execute it. You shouldn't be trying to determine what the next step is in the middle of the recovery process.
+
+Don't Be Afraid to Ask Others
+I have 18 years of experience using Oracle, am an ex-Oracle Instructor and have done my fair share of database recoveries.  If possible, I still have others review my recovery strategy and recovery steps before I execute them.  I'll be the first one to admit that I can still make a mistake during a recovery so I'm hapy to have others review my strategy.  Don't be afraid to ask others and don't be afraid to call Oracle support if you have to. That's what they get paid by your company to do - support you.  Don't make a database unrecoverable by guessing.  I once viewed over 100 different commands in an alert log after a junior DBA botched a production database recovery.  An ego that was too big to allow that person to ask questions created a database that was virtually unrecoverable.
+
+V$RECOVERFILE
+If you aren't using RMAN to perform the recovery, you can query the V$RECOVERFILE table to determine how many files are missing or corrupted before you have them restored. The operators will like you much better and the recovery process will be a lot faster if you restore all of the files that have been lost at the same time.
+
+Watch the NOLOGGING Option
+The NOLOGGING option is great for performance but it tends to complicate recoveries that require redo log entries to be applied. If you load or insert data using the NOLOGGING option and you don't immediately take a backup, you're asking for trouble. If you have to execute a database recovery, the database will be out of synch.  During the application of the redo log entries, the data loaded or inserted using the NOLOGGING option will not be in the redo logs.  This means that the data will not be replayed during the database recovery.   If transactions that depend on the missing data are replayed during the recovery, they will be accessing data that's not there!   Bad things will happen to your recovery as a result.   Take a backup after a NOLOGGING statement or utility execution.
+
+Striped File Systems
+If mirroring is not used, exercise caution when placing redo logs and/or control files on the same disk stripes as data files. If you lose any disk contained in the stripe, you also lose your ability to recover the database to the current point-in-time. Call me old-fashioned, I still try to sneak a copy of the control files and redo logs on a non-striped drive. If the stripe containing the other copies becomes unusable, the copies on the non-stripe disk are available to use as input to a forward recovery. I just can't bring myself to place all of my multiplexed redo log files and control files on the same stripe (whether that stripe is mirrored or not).  
+
+Data Files and Redo Logs
+If mirroring is not used, don't place redo logs and data files on the same disk. Once again, you may lose your ability to recover the database to the current point-in-time.
+
+Redo Log and Control File Multiplexing
+Make sure your redo log groups have two or more members in each group with each member being on a different disk drive. Multiple copies of the control file should also be maintained on different disks. There should be a very limited number of reasons why you have to recover a database due to the loss of all members of a redo log group or control file set.
+
+Recovery Manager
+Whether you love it or hate it, the Oracle Recovery Manager (RMAN) tool is Oracle's preferred strategy for backup and recovery.   The tool really does simplify the recovery process. Recovery Manager allows administrators to write scripts, test them and store them in the recovery catalog.  During a recovery scenario, the administrator executes one of the scripts stored in the catalog to recover the database. Running a script or two at 2AM in the morning is usually preferable to sitting at your PC trying to paste together a recovery procedure.
+
+Here is some general information on the Recovery Manager toolset:
+
+Recovery Manager is a utility that allows administrators to create database backups and use them as input to database recoveries.  RMAN uses a special program interface to the server for invoking backup and restore operations.
+
+Recovery Manager provides the following benefits:
+
+    * Automates backup operations.
+    * Creates printable logs of all backup and recovery operations.
+    * Automates both restore media and recovery operations.
+    * Automates backup and recovery processes.
+    * Configures backups for later execution.
+    * Automatically finds datafiles that need a backup based on user-specified limits on the amount of redo that must be applied if the datafiles were to be recovered. 
+
+Notice that the key word is automate! Many of the operations that once required manual intervention by the administrator are now automated. Recovery Manager automatically starts Oracle server processes to  backup and recover the target databases.
+
+Recovery Manager can be run in either interactive or batch mode. In interactive mode, Recovery Manager will immediately execute commands as you enter them at the prompt.  Batch mode allows backups to be run by third party job schedulers.  
+
+Recovery Catalog
+The recovery catalog can be loosely compared to a database catalog. Recovery manager uses the catalog's repository of information to keep track of backup and recovery operations. The recovery catalog must be contained in an Oracle database but does not require the creation of an additional database. The catalog can be placed in an existing database if desired.  It is highly recommended that you create the RMAN repository in a separate database that is used only for RMAN operations.
+
+The recovery catalog contains information on:
+
+    * Tablespaces and datafiles
+    * Archived redo logs (and copies of archived redo logs)
+    * Datafile copies
+    * Datafile and archivelog backup sets and backup pieces
+    * Stored scripts which contain user created sequences of commands that can be executed by the Recovery Manager 
+
+Administrators are able to create scripts and store them in the recovery catalog. Stored scripts allow administrators to chain a sequence of backup or recovery operations together and execute them as a single unit.
+
+Channels
+A channel is a data stream that is sent to a device.  The most common devices are disk and tape.  Administrators are able to automatically configure channels using the RMAN CONFIGURE command or they can explicity define the channel in the RMAN backup or recovery script. 
+
+The example below shows an RMAN script that allocates a device type of SBT (TAPE) and names the channel TAPE1.  The next line tells RMAN to back up the entire database including all of the archive logs.
+
+RUN
+{
+  ALLOCATE CHANNEL tape1 DEVICE TYPE sbt;
+  BACKUP DATABASE PLUS ARCHIVELOG;
+}
+
+This example allocates a channel to disk with all files created by this channel having the format '/u01/rpprod1/backup/23005tools.bak'.  The script backs up one database datafile. 
+
+RUN
+{
+  ALLOCATE CHANNEL d1 DEVICE TYPE disk
+  FORMAT = '/u01/rpprod1/backup/23005tools.bak';
+  BACKUP DATAFILE '/u01/oracle/oradata/rpprod1/tools01.dbf';
+}
+
+Our last example allocates 3 disk channels, performs an incremental level 0 (base) backup and uses channel d1 to backup data files 1, 4 and 5, d2 to backup up data files 2, 3 and 6 and so on.  The naming convention of the output files will begin with the characters "df_" followed by database name, set name and piece name.
+
+RUN
+{
+  ALLOCATE CHANNEL d1 DEVICE TYPE disk;
+  ALLOCATE CHANNEL d2 DEVICE TYPE disk;
+  ALLOCATE CHANNEL d3 DEVICE TYPE disk;
+  BACKUP
+  INCREMENTAL LEVEL = 0
+  FORMAT = '/u01/rpprod1/backup/df_%d_%s_%p.bak';
+  (DATAFILE 1, 4, 5 CHANNEL d1 tag=df1)
+  (DATAFILE 2, 3, 6 CHANNEL d2 tag=df2)
+  (DATAFILE 7, 8, 9 CHANNEL d3 tag=df3);
+   sql 'alter system archive log current';
+}
+
+Recovery Manager Backup Types
+Recovery Manager supports two different types of backups: backup sets and image copies:
+
+Backup Sets
+Backup sets consist of datafiles or archivelogs.  A single backup set cannot contain a combination of archivelogs and datafiles. A backup set can contain a combination of datafile and control file backups. Recovery Manager allows you to move archived logs from disk to tape. Backup sets containing moved archived logs are called archivelog backup sets.
+
+Backup sets consist of one or more individual backup files. The individual files contained in a backup set are called backup pieces. Recovery Manager uses the backup sets as input for recovery operations. Backup sets can be written to disk or sequential output media (tape). The V$BACKUP_DEVICE contains a list of backup devices that are supported by your platform.
+
+Backup sets can be full or incremental. A full backup is a backup of all of the blocks that make up a datafile or datafiles. Recovery Manager allows you to take full backups of datafiles, datafile copies, tablespaces, archive logs, control files and databases. Incremental backups copy blocks that have been changed since a previous backup. Incremental copes can be taken of datafiles, tablespaces and databases. Recovery Manager also provides cumulative backups. Cumulative backups copy all blocks that have been changed since the most recent incremental backup.
+
+Image Copies
+An image copy is a single datafile that you can use as input to a recovery. The Oracle server process validates the blocks in the file during backup and registers the copy in the recovery catalog.  Image copies do not require the execution of a recovery operation, the datafile can be renamed to the image copy.
+
+As a result, image copies:
+
+    * Do not store header or footer control information.
+    * Must be written to disk.
+    * Cannot be compressed.
+    * Cannot contain multiple input or output files.
+    * Cannot be multiplexed (discussed later). 
+
+Parallel Backup and Recovery
+Recovery Manager is able to parallelize a single backup, recovery or restore operation, but is unable to process multiple commands in a stored script in parallel.
+
+The RMAN script below uses three channels to back up three data files identified by their file number.  This creates three separate server processes each one sending a data stream to the tape device. 
+
+RUN
+{
+  ALLOCATE CHANNEL t1 DEVICE TYPE sbt;
+  ALLOCATE CHANNEL t2 DEVICE TYPE sbt;
+  ALLOCATE CHANNEL t3 DEVICE TYPE sbt;
+  BACKUP DATAFILE 3,4,5 ;
+}
+
+Multiplexed Backup Sets
+A backup process is able to take concurrent backups of multiple data files, or one or more multi-file tablespaces and multiplex the output into a single stream.
+
+Backup/Recovery Reports
+Recovery Manager provides two commands to provide information relating to backups and image copies:
+
+    * Report - produces a report of files that require backups, files that are unrecoverable and backup files that can be deleted.
+    * List - produces a listing of the contents of the recovery catalog. The list command allows you to find out what backups or copies are available. 
+
+Database Restore and Recovery
+The database restoration process is performed by executing the RMAN RESTORE and RECOVER commands.
+
+The RESTORE command tells RMAN to retrieve files from RMAN backups based on the contents of the RMAN repository. 
+
+You use the RECOVER command in Recovery Manager to perform media recovery and apply incremental backups and redo logs (archived or online) if necessary. Recovery Manager uses the recovery catalog to select the backup sets or image copies to use as input to the recovery operation.
+
+There are four variations of the recover command:
+
+    * RECOVER DATABASE - recovers an entire database.
+    * RECOVER TABLESPACE - recovers an entire tablespace consisting of one or more datafiles.
+    * RECOVER DATAFILE - recovers a single datafile or datafiles.
+    * RECOVER CONTROLFILE - recovers the database control files.
+
+This sample recovery script allocates three disk channels, performs a point-in-time recovery to the specified time and resets the logs when opening the database: 
+
+RUN
+{
+  ALLOCATE CHANNEL d1 DEVICE TYPE disk;
+  ALLOCATE CHANNEL d2 DEVICE TYPE disk;
+  ALLOCATE CHANNEL d3 DEVICE TYPE disk;
+  SET UNTIL TIME = '2005-02-28:11:00:00';
+  RESTORE DATABASE;
+  RECOVER DATABASE;
+  SQL 'alter database open resetlogs';
+  }
+
+RMAN Examples
+The examples below should give you a general understanding of how RMAN is used to back up and recover an Oracle database:
+
+    * rman - Operating system command to activate RMAN. There is also a GUI version available in later releases.
+    * CONNECT TARGET SYS/sysdba@prod1  - Connecting to the target database (the one that is to be backed up or recovered).
+    * CONNECT CATALOG rman/rman@rcat - Connecting to the database containing the RMAN catalog.
+    * rman TARGET SYS/target_pwd@target_str CATALOG rman/cat_pwd@cat_str - Getting high-tech and connecting to both the target and RMAN catalog at the same time.
+    * CREATE CATALOG; - Creating the catalog in the RMAN repository database.
+    * REGISTER DATABASE; - Registers the target database in he RMAN repository database.
+    * REPORT SCHEMA; - Displays the datafiles currently in the target database.
+    * LIST BACKUP SUMMARY; - Displays a summary of all backups recorded in the catalog.
+    * LIST COPY OF DATABASE ARCHIVELOG ALL; - Lists archived logs and copies of logs. 
+
+Sample RMAN Scripts
+This command uses two backupSpec clauses to back up tablespaces and datafiles and lets RMAN perform automatic parallelization of the backup. A channel must be allocated when it accesses a disk or tape drive. The backup is identifying files by tablespace name and fileid.
+
+ RUN
+ {
+   ALLOCATE CHANNEL dev1 DEVICE TYPE DISK FORMAT '/fs1/%U';
+   ALLOCATE CHANNEL dev2 DEVICE TYPE DISK FORMAT '/fs2/%U';
+   BACKUP
+     (TABLESPACE SYSTEM,sales1,sales2,sales3 FILESPERSET 10)
+     (DATAFILE 12,14,15);
+ }
+
+The following example takes the USERS tablespace offline, uses automatic channels to restore and recover it , then brings it back online.  Notice that we don't care what the backupset file names are or where the archived logs are located - RMAN handles it all!
+
+RUN
+ {
+SQL "ALTER TABLESPACE users OFFLINE IMMEDIATE";
+RESTORE TABLESPACE tools;
+RECOVER TABLESPACE tools;
+SQL "ALTER TABLESPACE tools ONLINE";
+ }
+
+Considering that we will be using this new release of RMAN to back up and recover our multiple terabyte data warehouses, I won't rest easy until I know I have tested every command that we use here at Giant Eagle.
+
+Call me paranoid but I will never, ever, ever trust any tool with my career. The test plan included in this blog may seem like overkill to you, but if it reduces my personal anxiety and lowers my (and my unit's) stress during our next recovery, the time spent testing RMAN will be well worth it. The more stressed you are during a recovery, the greater the chance you will have of making mistakes. Recoveries are stressful enough. I don't want to be wondering if the tool is going to work.
+
+Change Tracking for Incremental Backups
+10G's Change Tracking feature improves the performance of incremental backups by recording datafile block changes in a change tracking file.  Without Change Tracking, RMAN incremental backups are required to scan every block in the datafile to identify the blocks that have changed since the last database backup.  
+
+Activating Change Tracking allows RMAN to read the change tracking file to identify the changed blocks.  So, RMAN incremental backups should run much faster because they are no longer required to read each and every block in the datafile.   Sounds logical to me!
+
+What does concern me is that Change Tracking is disabled by default.  Oracle states that this is because the feature does introduce some "minimal overhead" on the database during normal day-to-day operations.  We'll need to perform some in-depth performance testing to determine exactly how much minimal overhead is incurred when Change Tracking is activated.   We intend to execute SQLLDR utilities and DML statements that insert or update millions of rows with Change Tracking off and then run the same workload with Change Tracking activated.   Once we compare the results, I'll make sure to include them in my next blog.
+
+One change tracking file is used to track changes for the entire database.  The file is created as an Oracle managed file and, as a result, is stored in the directory identified in the DB_CREATE_FILE_DEST initialization parameter.  Administrators are also able to specify the name of the change tracking file and place it in any location they choose.
+
+The size of the change tracking file depends on the size of the database and not the frequency of updates.  I still haven't figured out how this works but Oracle states that the size of the block tracking file is 1/30,000 the size of all the database data blocks being tracked by Change Tracking.   Oracle also states that the file is created in 10 MB increments.  For databases up to and including one terabyte, the size of the change tracking file will be 10MEGs, 2 terabyte databases will require 20MEGs and so on.
+ 
+We are very excited about the potential performance improvement that Change Tracking offers.   It seems fairly obvious that the improvements should be considerable.    But we must determine if the level of overhead generated by the Change Tracking feature is low enough to warrant its use.  I'll keep you posted.
+  
+Compressed Backupsets
+10G RMAN now supports binary compression of backupsets.  Administrators activate compression by specifying the AS COMPRESSED BACKUPSET parameters in the BACKUP command.   Oracle states that the backupsets are compressed using an algorithm that is optimized for efficient compression of Oracle database datafiles.  
+
+What I like most about this feature is that you don't need to uncompress the file to use it as input to an RMAN recovery.  RMAN will automatically uncompress the file during the file restoration process.  
+
+Oracle states that compressing the output file does increase CPU overhead for both the backup and restoration processes.   Since the majority of our backups are sent directly to tape devices, having RMAN generate smaller backup files is not really a huge benefit to us.    But there are times when we need to send a database backup to disk for performance reasons. Like many shops, we never seem to have enough disk available for the backup's output files.   We are hoping that the compression utility will help us when we need a backup immediately and are pressed for space. 
+ 
+We'll run one backup with compression off and another with compression activated and compare the size of the output files.   We will then use the compressed backup as input to an RMAN recovery to make sure it works.   I'll let you know the results as soon as we have them!
+ 
+Next Up
+Giant Eagle's application developers have also been hard at work testing Oracle10G.  They have been running their entire batch stream nightly for close to two months now with no issues.   Performance results have been VERY positive.   In my next blog, we'll review the results of our application testing and compare some batch and on-line execution times from our 9I data warehouse to its 10G counterpart.    We are getting close to converting a couple of billion rows to Oracle10G, folks.    As one of my DBA stated at the beginning of this project "its going to be a wild ride." 
+
+RMAN Test plan
+OK, here's my super-duper Giant Eagle 10G RMAN test plan.  As I said in the introduction, it may seem like overkill but if it makes me less nervous about using 10G RMAN, the time will be well spent.  Since we have been using 10G RMAN to back up our 10G test environments, many of the items below have already been tested.  I'll make sure to provide you with everything I learned during the execution of my test plan. 
+
+Whew, this will be a LOT of recoveries - but I need the practice.   Since I retired as an Oracle instructor, I haven't had a chance to do many recoveries.  This will be one way for me to sharpen my slightly rusty recovery skill sets.
+
+I'll keep you posted.
+
+
+ THE 10G RMAN TEST PLAN
+
+Commands:
+SQL 'ALTER DATABASE MOUNT'
+SQL 'ALTER DATABASE OPEN'
+ 
+ALTER SYSTEM SWITCH LOGFILE
+ALTER SYSTEM ARCHIVE LOG CURRENT
+ 
+ALLOCATE SINGLE TAPE CHANNEL (backup)
+ALLOCATE SINGLE TAPE CHANNEL (restore)
+ALLOCATE MULTIPLE TAPE CHANNELS (backup)
+ALLOCATE MULTIPLE TAPE CHANNELS (restore)
+ALLOCATE SINGLE DISK CHANNEL (backup)
+ALLOCATE SINGLE DISK CHANNEL (restore)
+ALLOCATE MULTIPLE DISK CHANNELS (backup)
+ALLOCATE MULTIPLE DISK CHANNELS (restore)
+
+CONFIGURE RETENTION POLICY TO REDUNDANCY 3
+CONFIGURE DEFAULT DEVICE TYPE TO TAPE
+CONFIGURE CONTROLFILE AUTOBACKUP ON
+ 
+CREATE CATALOG
+ 
+CROSSCHECK ARCHIVELOG ALL
+CROSSCHECK BACKUP
+DELETE EXPIRED BACKUP
+ 
+LIST BACKUP
+LIST BACKUP SUMMARY
+LIST COPY
+LIST INCARNATION OF DATABASE
+ 
+REGISTER DATABASE
+REPORT NEED BACKUP INCREMENTAL 3 DATABASE
+REPORT NEED BACKUP DAYS 3 DATABASE
+REPORT NEED BACKUP DAYS 3 TABLESPACE SYSTEM
+REPORT NEED BACKUP REDUNDANCY 3
+REPORT UNRECOVERABLE
+REPORT OBSOLETE
+ 
+RESET DATABASE
+RESYNC CATALOG
+SHOW ALL
+ 
+SHUTDOWN
+STARTUP
+ 
+VALIDATE
+VIEW SCHEMA
+ 
+Backup: 
+Database Backup Commands (to tape):
+Hot backup of entire database (multiple channels)
+Hot backup of entire database (single channel)
+Hot backup of multiple tablespaces (multiple channels)
+Hot backup of multiple tablespaces (single channel)
+Hot backup of single tablespace (multiple channels)
+Hot backup of single tablespace (single channel)
+Hot backup of single datafile (single channel)
+ 
+Hot backup of controlfiles
+ 
+Individual data file image copy
+ 
+Hot incremental backup of entire database (multiple channels)
+Hot incremental backup of multiple tablespaces (multiple channels)
+Hot incremental backup of single tablespace (multiple channels)
+ 
+Cold backup of entire database (multiple channels)
+Cold backup of entire database (single channel)
+Cold backup of multiple tablespaces (multiple channels)
+ 
+Cold backup of single tablespace (multiple channels)
+Cold backup of controlfiles 
+ 
+Cold incremental backup of entire database (multiple channels)
+Cold incremental backup of multiple tablespaces (multiple channels)
+Cold incremental backup of single tablespace (multiple channels)
+ 
+Database Backup Commands (to disk):
+Hot backup of entire database (multiple channels)
+Hot backup of entire database (single channel)
+Hot backup of multiple tablespaces (multiple channels)
+Hot backup of single tablespace (multiple channels)
+
+Hot backup of controlfiles
+
+Cold backup of entire database with no log archiving (multiple channels)
+Cold backup of entire database with archiving (multiple channels)
+Cold backup of multiple tablespaces (multiple channels)
+Cold backup of single tablespace (multiple channels)
+Cold backup of controlfiles
+ 
+Archive log backup (multiple channels)
+ 
+Database Restore Commands (tape):
+Complete database restore from cold backup (multiple channels)
+Complete database restore from cold backup (single channel)
+ 
+Complete database restore from hot backup to current point-in-time with archive log roll forward (multiple channels)
+Complete database restore to previous point-in-time (incomplete recovery) (multiple channels)
+ 
+Restore multiple tablespaces from hot backup (multiple channels)
+Restore single tablespace from hot backup (multiple channels)
+ 
+Complete database restore using cumulative incremental backups to current point-in-time (multiple channels)
+Complete database restore using cumulative incremental backups to current point-in-time (single channel)
+ 
+Complete database restore using incremental backups to previous point-in-time (incomplete recovery) (multiple channels)
+ 
+Restore of multiple tablespaces to current point-in-time (multiple channels)
+Restore of multiple tablespaces to current point-in-time (single channel)
+ 
+Restore of single tablespace to current point-in-time (multiple channels)
+ 
+Restore of individual datafile to current point-in-time (single channel)
+ 
+Relocating tablespace to a new location during current point-in-time restore

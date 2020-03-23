@@ -1,0 +1,162 @@
+Date: 06/28/05                                                                                                       Page:   1      
+Time: 09:05 AM                                           Report on All Locks                                         NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+                           Type       Mode                 Mode                 Lock       Lock                                     
+User                   SID Lock       Held                 Requested            ID1        ID2                                      
+--------------- ---------- ---------- -------------------- -------------------- ---------- ----------                               
+oracle                   2 BACKGROUND Share                None                 3          0                                        
+oracle                   2 BACKGROUND Share                None                 4          0                                        
+oracle                   2 BACKGROUND Share                None                 5          0                                        
+oracle                   2 BACKGROUND Share                None                 6          0                                        
+oracle                   2 BACKGROUND Share                None                 7          0                                        
+oracle                   2 BACKGROUND Share                None                 8          0                                        
+oracle                   2 BACKGROUND Share                None                 9          0                                        
+oracle                   2 BACKGROUND Share                None                 10         0                                        
+oracle                   2 BACKGROUND Share                None                 11         0                                        
+oracle                   2 BACKGROUND Share                None                 12         0                                        
+oracle                   2 BACKGROUND Share                None                 13         0                                        
+oracle                   2 BACKGROUND Share                None                 14         0                                        
+oracle                   2 BACKGROUND Share                None                 15         0                                        
+oracle                   2 BACKGROUND Share                None                 16         0                                        
+oracle                   2 BACKGROUND Share                None                 17         0                                        
+oracle                   2 BACKGROUND Share                None                 18         0                                        
+oracle                   2 BACKGROUND Share                None                 19         0                                        
+oracle                   2 BACKGROUND Share                None                 20         0                                        
+oracle                   2 BACKGROUND Share                None                 21         0                                        
+oracle                   2 BACKGROUND Share                None                 22         0                                        
+oracle                   2 BACKGROUND Share                None                 23         0                                        
+oracle                   2 BACKGROUND Share                None                 24         0                                        
+oracle                   2 BACKGROUND Share                None                 203        0                                        
+oracle                   2 BACKGROUND Share                None                 204        0                                        
+oracle                   2 BACKGROUND Share                None                 205        0                                        
+oracle                   2 BACKGROUND Share                None                 206        0                                        
+oracle                   2 BACKGROUND Share                None                 207        0                                        
+oracle                   2 BACKGROUND Share                None                 1          0                                        
+oracle                   2 BACKGROUND Share                None                 2          0                                        
+oracle                   2 BACKGROUND Share                None                 201        0                                        
+oracle                   2 BACKGROUND Share                None                 202        0                                        
+oracle                   4 BACKGROUND Exclusive            None                 1          0                                        
+oracle                   5 BACKGROUND Null                 None                 4          0                                        
+oracle                   6 BACKGROUND Row-X (SX)           None                 23         1                                        
+oracle                   6 BACKGROUND Row-X (SX)           None                 2          1                                        
+oracle                   6 BACKGROUND Row-X (SX)           None                 21         1                                        
+oracle                   6 BACKGROUND Row-X (SX)           None                 25         1                                        
+oracle                   6 BACKGROUND Row-X (SX)           None                 65543      764719                                   
+ga                      44 USER       Exclusive            None                 786447     162517                                   
+ga                      44 USER       Row-S (SS)           None                 31587      0                                        
+Administrator           45 USER       Exclusive            None                 1572876    40651                                    
+Administrator           45 USER       Row-S (SS)           None                 32209      0                                        
+Administrator           45 USER       Row-X (SX)           None                 31740      0                                        
+Administrator           45 USER       None                 Exclusive            1376272    75459                                    
+motors                  82 USER       Row-S (SS)           None                 32209      0                                        
+motors                  82 USER       Row-X (SX)           None                 31740      0                                        
+motors                  82 USER       None                 Exclusive            1376272    75459                                    
+motors                  82 USER       Exclusive            None                 917504     161939                                   
+ga                      91 USER       Exclusive            None                 196623     234018                                   
+ga                      91 USER       Row-S (SS)           None                 40352      0                                        
+motors                 109 USER       Row-X (SX)           None                 31414      0                                        
+motors                 109 USER       Row-X (SX)           None                 31461      0                                        
+Date: 06/28/05                                                                                                       Page:   2      
+Time: 09:05 AM                                           Report on All Locks                                         NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+                           Type       Mode                 Mode                 Lock       Lock                                     
+User                   SID Lock       Held                 Requested            ID1        ID2                                      
+--------------- ---------- ---------- -------------------- -------------------- ---------- ----------                               
+motors                 109 USER       Row-S (SS)           None                 31527      0                                        
+motors                 109 USER       Row-X (SX)           None                 32209      0                                        
+motors                 109 USER       Row-S (SS)           None                 31696      0                                        
+motors                 109 USER       Row-X (SX)           None                 31441      0                                        
+motors                 109 USER       Row-S (SS)           None                 31719      0                                        
+motors                 109 USER       Row-X (SX)           None                 31446      0                                        
+motors                 109 USER       Row-X (SX)           None                 31620      0                                        
+motors                 109 USER       Row-X (SX)           None                 31587      0                                        
+motors                 109 USER       Row-X (SX)           None                 31740      0                                        
+motors                 109 USER       Row-S (SS)           None                 31559      0                                        
+motors                 109 USER       Row-X (SX)           None                 31440      0                                        
+motors                 109 USER       Row-X (SX)           None                 31195      0                                        
+motors                 109 USER       Exclusive            None                 1376272    75459                                    
+motors                 109 USER       Row-X (SX)           None                 31625      0                                        
+motors                 109 USER       Row-S (SS)           None                 31578      0                                        
+motors                 109 USER       Row-X (SX)           None                 31622      0                                        
+motors                 109 USER       Row-S (SS)           None                 31281      0                                        
+accounts               125 USER       Exclusive            None                 1245184    97581                                    
+accounts               125 USER       Row-S (SS)           None                 32224      0                                        
+marine                 133 USER       Exclusive            None                 393216     234144                                   
+claims                 139 USER       Row-S (SS)           None                 31478      0                                        
+claims                 139 USER       Exclusive            None                 262156     227675                                   
+ga                     174 USER       Row-S (SS)           None                 31362      0                                        
+ga                     174 USER       Row-S (SS)           None                 31319      0                                        
+ga                     174 USER       Row-X (SX)           None                 31587      0                                        
+ga                     174 USER       Row-S (SS)           None                 31279      0                                        
+ga                     174 USER       Row-X (SX)           None                 31195      0                                        
+ga                     174 USER       Row-S (SS)           None                 31335      0                                        
+ga                     174 USER       Row-S (SS)           None                 31321      0                                        
+ga                     174 USER       Row-S (SS)           None                 31301      0                                        
+ga                     174 USER       Exclusive            None                 327697     231582                                   
+ga                     174 USER       Row-S (SS)           None                 31281      0                                        
+ri                     180 USER       Exclusive            None                 655361     249380                                   
+ri                     180 USER       Row-X (SX)           None                 31557      0                                        
+ri                     180 USER       Row-X (SX)           None                 31565      0                                        
+ri                     180 USER       Row-X (SX)           None                 31555      0                                        
+ri                     180 USER       Row-X (SX)           None                 31570      0                                        
+Administrator          182 USER       Exclusive            None                 589837     247292                                   
+Administrator          182 USER       Row-S (SS)           None                 32209      0                                        
+Administrator          182 USER       Row-X (SX)           None                 31740      0                                        
+Administrator          182 USER       None                 Exclusive            1376272    75459                                    
+motors                 193 USER       Exclusive            None                 65554      764735                                   
+motors                 193 USER       Row-S (SS)           None                 32209      0                                        
+motors                 193 USER       Row-X (SX)           None                 31740      0                                        
+motors                 193 USER       None                 Exclusive            1376272    75459                                    
+motors                 194 USER       Row-S (SS)           None                 32209      0                                        
+motors                 194 USER       Row-X (SX)           None                 31740      0                                        
+motors                 194 USER       None                 Exclusive            1376272    75459                                    
+motors                 194 USER       Exclusive            None                 1114114    167011                                   
+ga                     206 USER       Exclusive            None                 786441     162518                                   
+ga                     206 USER       Row-S (SS)           None                 31527      0                                        
+ga                     206 USER       Row-S (SS)           None                 31696      0                                        
+Date: 06/28/05                                                                                                       Page:   3      
+Time: 09:05 AM                                           Report on All Locks                                         NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+                           Type       Mode                 Mode                 Lock       Lock                                     
+User                   SID Lock       Held                 Requested            ID1        ID2                                      
+--------------- ---------- ---------- -------------------- -------------------- ---------- ----------                               
+ga                     206 USER       Row-X (SX)           None                 31441      0                                        
+ga                     206 USER       Row-S (SS)           None                 31719      0                                        
+ga                     206 USER       Row-X (SX)           None                 31446      0                                        
+ga                     206 USER       Row-S (SS)           None                 31620      0                                        
+ga                     206 USER       Row-X (SX)           None                 31587      0                                        
+ga                     206 USER       Row-S (SS)           None                 31559      0                                        
+ga                     206 USER       Row-X (SX)           None                 31440      0                                        
+ga                     206 USER       Row-X (SX)           None                 31195      0                                        
+ga                     206 USER       Row-X (SX)           None                 31625      0                                        
+ga                     206 USER       Row-S (SS)           None                 31578      0                                        
+ga                     206 USER       Row-X (SX)           None                 31622      0                                        
+Administrator          207 USER       Row-S (SS)           None                 32209      0                                        
+Administrator          207 USER       Exclusive            None                 720906     162654                                   
+Administrator          207 USER       Row-X (SX)           None                 31740      0                                        
+Administrator          207 USER       None                 Exclusive            1376272    75459                                    
+motors                 216 USER       Row-S (SS)           None                 31273      0                                        
+motors                 216 USER       Row-S (SS)           None                 31260      0                                        
+motors                 216 USER       Row-S (SS)           None                 31506      0                                        
+motors                 216 USER       Row-X (SX)           None                 31491      0                                        
+motors                 216 USER       Row-X (SX)           None                 31478      0                                        
+motors                 216 USER       Exclusive            None                 1179655    110887                                   
+motors                 216 USER       Row-S (SS)           None                 31458      0                                        
+motors                 235 USER       Exclusive            None                 917521     161944                                   
+motors                 235 USER       Row-X (SX)           None                 31491      0                                        
+motors                 235 USER       Row-S (SS)           None                 31478      0                                        
+motors                 235 USER       Row-X (SX)           None                 31435      0                                        
+life                   250 USER       Exclusive            None                 458752     236179                                   
+life                   260 USER       Row-S (SS)           None                 32856      0                                        
+life                   260 USER       Exclusive            None                 1507334    52638                                    
+life                   260 USER       Row-S (SS)           None                 32839      0                                        
+life                   260 USER       Row-X (SX)           None                 32848      0                                        
+life                   260 USER       Row-S (SS)           None                 32844      0                                        
+life                   263 USER       Row-S (SS)           None                 32856      0                                        
+life                   263 USER       Row-S (SS)           None                 32839      0                                        
+life                   263 USER       Row-X (SX)           None                 32848      0                                        
+life                   263 USER       Row-S (SS)           None                 32844      0                                        
+life                   263 USER       Exclusive            None                 1441804    62636                                    

@@ -1,0 +1,215 @@
+Enter value for owner: %
+Date: 02/04/03                                                                                                       Page:   1      
+Time: 10:49 AM                                             Extents Report                                            NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+                              Current        Max       Size                                                                         
+Tablespace Segment            Extents    Extents    (Bytes) Owner      Type                                                         
+---------- --------------- ---------- ---------- ---------- ---------- ----------                                                   
+EDP        PS_DRCR                 57 2147483645  118489088 FINAL7EDP  TABLE                                                        
+Date: 02/04/03                                                                                                       Page:   2      
+Time: 10:49 AM                                             Extents Report                                            NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+                              Current        Max       Size                                                                         
+Tablespace Segment            Extents    Extents    (Bytes) Owner      Type                                                         
+---------- --------------- ---------- ---------- ---------- ---------- ----------                                                   
+EXAMPLE    I_SNAP$_FWEEK_P         23 2147483645    8388608 SH         INDEX                                                        
+           SCAT_SALES_                                                                                                              
+                                                                                                                                    
+           CUSTOMERS               23 2147483645    8388608            TABLE                                                        
+           FWEEK_PSCAT_SAL         22 2147483645    7340032            TABLE                                                        
+           ES_MV                                                                                                                    
+                                                                                                                                    
+Date: 02/04/03                                                                                                       Page:   3      
+Time: 10:49 AM                                             Extents Report                                            NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+                              Current        Max       Size                                                                         
+Tablespace Segment            Extents    Extents    (Bytes) Owner      Type                                                         
+---------- --------------- ---------- ---------- ---------- ---------- ----------                                                   
+FIN7IDXTAB FNX_OS_01               34 2147483645   35651584 FINAL7     INDEX                                                        
+           FT_OS_NX_01             35 2147483645   36700160            INDEX                                                        
+           NUX_FP_DBTRG_IN         21 2147483645   22020096            INDEX                                                        
+           TERFACE_01                                                                                                               
+                                                                                                                                    
+           PK_PDS_01               49 2147483645   51380224            INDEX                                                        
+           DRCR_CUST_CODE          55 2147483645  101711872 PREMPROD   INDEX                                                        
+           DRCR_POL_SYS_ID         61 2147483645   63963136            INDEX                                                        
+Date: 02/04/03                                                                                                       Page:   4      
+Time: 10:49 AM                                             Extents Report                                            NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+                              Current        Max       Size                                                                         
+Tablespace Segment            Extents    Extents    (Bytes) Owner      Type                                                         
+---------- --------------- ---------- ---------- ---------- ---------- ----------                                                   
+FIN7IDX_NY FT_CUR_TRANS_DE         33 2147483645   34603008 FINAL7     INDEX                                                        
+R          TAIL_02                                                                                                                  
+                                                                                                                                    
+           FT_PRV_TRANS_HE         34 2147483645   35651584            INDEX                                                        
+           ADER_01                                                                                                                  
+                                                                                                                                    
+           NUX_FT_CUR_TRAN         45 2147483645   47185920            INDEX                                                        
+           S_DETAIL_01                                                                                                              
+                                                                                                                                    
+           NUX_FT_PRV_TRAN         59 2147483645  135266304            INDEX                                                        
+           S_DETAIL_01                                                                                                              
+                                                                                                                                    
+           NUX_FT_PRV_TRAN         53 2147483645   84934656            INDEX                                                        
+           S_DETAIL_02                                                                                                              
+                                                                                                                                    
+           NUX_FT_PRV_TRAN         34 2147483645   35651584            INDEX                                                        
+           S_HEADER_01                                                                                                              
+                                                                                                                                    
+           PK_TD_CUR_01            46 2147483645   48234496            INDEX                                                        
+           PK_TD_PRV_01            67 2147483645  202375168            INDEX                                                        
+           PK_TH_PRV_01            34 2147483645   35651584            INDEX                                                        
+           P_REP_TD_MAIN_S         64 2147483645  177209344            INDEX                                                        
+           UB_AC                                                                                                                    
+                                                                                                                                    
+           REP_TD_MAIN_SUB         24 2147483645   25165824            INDEX                                                        
+           _AC                                                                                                                      
+                                                                                                                                    
+Date: 02/04/03                                                                                                       Page:   5      
+Time: 10:49 AM                                             Extents Report                                            NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+                              Current        Max       Size                                                                         
+Tablespace Segment            Extents    Extents    (Bytes) Owner      Type                                                         
+---------- --------------- ---------- ---------- ---------- ---------- ----------                                                   
+FINAL7     FP_DBTRG_INTERF         53 2147483645   77594624 FINAL7     TABLE                                                        
+           ACE                                                                                                                      
+                                                                                                                                    
+           FS_PROC_DETAIL          64 2147483645  177209344            TABLE                                                        
+           FT_CUR_TRANS_DE         52 2147483645   76546048            TABLE                                                        
+           TAIL                                                                                                                     
+                                                                                                                                    
+           FT_CUR_TRANS_HE         22 2147483645   23068672            TABLE                                                        
+           ADER                                                                                                                     
+                                                                                                                                    
+           FT_OS                   59 2147483645  135266304            TABLE                                                        
+           FT_PRV_TRANS_DE        101 2147483645  487587840            TABLE                                                        
+           TAIL                                                                                                                     
+                                                                                                                                    
+           FT_PRV_TRANS_HE         55 2147483645  101711872            TABLE                                                        
+           ADER                                                                                                                     
+                                                                                                                                    
+Date: 02/04/03                                                                                                       Page:   6      
+Time: 10:49 AM                                             Extents Report                                            NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+                              Current        Max       Size                                                                         
+Tablespace Segment            Extents    Extents    (Bytes) Owner      Type                                                         
+---------- --------------- ---------- ---------- ---------- ---------- ----------                                                   
+LIFE       PH_GL_POL_EMPLO         57 2147483645  118489088 LIFEPROD   TABLE                                                        
+           YEE                                                                                                                      
+                                                                                                                                    
+           PH_GM_POL_EMPLO         63 2147483645  168820736            TABLE                                                        
+           YEE                                                                                                                      
+                                                                                                                                    
+           PH_GM_POL_EMP_D         57 2147483645  118489088            TABLE                                                        
+           EPND                                                                                                                     
+                                                                                                                                    
+Date: 02/04/03                                                                                                       Page:   7      
+Time: 10:49 AM                                             Extents Report                                            NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+                              Current        Max       Size                                                                         
+Tablespace Segment            Extents    Extents    (Bytes) Owner      Type                                                         
+---------- --------------- ---------- ---------- ---------- ---------- ----------                                                   
+PREMIA     PR_POL_APPDT_DE         22 2147483645   23068672 PREMPROD   INDEX                                                        
+           PT_CUST                                                                                                                  
+                                                                                                                                    
+           PH_POLICY               98 2147483645  462422016            TABLE                                                        
+           PH_POL_CHARGE           64 2147483645   67108864            TABLE                                                        
+           PH_POL_COVER            58 2147483645   60817408            TABLE                                                        
+           PH_VEHICLE              32 2147483645   33554432            TABLE                                                        
+           PS_DRCR                145 2147483645  856686592            TABLE                                                        
+           PS_FAC_RI               52 2147483645   76546048            TABLE                                                        
+           PS_PREM_REG             73 2147483645  252706816            TABLE                                                        
+           PS_PREM_REG_SI          48 2147483645   50331648            TABLE                                                        
+           PS_PREM_RI_REG          24 2147483645   25165824            TABLE                                                        
+           PS_VEHICLE_SUMM         42 2147483645   44040192            TABLE                                                        
+           ARY                                                                                                                      
+                                                                                                                                    
+           PS_XL_CLAIM_LIM         51 2147483645   53477376            TABLE                                                        
+           IT                                                                                                                       
+                                                                                                                                    
+           PS_XL_CLAIM_REG         56 2147483645  110100480            TABLE                                                        
+           PT_CLAIM                32 2147483645   33554432            TABLE                                                        
+           PT_CLAIM_ESTIMA         32 2147483645   33554432            TABLE                                                        
+           TE                                                                                                                       
+                                                                                                                                    
+           PT_CONDITION            53 2147483645   84934656            TABLE                                                        
+           PT_POLICY               76 2147483645  277872640            TABLE                                                        
+           PT_POLICY_APPL_         32 2147483645   33554432            TABLE                                                        
+           CURR                                                                                                                     
+                                                                                                                                    
+           PT_POLICY_SCHED         48 2147483645   50331648            TABLE                                                        
+           ULE                                                                                                                      
+                                                                                                                                    
+           PT_POL_ASSURED_         48 2147483645   50331648            TABLE                                                        
+           DTL                                                                                                                      
+                                                                                                                                    
+           PT_POL_CHARGE           57 2147483645  118489088            TABLE                                                        
+           PT_POL_COVER            52 2147483645   76546048            TABLE                                                        
+           PT_RI_CESSION           57 2147483645  118489088            TABLE                                                        
+           PT_RI_PREM_ALLO         36 2147483645   37748736            TABLE                                                        
+           C                                                                                                                        
+                                                                                                                                    
+           PT_VEHICLE              52 2147483645   76546048            TABLE                                                        
+           PT_VEHICLE_ADDL         33 2147483645   34603008            TABLE                                                        
+           _DTL                                                                                                                     
+                                                                                                                                    
+           PT_XL_CLAIM_ALL         56 2147483645  110100480            TABLE                                                        
+           OC                                                                                                                       
+                                                                                                                                    
+           PT_XL_PREM_ALLO         63 2147483645  168820736            TABLE                                                        
+           C                                                                                                                        
+                                                                                                                                    
+           PT_XL_REINST_DT         51 2147483645   53477376            TABLE                                                        
+Date: 02/04/03                                                                                                       Page:   8      
+Time: 10:49 AM                                             Extents Report                                            NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+                              Current        Max       Size                                                                         
+Tablespace Segment            Extents    Extents    (Bytes) Owner      Type                                                         
+---------- --------------- ---------- ---------- ---------- ---------- ----------                                                   
+           L                                                                                                                        
+                                                                                                                                    
+Date: 02/04/03                                                                                                       Page:   9      
+Time: 10:49 AM                                             Extents Report                                            NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+                              Current        Max       Size                                                                         
+Tablespace Segment            Extents    Extents    (Bytes) Owner      Type                                                         
+---------- --------------- ---------- ---------- ---------- ---------- ----------                                                   
+PREMIDXTAB CHG_POL_SYS_ID          25 2147483645   26214400 PREMPROD   INDEX                                                        
+           FK_PCVR_COVER_I         20 2147483645   20971520            INDEX                                                        
+           DX                                                                                                                       
+                                                                                                                                    
+           PIX_DRCR_2              52 2147483645   76546048            INDEX                                                        
+           PIX_DRCR_3              57 2147483645  111149056            INDEX                                                        
+           PK_PS_DRCR              54 2147483645   93323264            INDEX                                                        
+           UK_PT_POLICY_1          25 2147483645   26214400            INDEX                                                        
+           UK_PT_POL_COVER         20 2147483645   20971520            INDEX                                                        
+           _1                                                                                                                       
+                                                                                                                                    
+           UK_PT_XL_PREM_A         32 2147483645   33554432            INDEX                                                        
+           LLOC_1                                                                                                                   
+                                                                                                                                    
+Date: 02/04/03                                                                                                       Page:  10      
+Time: 10:49 AM                                             Extents Report                                            NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+                              Current        Max       Size                                                                         
+Tablespace Segment            Extents    Extents    (Bytes) Owner      Type                                                         
+---------- --------------- ---------- ---------- ---------- ---------- ----------                                                   
+SYSTEM     C_OBJ#                  24 2147483645    9437184 SYS        CLUSTER                                                      
+           I_COL1                  20 2147483645    5242880            INDEX                                                        
+           I_SOURCE1               21 2147483645    6291456            INDEX                                                        
+           ARGUMENT$               21 2147483645    6291456            TABLE                                                        
+           IDL_SB4$                21 2147483645    6291456            TABLE                                                        
+           IDL_UB1$                85 2147483645  117440512            TABLE                                                        
+           IDL_UB2$                33 2147483645   18874368            TABLE                                                        
+           SOURCE$                 81 2147483645   82837504            TABLE                                                        

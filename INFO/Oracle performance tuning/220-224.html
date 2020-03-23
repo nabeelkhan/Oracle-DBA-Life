@@ -1,0 +1,591 @@
+a74
+<HTML>
+<HEAD>
+<META name=vsisbn content="067230886x">
+<META name=vstitle content="Oracle Performance Tuning and Optimization">
+<META name=vsauthor content="Edward Whalen">
+<META name=vsimprint content="Sams">
+<META name=vspublisher content="Macmillan Computer Publishing">
+<META name=vspubdate content="04/01/96">
+<META name=vscategory content="Archive,Databases: Relational Databases">
+
+
+
+
+<TITLE>Oracle Performance Tuning and Optimization:Advanced Disk I/O Concepts</TITLE>
+
+<!-- HEADER -->
+
+<STYLE type="text/css"> 
+ <!--
+ A:hover  {
+ 	color : Red;
+ }
+ -->
+</STYLE>
+
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<script>
+<!--
+function displayWindow(url, width, height) {
+         var Win = window.open(url,"displayWindow",'width=' + width +',height=' + height + ',resizable=1,scrollbars=yes');
+	if (Win) {
+		Win.focus();
+	}
+}
+//-->
+</script>
+<SCRIPT>
+<!--
+function popUp(url) {
+        var Win = window.open(url,"displayWindow",'width=400,height=300,resizable=1,scrollbars=yes');
+	if (Win) {
+		Win.focus();
+	}
+}
+//-->
+</SCRIPT>
+
+<script language="JavaScript1.2">
+<!--
+function checkForQuery(fm) {
+  /* get the query value */
+  var i = escape(fm.query.value);
+  if (i == "") {
+      alert('Please enter a search word or phrase');
+      return false;
+  }                  /* query is blank, dont run the .jsp file */
+  else return true;  /* execute the .jsp file */
+}
+//-->
+</script>
+
+</HEAD>
+
+<body background="/images/back.jpg" bgcolor="#FFFFFF" link="#003399" alink="#FF0000" vlink="#003399" topmargin=0 leftmargin=0 marginheight=0 marginwidth=0>
+
+<table bgcolor="#003366" width="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td colspan="3">
+		
+		<table width="100%">
+			<tr valign="top">
+				<td bgcolor="#003366">&nbsp;&nbsp;<a href="http://www.earthweb.com" target="resource window"><img src="/images/ew_logo.jpg" width="109" height="93" vspace="5" alt="EarthWeb" border="0"></a>&nbsp;&nbsp;&nbsp;</td>
+				<td bgcolor="#003366" nowrap>
+
+<!--  Begin Ads ITK.BOOKS.DATABASE //-->
+
+<A HREF="/adclick.html/CID=00000349ba50285a00000000/site=corpitk/area=corpitk.books.database/aamsz=468x60" target="_blank"><IMG SRC="http://adimages.earthweb.com/images/ads/spidercatcher.gif?" %%HEIGHT%% %%WIDTH%% ALT="Click Here!"  BORDER="0"></A>
+
+
+<!-- ITK.BOOKS.DATABASE End Ads //--></td>
+				<td bgcolor="#003366" nowrap>
+
+<!--  Begin Ads ITKBAN.FRONT //-->
+
+<A HREF="/adclick.html/CID=000019d5ba50285a00000000/site=corpitk/area=corpitk.books.database/aamsz=160x60/position=top" target="_blank"><IMG SRC="http://adimages.earthweb.com/images/ads/160x60/earthweb_sponsorship160x60.gif?" %%HEIGHT%% %%WIDTH%% ALT=""  BORDER="0"></A>
+
+
+<!-- ITKBAN.FRONT End Ads //-->
+990
+</td>
+<td><a href="CITK1a2b3c4d5e6f7g8h9idefcon4.html">
+<img src="/images/dotblue.gif" border="0" height="1" width="1" align="right"></a></td>
+			</tr>
+		</table>
+		
+		</td>
+	</tr>
+		
+	<tr>
+		<td height="1" colspan="3" bgcolor="#003366"><img src="/images/dotclear.gif" border=0 alt=""></td>
+	</tr>
+</table>
+
+<!-- END HEADER -->
+
+
+<!-- BEGIN SUB HEADER -->
+
+<table bgcolor="#003366" cellpadding="0" cellspacing="0" border="0" width="100%">
+
+<!-- ITK TOPNAV -->
+	
+	<tr>
+		<td align="left" valign="top" nowrap><a href="/"><img src="/images/top_tabs/home_off.gif" alt="Home" border="0"></a><a href="/content/corp.html"><img src="/images/top_tabs/subscribe.gif" alt="Subscribe" border="0"></a><a href="/search/"><img src="/images/top_tabs/search.gif" alt="Search" border="0"></a><a href="/faq/faq.html"><img src="/images/top_tabs/faq.gif" alt="FAQ" border="0"></a><a href="/sitemap.html"><img src="/images/top_tabs/sitemap.gif" alt="Sitemap" border="0"></a><a href="/contactus.html"><img src="/images/top_tabs/contact_us.gif" alt="Contact Us" border="0"></a></td> 
+	</tr>
+	
+<!-- END of ITK TOPNAV -->
+
+<!-- ITK LOGO and newsletter sign up -->
+
+</table>
+	
+<table cellpadding="0" cellspacing="0" border="0" width="100%">
+
+	<tr>
+		<td align="left" valign="top" nowrap><img src="/images/itk_logo_sm.jpg" alt="" border="0"></td>
+		<td align="right"><font face="verdana, sans-serif" size="1">
+
+<script language="JavaScript">
+<!-- 
+
+var days = new Array(8);
+days[1] = "Sunday";
+days[2] = "Monday";
+days[3] = "Tuesday";
+days[4] = "Wednesday";
+days[5] = "Thursday";
+days[6] = "Friday";
+days[7] = "Saturday";
+
+var months = new Array(13);
+months[1] = "January";
+months[2] = "February";
+months[3] = "March";
+months[4] = "April";
+months[5] = "May";
+months[6] = "June";
+months[7] = "July";
+months[8] = "August";
+months[9] = "September";
+months[10] = "October";
+months[11] = "November";
+months[12] = "December";
+
+var dateObj = new Date()
+var wday = days[dateObj.getDay() + 1]
+var lmonth = months[dateObj.getMonth() + 1]
+var date = dateObj.getDate()
+var fyear = dateObj.getYear()
+if (fyear <1000) fyear += 1900;
+document.write(wday + ", " + lmonth + " " + date + ", " + fyear)
+                
+//-->
+</script>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>
+<br><br>
+
+<!-- <img src="/images/enterprise_logo.gif" width="254" height="51" border="0"> --></td>
+	</tr>
+</table>
+
+<!-- END ITK LOGO and newsletter sign up-->
+	
+<!-- begin of ITK left NAV -->
+
+<!-- BEGIN LEFT NAVBAR -->
+
+
+1000
+
+<!-- BEGIN LEFT NAVBAR -->
+
+	<table border="0" cellpadding="0" cellspacing="0">
+	
+	
+		<tr>
+		<td width="145" valign="top" align="left" rowspan=8>
+		
+	<!-- KEYWORD SEARCH -->
+<script language="JavaScript1.2">
+<!--
+function checkForQuery(fm) {
+  /* get the query value */
+  var i = escape(fm.query.value);
+  if (i == "") {
+      alert('Please enter a search word or phrase');
+      return false;
+  }                  /* query is blank, dont run the .jsp file */
+  else return true;  /* execute the .jsp file */
+}
+//-->
+</script>
+ 
+	
+	<form name="keyword" method="POST" action="http://ewsearch.earthweb.com:80/jsp/k2search/ewkwk2search.jsp" onSubmit=" return checkForQuery(this); ">
+
+<img src="/images/keyword_searcha.gif" vspace="5" width="145" alt="" border="0">
+<INPUT type="hidden" name="collection" value="corpitk">
+<INPUT type="hidden" name="altcoll" value="bookscorpitk">
+<INPUT type="hidden" name="hl" value="on">
+<INPUT name="sortspec" type=hidden value="vspubdate desc score desc">
+<INPUT name=fields type=hidden value="vdkvgwkey score vstitle vsauthor vsisbn vspublisher vspubdate">		
+<INPUT name=imageprefix type=hidden value="http://corpitk.earthweb.com">
+<INPUT name=ssiFolder type=hidden value="corpitkads">
+		
+		<table width="145" border="0" cellpadding="0" cellspacing="0">
+		<tr>
+		<td width="145">&nbsp;&nbsp;<input type="text" name="query" value="" size="11">&nbsp;<input type="image" width=28 height=23 border=0 value="Go" name="Go" src="/images/go.gif" align=absmiddle><br>
+			<font face="arial, helvetica" size="2">
+			<img src="/images/dotclear.gif" width="1" height="5" alt="" border="0"><br>
+			
+			&nbsp;&nbsp;<a href="/search/search-tips.html"><img src="/images/arrows_blue.gif" alt="" border="0"><font size="1" color="#ffffff">Search Tips</font></a><br>
+			&nbsp;&nbsp;<a href="/search/"><img src="/images/arrows_blue.gif" alt="" border="0"><font size="1" color="#ffffff">Advanced Search</font></a><br>
+			
+			</font>
+			
+		</td>
+		<td width="5"><img src="/images/dotclear.gif" width=5 height=10 hspace="5" alt="" border="0"></td>
+		</tr>
+		</table>
+	</form>
+		
+		
+<!-- BROWSE BY TOPIC -->
+		
+
+<form name="meta" method="POST" action="http://ewsearch.earthweb.com:80/jsp/k2search/ewmetak2search.jsp" onSubmit=" return checkForQuery(this); ">
+
+
+
+<img src="/images/publication_searcha.gif" width="145" alt="" border="0">
+<INPUT type="hidden" name="collection" value="bookscorpitk">
+<INPUT type="hidden" name="altcoll" value="corpitk">
+<INPUT type="hidden" name="hl" value="on">
+<INPUT name="sortspec" type=hidden value="vspubdate desc score desc">
+<INPUT name=fields type=hidden value="vdkvgwkey score vstitle vsauthor vspublisher vspubdate">
+<INPUT name=imageprefix type=hidden value="http://corpitk.earthweb.com">
+<INPUT name=ssiFolder type=hidden value="corpitkads">
+		
+<table width="145" border="0" cellpadding="0" cellspacing="0">
+	
+			<tr>
+			<td valign="top">
+			&nbsp;&nbsp;<input type="text" name="query" value="" size="11">&nbsp;<input type="image" width=28 height=23 border=0 value="Go" name="Go" src="/images/go.gif" align=absmiddle><br><font face="arial, helvetica" size="2">
+			&nbsp;&nbsp;<SELECT NAME="metatags" style="font-size: 12; font-family: sans-serif;" size="1">
+			<option value="vstitle" SELECTED>Title
+			<option value="vsauthor">Author
+			<option value="vspublisher">Publisher
+			<option value="vsisbn">ISBN			
+			</SELECT><br><br></font>
+			</td>
+			</tr>
+</table>
+</form>
+
+<form action="" name="catlist">	
+<table width="145" border="0" cellpadding="0" cellspacing="0">				
+			<tr>
+			<td valign="top">
+			<img src="/images/jump_topica.gif" width="145" alt="" border="0">
+			</td>
+			</tr>
+			<tr>
+			<td width="145">
+				
+	        	<font face="Arial,helvetica" size="1">
+				&nbsp;&nbsp;<SELECT NAME="cat" onChange='top.location.href=this.options[selectedIndex].value;' style="font-size: 10; font-family: sans-serif;">
+                        <option value="" selected>Please Select
+                        <option value="">-----------
+						<option value="/reference/dir.ai.html">Artificial Intel
+						<option value="/reference/dir.busman.ht
+ad1
+ml">Business &amp; Mgmt
+                        <option value="/reference/dir.components.html">Components
+                        <option value="/reference/dir.contentmanagement.html">Content Mgmt
+                        <option value="/reference/dir.certification1.html">Certification
+                        <option value="/reference/dir.databases.html">Databases
+                        <option value="/reference/dir.enterprisemanagement1.html">Enterprise Mgmt
+                        <option value="/reference/dir.funandgames1.html">Fun/Games
+                        <option value="/reference/dir.groupwareandcollaboration1.html">Groupware
+                        <option value="/reference/dir.hardware1.html">Hardware
+                        <option value="/reference/dir.ibmredbooks.html">IBM Redbooks
+                        <option value="/reference/dir.intranetandextranetdevelopment1.html">Intranet Dev
+                        <option value="/reference/dir.middleware.html">Middleware
+                        <option value="/reference/dir.multimediaandgraphicdesign1.html">Multimedia
+                        <option value="/reference/dir.networkservices1.html">Networks 
+                        <option value="/reference/dir.operatingsystems.html">OS
+                        <option value="/reference/dir.productivityapplications1.html">Productivity Apps
+                        <option value="/reference/dir.programminglanguages.html">Programming Langs
+                        <option value="/reference/dir.security1.html">Security  
+						<option value="/reference/dir.softwareengineering1.html">Soft Engineering
+                        <!-- <option value="/reference/dir.ewtraining1.html">Training Guides -->
+                        <option value="/reference/dir.userinterfaces.html">UI
+                        <option value="/reference/dir.webservices.html">Web Services
+                        <option value="/reference/dir.webmasterskills1.html">Webmaster
+                        <option value="/reference/dir.y2k1.html">Y2K
+                        <option value="">-----------
+                        <option value="/reference/whatsnew.html">New Arrivals
+                        </SELECT>
+						</font>
+			
+		</td>
+		</tr>
+	</table>
+	</form>
+	
+<!-- LEFT NAV SEARCH END -->
+
+<table border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td>
+<a href="/desktop/"><img src="/images/desktop_icona.gif" border=0 alt="Go to ITKnowledge Enterprise"></a><br><br></td>
+	</tr>
+</table>
+
+<!-- END LEFT NAVBAR -->
+
+
+
+<!-- END LEFT NAVBAR -->
+	
+	<td width="15"><img src="/images/dotclear.gif" width="15" alt="" border="0"></td>
+
+<!-- end of ITK left NAV -->
+
+<!-- begin main content -->
+	
+	<td width="100%" valign="top" align="left">
+		<br>
+
+<!-- END SUB HEADER -->
+
+
+
+674
+<!-- Created by dB Page Builder.  http://www.pchelponline.com/bluestem -->
+
+<!--Begin Content Column -->
+
+<TABLE border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td width=75 valign=top>
+<img src="/images/sm_covers/067230886x.gif" width=60 height=73 alt="Oracle Performance Tuning and Optimization" border="1">
+</td>
+<td align="left">
+    <font face="arial, helvetica" size="-1" color="#336633"><b>Oracle Performance Tuning and Optimization</b></font>
+    <br>
+    <font face="arial, helvetica" size="-1"><i>by Edward Whalen</i>
+    <br>
+    Sams,&nbsp;Macmillan Computer Publishing
+    <br>
+    <b>ISBN:</b>&nbsp;067230886x<b>&nbsp;&nbsp;&nbsp;Pub Date:</b>&nbsp;04/01/96</font>
+</td>
+</tr>
+</table>
+<P>
+<FORM name= "search2" method="POST" action="http://ewsearch.earthweb.com:80/jsp/k2search/ewintrak2search.jsp" onSubmit=" return checkForQuery(this); ">
+<INPUT type="hidden" name="collection" value="corpitk">
+<INPUT type="hidden" name="altcoll" value="bookscorpitk">
+<INPUT type="hidden" name="hl" value="on">
+<INPUT name="sortspec" type=hidden value="score desc">
+<INPUT name="fields" type=hidden value="vdkvgwkey score vstitle vsisbn vsauthor vspublisher vspubdate">
+<INPUT name="imageprefix" type=hidden value="http://corpitk.earthweb.com">
+<INPUT name="ssiFolder" type=hidden value="corpitk">
+<INPUT type="hidden" name="bookid" value="corpitk.earthweb.comreferencepro067230886x">
+
+<font face="arial, helvetica" size=2><b>Search this book:</b></font><br>
+<INPUT NAME="query" size=25 VALUE="">&nbsp;<input type="image" width=28 height=23 border=0 value="Go" name="Go" src="/images/go.gif" align=absmiddle>
+
+</form>
+
+
+22 
+
+<!-- Empty Reference Subhead -->
+1000
+
+
+<!--ISBN=067230886x//-->
+<!--TITLE=Oracle Performance Tuning and Optimization//-->
+<!--AUTHOR=Edward Whalen//-->
+<!--PUBLISHER=Macmillan Computer Publishing//-->
+<!--IMPRINT=Sams//-->
+<!--CHAPTER=14//-->
+<!--PAGES=220-224//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="217-220.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch15/225-228.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H4 ALIGN="LEFT"><A NAME="Heading9"></A><FONT COLOR="#000077">Sequential I/Os</FONT></H4>
+<P>Now look at the case of purely sequential I/O. Sequential I/O has a much better performance rate than random I/O because there is very little head movement involved in sequential I/O. This example looks specifically at the I/O rates of the log writer. For this example, assume the following specifications:
+</P>
+<CENTER>
+<TABLE WIDTH="90%"><TR>
+<TH ALIGN="LEFT" WIDTH="55%">Measurement
+<TH ALIGN="LEFT" WIDTH="45%">Average Time in Milliseconds
+<TR>
+<TH COLSPAN="2"><HR>
+<TR>
+<TD>Average seek time
+<TD>14 msec
+<TR>
+<TD>Single-track seek time
+<TD>4 msec
+<TR>
+<TD>Average rotational latency
+<TD>5 msec
+<TR>
+<TD>Data transfer time<BR>(1 database block: 2,048 bytes in size)
+<TD VALIGN="BOTTOM">0.27 msec
+<TR>
+<TD>Queue time
+<TD>0 msec
+</TABLE>
+</CENTER>
+<P>For this example, look at how long it takes to retrieve a block of data on average. For sequential I/O, the access time is determined by a much smaller number of seeks. The number of times you have to seek is determined by when you have to go to the next track on the disk. Here are some additional specifications for the example drive:
+</P>
+<CENTER>
+<TABLE WIDTH="90%"><TR>
+<TD ALIGN="LEFT" WIDTH="26%">Sectors per track
+<TD ALIGN="LEFT" WIDTH="74%">63
+<TR>
+<TD>Number of platters
+<TD>3
+</TABLE>
+</CENTER>
+<P>Because disk technology is very efficient, in a sequential I/O, the heads write or read the data to the same cylinder before moving on. For a disk with 63 sectors per track and 3 platters with 2 sides each, the total amount of data that can be written or read before a single track seek has to occur is determined as follows:
+</P>
+<!-- CODE SNIP //-->
+<PRE>
+63 sectors/track * 3 platters * 2 tracks/platter * 512 bytes/sector =
+193,536 bytes = 189 Kbytes
+</PRE>
+<!-- END CODE SNIP //-->
+<P>Because the log writer writes the data in chunks of <TT>LOG_BUFFER_SIZE</TT> size (which is set to four times the size of the database block size), you can say that approximately 13 blocks are written before a seek must occur. This formula approximates the average time spent seeking:</P>
+<!-- CODE SNIP //-->
+<PRE>
+Average Seek Time = Single-Track Seek Time / 13 = 4 msec / 13 = 0.3 msecs
+</PRE>
+<!-- END CODE SNIP //-->
+<P>As you can see, the average seek time does not come into play at all with sequential I/Os. But what about the rotational latency? There <I>is</I> a problem there. Because the log writer fills the log buffer and then writes it out in chunks, it is unlikely that the disk heads will always be over the proper place on the disk. Therefore, rotational latency is still relevant for sequential I/O.</P>
+<P>Now look at the sequential performance in terms of the number of I/Os per second the disk can sustain. Because the I/Os you are looking at now are 8K in size (because this is the size of the log buffer), the data transfer rate is calculated as follows:</P>
+<!-- CODE SNIP //-->
+<PRE>
+Seconds per log buffer = 0.133 milliseconds per KB * 8 KB per buffer =
+1.06 milliseconds per block
+</PRE>
+<!-- END CODE SNIP //-->
+<P>Here&#146;s the formula to determine the data transfer rate:
+</P>
+<!-- CODE SNIP //-->
+<PRE>
+Average Seek Time &#43; Rotational Latency &#43; Data Transfer Time &#43; Queue Time
+</PRE>
+<!-- END CODE SNIP //-->
+<P>For this example, the data transfer rate works out like this:
+</P>
+<!-- CODE SNIP //-->
+<PRE>
+0.3 msec &#43; 5 msec &#43; 1.06 msec &#43; 0 msec = 6.36 msec
+</PRE>
+<!-- END CODE SNIP //-->
+<P>Therefore, the sequ
+f69
+ential I/O rate for this particular disk drive is calculated as follows:
+</P>
+<!-- CODE SNIP //-->
+<PRE>
+I/O requests per second = 1 / seconds per I/O request = 1 / 6.36 msec
+per I/O = 1 / 0.00636 sec per I/O = 157 I/Os per sec
+</PRE>
+<!-- END CODE SNIP //-->
+<P>Now assume that the log writer can use Asynchronous I/Os and can put enough requests in order to reduce the rotational latency. In that case, the number of I/Os increases significantly. The best possible case is one in which the log writer always writes enough data so that rotational latency is eliminated. You can do this by increasing the size of the log buffer or by enabling Asynchronous I/O on the LGWR. In this case, the maximum theoretical I/O rate is determined by using the following calculation:
+</P>
+<!-- CODE SNIP //-->
+<PRE>
+Average Seek Time &#43; Rotational Latency &#43; Data Transfer Time &#43; Queue Time
+</PRE>
+<!-- END CODE SNIP //-->
+<P>For this example, the calculation is as follows:
+</P>
+<!-- CODE SNIP //-->
+<PRE>
+0.3 msec &#43; 0 msec &#43; 1.06 msec &#43; 0 msec = 1.36 msec
+</PRE>
+<!-- END CODE SNIP //-->
+<P>Then use this formula to calculate the number of sequential I/Os per second:
+</P>
+<!-- CODE SNIP //-->
+<PRE>
+I/O requests per second = 1 / seconds per I/O request = 1 / 1.36 msec
+per I/O = 1 / 0.00136 sec per I/O = 735 I/Os per sec
+</PRE>
+<!-- END CODE SNIP //-->
+<P>This calculation gives the theoretical maximum number of sequential I/Os per second per disk as 735 I/Os per second per disk. Remember that these calculations are crude and don&#146;t take into account other factors that come into play as you near the limits of the capacity of the drives (factors such as queues and disk buffers).
+</P>
+<P>What is important to remember is the difference in performance you can achieve with sequential I/O versus random I/O. This performance difference is why it is so important to separate the log disks from the data disks. Because the redo log is so important to the operation of the RDBMS, you want to make sure that you can log as fast as necessary. Any delays in writing to the log volumes are reflected throughout the entire system.</P>
+<H3><A NAME="Heading10"></A><FONT COLOR="#000077">Summary</FONT></H3>
+<P>This chapter explained how the physical disks operate and provided some calculations to show how the magic numbers on disk I/O rates are calculated. I want to reemphasize that these numbers are very rough and should be used as general guidelines.
+</P>
+<P>The actual I/O rates you achieve depend not only on the physical disks themselves but on the disk controllers, the bus, and the operating system. As newer disks are being developed, new features are being added to improve performance.</P>
+<P>It is important to note that the number of random I/Os you can achieve system wide depends on the number of disks you have in the system. Remember this when you are configuring your next system: Although disk drives are getting larger and faster, the increased speed does not compensate for the performance you can get with more disks.</P>
+<P>It is usually much better to get more smaller disks than fewer larger disks. For example, a 2 gigabyte SCSI disk with a rotational speed of 4,500 RPM and an average seek time of 10 msec can achieve approximately 60 I/Os per second per disk. A 4 gigabyte SCSI disk with a rotational speed of 7,000 RPM and an average seek time of 8 msec can achieve approximately 79 I/Os per second per disk. However, two 2 gigabyte drives can support 120 random I/Os per second (compared with only 79 I/Os per second for the 4 gigabyte drive).</P>
+<P>The next chapter takes these concepts a bit farther when you look at disk arrays.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="217-220.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ch15/225-228.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+
+
+55e
+<!-- all of the reference materials (books) have the footer and subfoot reveresed -->
+<!-- reference_subfoot = footer -->
+<!-- reference_footer = subfoot -->
+
+<!-- BEGIN SUB FOOTER -->
+	<br>
+	<img src="/images/dotclear.gif" width="5" height="7" border="0">
+	</TD>
+    </TR>
+	</TABLE>
+	
+	<table width="100%" border=0 cellpadding=0 cellspacing=0>
+	<tr>
+		<td align="left" width="160"><img src="/images/bot_curve.jpg" width="160" alt="" border="0"></td>
+		<td align="left" valign="top" nowrap><a href="/"><img src="/images/top_tabs/home_bot.gif" alt="home" border="0"></a><a href="/content/corp.html"><img src="/images/top_tabs/subscribe_bot.gif" alt="subscribe" border="0"></a><a href="/search/"><img src="/images/top_tabs/search_bot.gif" alt="search" border="0"></a><a href="/faq/faq.html"><img src="/images/top_tabs/faq_bot.gif" alt="faq" border="0"></a><a href="/sitemap.html"><img src="/images/top_tabs/sitemap_bot.gif" alt="sitemap" border="0"></a><a href="/contactus.html"><img src="/images/top_tabs/contact_us_bot.gif" alt="contactus" border="0"></a><img src="/images/dotclear.gif" width=260 height="1" alt="" border="0"></td> 
+	</tr>
+	</table>
+		
+	<table width="100%" bgcolor="#003366" border=0 cellpadding=0 cellspacing=0>
+	<tr>
+		<td align="left" width=145><img src="/images/clear_pixel.gif" width=145 height="1" alt="" border="0"></td>
+				
+<!-- END SUB FOOTER -->
+
+702
+
+<!-- all of the books have the footer and subfoot reveresed -->
+<!-- reference_subfoot = footer -->
+<!-- reference_footer = subfoot -->
+
+<!-- FOOTER -->
+			
+<td align="left" bgcolor="#003366">
+<table border="0" cellspacing="10" cellpadding="5">
+<tr>
+<td align="center">
+<font face="arial, helvetica" size="1" color="#cccccc"><b><a href="/products.html"><font color="#0099CC">Products</font></a>&nbsp;|&nbsp; <a href="/contactus.html"><font color="#0099CC">Contact Us</font></a>&nbsp;|&nbsp; <a href="/aboutus.html"><font color="#0099CC">About Us</font></a>&nbsp;|&nbsp; <a href="http://www.earthweb.com/dlink.corp|privacy-jhtml.72.0.-.-.jhtml" target="resource window"><font color="#0099CC">Privacy</font></a> &nbsp;|&nbsp; <a href="http://www.itmarketer.com/" target="resource window"><font color="#0099CC">Ad Info</font></a> &nbsp;|&nbsp; <a href="/"><font color="#0099CC">Home</font></a></b>
+<br><br>Use of this site is subject to certain <a href="/agreement.html"><font color="#0099CC">Terms &amp; Conditions</font></a>, <a href="/copyright.html"><font color="#0099CC">Copyright &copy; 1996-2000 EarthWeb Inc.</font></a> All rights reserved.  Reproduction whole or in part in any form or medium without express written <a href="http://www.earthweb.com/dlink.corp|permissions-jhtml.72.0.-.-.jhtml" target="resource window"><font color="#0099CC">permission</font></a> of EarthWeb is prohibited. Read EarthWeb's <A HREF="http://www.earthweb.com/dlink.corp|privacy-jhtml.72.0.-.-.jhtml" target="resource window"><font color="#0099CC">privacy</font></A> statement.</font><br><br>
+</td>
+</tr>
+</table>
+
+<a href="CITK1a2b3c4d5e6f7g8h9idefcon4.html">
+<img src="/images/dotclear.gif" border="0" height="1" width="1" align="left"></a>
+</td>
+		</tr>
+</table>
+</BODY>
+</HTML>
+
+<!-- END FOOTER -->
+
+
+0
+

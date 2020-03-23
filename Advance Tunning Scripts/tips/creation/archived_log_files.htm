@@ -1,0 +1,126 @@
+<html>
+	<head>
+		<title>
+			Disk Configuration for Archived Log Files
+		</title>
+		<style>
+			<!-- a:hover{color:#660066;} -->
+		</style>
+	</head>
+	<body background="../../images/bg.jpg" link="#FF6600" vlink="#FF6600" alink="#660066">
+		
+		<h2 align="center">
+			<font color="#990000">
+				Disk Configuration for<br>
+				Archived Log Files
+			</font>
+		</h2>
+		<p>
+		Although, the performance of archiver I/O is not quite as critical as log file I/O, because it is performed in the background by ARCn,
+		each log file must nevertheless be able to be archived comfortably within the amount of time that it takes LGWR to fill the remaining log files.
+		Otherwise, redo generation will be suspended, which would be disastrous for performance.
+		</p>
+		<p>
+		The twin tuning strategies to prevent archival backlogs are
+		<ol>
+			<li>
+			Minimizing the time taken to archive each log file, and
+			<li>
+			Increasing the window available for archiving each log file by increasing the number of online log files.
+		</ol>
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				Are archiver writes sequential?
+			</font>
+		</h3>
+		<p>
+		Archiver writes are logically sequential.
+		However, unless redo generation is light, it is unwise to rely on archive writes being physically sequential as well.
+		This is because LGWR can write faster than a single ARCn process can archive,
+		and so it is often necessary to have multiple ARCn processes writing into the archive destination file systems at the same time.
+		This makes the logically sequential I/O appear pseudo-random at the disk level.
+		</p>
+		<p>
+		There are lots of reasons why LGWR has an unfair advantage over ARCn.
+		LGWR reads from memory, whereas ARCn has to read from disk.
+		Also LGWR can write to raw log files, whereas ARCn must write to a file system.
+		This often means that LGWR can perform asynchronous writes, but ARCn cannot.
+		Also LGWR overwrites an existing file, whereas ARCn must continually extend the file it is writing.
+		This involves significant file system space management overheads, which more than double the time taken to write the file.
+		</p>
+		<p>
+		So, if the rate of redo generation is moderate or heavy, it is easy for LGWR to write faster than ARCn can copy,
+		even if ARCn is just copying the log files to a single archive destination.
+		But ARCn's workload may be even greater if it needs to archive the log files to multiple destinations.
+		This is because each log file is copied to all the archive destinations by a single ARCn process, even if multiple ARCn processes are available.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				What type of file system is best?
+			</font>
+		</h3>
+		<p>
+		The key to configuring the archive destination file systems for fast archival
+		is to use an extent-based file system mounted for direct I/O on dedicated striped and mirrored disks.
+		The file systems must be extent-based and mounted for direct I/O to ensure that large writes are not normally split,
+		and to minimize the impact of the file system space management overheads.
+		Alternately, if a block-based file system must be used, the largest possible file system block size should be used.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				How should archive destinations be striped?
+			</font>
+		</h3>
+		<p>
+		If redo generation is light or moderate, a small stripe element size can be used to maximize the transfer rate of individual archive writes.
+		This is based on the assumption that there will only rarely be more than one ARCn process active.
+		In this case, the archive destinations should also be on dedicated disks, to preserve the sequential nature of the I/O when possible.
+		If redo generation is heavy, such that there will commonly be more than one ARCn process active,
+		then the stripe element size must be large relative to the size of archive writes (<em>_log_archive_buffer_size</em>) to maximize concurrency.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				What form of data protection is best?
+			</font>
+		</h3>
+		<p>
+		Where possible, data protection should be provided by hardware mirroring in order to minimize its impact.
+		However, multiple archive destinations may be necessary if the files are being transmitted to a hot standby database.
+		Multiple archive destinations should not however be preferred
+		merely because it facilitates the taking of duplicate tape backups of the archived log files.
+		With proper configuration, all modern backup solutions can be configured to take multiple tape backups of the
+		archived log files from a single mirrored source.
+		</p>
+		
+		
+		<hr noshade align="left" width="300" size="2" color="black">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="1000">
+					<font size="2" color="#660066">
+						<strong>
+							Copyright © Ixora Pty Ltd
+						</strong>
+					</font>
+				</td>
+				<td valign="top" align="right">
+					<nobr>
+					<map name="email">
+						<area shape="rect" coords="0, 0, 32, 21" title="Feedback" href="mailto:feedback@ixora.com.au?SUBJECT=[Tip] archived_log_files.htm">
+					</map>
+					<img ismap usemap="#email" border="0" alt="Send Email" src="../../images/email.gif" width="32" height="21">
+					<map name="home">
+						<area shape="rect" coords="0, 0, 28, 28" title="Home" href="/">
+					</map>
+					<img ismap usemap="#home" border="0" alt="Home" src="../../images/home.gif" width="28" height="28">
+					</nobr>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

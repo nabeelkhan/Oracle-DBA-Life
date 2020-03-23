@@ -1,0 +1,130 @@
+<html><head><title>
+Database block size = File system buffer size
+</title>
+<style>
+body {background-image:url(/images/bg.jpg)}
+a:link {color:#FF6600}
+a:active {color:#660066}
+a:visited {color:#FF6600} 
+a:hover {color:#660066}
+a {font-weight:bold}
+h1 {color:#990000; font-size:150%; text-align:center}
+h2 {color:#660066; font-size:125%}
+ul {list-style-image:url(/images/li.gif); margin-left:16px}
+
+.orange {color:#FF6600}
+.purple {color:#660066}
+.brown {color:#990000}
+.h3 {font-weight:bold; color:#990000}
+</style>
+
+</head>
+<script language="javascript"><!--
+function email(addr) { return addr + '@ixora.com.au' }
+//--></script>
+
+<body>
+
+
+<div style="text-align:center; font-size:125%; font-weight:bold; color:#660066">Oracle Performance Tuning Tips</div>
+
+
+
+<h1>Database block size = File system buffer size</h1>
+
+Although there is every reason <i><b>not</b></i> to use buffered I/O
+(<a href=avoid_buffered_io.htm>more</a>)
+if you are constrained to do so for political reasons,
+it is important to ensure that the database block size matches the file system buffer size exactly.
+Here's why.
+<ol>
+<li>
+If the database block size is smaller than the file system buffer size, then DBWn has to perform partial block writes.
+The problem of partial block writes is explained in our tip on using raw log files
+(<a href=use_raw_log_files.htm#partial_block_writes>here</a>).
+Because DBWn does its work in the background and foreground processes do not normally wait for it,
+this is a scalability issue rather than a performance issue.
+That is, partial block writes make DBWn work less efficiently
+and so foreground processes will begin to wait for its services at lower workloads than would otherwise be the case.
+Performance is not affected under light workloads, but scalability is constrained.
+(Foreground processes are seldom directly affected by partial block writes because their writes,
+normally to temporary segments, are typically large relative to the database block size).
+<p>
+<li>
+<a name=split_reads></a>
+If the database block size is larger than the file system buffer size,
+then all single block reads and writes are split into a series of distinct physical I/O operations -
+one for each file system buffer addressed - and these I/O operations are performed one at a time.
+For writes, a full rotational latency is sustained between each pair of file system buffer writes.
+For reads, all except the initial file system buffer read can normally be satisfied cheaply from the disk track buffers.
+However, the distinct contiguous file system buffer reads trigger the file system read ahead mechanism, even for random reads,
+causing inappropriate read ahead.
+<p>
+</ol>
+The following table shows the most common file system buffer sizes and some of the operating systems that use them.
+If for some reason you are using buffered I/O,
+then you are strongly advised to match your database block size and file system buffer size in order to avoid both of the above problems.
+(Windows NT/2000 is not listed in this table because it is not possible to use buffered I/O on that platform.
+Oracle performs direct I/O automatically.)
+<div style=text-align:center>
+<p align=center>
+<table border=1 cellspacing=0 cellpadding=3 bgcolor=white>
+<tr><th>File System Buffer Size</th><th>Operating Systems</th></tr>
+<tr><td>4K</td><td>AIX, Linux</td></tr>
+<tr><td>8K</td><td>Solaris, HP-UX, Tru64 Unix</td></tr>
+<tr><td>16K</td><td>Reliant Unix</td></tr>
+</table>
+</div>
+<p>
+If your operating system is not listed in the table above, you should be able to work out the file system buffer size
+by studying the ratio of <b>blks/s</b> to <b>r+w/s</b> in the <nobr><b>sar -d</b></nobr> output for various buffered filesystems.
+If so, please click on the feedback icon below and send us an email so that we can add it to the list.
+<p>
+<hr noshade align=left width=300 size=2 color=black>
+<table cellspacing=0 cellpadding=0 width=100%><tr>
+<td valign=top>
+<div style="font-size:80%; font-weight:bold; color:#660066">
+© Ixora Pty Ltd. &nbsp; All rights reserved.<br>
+
+
+
+01-May-2002
+</div>
+</td>
+
+<map name=searches>
+<area coords=3,3,33,25 href=/search.html>
+</map>
+
+<script language=javascript><!--
+document.write('<map name=question><area coords=3,3,15,25 href="mailto:' + email('questions') + '?SUBJECT=About http://www.ixora.com.au/tips/buffered_block_size.htm"></map>')
+document.write('<map name=feedback><area coords=3,3,25,25 href="mailto:' + email('feedback') + '?SUBJECT=About http://www.ixora.com.au/tips/buffered_block_size.htm"></map>')
+// --></script>
+
+<map name=up1level>
+<area coords=3,3,25,25 href=./>
+</map>
+<map name=homepage>
+<area coords=3,3,25,25 href=/>
+</map>
+
+<td valign=top align=right>
+<nobr>
+
+<img ismap border=0 usemap=#searches src=/images/search.gif width=36 height=28 alt=Search>
+&nbsp;
+
+<img ismap border=0 usemap=#question src=/images/q.gif alt=Questions>
+&nbsp;
+<img ismap border=0 usemap=#feedback src=/images/feedback.gif alt=Feedback>
+&nbsp;
+
+<img ismap border=0 usemap=#up1level src=/images/up_one.gif alt=Up>
+&nbsp;
+<img ismap border=0 usemap=#homepage src=/images/home.gif alt=Home>
+
+</nobr>
+</td>
+</tr></table>
+</body></html>
+

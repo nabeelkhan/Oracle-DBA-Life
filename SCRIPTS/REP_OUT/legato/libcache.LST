@@ -1,0 +1,20 @@
+Date: 02/04/03                                                   Page:   1      
+Time: 10:49 AM                Library Caches Report              NK_DBA         
+                              ORAKIC database                                   
+                                                                                
+Library Object       Gets  Get Hit%      Pins  Pin Hit%   Reloads  Invalidations
+--------------- --------- --------- --------- --------- --------- --------------
+SQL AREA          1361529     98.58   4970058     99.12      8421           9848
+TABLE/PROCEDURE    917144     97.58   1154324     94.72      4279              0
+BODY                31641     99.76     31674     99.65         0              0
+TRIGGER             41896     99.27     42186     97.90         0              0
+INDEX              244851     99.01    242431     98.99         9              0
+CLUSTER              1427     99.23      1337     98.80         0              0
+OBJECT                  0    100.00         0    100.00         0              0
+PIPE                    0    100.00         0    100.00         0              0
+JAVA SOURCE             0    100.00         0    100.00         0              0
+JAVA RESOURCE           0    100.00         0    100.00         0              0
+JAVA DATA               0    100.00         0    100.00         0              0
+
+11 rows selected.
+

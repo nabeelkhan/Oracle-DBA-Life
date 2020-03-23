@@ -1,0 +1,1086 @@
+a6c
+<HTML>
+<HEAD>
+<META name=vsisbn content="067230886x">
+<META name=vstitle content="Oracle Performance Tuning and Optimization">
+<META name=vsauthor content="Edward Whalen">
+<META name=vsimprint content="Sams">
+<META name=vspublisher content="Macmillan Computer Publishing">
+<META name=vspubdate content="04/01/96">
+<META name=vscategory content="Archive,Databases: Relational Databases">
+
+
+
+
+<TITLE>Oracle Performance Tuning and Optimization:Oracle Tuning Parameters</TITLE>
+
+<!-- HEADER -->
+
+<STYLE type="text/css"> 
+ <!--
+ A:hover  {
+ 	color : Red;
+ }
+ -->
+</STYLE>
+
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<script>
+<!--
+function displayWindow(url, width, height) {
+         var Win = window.open(url,"displayWindow",'width=' + width +',height=' + height + ',resizable=1,scrollbars=yes');
+	if (Win) {
+		Win.focus();
+	}
+}
+//-->
+</script>
+<SCRIPT>
+<!--
+function popUp(url) {
+        var Win = window.open(url,"displayWindow",'width=400,height=300,resizable=1,scrollbars=yes');
+	if (Win) {
+		Win.focus();
+	}
+}
+//-->
+</SCRIPT>
+
+<script language="JavaScript1.2">
+<!--
+function checkForQuery(fm) {
+  /* get the query value */
+  var i = escape(fm.query.value);
+  if (i == "") {
+      alert('Please enter a search word or phrase');
+      return false;
+  }                  /* query is blank, dont run the .jsp file */
+  else return true;  /* execute the .jsp file */
+}
+//-->
+</script>
+
+</HEAD>
+
+<body background="/images/back.jpg" bgcolor="#FFFFFF" link="#003399" alink="#FF0000" vlink="#003399" topmargin=0 leftmargin=0 marginheight=0 marginwidth=0>
+
+<table bgcolor="#003366" width="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td colspan="3">
+		
+		<table width="100%">
+			<tr valign="top">
+				<td bgcolor="#003366">&nbsp;&nbsp;<a href="http://www.earthweb.com" target="resource window"><img src="/images/ew_logo.jpg" width="109" height="93" vspace="5" alt="EarthWeb" border="0"></a>&nbsp;&nbsp;&nbsp;</td>
+				<td bgcolor="#003366" nowrap>
+
+<!--  Begin Ads ITK.BOOKS.DATABASE //-->
+
+<A HREF="/adclick.html/CID=00000349ba50285a00000000/site=corpitk/area=corpitk.books.database/aamsz=468x60" target="_blank"><IMG SRC="http://adimages.earthweb.com/images/ads/spidercatcher.gif?" %%HEIGHT%% %%WIDTH%% ALT="Click Here!"  BORDER="0"></A>
+
+
+<!-- ITK.BOOKS.DATABASE End Ads //--></td>
+				<td bgcolor="#003366" nowrap>
+
+<!--  Begin Ads ITKBAN.FRONT //-->
+
+<A HREF="/adclick.html/CID=00000ac5ba50285a00000000/site=corpitk/area=corpitk.books.database/aamsz=160x60/position=top" target="_blank"><IMG SRC="http://adimages.earthweb.com/images/ads/160x60/spider_catcher160x60.gif?" %%HEIGHT%% %%WIDTH%% ALT=""  BORDER="0"></A>
+
+
+<!-- ITKBAN.FRONT End Ads //-->
+990
+</td>
+<td><a href="CITK1a2b3c4d5e6f7g8h9idefcon4.html">
+<img src="/images/dotblue.gif" border="0" height="1" width="1" align="right"></a></td>
+			</tr>
+		</table>
+		
+		</td>
+	</tr>
+		
+	<tr>
+		<td height="1" colspan="3" bgcolor="#003366"><img src="/images/dotclear.gif" border=0 alt=""></td>
+	</tr>
+</table>
+
+<!-- END HEADER -->
+
+
+<!-- BEGIN SUB HEADER -->
+
+<table bgcolor="#003366" cellpadding="0" cellspacing="0" border="0" width="100%">
+
+<!-- ITK TOPNAV -->
+	
+	<tr>
+		<td align="left" valign="top" nowrap><a href="/"><img src="/images/top_tabs/home_off.gif" alt="Home" border="0"></a><a href="/content/corp.html"><img src="/images/top_tabs/subscribe.gif" alt="Subscribe" border="0"></a><a href="/search/"><img src="/images/top_tabs/search.gif" alt="Search" border="0"></a><a href="/faq/faq.html"><img src="/images/top_tabs/faq.gif" alt="FAQ" border="0"></a><a href="/sitemap.html"><img src="/images/top_tabs/sitemap.gif" alt="Sitemap" border="0"></a><a href="/contactus.html"><img src="/images/top_tabs/contact_us.gif" alt="Contact Us" border="0"></a></td> 
+	</tr>
+	
+<!-- END of ITK TOPNAV -->
+
+<!-- ITK LOGO and newsletter sign up -->
+
+</table>
+	
+<table cellpadding="0" cellspacing="0" border="0" width="100%">
+
+	<tr>
+		<td align="left" valign="top" nowrap><img src="/images/itk_logo_sm.jpg" alt="" border="0"></td>
+		<td align="right"><font face="verdana, sans-serif" size="1">
+
+<script language="JavaScript">
+<!-- 
+
+var days = new Array(8);
+days[1] = "Sunday";
+days[2] = "Monday";
+days[3] = "Tuesday";
+days[4] = "Wednesday";
+days[5] = "Thursday";
+days[6] = "Friday";
+days[7] = "Saturday";
+
+var months = new Array(13);
+months[1] = "January";
+months[2] = "February";
+months[3] = "March";
+months[4] = "April";
+months[5] = "May";
+months[6] = "June";
+months[7] = "July";
+months[8] = "August";
+months[9] = "September";
+months[10] = "October";
+months[11] = "November";
+months[12] = "December";
+
+var dateObj = new Date()
+var wday = days[dateObj.getDay() + 1]
+var lmonth = months[dateObj.getMonth() + 1]
+var date = dateObj.getDate()
+var fyear = dateObj.getYear()
+if (fyear <1000) fyear += 1900;
+document.write(wday + ", " + lmonth + " " + date + ", " + fyear)
+                
+//-->
+</script>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>
+<br><br>
+
+<!-- <img src="/images/enterprise_logo.gif" width="254" height="51" border="0"> --></td>
+	</tr>
+</table>
+
+<!-- END ITK LOGO and newsletter sign up-->
+	
+<!-- begin of ITK left NAV -->
+
+<!-- BEGIN LEFT NAVBAR -->
+
+
+1000
+
+<!-- BEGIN LEFT NAVBAR -->
+
+	<table border="0" cellpadding="0" cellspacing="0">
+	
+	
+		<tr>
+		<td width="145" valign="top" align="left" rowspan=8>
+		
+	<!-- KEYWORD SEARCH -->
+<script language="JavaScript1.2">
+<!--
+function checkForQuery(fm) {
+  /* get the query value */
+  var i = escape(fm.query.value);
+  if (i == "") {
+      alert('Please enter a search word or phrase');
+      return false;
+  }                  /* query is blank, dont run the .jsp file */
+  else return true;  /* execute the .jsp file */
+}
+//-->
+</script>
+ 
+	
+	<form name="keyword" method="POST" action="http://ewsearch.earthweb.com:80/jsp/k2search/ewkwk2search.jsp" onSubmit=" return checkForQuery(this); ">
+
+<img src="/images/keyword_searcha.gif" vspace="5" width="145" alt="" border="0">
+<INPUT type="hidden" name="collection" value="corpitk">
+<INPUT type="hidden" name="altcoll" value="bookscorpitk">
+<INPUT type="hidden" name="hl" value="on">
+<INPUT name="sortspec" type=hidden value="vspubdate desc score desc">
+<INPUT name=fields type=hidden value="vdkvgwkey score vstitle vsauthor vsisbn vspublisher vspubdate">		
+<INPUT name=imageprefix type=hidden value="http://corpitk.earthweb.com">
+<INPUT name=ssiFolder type=hidden value="corpitkads">
+		
+		<table width="145" border="0" cellpadding="0" cellspacing="0">
+		<tr>
+		<td width="145">&nbsp;&nbsp;<input type="text" name="query" value="" size="11">&nbsp;<input type="image" width=28 height=23 border=0 value="Go" name="Go" src="/images/go.gif" align=absmiddle><br>
+			<font face="arial, helvetica" size="2">
+			<img src="/images/dotclear.gif" width="1" height="5" alt="" border="0"><br>
+			
+			&nbsp;&nbsp;<a href="/search/search-tips.html"><img src="/images/arrows_blue.gif" alt="" border="0"><font size="1" color="#ffffff">Search Tips</font></a><br>
+			&nbsp;&nbsp;<a href="/search/"><img src="/images/arrows_blue.gif" alt="" border="0"><font size="1" color="#ffffff">Advanced Search</font></a><br>
+			
+			</font>
+			
+		</td>
+		<td width="5"><img src="/images/dotclear.gif" width=5 height=10 hspace="5" alt="" border="0"></td>
+		</tr>
+		</table>
+	</form>
+		
+		
+<!-- BROWSE BY TOPIC -->
+		
+
+<form name="meta" method="POST" action="http://ewsearch.earthweb.com:80/jsp/k2search/ewmetak2search.jsp" onSubmit=" return checkForQuery(this); ">
+
+
+
+<img src="/images/publication_searcha.gif" width="145" alt="" border="0">
+<INPUT type="hidden" name="collection" value="bookscorpitk">
+<INPUT type="hidden" name="altcoll" value="corpitk">
+<INPUT type="hidden" name="hl" value="on">
+<INPUT name="sortspec" type=hidden value="vspubdate desc score desc">
+<INPUT name=fields type=hidden value="vdkvgwkey score vstitle vsauthor vspublisher vspubdate">
+<INPUT name=imageprefix type=hidden value="http://corpitk.earthweb.com">
+<INPUT name=ssiFolder type=hidden value="corpitkads">
+		
+<table width="145" border="0" cellpadding="0" cellspacing="0">
+	
+			<tr>
+			<td valign="top">
+			&nbsp;&nbsp;<input type="text" name="query" value="" size="11">&nbsp;<input type="image" width=28 height=23 border=0 value="Go" name="Go" src="/images/go.gif" align=absmiddle><br><font face="arial, helvetica" size="2">
+			&nbsp;&nbsp;<SELECT NAME="metatags" style="font-size: 12; font-family: sans-serif;" size="1">
+			<option value="vstitle" SELECTED>Title
+			<option value="vsauthor">Author
+			<option value="vspublisher">Publisher
+			<option value="vsisbn">ISBN			
+			</SELECT><br><br></font>
+			</td>
+			</tr>
+</table>
+</form>
+
+<form action="" name="catlist">	
+<table width="145" border="0" cellpadding="0" cellspacing="0">				
+			<tr>
+			<td valign="top">
+			<img src="/images/jump_topica.gif" width="145" alt="" border="0">
+			</td>
+			</tr>
+			<tr>
+			<td width="145">
+				
+	        	<font face="Arial,helvetica" size="1">
+				&nbsp;&nbsp;<SELECT NAME="cat" onChange='top.location.href=this.options[selectedIndex].value;' style="font-size: 10; font-family: sans-serif;">
+                        <option value="" selected>Please Select
+                        <option value="">-----------
+						<option value="/reference/dir.ai.html">Artificial Intel
+						<option value="/reference/dir.busman.ht
+ad1
+ml">Business &amp; Mgmt
+                        <option value="/reference/dir.components.html">Components
+                        <option value="/reference/dir.contentmanagement.html">Content Mgmt
+                        <option value="/reference/dir.certification1.html">Certification
+                        <option value="/reference/dir.databases.html">Databases
+                        <option value="/reference/dir.enterprisemanagement1.html">Enterprise Mgmt
+                        <option value="/reference/dir.funandgames1.html">Fun/Games
+                        <option value="/reference/dir.groupwareandcollaboration1.html">Groupware
+                        <option value="/reference/dir.hardware1.html">Hardware
+                        <option value="/reference/dir.ibmredbooks.html">IBM Redbooks
+                        <option value="/reference/dir.intranetandextranetdevelopment1.html">Intranet Dev
+                        <option value="/reference/dir.middleware.html">Middleware
+                        <option value="/reference/dir.multimediaandgraphicdesign1.html">Multimedia
+                        <option value="/reference/dir.networkservices1.html">Networks 
+                        <option value="/reference/dir.operatingsystems.html">OS
+                        <option value="/reference/dir.productivityapplications1.html">Productivity Apps
+                        <option value="/reference/dir.programminglanguages.html">Programming Langs
+                        <option value="/reference/dir.security1.html">Security  
+						<option value="/reference/dir.softwareengineering1.html">Soft Engineering
+                        <!-- <option value="/reference/dir.ewtraining1.html">Training Guides -->
+                        <option value="/reference/dir.userinterfaces.html">UI
+                        <option value="/reference/dir.webservices.html">Web Services
+                        <option value="/reference/dir.webmasterskills1.html">Webmaster
+                        <option value="/reference/dir.y2k1.html">Y2K
+                        <option value="">-----------
+                        <option value="/reference/whatsnew.html">New Arrivals
+                        </SELECT>
+						</font>
+			
+		</td>
+		</tr>
+	</table>
+	</form>
+	
+<!-- LEFT NAV SEARCH END -->
+
+<table border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td>
+<a href="/desktop/"><img src="/images/desktop_icona.gif" border=0 alt="Go to ITKnowledge Enterprise"></a><br><br></td>
+	</tr>
+</table>
+
+<!-- END LEFT NAVBAR -->
+
+
+
+<!-- END LEFT NAVBAR -->
+	
+	<td width="15"><img src="/images/dotclear.gif" width="15" alt="" border="0"></td>
+
+<!-- end of ITK left NAV -->
+
+<!-- begin main content -->
+	
+	<td width="100%" valign="top" align="left">
+		<br>
+
+<!-- END SUB HEADER -->
+
+
+
+674
+<!-- Created by dB Page Builder.  http://www.pchelponline.com/bluestem -->
+
+<!--Begin Content Column -->
+
+<TABLE border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td width=75 valign=top>
+<img src="/images/sm_covers/067230886x.gif" width=60 height=73 alt="Oracle Performance Tuning and Optimization" border="1">
+</td>
+<td align="left">
+    <font face="arial, helvetica" size="-1" color="#336633"><b>Oracle Performance Tuning and Optimization</b></font>
+    <br>
+    <font face="arial, helvetica" size="-1"><i>by Edward Whalen</i>
+    <br>
+    Sams,&nbsp;Macmillan Computer Publishing
+    <br>
+    <b>ISBN:</b>&nbsp;067230886x<b>&nbsp;&nbsp;&nbsp;Pub Date:</b>&nbsp;04/01/96</font>
+</td>
+</tr>
+</table>
+<P>
+<FORM name= "search2" method="POST" action="http://ewsearch.earthweb.com:80/jsp/k2search/ewintrak2search.jsp" onSubmit=" return checkForQuery(this); ">
+<INPUT type="hidden" name="collection" value="corpitk">
+<INPUT type="hidden" name="altcoll" value="bookscorpitk">
+<INPUT type="hidden" name="hl" value="on">
+<INPUT name="sortspec" type=hidden value="score desc">
+<INPUT name="fields" type=hidden value="vdkvgwkey score vstitle vsisbn vsauthor vspublisher vspubdate">
+<INPUT name="imageprefix" type=hidden value="http://corpitk.earthweb.com">
+<INPUT name="ssiFolder" type=hidden value="corpitk">
+<INPUT type="hidden" name="bookid" value="corpitk.earthweb.comreferencepro067230886x">
+
+<font face="arial, helvetica" size=2><b>Search this book:</b></font><br>
+<INPUT NAME="query" size=25 VALUE="">&nbsp;<input type="image" width=28 height=23 border=0 value="Go" name="Go" src="/images/go.gif" align=absmiddle>
+
+</form>
+
+
+22 
+
+<!-- Empty Reference Subhead -->
+1000
+
+
+<!--ISBN=067230886x//-->
+<!--TITLE=Oracle Performance Tuning and Optimization//-->
+<!--AUTHOR=Edward Whalen//-->
+<!--PUBLISHER=Macmillan Computer Publishing//-->
+<!--IMPRINT=Sams//-->
+<!--APPENDIX=E//-->
+<!--PAGES=618-644//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="ewtoc.html">Table of Contents</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H2><A NAME="Heading1"></A><FONT COLOR="#000077">Appendix E<BR>Oracle Tuning Parameters
+</FONT></H2>
+<P>This appendix lists the Oracle tuning parameters. The appendix first groups them into general areas of use and then sorts them alphabetically within the group. The section headings are the syntax for the parameters. The syntax contains information in the following format:
+</P>
+<!-- CODE SNIP //-->
+<PRE>
+<I>PARAMETER</I>[<I>option1, option2, option3,etc..</I>]<I>&lt;DEFAULT VALUE&gt;</I>
+</PRE>
+<!-- END CODE SNIP //-->
+<P>These parameters are divided into sections based on whether the parameter affects performance, is a parameter that enables system analysis, is a general parameter, and so on. Because there may be some overlap, if a parameter is not in the section where you expected it, keep looking.
+</P>
+<H3><A NAME="Heading2"></A><FONT COLOR="#000077">Performance Parameters</FONT></H3>
+<P>These parameters change the performance characteristics of the system.
+</P>
+<P><FONT SIZE="+1"><B>CURSOR_SPACE_FOR_TIME [ <I>TRUE,FALSE</I> ] &lt; FALSE &gt;
+</B></FONT></P>
+<P><TT>CURSOR_SPACE_FOR_TIME</TT> causes the system to use more space for cursors, thus increasing performance. This parameter affects both the shared SQL areas and the user&#146;s private SQL area. This parameter speeds performance but uses more memory.</P>
+<P>If <TT>CURSOR_SPACE_FOR_TIME</TT> is TRUE, the shared SQL areas remain pinned in the shared pool as long as an open cursor references them. This parameter should be used only if you have a sufficiently large shared pool to hold all the processes&#146; cursors simultaneously.</P>
+<P>The user&#146;s private SQL area is also retained during cursor execution, thus saving time and I/Os at the expense of memory.</P>
+<P><FONT SIZE="+1"><B>DB_BLOCK_BUFFERS [ <I>4..65535</I> ] &lt; 32 buffers &gt;
+</B></FONT></P>
+<P>This parameter controls the number of database block buffers in the SGA. <TT>DB_BLOCK_BUFFERS</TT> is probably the most significant instance tuning parameter because the majority of I/Os in the system are generated by database blocks. Increasing <TT>DB_BLOCK_BUFFERS</TT> increases performance at the expense of memory. You can calculate the amount of memory that will be consumed with the following formula:</P>
+<!-- CODE SNIP //-->
+<PRE>
+Buffer Size = DB_BLOCK_BUFFERS * DB_BLOCK_SIZE
+</PRE>
+<!-- END CODE SNIP //-->
+<P>A larger number of database block buffers in the system creates a higher cache-hit rate, thus reducing the amount of I/O and CPU utilized and improving performance.
+</P>
+<P><FONT SIZE="+1"><B>DB_BLOCK_CHECKPOINT_BATCH [ <I>0..DB_BLOCK_WRITE_BATCH</I> ] &lt; DB_BLOCK_WRITE_BATCH / 4 &gt;
+</B></FONT></P>
+<P>This parameter specifies the number of blocks that the DBWR writes in one batch when performing a checkpoint. Setting this value too high causes the system to flood the I/O devices during the checkpoint, severely degrades performance, and increases response times&#151;maybe to unacceptable levels.
+</P>
+<P>You should set <TT>DB_BLOCK_CHECKPOINT_BATCH</TT> to a level that allows a checkpoint to finish before the next checkpoint occurs. Because setting <TT>DB_BLOCK_CHECKPOINT_BATCH</TT> to zero causes the default value to be used, changing <TT>DB_BLOCK_WRITE_BATCH</TT> is automatically reflected in the default value of <TT>DB_BLOCK_CHECKPOINT_BATCH</TT>.</P>
+<P><FONT SIZE="+1"><B>DB_BLOCK_SIZE [ <I>1024-8192 (OS dependent)</I> ] &lt; OS dependent &gt;
+</B></FONT></P>
+<P>This parameter specifies in bytes the size of the Oracle database blocks. The typical values are 2048 and 4096. If you set the block size relative to the size of the rows in database, you c
+1000
+an reduce I/O. In some types of applications in which large amounts of sequential accesses are done, a larger database block size can be of benefit. This value is of use only at database creation time.
+</P>
+<P><FONT SIZE="+1"><B>DB_FILE_MULTIBLOCK_READ_COUNT [ <I>number (OS dependent)</I> ] &lt; OS dependent &gt;
+</B></FONT></P>
+<P><TT>DB_FILE_MULTIBLOCK_READ_COUNT</TT> specifies the maximum number of blocks read in one I/O during a sequential scan. The default is a function of <TT>DB_BLOCK_BUFFERS</TT> and <TT>PROCESSES</TT>. Reasonable values are 4, 16, or 32. The maximum allowed values are OS dependent.</P>
+<P>This parameter can be especially useful if you do a large number of table scans such as in a DSS system.</P>
+<P><FONT SIZE="+1"><B>DB_FILE_SIMULTANEOUS_WRITES [ <I>1..24</I> ] &lt; 4 &gt;
+</B></FONT></P>
+<P>Specifies the number of simultaneous writes for each database file when written by the DBWR. For disk arrays that handle large numbers of requests in the hardware simultaneously, it is advantageous to set <TT>DB_FILE_SIMULTANEOUS_WRITES</TT> to its maximum.</P>
+<P><FONT SIZE="+1"><B>DISCRETE_TRANSACTIONS_ENABLED [ <I>TRUE/FALSE</I> ] &lt; FALSE &gt;
+</B></FONT></P>
+<P>This parameter implements a simpler, faster rollback mechanism that, under certain conditions, can improve performance. In this mode, you can obtain greater efficiency but the qualification criteria for what kind of transactions can take advantage of discrete transactions are quite strict.
+</P>
+<P><FONT SIZE="+1"><B>DML_LOCKS [ <I>20..unlimited,0</I> ] &lt; 4 * TRANSACTIONS &gt;
+</B></FONT></P>
+<P>This parameter specifies the maximum number of DML locks. A DML lock is used for each table modification transaction. DML locks are used in the <TT>DROP TABLE</TT>, <TT>CREATE INDEX</TT>, and <TT>LOCK TABLE IN EXCLUSIVE MODE</TT> statements. If the value is set to zero, enqueues are disabled, which improves performance slightly.</P>
+<P><FONT SIZE="+1"><B>LOG_ARCHIVE_BUFFER_SIZE [ <I>1..OS dependent</I> ] &lt; OS dependent &gt;
+</B></FONT></P>
+<P>When running in ARCHIVELOG mode, this parameter specifies the size of each archival buffer in redo log blocks. This parameter, in conjunction with the <TT>LOG_ARCHIVE_BUFFERS</TT> parameter, can be used to tune the speed of archiving faster or slower as desired to affect overall system performance.</P>
+<P><FONT SIZE="+1"><B>LOG_ARCHIVE_BUFFERS [ <I>1..OS dependent</I> ] &lt; OS dependent &gt;
+</B></FONT></P>
+<P>When running in ARCHIVELOG mode, this parameter specifies the number of buffers to allocate to archiving. This parameter is used with the <TT>LOG_ARCHIVE_BUFFER_SIZE</TT> parameter to control the speed of archiving.</P>
+<P><FONT SIZE="+1"><B>LOG_BUFFER [ <I>OS dependent</I> ] &lt; OS dependent &gt;
+</B></FONT></P>
+<P><TT>LOG_BUFFER</TT> specifies the number of bytes allocated to the redo log buffer. Larger values reduce I/Os to the redo log by writing fewer blocks of a larger size. Particularly in a heavily used system, this may help performance.</P>
+<P><FONT SIZE="+1"><B>LOG_CHECPOINT_INTERVAL [ <I>2..unlimited</I> ] &lt; OS dependent &gt;
+</B></FONT></P>
+<P>This parameter specifies the number of redo log file blocks to be filled to cause a checkpoint to occur. Remember that a checkpoint always happens when a log switch occurs. This parameter can be used to cause checkpoints to occur more frequently. Sometimes, frequent checkpoints have less effect on the system than one large checkpoint when the log switch occurs.
+</P>
+<P><FONT SIZE="+1"><B>LOG_CHECKPOINT_TIMEOUT [ <I>0..unlimited</I> ] &lt; OS dependent &gt;
+</B></FONT></P>
+<P>This parameter specifies the maximum amount of time that can pass before another checkpoint must occur. This parameter can also be used to increase the frequency of the checkpoint process, thus changing the overall system affect.
+</P>
+<P><FONT SIZE="+1"><B>LOG_SIMULTANEOUS_COPIES [ <I>0..unlimited</I> ] &lt; CPU_COUNT &gt;
+</B></FONT></P>
+<P><TT>LOG_SIMULTANEOUS_COPIES</TT> specifies the number of redo buffer copy latches simultaneously availab
+1000
+le to write log entries. You can have up to two redo copy latches per CPU. This helps the LGWR process keep up with the extra load generated by multiple CPUs.</P>
+<P>If this parameter is zero, redo copy latches are turned off and all log entries are copied on the redo allocation latch.</P>
+<P><FONT SIZE="+1"><B>LOG_SMALL_ENTRY_MAX_SIZE [ <I>number (OS dependent)</I> ] &lt; OS dependent &gt;
+</B></FONT></P>
+<P>This parameter specifies the size in bytes of the largest copy to the log buffers that can occur under the redo allocation latch without obtaining the redo buffer copy latch. If <TT>LOG_SIMULTANEOUS_COPIES</TT> is zero, this parameter is ignored.</P>
+<P><FONT SIZE="+1"><B>OPTIMIZER_MODE [ <I>RULE/COST/FIRST_ROWS/ALL_ROWS</I> ] COST
+</B></FONT></P>
+<P>When set to <TT>RULE</TT>, this parameter causes rule-based optimization to be used, unless hints are supplied in the query. When set to <TT>COST</TT>, this parameter causes a cost-based approach for the SQL statement, providing that there are any statistics in the data dictionary. When set to <TT>FIRST_ROWS</TT>, the optimizer chooses execution plans that minimize response time. When set to <TT>ALL_ROWS</TT>, the optimizer chooses execution plans that minimize total execution time.</P>
+<P><FONT SIZE="+1"><B>PRE_PAGE_SGA [ <I>TRUE/FALSE</I> ] &lt; FALSE &gt;
+</B></FONT></P>
+<P>When set to TRUE, this parameter specifies that, at instance startup, all pages of the SGA are touched, causing them to be allocated in memory. This increases startup time but reduces page faults during run time. This is useful if you have a large number of processes starting at once. This parameter can increase the system performance in that case by avoiding memory allocation overhead.
+</P>
+<P><FONT SIZE="+1"><B>ROLLBACK_SEGMENTS [ <I>Any rollback segment names</I> ] &lt; NULL &gt;
+</B></FONT></P>
+<P><TT>ROLLBACK_SEGMENTS</TT> specifies one or more rollback segment names to be allocated to this instance. If <TT>ROLLBACK_SEGMENTS</TT> is not specified, the public rollback segments are used. If you want to move your rollback segments to a different disk device, you must specify it here. The parameter is specified as follows:</P>
+<!-- CODE SNIP //-->
+<PRE>
+ROLLBAC_SEGMENTS = ( roll1, roll2, roll3 )
+</PRE>
+<!-- END CODE SNIP //-->
+<P>If you use the Oracle Parallel Server option, you must name different rollback segments for each instance.
+</P>
+<P><FONT SIZE="+1"><B>ROW_CACHE_CURSORS [ <I>10..3300</I> ] &lt; 10 &gt;
+</B></FONT></P>
+<P>This parameter specifies the number of cached recursive cursors used by the row cache manager for selecting rows from the data dictionary. The default is usually sufficient unless you have particularly high access to the data dictionary.
+</P>
+<P><FONT SIZE="+1"><B>ROW_LOCKING [ <I>ALWAYS/INTENT</I> ] &lt; ALWAYS &gt;
+</B></FONT></P>
+<P>The value <TT>ALWAYS</TT> specifies that only row locks are acquired when a table is updated. If you set this value to <TT>INTENT</TT>, row locks are acquired on a <TT>SELECT FOR UPDATE</TT>, but when the update occurs, a table lock is acquired.</P>
+<P><FONT SIZE="+1"><B>SEQUENCE_CACHE_ENTRIES [ <I>10..32000</I> ] &lt; 10 &gt;
+</B></FONT></P>
+<P>This parameter specifies the number of sequences that can be cached in the SGA. By caching the sequences, an immediate response is achieved for sequences. Set a large value for <TT>SEQUENCE_CACHE_ENTRIES</TT> if you have a high concurrency of processes requesting sequences.</P>
+<P><FONT SIZE="+1"><B>SEQUENCE_CACHE_HASH_BUCKETS [ <I>1..32000 (prime number)</I> ] &lt; 7 &gt;
+</B></FONT></P>
+<P>This parameter specifies the number of buckets to speed up access to sequences in the cache. The cache is arranged as a hash table.
+</P>
+<P><FONT SIZE="+1"><B>SERIALIZABLE [ <I>TRUE/FALSE</I> ] &lt; FALSE &gt;
+</B></FONT></P>
+<P>If this value is set to TRUE, it causes queries to obtain table-level read locks, which prohibits modifications to that table until the transaction has committed or rolled back the transaction. This mode provides repeatable reads and ensures that, w
+1000
+ithin the transactions, multiple queries to the same data achieve the same result.
+</P>
+<P>With <TT>SERIALIZABLE</TT> set to TRUE, degree-three consistency is provided. There is a performance penalty paid when you run in this mode, which is usually not necessary.</P>
+<P><FONT SIZE="+1"><B>SESSION_CACHED_CURSORS [ <I>0..OS dependent</I> ] &lt; 0 &gt;
+</B></FONT></P>
+<P>This parameter specifies the number of session cursors to cache. If parse calls of the same SQL statement are repeated, this can cause the session cursor for that statement to be moved into the session cursor cache. Subsequent calls need not reopen the cursor.
+</P>
+<P><FONT SIZE="+1"><B>SHARED_POOL_SIZE [ <I>300KB..OS dependent</I> ] &lt; 3.5Mbytes &gt;
+</B></FONT></P>
+<P>This parameter specifies the size of the shared pool in bytes. The shared pool contains the data dictionary cache (row cache) and the library cache as well as session information. Increasing the size of the shared pool should help performance, at the cost of memory.
+</P>
+<P><FONT SIZE="+1"><B>SMALL_TABLE_THRESHOLD [ <I>0..OS dependent</I> ] &lt; 4 &gt;
+</B></FONT></P>
+<P>This parameter specifies the number of buffers available in the SGA for table scans. A small table may be read entirely into cache if it fits in <TT>SMALL_TABLE_THRESHOLD</TT> number of buffers. When scanning a table larger than this, these buffers are reused immediately. This provides a mechanism to prohibit a single-table scan from taking over the buffer cache.</P>
+<P><FONT SIZE="+1"><B>SORT_AREA_RETAINED_SIZE [ <I>0..SORT_AREA_SIZE</I> ] &lt; SORT_AREA_SIZE &gt;
+</B></FONT></P>
+<P><TT>SORT_AREA_RETAINED_SIZE</TT> defines the maximum amount of session memory in bytes that can be used for an in-memory sort. The memory is released when the last row is fetched from the sort area.</P>
+<P>If the sort does not fit in <TT>SORT_AREA_RETAINED_SIZE</TT> bytes, a temporary segment is allocated and the sort is done in this temporary table. This is called an external (disk) sort. This value is important if sort performance is critical.</P>
+<P><FONT SIZE="+1"><B>SORT_AREA_SIZE [ <I>number of bytes</I> ] &lt; OS dependent &gt;
+</B></FONT></P>
+<P>This value specifies the maximum amount of PGA memory to use for an external sort. This memory is released when the sorted rows are written to disk. Increasing this value increases the performance of large sorts.
+</P>
+<P>Remember that each user process has its own PGA. You can calculate the potential memory usage if all the users are doing a large sort with the following formula:</P>
+<!-- CODE SNIP //-->
+<PRE>
+Potential Memory Usage = SORT_AREA_SIZE * ( number of users doing a large sort)
+</PRE>
+<!-- END CODE SNIP //-->
+<P>If very large indexes are being created, you may want to adjust this parameter up.
+</P>
+<P><FONT SIZE="+1"><B>SORT_SPACEMAP_SIZE [ <I>bytes</I> ] &lt; OS dependent &gt;
+</B></FONT></P>
+<P>The size in bytes of the sort spacemap in the context area. If you have very large indexes, adjust this parameter up. Optimal performance is achieved when this parameter has the following value:
+</P>
+<!-- CODE SNIP //-->
+<PRE>
+SORT_SPACEMAP_SIZE = ( total-sort-bytes / sort-area-size ) &#43; 64
+</PRE>
+<!-- END CODE SNIP //-->
+<P>In this formula, <TT>total-sort-bytes</TT> has the following value:</P>
+<!-- CODE SNIP //-->
+<PRE>
+total-sort-bytes = record-count * ( sum-of-average-column-sizes &#43;
+( 2 * number-of-columns ) )
+</PRE>
+<!-- END CODE SNIP //-->
+<P>The <TT>number-of-columns</TT> include the <TT>SELECT</TT> list for the <TT>ORDER BY</TT>, the <TT>GROUP BY</TT>, and the key list for the <TT>CREATE INDEX</TT>. Also add a 10 or 20 extra bytes for overhead.</P>
+<H3><A NAME="Heading3"></A><FONT COLOR="#000077">Parallel Query Option Parameters</FONT></H3>
+<P>The following parameters affect the operation of the Parallel Query option, which has been available in Oracle since version 7.1. The Parallel Query option can affect performance of certain operations dramatically.
+</P>
+<P><FONT SIZE="+1"><B>PARALLEL_DEFAULT_MAX_SCANS [ <I>0..unlimited</I
+1000
+> ] &lt; OS dependent &gt;
+</B></FONT></P>
+<P>This value specifies the maximum number of query servers to be used by default for a query. This valued is used only if there are no values specified in a <TT>PARALLEL</TT> hint or in the <TT>PARALLEL</TT> definition clause. This limits the number of query servers used by default when the value of <TT>PARALLEL_DEFAULT_SCANSIZE</TT> is used by the query coordinator.</P>
+<P><FONT SIZE="+1"><B>PARALLEL_DEFAULT_SCANSIZE [ <I>0..OS dependent</I> ] &lt; OS dependent &gt;
+</B></FONT></P>
+<P>This parameter is used to determine the number of query servers to be used for a particular table. The size of the table divided by <TT>PARALLEL_DEFAULT_SCANSIZE</TT> determines the number of query servers, up to <TT>PARALLEL_DEFAULT_MAX_SCANS</TT>.</P>
+<P><FONT SIZE="+1"><B>PARALLEL_MAX_SERVERS [ <I>0..100</I> ] &lt; OS dependent &gt;
+</B></FONT></P>
+<P>This parameter specifies the maximum number of query servers or parallel recovery processes available for this instance.
+</P>
+<P><FONT SIZE="+1"><B>PARALLEL_MIN_SERVERS [ <I>0..PARALLEL_MAX_SERVERS</I> ] &lt; 0 &gt;
+</B></FONT></P>
+<P>This parameter determines the minimum number of query servers for an instance. It is also the number of query servers started at instance startup.
+</P>
+<P><FONT SIZE="+1"><B>PARALLEL_SERVER_IDLE_TIME [ <I>0..unlimited</I> ] &lt; OS dependent &gt;
+</B></FONT></P>
+<P>This parameter specifies the number of minutes before Oracle terminates an idle query server process.
+</P>
+<P><FONT SIZE="+1"><B>RECOVERY_PARALLELISM [ <I>0..PARALLEL_MAX_SERVERS</I> ] &lt; OS dependent &gt;
+</B></FONT></P>
+<P>This parameter specifies the number of processes to be used for instance or media recovery. A large value can greatly reduce instance recovery time. A value of 0 or 1 indicates that parallel recovery will not be done and that recovery will be serial.
+</P>
+<H3><A NAME="Heading4"></A><FONT COLOR="#000077">Analysis Tool Parameters</FONT></H3>
+<P>The following parameters turn on special features in Oracle for detailed analysis and debugging.
+</P>
+<P><FONT SIZE="+1"><B>DB_BLOCK_CHECKSUM [ <I>TRUE/FALSE</I> ] &lt; FALSE &gt;
+</B></FONT></P>
+<P>Setting this parameter to TRUE causes the DBWR and direct loader to calculate a checksum for every block they write to disk. This checksum is written into the header of each block.
+</P>
+<P><FONT SIZE="+1"><B>DB_LOG_CHECKSUM [ <I>TRUE/FALSE</I> ] &lt; FALSE &gt;
+</B></FONT></P>
+<P>Setting this parameter to TRUE causes the LGWR to calculate a checksum for every block it writes to disk. The checksum is written into the header of the redo block.
+</P>
+<P><FONT SIZE="+1"><B>DB_BLOCK_LRU_EXTENDED_STATISTICS [ <I>0..unlimited</I> ] &lt; 0 &gt;
+</B></FONT></P>
+<P>This parameter enables statistics in the X$KCBRBH table to be gathered. These statistics estimate the increased number of database block buffer cache hits for each additional buffer. Any value over zero specifies the number of buffers to estimate the cache hits for. If you are interested in estimating the cache hits for an additional 100 buffers, set this parameter to 100.
+</P>
+<P>This parameter affects performance and should be turned off during normal operation.</P>
+<P><FONT SIZE="+1"><B>DB_BLOCK_LRU_STATISTICS [ <I>TRUE/FALSE</I> ] &lt; FALSE &gt;
+</B></FONT></P>
+<P>This parameter specifies whether statistics are gathered for database block buffer cache-hit estimates as specified in <TT>DB_BLOCK_LRU_EXTENDED_STATISTICS</TT>. Set this parameter to TRUE when you want to gather these statistics.</P>
+<P><FONT SIZE="+1"><B>EVENT &lt; <I>NULL</I> &gt;
+</B></FONT></P>
+<P>The <TT>EVENT</TT> parameter modifies the scope of <TT>ALTER SESSION SET EVENTS</TT> commands so that they pertain to the entire instance rather than just the session. This is an Oracle internal parameter and should be changed only at the direction of Oracle support.</P>
+<P><FONT SIZE="+1"><B>FIXED_DATE [ <I>date string</I> ] &lt; NULL &gt;
+</B></FONT></P>
+<P><TT>FIXED_DATE</TT> allows you to set as a constant the Oracle function <TT>SYSDATE
+1000
+</TT> in the format YYYY-MM-DD-HH24:MI:SS. Use this parameter for debug only. This parameter allows you to test your application&#146;s functionality with certain dates, such as the turn of the century.</P>
+<P><FONT SIZE="+1"><B>SQL_TRACE [ T<I>RUE/FALSE</I> ] &lt; FALSE &gt;
+</B></FONT></P>
+<P>This parameter specifies whether the SQL Trace facility is enabled. The SQL Trace facility can provide valuable information but at the price of some overhead. Use SQL Trace only when you are tracking down a specific problem.
+</P>
+<P><FONT SIZE="+1"><B>TIMED_STATISTICS [ <I>TRUE/FALSE</I> ] &lt; FALSE &gt;
+</B></FONT></P>
+<P>When <TT>TIMED_STATISTICS</TT> is set to TRUE, the time-related statistics in the dynamic performance tables are enabled. This information can be quite useful but there is considerable overhead involved. Only enable <TT>TIMED_STATISTICS</TT> when you are analyzing the system.</P>
+<H3><A NAME="Heading5"></A><FONT COLOR="#000077">General Parameters</FONT></H3>
+<P>These parameters are of a general nature; typically they set limits and do not significantly affect performance&#151;except that they may take up space in the SGA.
+</P>
+<P><FONT SIZE="+1"><B>BACKGROUND_DUMP_DEST [ <I>path-name</I> ] &lt; OS dependent &gt;
+</B></FONT></P>
+<P>This parameter specifies the destination directory where the debugging trace files for the background processes are written. The background processes log all startup and shutdown messages and errors to these files, as well as any other error logs. A log of all <TT>CREATE</TT>, <TT>ALTER</TT>, or <TT>DROP</TT> statements is also stored here.</P>
+<P><FONT SIZE="+1"><B>BLANK_TRIMMING [ <I>TRUE/FALSE</I> ] &lt; FALSE &gt;
+</B></FONT></P>
+<P>If the value of <TT>BLANK_TRIMMING</TT> is TRUE, this allows a data assignment of a string variable to a column value that is smaller (assuming that the truncated characters are blank).</P>
+<P><FONT SIZE="+1"><B>CHECKPOINT_PROCESS [ <I>TRUE/FALSE</I> ] &lt; FALSE &gt;
+</B></FONT></P>
+<P>This parameter determines whether the CKPT background process is enabled. During a checkpoint, the headers of all the data files must be updated. This task is usually performed by the LGWR process. The job of writing the blocks to disk belongs to the DBWR process. If you notice that the LGWR is slowing down during checkpoints, it may be necessary to enable CKPT to eliminate the extra work that LGWR is doing.
+</P>
+<P><FONT SIZE="+1"><B>CLEANUP_ROLLBACK_ENTRIES [ <I>number</I> ] &lt; 20 &gt;
+</B></FONT></P>
+<P>This parameter specifies the number of undo records processed at a time when a rollback occurs. This breaks up the rollback and limits a large rollback from locking out smaller rollbacks.
+</P>
+<P><FONT SIZE="+1"><B>CLOSE_CHACHED_OPEN_CURSORS [ <I>TRUE/FALSE</I> ] &lt; FALSE &gt;
+</B></FONT></P>
+<P>This parameter specifies whether cursors that have been opened and cached by PL/SQL are automatically closed at commit. A value of FALSE allows these cursors to remain open for further use. If cursors are rarely reused, you can save space in the SGA by setting this value to TRUE. If cursors are reused, you can improve performance by leaving this parameter at the default value of FALSE.
+</P>
+<P><FONT SIZE="+1"><B>COMPATABLE [ <I>variable</I> ] &lt; release dependent &gt;
+</B></FONT></P>
+<P>Setting this variable guarantees that the DBMS will remain compatible with the specified release. Some features may have to be limited for the compatibility to be maintained.
+</P>
+<P><FONT SIZE="+1"><B>COMPATIBLE_NO_RECOVERY [ <I>variable</I> ] &lt; release dependent &gt;
+</B></FONT></P>
+<P>This parameter works like the <TT>COMPATABLE</TT> parameter except that the earlier version (specified as the parameter) may not work on the current database if recovery is necessary.</P>
+<P><FONT SIZE="+1"><B>CONTROL_FILES [ <I>1..8 filenames</I> ] &lt; OS dependent &gt;
+</B></FONT></P>
+<P>This parameter specifies the path names of one to eight control files. It is recommended that there always be more than one control file and that they exist on different physica
+1000
+l devices.
+</P>
+<P><FONT SIZE="+1"><B>DB_DOMAIN [ <I>extension components of a global db name</I> ] &lt; WORLD &gt;
+</B></FONT></P>
+<P>This parameter specifies the extension components of the global database name consisting of valid identifiers separated by periods (for example, <TT>texas.us.widgets.com</TT>). This allows multiple divisions to each have an ACCOUNTING database that is uniquely identified by the addition of the domain.</P>
+<P><FONT SIZE="+1"><B>DBLINK_ENCRYPT_LOGIN [ <I>TRUE/FALSE</I> ] &lt; FALSE &gt;
+</B></FONT></P>
+<P>When you connect to another server, Oracle encrypts the password. If the value of <TT>DBLINK_ENCRYPT_LOGIN</TT> is FALSE and the connection fails, Oracle tries to connect again with a nonencrypted password. If <TT>DBLINK_ENCRYPT_LOGIN</TT> is TRUE and the connection fails, Oracle does not attempt a reconnection.</P>
+<P><FONT SIZE="+1"><B>DB_FILES [ <I>min: MAXDATAFILES, max OS dependent</I> ] &lt; OS dependent &gt;
+</B></FONT></P>
+<P>This parameter specifies the maximum number of database files that can be open. This value can be reduced if you want to reclaim space in the SGA. There is no performance degradation by leaving this value high, just additional memory usage in the SGA.
+</P>
+<P><FONT SIZE="+1"><B>DB_NAME [ <I>valid name</I> ] &lt; NULL &gt;
+</B></FONT></P>
+<P>This parameter provides a string up to eight characters in length that specifies the name of the database. The following characters are valid:
+</P>
+<DL>
+<DD><B>&#149;</B>&nbsp;&nbsp;Alphabetic characters
+<DD><B>&#149;</B>&nbsp;&nbsp;Numbers
+<DD><B>&#149;</B>&nbsp;&nbsp;Underscore (_)
+<DD><B>&#149;</B>&nbsp;&nbsp;Pound sign (#)
+<DD><B>&#149;</B>&nbsp;&nbsp;Dollar sign ($)
+</DL>
+<P>No other characters can be used. Double quotation marks (that may be used in the name specified by the user) are removed; they cannot be part of the name. The characters used in the <TT>DB_NAME</TT> parameter are case insensitive. Thus, <TT><B>SALES</B></TT> is the same as <TT><B>Sales</B></TT> is the same as <TT><B>sales</B></TT>.</P>
+<P><FONT SIZE="+1"><B>ENQUEUE_RESOURCES [ <I>10..65535</I> ] &lt; derived &gt;
+</B></FONT></P>
+<P>This parameter specifies the number of resources that can be locked by the lock manager. The default value is derived from <TT>PROCESSES</TT> and is usually sufficient. The value is derived from this formula:</P>
+<!-- CODE SNIP //-->
+<PRE>
+PROCESSES &lt;= 3; default values = 20
+PROCESSES 4-10; default value = ((PROCESSES -  3) * 5) &#43; 20
+PROCESSES &gt; 10; default value = ((PROCESSES - 10) * 2) &#43; 55
+</PRE>
+<!-- END CODE SNIP //-->
+<P>If you use a large number of tables, you may have to increase this value. This value should never exceed <TT>DML_LOCKS</TT> &#43; <TT>DDL_LOCKS</TT> &#43; <TT>20</TT> (overhead).</P>
+<P><FONT SIZE="+1"><B>GLOBAL_NAMES [ <I>TRUE/FALSE</I> ] &lt; FALSE &gt;
+</B></FONT></P>
+<P>This parameter determines whether a database link is required to have the same name as the database to which it connects. Oracle recommends setting this parameter to TRUE to ensure the use of consistent naming conventions for databases and links.
+</P>
+<P><FONT SIZE="+1"><B>IFILE [ <I>parameter file name</I> ] &lt; NULL &gt;
+</B></FONT></P>
+<P>This parameter embeds another parameter file into the current parameter file. This can be very useful to separate specific changes from the general changes that you often make. The parameter also allows you to separate different types of parameters such as parallel options.
+</P>
+<P><FONT SIZE="+1"><B>INIT_SQL_FILES [ <I>SQL file name</I> ] &lt; NULL &gt;
+</B></FONT></P>
+<P>This parameter lists the names of SQL files that should be run immediately after database creation. This parameter can be used to automatically create the data dictionary.
+</P>
+<P><FONT SIZE="+1"><B>JOB_QUEUE_INTERVAL [ <I>1..3600</I> ] &lt; 60 &gt;
+</B></FONT></P>
+<P>This parameter specifies, in seconds, the interval between wake-ups of the SNP background process. The processes run jobs that have been queued.
+</P>
+<P><FONT SIZE="+1"><B>JOB_QUEUE_KEEP_CONNEC
+1000
+TIONS [ <I>1..10</I> ] &lt; 0 &gt;
+</B></FONT></P>
+<P>This parameter specifies the number of SNP background processes per instance.
+</P>
+<P><FONT SIZE="+1"><B>JOB_QUEUE_PROCESSES [ <I>TRUE/FALSE</I> ] &lt; FALSE &gt;
+</B></FONT></P>
+<P>This parameter specifies whether remote connections should be shut down after remote jobs have finished executing.
+</P>
+<P><FONT SIZE="+1"><B>LICENSE_MAX_SESSIONS [ <I>0..number of session licenses</I> ] &lt; 0 &gt;
+</B></FONT></P>
+<P><TT>LICENSE_MAX_USERS</TT> sets the maximum number of concurrent user sessions allowed. When this limit is reached, only users with <TT>RESTRICTED SESSION</TT> privilege can connect to the server. A zero value indicates that this constraint is not enforced. Either <TT>LICENSE_MAX_USERS</TT> or <TT>LICENSE_MAX_SESSIONS</TT> should be set, not both.</P>
+<P><FONT SIZE="+1"><B>LICENSE_MAX_USERS [ <I>0..number of user icenses</I> ] &lt; 0 &gt;
+</B></FONT></P>
+<P><TT>LICENSE_MAX_USERS</TT> sets the maximum number of concurrent users you can create in the database. When you reach this limit, you can no longer create users. A zero value indicates that this constraint is not enforced. Either <TT>LICENSE_MAX_USERS</TT> or <TT>LICENSE_MAX_SESSIONS</TT> should be set, not both.</P>
+<P><FONT SIZE="+1"><B>LICENSE_SESSIONS_WARNING [ <I>0..LICENSE_MAX_SESSIONS</I> ] &lt; 0 &gt;
+</B></FONT></P>
+<P>Sets a warning limit so that the administrator can be aware that the <TT>LICENSE_MAX_SESSIONS</TT> limit may soon be reached. After <TT>LICENSE_SESSIONS_WARNING</TT> number of users have connected, a message is written to the alert log for each additional user connecting in.</P>
+<P><FONT SIZE="+1"><B>LOG_ARCHIVE_DEST [ <I>valid path or device name</I> ] &lt; OS dependent &gt;
+</B></FONT></P>
+<P>When running in ARCHIVELOG mode, this text value specifies the default location and root of the file or tape device to use when archiving redo log files. Archiving to tape is not supported under all operating systems.
+</P>
+<P><FONT SIZE="+1"><B>LOG_ARCHIVE_FORMAT [ valid filename ] &lt; OS dependent &gt;</B></FONT></P>
+<P>This parameter uses a text string and variables to specify the default filename format of the archive log files. This string is appended to the <TT>LOG_ARCHIVE_DEST</TT> parameter name. The following variables can be used in the string:</P>
+<CENTER>
+<TABLE WIDTH="90%"><TR>
+<TD WIDTH="10%" ALIGN="LEFT">%s
+<TD WIDTH="90%" ALIGN="LEFT">Log sequence number
+<TR>
+<TD>%t
+<TD>Thread number
+</TABLE>
+</CENTER>
+<P>Using uppercase letters (%S, %T) causes the value to be fixed length, padded to the left with zeros. A good value is similar to the following:
+</P>
+<!-- CODE SNIP //-->
+<PRE>
+LOG_ARCHIVE_FORMAT = 'log%S_%T.arc'
+</PRE>
+<!-- END CODE SNIP //-->
+<P><FONT SIZE="+1"><B>LOG_ARCHIVE_START [ <I>TRUE/FALSE</I> ] &lt; FALSE &gt;
+</B></FONT></P>
+<P>When running in ARCHIVELOG mode, <TT>LOG_ARCHIVE_START</TT> specifies whether archiving should be started up automatically at instance startup. A setting of TRUE indicates that archiving is automatic; FALSE indicates that archiving is manual.</P>
+<P><FONT SIZE="+1"><B>LOG_CHECKPOINTS_TO_ALERT [ <I>TRUE/FALSE</I> ] &lt; FALSE &gt;
+</B></FONT></P>
+<P>This parameter specifies whether you want to log the checkpoints to the alert log. This can be useful in verifying the frequency of checkpoints.
+</P>
+<P><FONT SIZE="+1"><B>LOG_FILES [ <I>2..255</I> ] &lt; 255 &gt;
+</B></FONT></P>
+<P>This parameter specifies the maximum number of redo log files that can be opened at instance startup. Reducing this value can save some space in the SGA. If this value is set higher than the value of <TT>MAXLOGFILES</TT> used at database creation, it does not override <TT>MAXLOGFILES</TT>.</P>
+<P><FONT SIZE="+1"><B>MAX_DUMP_FILE_SIZE [ <I>0..unlimited</I> ] &lt; 500 blocks &gt;
+</B></FONT></P>
+<P>This parameter specifies the maximum size in OS blocks of any trace file written. Set this if you are worried that trace files may consume too much space.
+</P>
+<P><FONT SIZE="+1"><B>MAX_ENABLED_ROLES [ <I>0..48</I> ] &lt; 20 
+1000
+&gt;
+</B></FONT></P>
+<P>This parameter specifies the maximum number of database roles (including subroles) that a user can enable.
+</P>
+<P><FONT SIZE="+1"><B>MAX_ROLLBACK_SEGMENTS [ <I>1..65536</I> ] &lt; 30 &gt;
+</B></FONT></P>
+<P>This parameter specifies the maximum number of rollback segments that can be online for one instance.
+</P>
+<P><FONT SIZE="+1"><B>OPEN_CURSORS [ <I>1..OS limit</I> ] &lt; 50 &gt;
+</B></FONT></P>
+<P>This parameter specifies the maximum number of open cursors that a single user process can have open at once.
+</P>
+<P><FONT SIZE="+1"><B>OPEN_LINKS [ <I>0..255</I> ] &lt; 4 &gt;
+</B></FONT></P>
+<P>This parameter specifies the maximum number of concurrent open connections to remote database processes per user process. This value should exceed the maximum number of remote systems accessed within any single SQL statement.
+</P>
+<P><FONT SIZE="+1"><B>PROCESSES [ <I>6 to OS dependent</I> ] &lt; 50 &gt;
+</B></FONT></P>
+<P>This parameter specifies the maximum number of OS user processes that connect to the Oracle instance. This number must take into account the background processes and the login process that started up the instance. Be sure to add an additional 6 processes for the background processes.
+</P>
+<P><FONT SIZE="+1"><B>REMOTE_LOGIN_PASSWORDFILE [ <I>NONE/SHARED/EXCLUSIVE</I> ] &lt; NONE &gt;
+</B></FONT></P>
+<P>This parameter specifies whether Oracle checks for a password file. A value of <TT>NONE</TT> indicates that users are authenticated through the operating system. A value of <TT>EXCLUSIVE</TT> indicates that the password file can be used only by one database and can contain names other than <TT>SYS</TT> and <TT>INTERNAL</TT>. Setting this parameter to <TT>SHARED</TT> allows more than one database to use this password file but only <TT>SYS</TT> and <TT>INTERNAL</TT> are recognized by this password file.</P>
+<P><FONT SIZE="+1"><B>SESSIONS [ <I>number</I> ] &lt; 1.1 * PROCESSES &gt;
+</B></FONT></P>
+<P>This parameter specifies the total number of user and system sessions. Because recursive sessions may occur, this number should be set slightly higher than <TT>PROCESSES</TT>. The <TT>DDL_LOCKS</TT> is derived from this parameter.</P>
+<P><FONT SIZE="+1"><B>SNAPSHOT_REFRESH_INTERVAL [ <I>1..3600</I> ] &lt; 60 &gt;
+</B></FONT></P>
+<P>This parameter specifies the number of seconds between wake-ups for the instance&#146;s snapshot refresh process.
+</P>
+<P><FONT SIZE="+1"><B>SNAPSHOT_REFRESH_KEEP_CONNECTION [ <I>TRUE/FALSE</I> ] &lt; FALSE &gt;
+</B></FONT></P>
+<P>This parameter specifies whether the snapshot refresh process should keep remote connections after the refresh. If set to FALSE, the remote database connections are closed after the refreshes occur.
+</P>
+<P><FONT SIZE="+1"><B>SNAPSHOT_REFRESH_PROCESS [ <I>0..10</I> ] &lt; 0 &gt;
+</B></FONT></P>
+<P>This parameter specifies the number of snapshot refresh processes per instance. You must set this value to 1 or higher for automatic refreshes. One snapshot refresh process is usually sufficient.
+</P>
+<P><FONT SIZE="+1"><B>SINGLE_PROCESS [ <I>TRUE/FALSE</I> ] &lt; FALSE &gt;
+</B></FONT></P>
+<P>If <TT>SINGLE_PROCESS</TT> is set to TRUE, the database instance is brought up in a single user mode. A value of FALSE indicates that the database is brought up in a multiprocess mode.</P>
+<P><FONT SIZE="+1"><B>TEMPORARY_TABLE_LOCKS [ <I>0..OS dependent</I> ] &lt; SESSIONS &gt;
+</B></FONT></P>
+<P><TT>TEMPORARY_TABLE_LOCKS</TT> specifies the number of temporary tables that can be created in the temporary segment space. A temporary table lock is required whenever a sort occurs that cannot be held in memory (that is, the sort exceeds <TT>SORT_AREA_RETAINED_SIZE</TT>). If your application contains a large number of <TT>ORDER BY</TT> clauses or you perform a large number of index sorts, you may want to increase this number.</P>
+<P><FONT SIZE="+1"><B>TRANSACTIONS [ <I>number</I> ] &lt; 1.1 * PROCESSES &gt;
+</B></FONT></P>
+<P>This parameter specifies the maximum number of concurrent transactions in the instance. The default 
+1000
+value is greater than <TT>PROCESSES</TT> to provide for recursive transactions. A larger value increases the size of the SGA. If you increase the number of transactions allowed in the system, you may also want to increase the number of rollback segments available.</P>
+<P><FONT SIZE="+1"><B>TRANSACTIONS_PER_ROLLBACK_SEGMENT [ <I>1..OS dependent</I> ] &lt; 30 &gt;
+</B></FONT></P>
+<P>This value specifies the maximum number of concurrent transactions allowed per rollback segment. You can calculate the minimum number of rollback segments enabled at startup with this formula:
+</P>
+<!-- CODE SNIP //-->
+<PRE>
+Rollback Segments = TRANSACTIONS / TRANSACTIONS_PER_ROLLBACK_SEGMENT
+</PRE>
+<!-- END CODE SNIP //-->
+<P>Performance can be improved if there is less contention on rollback segments. In a heavily used system, you may want to reduce <TT>TRANSACTIONS_PER_ROLLBACK_SEGMENT</TT> to decrease this contention.</P>
+<P><FONT SIZE="+1"><B>USER_DUMP_DEST [ <I>valid path name</I> ] &lt; OS dependent &gt;
+</B></FONT></P>
+<P><TT>USER_DUMP_DEST</TT> specifies the path to where the debugging trace files are written.</P>
+<H3><A NAME="Heading6"></A><FONT COLOR="#000077">Multithreaded Server Parameters</FONT></H3>
+<P>These parameters are used if you are using the multithreaded server process.
+</P>
+<P><FONT SIZE="+1"><B>MTS_DISPATCHERS [ <I>&#147;protocol, number &#148;</I> ] &lt; NULL &gt;
+</B></FONT></P>
+<P>This parameter specifies the configuration of the dispatcher processes created at startup time. The value of this parameter is a quoted string of two values separated by a comma. The values are the network protocol and the number of dispatchers. Each protocol requires a separate specification. This parameter can be specified multiple times. Here is an example of two dispatcher definitions:
+</P>
+<!-- CODE SNIP //-->
+<PRE>
+MTS_DISPATCHERS = "tcp, 2"
+MTS_DISPATCHERS = "ipx, 1"
+</PRE>
+<!-- END CODE SNIP //-->
+<P><FONT SIZE="+1"><B>MTS_LISTENER_ADDRESS [ <I>configuration</I> ] &lt; NULL &gt;
+</B></FONT></P>
+<P>This parameter specifies the configuration of the listener process addresses. There must be a listener process address for each protocol used in the system. Addresses are specified as the SQL*Net description of the connection address.
+</P>
+<P>Because each connection is required to have its own address, this parameter may be specified several times. Here is an example:</P>
+<!-- CODE SNIP //-->
+<PRE>
+MTS_LISTENER_ADDRESS = "(ADDRESS=(PROTOCOL=tcp)(HOST=hostname)(PORT=7002))"
+MTS_LISTENER_ADDRESS = "(ADDRESS=(PROTOCOL=ipx)()())"
+</PRE>
+<!-- END CODE SNIP //-->
+<P><FONT SIZE="+1"><B>MTS_MAX_DISPATCHERS [ <I>OS dependent</I> ] &lt; 5 &gt;
+</B></FONT></P>
+<P>This parameter specifies the maximum number of dispatcher processes allowed to run simultaneously.
+</P>
+<P><FONT SIZE="+1"><B>MTS_MAX_SERVERS [ <I>OS dependent</I> ] &lt; 20 &gt;
+</B></FONT></P>
+<P>This parameter specifies the maximum number of shared server processes allowed to run simultaneously.
+</P>
+<P><FONT SIZE="+1"><B>MTS_SERVERS [ <I>OS dependent</I> ] &lt; 0 &gt;
+</B></FONT></P>
+<P>This parameter specifies the number of server processes created at instance startup.
+</P>
+<P><FONT SIZE="+1"><B>MTS_SERVICE [ <I>name</I> ] &lt; DB_NAME &gt;
+</B></FONT></P>
+<P>This parameter specifies the name of the service to be associated with the dispatcher. Using this name in the <TT>CONNECT</TT> string allows users to connect using the dispatcher. The name should be unique. Do not specify this name in quotes. Usually, it is a good idea to make this name the same as the instance name. Because the dispatcher is tried first, if it is not available, the <TT>CONNECT</TT> string can still connect the user to the database through a normal database connection.</P>
+<H3><A NAME="Heading7"></A><FONT COLOR="#000077">Distributed Option Parameters</FONT></H3>
+<P>These parameters are meaningful only when you use the distributed option.
+</P>
+<P><FONT SIZE="+1"><B>COMMIT_POINT_STRENGTH [ <I>0..255</I> ] &lt; OS dependent &gt;
+</B></FONT></P>
+<P>This value is
+1000
+ used to determine the commit point site when executing a distributed transaction. The site with the highest value for <TT>COMMIT_POINT_STRENGTH</TT> is the commit point site. The site with the largest amount of critical data should be the commit point site.</P>
+<P><FONT SIZE="+1"><B>DISTRIBUTED_LOCK_TIMEOUT [ <I>1..unlimited</I> ] &lt; 60 seconds &gt;
+</B></FONT></P>
+<P><TT>DISTRIBUTED_LOCK_TIMEOUT</TT> specifies, in seconds, how long distributed transactions should wait for locked resources.</P>
+<P><FONT SIZE="+1"><B>DISTRIBUTED_RECOVERY_CONNECTION_HOLD_TIME [ <I>1..1800</I> ] &lt; 200 seconds &gt;
+</B></FONT></P>
+<P><TT>DISTRIBUTED_RECOVERY_CONNECTION_HOLD_TIME</TT> specifies, in seconds, how long to hold a remote connection open after a distributed transaction fails. A larger value holds the connection longer but also continues to use local resources, even though the connection may have been severed. Any value larger than 1800 seconds interferes with the reconnection and recovery background processes and will never drop a failed connection.</P>
+<P><FONT SIZE="+1"><B>DISTRIBUTED_TRANSACTIONS [ <I>0..TRANSACTIONS</I> ] &lt; OS dependent &gt;
+</B></FONT></P>
+<P><TT>DISTRIBUTED_TRANSACTIONS</TT> specifies the maximum number of distributed transactions that the database can process concurrently. This value cannot exceed the value of <TT>TRANSACTIONS</TT>. If you are having problems with distributed transactions because network failures are causing many in-doubt transactions, you may want to limit the number of distributed transactions.</P>
+<P>If <TT>DISTRIBUTED_TRANSACTIONS</TT> is set to zero, no distributed transactions are allowed and the RECO process does not start at instance startup.</P>
+<P><FONT SIZE="+1"><B>REMOTE_OS_AUTHENT [ <I>TRUE/FALSE</I> ] &lt; FALSE &gt;
+</B></FONT></P>
+<P>If this parameter is set to TRUE, it allows authentication to remote systems with the value of <TT>OS_AUTHENT_PREFIX</TT>.</P>
+<P><FONT SIZE="+1"><B>REMOTE_OS_ROLES [ <I>TRUE/FALSE</I> ] &lt; FALSE &gt;
+</B></FONT></P>
+<P>If this parameter is set to TRUE, it allows remote clients to have their roles managed by the OS. If <TT>REMOTE_OS_ROLES</TT> is FALSE, roles are managed and identified by the database for the remote system.</P>
+<H3><A NAME="Heading8"></A><FONT COLOR="#000077">Parallel Server Parameters</FONT></H3>
+<P>These parameters are used only in conjunction with the Oracle Parallel Server option.
+</P>
+<P><FONT SIZE="+1"><B>CACHE_SIZE_THRESHOLD [ <I>number</I>  ] &lt; 0.1 * DB_BLOCK_BUFFERS &gt;
+</B></FONT></P>
+<P>This parameter specifies the maximum size of a cached partition table split among the caches of multiple instances. If the partition is larger than this value, the table is not split among the caches.
+</P>
+<P><FONT SIZE="+1"><B>GC_DB_LOCKS [ <I>0..unlimited</I> ] &lt; 0 &gt;
+</B></FONT></P>
+<P>This parameter specifies the number of PCM locks allocated. The value of <TT>GC_DB_LOCKS</TT> should be at least 1 greater than the sum of the locks specified with the parameter <TT>GC_FILES_TO_LOCKS</TT>.</P>
+<P><FONT SIZE="+1"><B>GC_FILES_TO_LOCKS [ <I>file_number=locks:filename=locks</I> ] &lt; NULL &gt;
+</B></FONT></P>
+<P>This parameter supplies a list of filenames, each specifying how many locks should be allocated for that file. Optionally, the number of blocks and the value <TT>EACH</TT> can be added to further specify the allocation of the locks.</P>
+<P><FONT SIZE="+1"><B>GC_LCK_PROCS [ <I>0..10</I> ] &lt; 1 &gt;
+</B></FONT></P>
+<P>This parameter specifies the number of lock processes (<TT>LCK0</TT> to <TT>LCK9</TT>) to create for the instance. Usually, the default value of 1 is sufficient unless an unusually high number of locks are occurring.</P>
+<P><FONT SIZE="+1"><B>GC_ROLLBACK_LOCKS [ <I>number</I> ] &lt; 20 &gt;
+</B></FONT></P>
+<P>This parameter specifies the number of distributed locks available for each rollback segment. The default value is usually sufficient.
+</P>
+<P><FONT SIZE="+1"><B>GC_ROLLBACK_SEGMENTS [ <I>number</I> ] &lt; 20 &gt;
+</B></FONT></P>
+<P><TT>GC_ROLLBACK_SEGME
+1000
+NTS</TT> specifies the maximum number of rollback segments system wide. This includes all instances in the parallel server system, including the <TT>SYSTEM</TT> rollback segment.</P>
+<P><FONT SIZE="+1"><B>GC_SAVE_ROLLBACK_LOCKS [ <I>number</I> ] &lt; 20 &gt;
+</B></FONT></P>
+<P>This parameter specifies the number of distributed locks reserved for deferred rollback segments. These deferred rollback segments contain rollback entries for segments taken offline.
+</P>
+<P><FONT SIZE="+1"><B>GC_SEGMENTS [ <I>number</I> ] &lt; 10 &gt;
+</B></FONT></P>
+<P>This parameter specifies the maximum number of segments that may have space management activities performed by different instances simultaneously.
+</P>
+<P><FONT SIZE="+1"><B>GC_TABLESPACES [ <I>number</I> ] &lt; 5 &gt;
+</B></FONT></P>
+<P>This parameter specifies the maximum number of tablespaces that can be brought online or offline simultaneously.
+</P>
+<P><FONT SIZE="+1"><B>INSTANCE_NUMBER [ <I>1..OS dependent</I> ] &lt; lowest available number &gt;
+</B></FONT></P>
+<P>This parameter specifies a unique number that maps the instance to a group of free space lists.
+</P>
+<P><FONT SIZE="+1"><B>MAX_COMMIT_PROPAGATION_DELAY</B></FONT></P>
+<P>This parameter specifies the maximum amount of time that can pass before the SCN (System Change Number) is changed by the DBWR. This value helps in certain conditions where the SCN may not be refreshed often enough because of a high load from multiple instances.
+</P>
+<P><FONT SIZE="+1"><B>PARALLEL_DEFAULT_MAX_INSTANCES [ <I>0..instances</I> ] &lt; OS dependent &gt;
+</B></FONT></P>
+<P>This parameter specifies the default number of instances to spit a table among for parallel query processing. This value is used if the <TT>INSTANCES DEFAULT</TT> is specified in the table/cluster definition.</P>
+<P><FONT SIZE="+1"><B>THREAD [ <I>0..max threads</I> ] &lt; 0 &gt;
+</B></FONT></P>
+<P>This parameter specifies the number of the redo thread to be used by this instance. Any number can be used, but the value must be unique within the cluster.
+</P>
+<H3><A NAME="Heading9"></A><FONT COLOR="#000077">Security Parameters</FONT></H3>
+<P>The following parameters help set up system security; manipulate them to obtain the best mix of efficiency and security.
+</P>
+<P><FONT SIZE="+1"><B>AUDIT_TRAIL [ <I>NONE,DB,OS</I> ]
+</B></FONT></P>
+<P>The <TT>AUDIT_TRAIL</TT> parameter enables auditing to the table SYS$AUD$. Auditing causes a record of database and user activity to be logged. Because auditing causes overhead, it limits performance. The amount of overhead and the effect on performance is determined by what and how much is audited. Once <TT>AUDIT_TRAIL</TT> is enabled, auditing is turned on by the Oracle command <TT>AUDIT</TT>.</P>
+<P><FONT SIZE="+1"><B>OS_AUTHENT_PREFIX [ ] &lt; OPS$ &gt;</B></FONT></P>
+<P>This is the value concatenated to the beginning of the user&#146;s OS login account to give a default Oracle account name. The default value of <TT>OPS$</TT> is OS dependent and is provided for backward compatibility with previous Oracle versions. Typically, you use the default or set the value to &#147;&#148; (NULL) to eliminate prefixes altogether.</P>
+<P><FONT SIZE="+1"><B>OS_ROLES [ <I>TRUE/FALSE</I> ] &lt; FALSE &gt;
+</B></FONT></P>
+<P>Setting this parameter to TRUE allows the OS to have control over the username&#146;s roles. If set to FALSE, the username&#146;s roles are controlled by the database.
+</P>
+<P><FONT SIZE="+1"><B>SQL92_SECURITY [ <I>TRUE/FALSE</I> ] &lt; FALSE &gt;
+</B></FONT></P>
+<P>This parameter specifies whether the table-level <TT>SELECT</TT> privileges are needed to execute an update or delete that reference&#146;s table column values.</P>
+<H3><A NAME="Heading10"></A><FONT COLOR="#000077">Trusted Oracle7 Parameters</FONT></H3>
+<P>The following parameters apply to the Trusted Oracle7 option.
+</P>
+<P><FONT SIZE="+1"><B>AUTO_MOUNTING [ <I>TRUE/FALSE</I> ] &lt; TRUE &gt;
+</B></FONT></P>
+<P>When set to TRUE, this parameter specifies that a secondary database is mounted by the primary database whenever 
+1000
+a user connected to the primary database requests data from the secondary database.
+</P>
+<P><FONT SIZE="+1"><B>DB_MOUNT_MODE [ <I>NORMAL/READ_COMPATIBLE</I> ] &lt; NORMAL &gt;
+</B></FONT></P>
+<P>This parameter specifies the access mode to which the database is mounted at instance startup. A value of <TT>NORMAL</TT> starts the database in normal read-write mode; <TT>READ_COMPATIBLE</TT> starts the database in read-write mode with the addition that it supports concurrent mounting by one or more read-secure instances.</P>
+<P><FONT SIZE="+1"><B>LABEL_CACHE_SIZE [ <I>number &gt; 50</I> ] &lt; 50 &gt;
+</B></FONT></P>
+<P>This parameter specifies the cache size for dynamic comparison of labels. This number should be greater than the label-category combinations in the OS and should never be less than 50.
+</P>
+<P><FONT SIZE="+1"><B>MLS_LABEL_FORMAT [ <I>valid label format</I> ] &lt; sen &gt;
+</B></FONT></P>
+<P>This parameter specifies the format used to display labels. The default value <TT>sen</TT> specifies <I>sensitive</I>.</P>
+<P><FONT SIZE="+1"><B>OPEN_MOUNTS [ <I>0..255</I> ] &lt; 5 &gt;
+</B></FONT></P>
+<P>This parameter specifies the maximum number of databases that an instance can simultaneously mount in OS MAC mode. This value should be large enough to handle all the primary and secondary databases you might mount.
+</P>
+<H3><A NAME="Heading11"></A><FONT COLOR="#000077">National Language Support Parameters</FONT></H3>
+<P>The following parameters are used in the configuration of National Language Support features.
+</P>
+<P><FONT SIZE="+1"><B>NLS_CURRENCY [ <I>character string</I> ] &lt; derived from NLS_TERRITORY &gt;
+</B></FONT></P>
+<P>This parameter specifies the string to use as the local currency symbol for the <TT>L</TT> number format element.</P>
+<P><FONT SIZE="+1"><B>NLS_DATE_FORMAT [ <I>format mask</I> ] &lt; derived from NLS_TERRITORY &gt;
+</B></FONT></P>
+<P>This parameter defines the default date format to use with the <TT>TO_CHAR</TT> and <TT>TO_DATE</TT> functions. The value of this parameter is any valid date format mask. Here is an example:</P>
+<!-- CODE SNIP //-->
+<PRE>
+NLS_DATE_FORMAT = 'DD/MM/YYYY'
+</PRE>
+<!-- END CODE SNIP //-->
+<P><FONT SIZE="+1"><B>NLS_DATE_LANGUAGE [ <I>NLS_LANGUAGE value</I> ] &lt; value for NLS_LANGUAGE &gt;
+</B></FONT></P>
+<P>This parameter determines the language to use for the day and month names and date abbreviations (<TT>AM</TT>, <TT>PM</TT>, <TT>AD</TT>, <TT>BC</TT>).</P>
+<P><FONT SIZE="+1"><B>NLS_ISO_CURRENCY [ <I>valid NLS_TERRITORY value</I> ] &lt; derived from NLS_TERRITORY&gt;
+</B></FONT></P>
+<P>This parameter defines the string to use as the international currency symbol for the <TT>C</TT> number format element.</P>
+<P><FONT SIZE="+1"><B>NLS_LANGUAGE [ <I>NLS_LANGUAGE value</I> ] &lt; OS dependent &gt;
+</B></FONT></P>
+<P>This parameter defines the default language of the database. This specifies the language to use for messages, the language of day and month names, symbols to be used for <TT>AD</TT>, <TT>BC</TT>, <TT>AM</TT>, and <TT>PM</TT>, and the default sorting mechanisms.</P>
+<P><FONT SIZE="+1"><B>NLS_NUMERIC_CHARACTERS [ <I>two characters</I> ] &lt; derived from NLS_TERRITORY &gt;
+</B></FONT></P>
+<P>This parameter defines the characters to be used as the group separator and decimal. The group separator is used to separate the integer groups (that is, hundreds, thousands, millions, and so on). The decimal separator is used to distinguish between the integer and decimal portion of the number. Any two characters can be used but they must be different. The parameter is specified by two characters within single quotes. To set the group separator to , (comma) and the decimal separator to . (period), use the following statement:
+</P>
+<!-- CODE SNIP //-->
+<PRE>
+NLS_NUMBERIC_CHARACTERS = ',.'
+</PRE>
+<!-- END CODE SNIP //-->
+<P><FONT SIZE="+1"><B>NLS_SORT [ <I>BINARY or named linguistic sort</I> ] &lt; derived from NLS_LANGUAGE &gt;
+</B></FONT></P>
+<P>If this parameter is set to <TT>BINARY</TT>, the collating sequence for <TT>
+ecb
+ORDER_BY</TT> is based on the numeric values of the characters. A linguistic sort decides the order based on the defined linguistic sort. A binary sort is much more efficient and uses much less overhead.</P>
+<P><FONT SIZE="+1"><B>NLS_TERRITORY [ <I>territory name</I> ] &lt; OS dependent &gt;
+</B></FONT></P>
+<P>This parameter specifies the name of the territory whose conventions are used for day and week numbering. The parameter also provides defaults for other NLS parameters.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="ewtoc.html">Table of Contents</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+
+<!-- all of the reference materials (books) have the footer and subfoot reveresed -->
+<!-- reference_subfoot = footer -->
+<!-- reference_footer = subfoot -->
+
+<!-- BEGIN SUB FOOTER -->
+	<br>
+	<img src="/images/dotclear.gif" width="5" height="7" border="0">
+	</TD>
+    </TR>
+	</TABLE>
+	
+	<table width="100%" border=0 cellpadding=0 cellspacing=0>
+	<tr>
+		<td align="left" width="160"><img src="/images/bot_curve.jpg" width="160" alt="" border="0"></td>
+		<td align="left" valign="top" nowrap><a href="/"><img src="/images/top_tabs/home_bot.gif" alt="home" border="0"></a><a href="/content/corp.html"><img src="/images/top_tabs/subscribe_bot.gif" alt="subscribe" border="0"></a><a href="/search/"><img src="/images/top_tabs/search_bot.gif" alt="search" border="0"></a><a href="/faq/faq.html"><img src="/images/top_tabs/faq_bot.gif" alt="faq" border="0"></a><a href="/sitemap.html"><img src="/images/top_tabs/sitemap_bot.gif" alt="sitemap" border="0"></a><a href="/contactus.html"><img src="/images/top_tabs/contact_us_bot.gif" alt="contactus" border="0"></a><img src="/images/dotclear.gif" width=260 height="1" alt="" border="0"></td> 
+	</tr>
+	</table>
+		
+	<table width="100%" bgcolor="#003366" border=0 cellpadding=0 cellspacing=0>
+	<tr>
+		<td align="left" width=145><img src="/images/clear_pixel.gif" width=145 height="1" alt="" border="0"></td>
+				
+<!-- END SUB FOOTER -->
+
+<!-- all of the books have the footer and subfoot reveresed -->
+<!-- reference_subfoot = footer -->
+<!-- reference_footer = subfoot -->
+
+<!-- FOOTER -->
+			
+<td align="left" bgcolor="#003366">
+<table border="0" cellspacing="10" cellpadding="5">
+<tr>
+<td align="center">
+<font face="arial, helvetica" size="1" color="#cccccc"><b><a href="/products.html"><font color="#0099CC">Products</font></a>&nbsp;|&nbsp; <a href="/contactus.html"><font color="#0099CC">Contact Us</font></a>&nbsp;|&nbsp; <a href="/aboutus.html"><font color="#0099CC">About Us</font></a>&nbsp;|&nbsp; <a href="http://www.earthweb.com/dlink.corp|privacy-jhtml.72.0.-.-.jhtml" target="resource window"><font color="#0099CC">Privacy</font></a> &nbsp;|&nbsp; <a href="http://www.itmarketer.com/" target="resource window"><font color="#0099CC">Ad Info</font></a> &nbsp;|&nbsp; <a href="/"><font color="#0099CC">Home</font></a></b>
+<br><br>Use of this site is subject to certain <a href="/agreement.html"><font color="#0099CC">Terms &amp; Conditions</font></a>, <a href="/copyright.html"><font color="#0099CC">Copyright &copy; 1996-2000 EarthWeb Inc.</font></a> All rights reserved.  Reproduction whole or in part in any form or medium without express written <a href="http://www.earthweb.com/dlink.corp|permissions-jhtml.72.0.-.-.jhtml" target="resource window"><font color="#0099CC">permission</font></a> of EarthWeb is prohibited. Read EarthWeb's <A HREF="http://www.earthweb.com/dlink.corp|privacy-jhtml.72.0.-.-.jhtml" target="resource window"><font color="#0099CC">privacy</font></A> statement.</font><br><br>
+</td>
+</tr>
+</table>
+
+<a href="CITK1a2b3c4d5e6f7g8h9idefcon4.html">
+<img src="/images/dotclear.gif" border="0" height="1" width="1" align="left"></a>
+</td>
+		</tr>
+</table>
+</BODY>
+</HTML>
+
+<!-- END FOOTER -->
+
+
+0
+

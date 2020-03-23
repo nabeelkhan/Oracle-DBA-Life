@@ -1,0 +1,356 @@
+Scripts from chapter 15 of ORACLE9i DBA Handbook.  See the readme.doc file for details.
+
+
+
+create tablespace CODES_TABLES
+datafile '/u01/oracle/VLDB/codes_tables.dbf'
+size 10M
+extent management local uniform size 1M;
+
+create table EMPLOYEE (
+EmpNo          NUMBER(10) primary key,
+Name           VARCHAR2(40),
+DeptNo         NUMBER(2),
+Salary         NUMBER(7,2),
+Birth_Date     DATE,
+Soc_Sec_Num    VARCHAR2(9),
+State_Code     CHAR(2),
+constraint FK_DeptNO foreign key (DeptNo)
+   references DEPT(DeptNo),
+constraint FK_StateCode foreign key (State_Code)
+   references State(State_Code)
+);
+
+
+create table EMPLOYEE (
+EmpNo          NUMBER(10) primary key,
+Name           VARCHAR2(40),
+DeptNo         NUMBER(2),
+Salary         NUMBER(7,2),
+Birth_Date     DATE,
+Soc_Sec_Num    VARCHAR2(9),
+ constraint FK_DeptNO foreign key (DeptNo)
+   references DEPT(DeptNo)
+)
+partition by range (DeptNo)
+ (partition PART1   values less than (11)
+   tablespace PART1_TS,
+  partition PART2   values less than (21)
+   tablespace PART2_TS,
+  partition PART3   values less than (31)
+   tablespace PART3_TS,
+  partition PART4   values less than (MAXVALUE)
+   tablespace PART4_TS)
+;
+
+
+select *
+  from EMPLOYEE partition (PART2)
+ where DeptNo between 11 and 20;
+
+
+create index EMPLOYEE_DEPTNO
+  on EMPLOYEE(DeptNo)
+   local
+   (partition PART1
+     tablespace PART1_NDX_TS,
+    partition PART2
+     tablespace PART2_NDX_TS,
+    partition PART3
+     tablespace PART3_NDX_TS,
+    partition PART4
+     tablespace PART4_NDX_TS);
+
+
+create index EMPLOYEE_DEPTNO
+on EMPLOYEE(Name)
+ global partition by range (Name)
+ (partition PART1   values less than ('J')
+   tablespace PART1_NDX_TS,
+  partition PART2   values less than ('N')
+   tablespace PART2_NDX_TS,
+  partition PART3   values less than ('R')
+   tablespace PART3_NDX_TS,
+  partition PART4   values less than (MAXVALUE)
+   tablespace PART4_NDX_TS);
+
+
+alter table EMPLOYEE
+   modify partition PART1
+   storage (next 1M pctincrease 0);
+
+
+alter table EMPLOYEE
+  truncate partition PART3
+  drop storage;
+
+
+alter index EMPLOYEE_DEPTNO
+rebuild partition PART4
+storage (initial 2M next 2M pctincrease 0);
+
+
+create table EMPLOYEE (
+EmpNo          NUMBER(10) primary key,
+Name           VARCHAR2(40),
+DeptNo         NUMBER(2),
+Salary         NUMBER(7,2),
+Birth_Date     DATE,
+Soc_Sec_Num    VARCHAR2(9),
+ constraint FK_DeptNO foreign key (DeptNo)
+   references DEPT(DeptNo)
+)
+partition by hash (DeptNo)
+partitions 10;
+
+
+create table EMPLOYEE (
+EmpNo          NUMBER(10) primary key,
+Name           VARCHAR2(40),
+DeptNo         NUMBER(2),
+Salary         NUMBER(7,2),
+Birth_Date     DATE,
+Soc_Sec_Num    VARCHAR2(9),
+ constraint FK_DeptNO foreign key (DeptNo)
+   references DEPT(DeptNo)
+)
+partition by hash (DeptNo)
+partitions 2
+store in (PART1_TS, PART2_TS);
+
+
+create table EMPLOYEE (
+EmpNo          NUMBER(10) primary key,
+Name           VARCHAR2(40),
+DeptNo         NUMBER(2),
+Salary         NUMBER(7,2),
+Birth_Date     DATE,
+Soc_Sec_Num    VARCHAR2(9),
+ constraint FK_DeptNO foreign key (DeptNo)
+   references DEPT(DeptNo)
+)
+partition by range (DeptNo)
+subpartition by hash (Name)
+subpartitions 10
+ (partition PART1   values less than (11)
+   tablespace PART1_TS,
+  partition PART2   values less than (21)
+   tablespace PART2_TS,
+  partition PART3   values less than (31)
+   tablespace PART3_TS,
+  partition PART4   values less than (MAXVALUE)
+   tablespace PART4_TS);
+
+
+create table LOCATIONS
+ ( Location_ID    NUMBER,
+   Street_Address VARCHAR2(25), 
+   Postal_Code    NUMBER(10),
+   City           VARCHAR2(25), 
+   State_Province VARCHAR2(2), 
+   Country_ID     VARCHAR2(10))
+partition by list (State_Province)
+ ( partition REGION_EAST
+   VALUES ('MA','NY','CT','NH','ME','MD','VA','PA','NJ')
+   
+ , partition REGION_WEST
+   VALUES ('CA','AZ','NM','OR','WA','UT','NV','CO')
+ , partition REGION_SOUTH
+   VALUES ('TX','KY','TN','LA','MS','AR','AL','GA')
+  
+ , partition REGION_CENTRAL
+   VALUES ('OH','ND','SD','MO','IL','MI', NULL, 'IA')
+ );
+
+
+
+create materialized view SALES_MONTH_MV
+tablespace AGG_DATA
+refresh complete
+start with sysdate
+next sysdate+1
+enable query rewrite
+as 
+select SALES.Sales_Month, 
+       PRODUCT.Product_Type,
+       CUSTOMER.Customer_Type,
+       SUM(SALES.Amount)
+  from SALES, PRODUCT, CUSTOMER
+ where SALES.Product_ID=PRODUCT.Product_ID
+   and SALES.Customer_ID=CUSTOMER.Customer_ID
+ group by SALES.Sales_Month, 
+          PRODUCT.Product_Type, CUSTOMER.Customer_Type;
+
+
+create table STATE (
+State_Code      CHAR(2) primary key,
+Description     VARCHAR2(25)
+)
+organization index;
+
+
+
+create directory state_dir as '/u01/files';
+
+
+
+create table STATE_EXTERNAL 
+(State_Code CHAR(2), 
+Description VARCHAR2(25)) 
+organization external
+ ( type ORACLE_LOADER 
+   default directory (state_dir) 
+   access parameters ( FIELDS TERMINATED BY ',' 
+                       BADFILE 'files/bad_states' 
+   logfile 'files/log_states' ( State_Code CHAR, DESCRIPTION CHAR))
+   location ('state_dir/state.txt') ) 
+reject limit 25;
+
+
+create global temporary table STATE_WORK
+(State_Code CHAR(2), 
+Description VARCHAR2(25)) 
+on commit preserve rows;
+
+
+create bitmap index EMPLOYEE$STATE_CODE$BMAP
+    on EMPLOYEE(State_Code);
+
+
+set transaction use rollback segment SEGMENT_NAME;
+
+
+insert /*+ APPEND */ into SALES_PERIOD_CUST_AGG
+select Period_ID, Customer_ID, SUM(Sales)
+  from SALES
+ group by Period_ID, Customer_ID;
+
+
+execute DELETE_COMMIT('delete from SALES where Customer_ID=12',1000);
+
+
+execute DELETE_COMMIT('delete from SALES where State_Code = ''NH''',500)
+
+
+create or replace procedure DELETE_COMMIT
+( p_statement in varchar2,
+  p_commit_batch_size   in number default 10000)
+is
+        cid                             integer;
+        changed_statement               varchar2(2000);
+        finished                        boolean;
+        nofrows                         integer;
+        lrowid                          rowid;
+        rowcnt                          integer;
+        errpsn                          integer;
+        sqlfcd                          integer;
+        errc                            integer;
+        errm                            varchar2(2000);
+begin
+        /* If the actual statement contains a WHERE clause, then
+          append a rownum < n clause after that using N, else
+          use WHERE rownum < n clause */
+        if ( upper(p_statement) like '% WHERE %') then
+                changed_statement := p_statement||' AND rownum < '               ||to_char(p_commit_batch_size + 1);
+        else
+changed_statement := p_statement||' WHERE rownum < '||to_char(p_commit_batch_size + 1);
+        end if;
+        begin
+  cid := dbms_sql.open_cursor; -- Open a cursor for the task
+               dbms_sql.parse(cid,changed_statement, dbms_sql.native);
+                        -- parse the cursor.
+  rowcnt := dbms_sql.last_row_count;
+                      -- store for some future reporting
+        exception
+           when others then
+                     errpsn := dbms_sql.last_error_position;
+                        -- gives the error position in the changed sql
+                        -- delete statement if anything happens
+     sqlfcd := dbms_sql.last_sql_function_code;
+                        --function code can be found in the OCI manual
+                     lrowid := dbms_sql.last_row_id;
+                        -- store all these values for error reporting.
+                        -- However all these are really useful in a
+                        -- stand-alone proc execution for dbms_output
+                        -- to be successful, not possible when called
+                        -- from a form or front-end tool. 
+                     errc := SQLCODE;
+                     errm := SQLERRM;
+                     dbms_output.put_line('Error '||to_char(errc)||
+                           ' Posn '||to_char(errpsn)||
+               ' SQL fCode '||to_char(sqlfcd)||
+        ' rowid '||rowidtochar(lrowid));
+                    raise_application_error(-20000,errm);
+                      -- this will ensure the display of at least
+                      -- the error message if something happens,
+                      -- even in a front-end tool.
+        end;
+        finished := FALSE;
+        while not (finished)
+        loop -- keep on executing the cursor till there is no more 
+             -- to process.
+                 begin
+ nofrows := dbms_sql.execute(cid);
+                        rowcnt := dbms_sql.last_row_count;
+                exception
+                        when others then
+                               errpsn := dbms_sql.last_error_position;
+                            sqlfcd := dbms_sql.last_sql_function_code;
+                                lrowid := dbms_sql.last_row_id;
+                                  errc := SQLCODE;
+                                  errm := SQLERRM;
+                      dbms_output.put_line('Error '||to_char(errc)||
+                             ' Posn '||to_char(errpsn)||
+                 ' SQL fCode '||to_char(sqlfcd)||
+          ' rowid '||rowidtochar(lrowid));
+                                raise_application_error(-20000,errm);
+                end;
+                if nofrows = 0 then
+                        finished := TRUE;
+                else
+                 finished := FALSE;
+                end if;
+                commit;
+        end loop;
+        begin
+                dbms_sql.close_cursor(cid);
+                        -- close the cursor for a clean finish
+        exception
+                when others then
+                        errpsn := dbms_sql.last_error_position;
+                        sqlfcd := dbms_sql.last_sql_function_code;
+                        lrowid := dbms_sql.last_row_id;
+     errc := SQLCODE;
+                        errm := SQLERRM;
+       dbms_output.put_line('Error '||to_char(errc)||
+      ' Posn '||to_char(errpsn)||
+                                ' SQL fCode '||to_char(sqlfcd)||
+                                ' rowid '||rowidtochar(lrowid));
+                        raise_application_error(-20000,errm);
+        end;
+end;
+/
+
+
+
+execute DBMS_TTS.TRANSPORT_SET_CHECK('AGG_DATA,AGG_INDEXES',FALSE);
+
+
+alter tablespace AGG_DATA read only;
+alter tablespace AGG_INDEXES read only;
+
+exp TRANSPORT_TABLESPACE=Y TABLESPACES=(AGG_DATA,AGG_INDEXES) 
+CONSTRAINTS=N GRANTS=Y TRIGGERS=N
+
+imp TRANSPORT_TABLESPACE=Y DATAFILES=(agg_data.dbf, agg_indexes.dbf)
+
+alter tablespace AGG_DATA read write;
+alter tablespace AGG_INDEXES read write;
+
+create tablespace CODES_TABLES
+datafile '/u01/oracle/VLDB/codes_tables.dbf'
+size 10M
+extent management local uniform size 256K;
+
+
+

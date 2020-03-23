@@ -1,0 +1,21 @@
+Degrading Performance:
+
+
+a) 
+declare
+	i number :=1;
+begin
+	loop
+	 i := i + 0;
+	  exit when i=0;
+	end loop;
+end;
+
+b)
+select count(*) from 
+all_objects,all_objects,all_objects,all_objects,all_objects,all_objects,all_objects;
+
+c)
+
+
+

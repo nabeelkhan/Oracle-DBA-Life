@@ -1,0 +1,25 @@
+UPDATE TABLE COLUMN WITH SEQUENCE
+
+UPDATE cms_store_locations
+SET store_id = store_seq.nextval;
+
+
+PL/SQL
+
+DECLARE
+
+Cursor store_id
+IS
+SELECT store_id FROM store_locations FOR UPDATE;
+
+BEGIN
+
+FOR c_store_id IN store_id LOOP
+UPDATE cms_store_locations
+SET store_id = store_seq.nextval
+WHERE CURRENT OF store_id;
+
+END LOOP;
+commit;
+END;
+/

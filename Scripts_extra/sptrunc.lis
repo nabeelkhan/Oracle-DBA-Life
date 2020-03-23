@@ -1,0 +1,128 @@
+
+Warning
+~~~~~~~
+Running sptrunc.sql removes ALL data from Statspack tables.  You may
+wish to export the data before continuing.
+
+
+About to Truncate Statspack Tables
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+If you would like to continue, press <return>
+
+
+Enter value for return: 
+Entered - starting truncate operation
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+Table truncated.
+
+
+2 rows deleted.
+
+
+1 row deleted.
+
+
+Commit complete.
+
+
+Package altered.
+
+
+Truncate operation complete
+

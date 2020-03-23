@@ -1,0 +1,46 @@
+			DBA Reports v2.0 for ORACLE
+
+	---- Informational Reports (Many don't require DBA privilege) ----
+
+	1) cnt_exts	2) col_priv	3) db_disks	4) db_files
+	5) db_indx	6) db_logs	7) db_parms	8) db_profl
+	9) db_rbk	10) db_segmt	11) db_syns	12) db_tbls
+	13) db_tbsp	14) db_user	15) dbblocks	16) dbfileio
+	17) diskcntr	18) dbszv7	19) exp_plan	20) hit_rati
+	21) lstalsql	22) lstauact	23) lstaudit	24) lstauopt
+	25) lstbhobj	26) lstdblnk	27) lstdbmap	28) lstdbsz7
+	29) lstcache	30) lstcolcn	31) lstconst	32) lst_deps
+	33) lst_diff	34) lstfiles	35) lstfilst	36) lstindx
+	37) lstindst	38) lstlock	39) lstltchh	40) lstobjns
+	41) lstobjxt	42) lstpackg	43) lstparms	44) lstpid
+	45) lstplprm	46) lstprdpf	47) lstrbkst	48) lstrbktr
+	49) lstseq	50) lstslock	51) lst_snap	52) lstsql
+	53) lstsysst	54) lsttbcol	55) lsttbl	56) lsttblcn
+	57) lsttblnk	58) lsttrg	59) lsttsqta	60) lsttbst
+	61) lstuser	62) roles	63) rolepriv	64) reltbls
+	65) obj_exts	66) tbspfree	67) sys_priv	68) tab_priv
+	69) user_hit
+
+	---- Defragmentation utils to compress v6 extents (read cmp_exts.txt for help) ----
+
+	70) bef_aftr	71) cntg_tbl	72) gncrts	73) fragindx
+	74) mapper
+
+	---- ORACLE Financials  utils  ----
+
+	75) lstcnapp	76) lstcncon	77) lstcncur	78) lstcnjob
+	79) lstcnmgr	80) lstcnspr	81) lstreqst	82) lstusrre
+
+	---- Utilities for Generating scripts to re-create DDL for an object ----
+
+	83) gncrtdb	84) gncrtdbl	85) gncrtcon	86) gncrtind
+	87) gncrtixp	88) gncrtrbk	89) gncrtspr	90) gncrtsyn
+	91) gncrttpr	92) gncrtcpr	93) gncrtrol	94) gncrttab
+	95) gncrttbp	96) gncrttbs	97) gncrttrg	98) gncrtusr
+	99) gncrtvw	100) gnrfcon
+
+	---- General Utilities for Generating scripts to perform maintenance/DBA functions ----
+
+	101) gnaltcmp	102) gnanalyz	103) gnctl	104) gndefrag
+	105) gnkillse	106) gninsrt	107) gnpinprc	108) gnslct
+	109) modobj

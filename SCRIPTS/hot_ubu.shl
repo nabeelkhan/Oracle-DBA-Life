@@ -1,0 +1,93 @@
+#*********************************************************************************
+# Name          :       hot_backup
+# Purpose       :       Perform a hot backup of an Oracle Database
+# Use           :       sh hot_backup
+# Limitations :         Creates read consistent image, but doesn't get in process 
+#                               transactions
+#
+#*********************************************************************************
+#
+ERROR="FALSE"
+LOGFILE="$ORACLE_HOME/ADHOC/scripts/hot_back_log" 
+while [ "$error"=FALSE ] 
+do
+sqldba << ending1
+        connect internal
+        alter tablespace system begin backup;
+        exit
+ending1
+        if ( tar cfv /oracle/backup /data/ORA_SYSTEM_1.DBF )
+        then
+             :  
+        else 
+            ERROR="TRUE";
+            echo "Tar backup failed for ora_system1.dbf" >$LOGFILE
+        fi 
+sqldba << ending2
+        connect internal
+        alter tablespace system end backup;
+        exit
+ending2
+      
+dup_it="tar rv /oracle/backup"
+sqldba << ending3
+        connect internal
+        alter tablespace user_tables begin backup;
+        exit
+ending3
+if ( $dup_it /data/ora_user_tables_1.dbf )              
+then
+        :
+else
+    ERROR="TRUE";echo "Tar backup failed for ora_user_tables_1.dbf">>$LOGFILE
+fi #we must still end backup for tablespaces
+sqldba << ending4
+        connect internal
+        alter tablespace user_tables end backup;
+        exit
+ending4
+# force write of all archive logs
+sqldba << ending5
+        connect internal
+        alter system switch logfile;
+        archive log all;
+        exit
+ending5
+if ( cp /usr/oracle/oracle6/db_example.archives/*.arc *.oldarc )
+then
+    :
+else
+    ERROR="TRUE";echo "Copy of archive logs failed">>$LOGFILE
+fi
+# Now backup a control file
+sqldba << ending6
+        connect internal
+        alter database example 
+        backup controlfile to 
+        '/usr/oracle/oracle6/db_example/ora_control.bac
+        reuse;
+        exit
+ending6
+if ( $dup_it /usr/oracle/oracle6/db_example/ora_control.bac )
+then
+    :
+else
+    ERROR="TRUE";echo "Tar backup failed for control file">>$LOGFILE
+fi
+# now backup all archive logs
+if ( $dup_it /usr/oracle/oracle6/db_example.archives/*.oldarc )
+then
+    :
+else
+    ERROR="TRUE";echo "Tar backup failed for archive files">>$LOGFILE
+fi
+# Now delete logs
+if ( rm /usr/m_oracle/oracle6/db_examples.archives/*.oldarc;* )
+then
+    ERROR="TRUE"
+else
+    ERROR="TRUE";echo "Delete of archive files failed">>$LOGFILE
+fi
+done
+exit 
+done

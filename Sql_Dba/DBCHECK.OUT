@@ -1,0 +1,67 @@
+SQL> 
+SQL> rem ***************************************************************************
+SQL> 
+SQL> rem Print overall heading for report
+SQL> 
+SQL> set heading off
+SQL> 
+SQL> prompt ########################################################################
+########################################################################
+SQL> prompt #               Oracle Database Configuration Report                   #
+#               Oracle Database Configuration Report                   #
+SQL> prompt ########################################################################
+########################################################################
+SQL> prompt
+
+SQL> prompt Instance Name:
+Instance Name:
+SQL> 
+SQL> select value from v$parameter where name='db_name'
+  2  /
+
+ora_kic                                                                                             
+SQL> 
+SQL> prompt
+
+SQL> prompt
+
+SQL> prompt Date Of This Report:
+Date Of This Report:
+SQL> 
+SQL> Column today format a30
+SQL> 
+SQL> select to_char(sysdate,'dd Month YYYY  HH24:MI') today from sys.dual;
+
+09 November  1999  09:49                                                                            
+SQL> 
+SQL> set heading on
+SQL> 
+SQL> prompt
+
+SQL> prompt
+
+SQL> 
+SQL> rem ***************************************************************************
+SQL> 
+SQL> rem  Print datafiles associated with this database
+SQL> 
+SQL> column tablespace_name heading "Tablespace" format a22
+SQL> column file_id heading ID format 999
+SQL> column bytes heading "Bytes" format 99,999,999,999
+SQL> column file_name heading "File Name" format a35
+SQL> 
+SQL> prompt ########################################################################
+########################################################################
+SQL> prompt
+
+SQL> prompt Data Files Associated With This Database
+Data Files Associated With This Database
+SQL> prompt
+
+SQL> prompt
+
+SQL> 
+SQL> select file_id,file_name,tablespace_name,bytes
+  2   from sys.dba_data_files
+  3  /
+SQL> 

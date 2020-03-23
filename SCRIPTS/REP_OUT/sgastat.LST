@@ -1,0 +1,51 @@
+Press <Enter> to continue...Date: 07/04/2003              Kuwait Insurance Co.               Page:   1      
+Time: 08:58 AM             SGA Component Sizes Report            PREMPROD       
+                              ORAKIC database                                   
+                                                                                
+NAME                            BYTES    PERCENT                                
+-------------------------- ---------- ----------                                
+buffer_cache               1543503872   56.42062                                
+free memory                 743722240   27.18572                                
+free memory                 117440512    4.29287                                
+log_buffer                  100927488    3.68926                                
+free memory                  67108864    2.45307                                
+sql area                     60983848    2.22918                                
+library cache                31010536    1.13355                                
+miscellaneous                12789488     .46750                                
+db_block_hash_buckets        12529616     .45800                                
+KGLS heap                    10485672     .38329                                
+KQR M PO                      4064624     .14858                                
+dictionary cache              3221760     .11777                                
+Checkpoint queue              3079680     .11257                                
+sim memory hea                2903760     .10614                                
+event statistics per sess     2847040     .10407                                
+kgl simulator                 2680720     .09799                                
+1M buffer                     2098176     .07670                                
+KQR L PO                      1958160     .07158                                
+FileOpenBlock                 1935392     .07075                                
+log_buffer                    1576992     .05764                                
+KSXR receive buffers          1034000     .03780                                
+message pool freequeue         940944     .03439                                
+KSXR pending messages que      853952     .03122                                
+MTTR advisory                  845368     .03090                                
+sessions                       761600     .02784                                
+PL/SQL MPCODE                  739328     .02703                                
+fixed_sga                      735872     .02690                                
+PL/SQL DIANA                   614448     .02246                                
+VIRTUAL CIRCUITS               574960     .02102                                
+enqueue                        488464     .01786                                
+FileIdentificatonBlock         349824     .01279                                
+processes                      322000     .01177                                
+db_handles                     290000     .01060                                
+trigger defini                 206104     .00753                                
+table definiti                  25256     .00092                                
+parameters                      13832     .00051                                
+KGK heap                         7000     .00026                                
+KQR S SO                         4608     .00017                                
+joxs heap init                   4240     .00015                                
+PLS non-lib hp                   3032     .00011                                
+trigger inform                   1768     .00006                                
+fixed allocation callback         968     .00004                                
+trigger source                    264     .00001                                
+                           ---------- ----------                                
+sum                        2735686272   99.99918                                

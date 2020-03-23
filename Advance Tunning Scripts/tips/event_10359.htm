@@ -1,0 +1,115 @@
+<html><head><title>
+Consider event 10359 for NOLOGGING LOBs
+</title>
+<style>
+body {background-image:url(/images/bg.jpg)}
+a:link {color:#FF6600}
+a:active {color:#660066}
+a:visited {color:#FF6600} 
+a:hover {color:#660066}
+a {font-weight:bold}
+h1 {color:#990000; font-size:150%; text-align:center}
+h2 {color:#660066; font-size:125%}
+ul {list-style-image:url(/images/li.gif); margin-left:16px}
+
+.orange {color:#FF6600}
+.purple {color:#660066}
+.brown {color:#990000}
+.h3 {font-weight:bold; color:#990000}
+</style>
+
+</head>
+<script language="javascript"><!--
+function email(addr) { return addr + '@ixora.com.au' }
+//--></script>
+
+<body>
+
+
+<div style="text-align:center; font-size:125%; font-weight:bold; color:#660066">Oracle Performance Tuning Tips</div>
+
+
+
+<h1>Consider event 10359<br>for NOLOGGING LOBs</h1>
+
+If your application performs frequent NOLOGGING operations, particularly frequent small changes to NOLOGGING LOBs,
+then you may find that it also spends a lot of time waiting for <i>control file sequential read</i> and <i>control file parallel write</i> waits.
+In some real world applications, these waits have been seen to account for as much as 20% of application response time.
+<p>
+Why does Oracle do so much I/O to the controlfile?
+It is because whenever a datafile is changed by a NOLOGGING operation,
+the <a href=/notes/unrecoverable_scn.htm>unrecoverable SCN</a> for that datafile,
+which is stored in the controlfile, needs to be updated.
+These updates must occur in <a href=/notes/controlfile_transactions.htm>controlfile transactions</a>
+to permit recoverability from an instance crash while the controlfile is being changed.
+<p>
+Unfortunately, controlfile transactions are very I/O intensive.
+Each controlfile transaction requires at least two reads and two data synchronous writes per controlfile copy.
+If the controlfiles are buffered by the operating system's file system buffer cache, then the reads may be relatively cheap.
+Even so, in a typical environment with two or three controlfile copies,
+a controlfile transaction must nevertheless wait for 4 or 6 random physical writes to the controlfiles.
+<p>
+If your application makes frequent small changes to NOLOGGING LOBs,
+then it may well be that the controlfile transactions required to update the unrecoverable SCN
+are actually taking a lot longer than it would take to log the redo for the LOB changes if the LOBs were changed to LOGGING.
+However, there is a better alternative -- namely, setting event 10359.
+Most numeric events are undocumented, and not normally supported.
+However, this particular event is sanctioned with a reference in the
+<a href=http://download-west.oracle.com/otndoc/oracle9i/901_doc/appdev.901/a88879/adl09be3.htm#121892 target=r>
+Oracle9<i>i</i> Application Developer' Guide - Large Objects (LOBs)</a>.
+<p>
+Event 10359 disables all updates of unrecoverable SCNs.
+By setting this event you can retain the performance benefit of not logging LOB changes
+without sustaining the performance penalty of repeated foreground controlfile transactions.
+The only disadvantage is that RMAN will no longer be able to report which datafiles
+have recently been affected by NOLOGGING operations,
+and so you will have to adopt a backup strategy that compensates for that.
+<p>
+<hr noshade align=left width=300 size=2 color=black>
+<table cellspacing=0 cellpadding=0 width=100%><tr>
+<td valign=top>
+<div style="font-size:80%; font-weight:bold; color:#660066">
+© Ixora Pty Ltd. &nbsp; All rights reserved.<br>
+
+
+
+05-Apr-2002
+</div>
+</td>
+
+<map name=searches>
+<area coords=3,3,33,25 href=/search.html>
+</map>
+
+<script language=javascript><!--
+document.write('<map name=question><area coords=3,3,15,25 href="mailto:' + email('questions') + '?SUBJECT=About http://www.ixora.com.au/tips/event_10359.htm"></map>')
+document.write('<map name=feedback><area coords=3,3,25,25 href="mailto:' + email('feedback') + '?SUBJECT=About http://www.ixora.com.au/tips/event_10359.htm"></map>')
+// --></script>
+
+<map name=up1level>
+<area coords=3,3,25,25 href=./>
+</map>
+<map name=homepage>
+<area coords=3,3,25,25 href=/>
+</map>
+
+<td valign=top align=right>
+<nobr>
+
+<img ismap border=0 usemap=#searches src=/images/search.gif width=36 height=28 alt=Search>
+&nbsp;
+
+<img ismap border=0 usemap=#question src=/images/q.gif alt=Questions>
+&nbsp;
+<img ismap border=0 usemap=#feedback src=/images/feedback.gif alt=Feedback>
+&nbsp;
+
+<img ismap border=0 usemap=#up1level src=/images/up_one.gif alt=Up>
+&nbsp;
+<img ismap border=0 usemap=#homepage src=/images/home.gif alt=Home>
+
+</nobr>
+</td>
+</tr></table>
+</body></html>
+

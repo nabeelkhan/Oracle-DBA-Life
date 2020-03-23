@@ -1,0 +1,241 @@
+Description:    Listed below is a very easy way to monitor for Space issues ( or insert any SQL here for monitoring for other needs and thresholds ). 
+
+If any tablespace has less then 5% free then a page message is sent to the DBA cell phone. If any tablespace has 15% free but above 5% then only send an email. 
+
+The procedure relies upon SYS.MAIL_FILES proc which is well know proc on the DBA Internet web sites, but which we use here. ( I have included it below too.)
+
+I realize any of Oracle's internal mailing procedures could of worked, but we have been using this we no issues for a long time (since our 8i days). 
+
+The reason I did this is so my other monitor scripts that use to run on Sun UNIX are now less OS "dependant" allowing to port to Linux if or when we want and to utilize the DBMS_JOBS inside of Oracle so to move away from the old crontab UNIX jobs. 
+
+Currently, all the below scripts I have been tested using 9i release 2 (9204) but should easily port to other versions of Oracle (8i, 9ir1, 10g). 
+Code: 
+
+-- After creating user DBMONITOR with DBA role and creating the MAIL_FILES (see below) proc then run the following as DBMONITOR user:
+
+CREATE OR REPLACE PROCEDURE DBMONITOR.SP_ALARM_MONITOR_SPACE 
+AS 
+/* Created by Roger Eisentrager 
+Date October 28 2004 
+*/ 
+CURSOR sql_f_space IS SELECT D.TABLESPACE_NAME tbs_name, 
+D.STATUS tbs_status, 
+ROUND((A.BYTES/1024/1024),2) total_size, 
+ROUND(((A.BYTES-DECODE(F.BYTES,NULL,0,F.BYTES))/1024/1024),2) used_size, 
+ROUND(((A.BYTES/1024/1024)-(A.BYTES-DECODE(F.BYTES,NULL,0,F.BYTES))/1024/1024),2) free_size, 
+ROUND((((A.BYTES/1024/1024)-(A.BYTES-DECODE(F.BYTES,NULL,0,F.BYTES))/1024/1024)/(A.BYTES/1024/1024))*100.0,2) pct_free
+
+FROM SYS.DBA_TABLESPACES D,SYS.SM$TS_AVAIL A,SYS.SM$TS_FREE F 
+WHERE D.TABLESPACE_NAME = A.TABLESPACE_NAME 
+AND F.TABLESPACE_NAME(+)=D.TABLESPACE_NAME 
+UNION ALL 
+SELECT d.tablespace_name tbs_name, 
+d.status tbs_status, 
+ROUND((a.bytes / 1024 / 1024),2) total_size, 
+ROUND(NVL(t.bytes, 0)/1024/1024,2) used_size, 
+ROUND((a.bytes / 1024 / 1024) - (NVL(t.bytes,0)/1024/1024),2) free_size, 
+ROUND(100 - (NVL(t.bytes /a.bytes * 100, 0)),2) pct_free 
+FROM sys.dba_tablespaces d, 
+( select tablespace_name, sum(bytes) bytes 
+from dba_temp_files group by tablespace_name) a, 
+( select tablespace_name, sum(bytes_cached) bytes 
+from SYS.v_$temp_extent_pool group by tablespace_name) t 
+WHERE d.tablespace_name = a.tablespace_name(+) 
+AND d.tablespace_name = t.tablespace_name(+) 
+AND d.extent_management like 'LOCAL' 
+AND d.contents like 'TEMPORARY'; 
+tbs_sp_rec sql_f_space%ROWTYPE; 
+email VARCHAR2(50) := ; 
+BEGIN 
+FOR tbs_sp_rec IN sql_f_space LOOP 
+email := CASE 
+/* Alarm if free space is less then 10% */ 
+WHEN tbs_sp_rec.pct_free <= 10 THEN '2106781234@messaging.sprintpcs.com' 
+/* Only send a warning Email to DBA if free space is less then 16% but greater then 11% */ 
+WHEN tbs_sp_rec.pct_free >= 11 AND tbs_sp_rec.pct_free <= 16 THEN 'oncall.dba@meridianiq.com' 
+ELSE 'na' 
+END; 
+IF email <> 'na' THEN 
+SYS.mail_files ( 'ORACLE_PROD_DB', email, 'Our Oracle PRODUCTION db RED with Space', 'Check production for Running Low on Space' );
+
+END IF; 
+END LOOP; 
+END; 
+/ 
+
+
+-- Run this in Production DB 1 time for every 10 minutes: 
+-- ( In Place of "Thursday, October 28, 2004 2 10 00 PM" put in your current date-time ) 
+
+DECLARE jobno number; 
+BEGIN 
+DBMS_JOB.SUBMIT(jobno, 
+'DBMONITOR.SP_ALARM_MONITOR_SPACE;', 
+TO_DATE('Thursday, October 28, 2004 2 10 00 PM', 'DAY, MONTH DD, YYYY HH:MI:SS AM'), 
+'SYSDATE+10/(24*60)'); 
+COMMIT; 
+END; 
+/ 
+
+
+
+
+-- Needed for the above to compile and work correctly: 
+
+CREATE OR REPLACE PROCEDURE SYS.mail_files ( from_name varchar2, 
+to_name varchar2, 
+subject varchar2, 
+message varchar2, 
+max_size number default 9999999999, 
+filename1 varchar2 default null, 
+filename2 varchar2 default null, 
+filename3 varchar2 default null, 
+debug number default 0 ) is 
+
+/* 
+This procedure uses the UTL_SMTP package to send an email message. 
+Up to three file names may be specified as attachments. 
+Parameters are: 
+1) from_name (varchar2) 
+2) to_name (varchar2) 
+3) subject (varchar2) 
+4) message (varchar2) 
+5) max_size (number) 
+5) filename1 (varchar2) 
+6) filename2 (varchar2) 
+7) filename3 (varchar2) 
+eg. 
+mail_files( from_name => 'oracle' , 
+to_name => 'someone@somewhere.com' , 
+subject => 'A test', 
+message => 'A test message', 
+filename1 => '/data/oracle/dave_test1.txt', 
+filename2 => '/data/oracle/dave_test2.txt'); 
+
+*/ 
+
+v_smtp_server varchar2(10) := 'localhost'; 
+v_smtp_server_port number := 25; 
+v_directory_name varchar2(100); 
+v_file_name varchar2(100); 
+v_line varchar2(1000); 
+crlf varchar2(2):= chr(13) || chr(10); 
+mesg varchar2(32767); 
+conn UTL_SMTP.CONNECTION; 
+type varchar2_table is table of varchar2(4096) index by binary_integer; 
+file_array varchar2_table; 
+i binary_integer; 
+v_file_handle utl_file.file_type; 
+v_slash_pos number; 
+mesg_len number; 
+mesg_too_long exception; 
+invalid_path exception; 
+mesg_length_exceeded boolean := false; 
+begin 
+-- first load the three filenames into an array for easier handling later ... 
+file_array(1) := filename1; 
+file_array(2) := filename2; 
+file_array(3) := filename3; 
+
+-- Open the SMTP connection ... 
+-- ------------------------ 
+conn:= utl_smtp.open_connection( v_smtp_server, v_smtp_server_port ); 
+
+-- Initial handshaking ... 
+-- ------------------- 
+utl_smtp.helo( conn, v_smtp_server ); 
+utl_smtp.mail( conn, from_name ); 
+utl_smtp.rcpt( conn, to_name ); 
+utl_smtp.open_data ( conn ); 
+
+-- build the start of the mail message ... 
+-- ----------------------------------- 
+mesg:= 'Date: ' || TO_CHAR( SYSDATE, 'dd Mon yy hh24:mi:ss' ) || crlf || 
+'From: ' || from_name || crlf || 
+'Subject: ' || subject || crlf || 
+'To: ' || to_name || crlf || 
+'Mime-Version: 1.0' || crlf || 
+'Content-Type: multipart/mixed; boundary="DMW.Boundary.605592468"' || crlf || 
+|| crlf || 
+'This is a Mime message, which your current mail reader may not' || crlf || 
+'understand. Parts of the message will appear as text. If the remainder' || crlf || 
+'appears as random characters in the message body, instead of as' || crlf || 
+'attachments, then you ll have to extract these parts and decode them' || crlf || 
+'manually.' || crlf || 
+|| crlf || 
+'--DMW.Boundary.605592468' || crlf || 
+'Content-Type: text/plain; name="message.txt"; charset=US-ASCII' || crlf || 
+'Content-Disposition: inline; filename="message.txt"' || crlf || 
+'Content-Transfer-Encoding: 7bit' || crlf || 
+|| crlf || 
+message || crlf ; 
+mesg_len := length(mesg); 
+if mesg_len > max_size then 
+mesg_length_exceeded := true; 
+end if; 
+utl_smtp.write_data ( conn, mesg ); 
+-- Append the files ... 
+-- ---------------- 
+for i in 1..3 loop 
+-- Exit if message length already exceeded ... 
+exit when mesg_length_exceeded; 
+-- If the filename has been supplied ... 
+if file_array(i) is not null then 
+begin 
+-- locate the final '/' or '\' in the pathname ... 
+v_slash_pos := instr(file_array(i), '/', -1 ); 
+if v_slash_pos = 0 then 
+v_slash_pos := instr(file_array(i), '\', -1 ); 
+end if; 
+-- separate the filename from the directory name ... 
+v_directory_name := substr(file_array(i), 1, v_slash_pos - 1 ); 
+v_file_name := substr(file_array(i), v_slash_pos + 1 ); 
+-- open the file ... 
+v_file_handle := utl_file.fopen(v_directory_name, v_file_name, 'r' ); 
+-- generate the MIME boundary line ... 
+mesg := crlf || '--DMW.Boundary.605592468' || crlf || 
+'Content-Type: application/octet-stream; name="' || v_file_name || '"' || crlf || 
+'Content-Disposition: attachment; filename="' || v_file_name || '"' || crlf || 
+'Content-Transfer-Encoding: 7bit' || crlf || crlf ; 
+mesg_len := mesg_len + length(mesg); 
+utl_smtp.write_data ( conn, mesg ); 
+-- and append the file contents to the end of the message ... 
+loop 
+utl_file.get_line(v_file_handle, v_line); 
+if mesg_len + length(v_line) > max_size then 
+mesg := '*** truncated ***' || crlf; 
+utl_smtp.write_data ( conn, mesg ); 
+mesg_length_exceeded := true; 
+raise mesg_too_long; 
+end if; 
+mesg := v_line || crlf; 
+utl_smtp.write_data ( conn, mesg ); 
+mesg_len := mesg_len + length(mesg); 
+end loop; 
+exception 
+when utl_file.invalid_path then 
+if debug > 0 then 
+dbms_output.put_line('Error in opening attachment '|| 
+file_array(i) ); 
+end if; 
+-- All other exceptions are ignored .... 
+when others then 
+null; 
+end; 
+mesg := crlf; 
+utl_smtp.write_data ( conn, mesg ); 
+-- close the file ... 
+utl_file.fclose(v_file_handle); 
+end if; 
+end loop; 
+-- append the final boundary line ... 
+mesg := crlf || '--DMW.Boundary.605592468--' || crlf; 
+utl_smtp.write_data ( conn, mesg ); 
+-- and close the SMTP connection ... 
+utl_smtp.close_data( conn ); 
+utl_smtp.quit( conn ); 
+end; 
+/ 
+
+GRANT EXECUTE ON SYS.MAIL_FILES TO "PUBLIC" 
+/

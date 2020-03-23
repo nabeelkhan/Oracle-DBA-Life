@@ -1,0 +1,85 @@
+<html>
+	<head>
+		<title>
+			Cleaning Up Stray Temporary Segments
+		</title>
+		<style>
+			<!-- a:hover{color:#660066;} -->
+		</style>
+	</head>
+	<body background="../../images/bg.jpg" link="#FF6600" vlink="#FF6600" alink="#660066">
+		
+		<h2 align="center">
+			<font color="#990000">
+				Cleaning Up Stray Temporary Segments
+			</font>
+		</h2>
+		<p>
+		Some temporary segments are not cleaned up as expected, and can often persist for hours.
+		This sometimes results in tablespaces running out of space inappropriately.
+		To avoid such problems, DBAs can trigger the cleanup of straggling temporary segments.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				What causes stray temporary segments?
+			</font>
+		</h3>
+		<p>
+		When a segment is dropped, its extents are not freed immediately.
+		Initially the process dropping the segment just changes the segment's type to a temporary segment.
+		This operation can be rolled back if the statement fails for any reason.
+		The temporary segment is normally cleaned up and its extents freed upon the conclusion of the call.
+		However, if the data dictionary cache row representing the segment is still dirty or in use, temporary segment cleanup cannot occur at this time.
+		This applies in particular to temporary segments released by recursive calls.
+		Because the parent transaction has not yet committed, such temporary segments cannot be cleaned up immediately.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				How do stray temporary segments get cleaned up?
+			</font>
+		</h3>
+		<p>
+		The task of cleaning up straggling temporary segments and freeing their extents falls to the SMON process.
+		Although SMON wakes up every five minutes, unless it is explicitly posted by another process,
+		it only checks for temporary segments to clean up once every two hours and five minutes.
+		Even then it will only clean up five temporary segments at most, and only if it can get the required locks within 5 seconds.
+		So temporary segment cleanup can appear to take a long time, even days.
+		</p>
+		<p>
+		However, SMON also performs temporary segment cleanup when it is posted explicitly by another process.
+		You can make use of this fact to force SMON to clean up temporary segments more promptly.
+		SMON is posted whenever a space transaction fails.
+		So you can trigger temporary segment clean up by attempting to create a table of 2 extents with a small INITIAL and an impossible NEXT extent size.
+		However, a more elegant way of posting SMON is to use the ORADEBUG WAKEUP command from within SQL*Plus (or SVRMGRL before 8.1).
+		There is an APT script that does this, called <b><a href="../../scripts/misc.htm#post_smon">post_smon.sql</a></b>.
+		</p>
+		
+		
+		<hr noshade align="left" width="300" size="2" color="black">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="1000">
+					<font size="2" color="#660066">
+						<strong>
+							Copyright © Ixora Pty Ltd
+						</strong>
+					</font>
+				</td>
+				<td valign="top" align="right">
+					<nobr>
+					<map name="email">
+						<area shape="rect" coords="0, 0, 32, 21" title="Feedback" href="mailto:feedback@ixora.com.au?SUBJECT=[Tip] stray_temp.htm">
+					</map>
+					<img ismap usemap="#email" border="0" alt="Send Email" src="../../images/email.gif" width="32" height="21">
+					<map name="home">
+						<area shape="rect" coords="0, 0, 28, 28" title="Home" href="/">
+					</map>
+					<img ismap usemap="#home" border="0" alt="Home" src="../../images/home.gif" width="28" height="28">
+					</nobr>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

@@ -1,0 +1,144 @@
+<html>
+	<head>
+		<title>
+			Disk Configuration for Online Log Files
+		</title>
+		<style>
+			<!-- a:hover{color:#660066;} -->
+		</style>
+	</head>
+	<body background="../../images/bg.jpg" link="#FF6600" vlink="#FF6600" alink="#660066">
+		
+		<h2 align="center">
+			<font color="#990000">
+				Disk Configuration for<br>
+				Online Log Files
+			</font>
+		</h2>
+		<p>
+		Our tip <b><a href="raw_log_files.htm">Why Raw Log Files</a></b> explains why LGWR performance is important,
+		and why it is best to use raw log files instead of file system based log files.
+		That tip should be reviewed before reading this one.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				Should you stripe your log files?
+			</font>
+		</h3>
+		<p>
+		There is normally no benefit in striping the log files.
+		Most log writes are small, and so the response time is dominated by the rotational latency, rather than the transfer time.
+		Striping reduces the transfer time but increases the average rotational latency, so it actually degrades the performance of log writes in most cases.
+		The one exception is where log writes are large relative to the average track length.
+		This only occurs in situations where the commit rate is very low and the maximum physical I/O size is large.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				Should you use mirroring or multiplexing?
+			</font>
+		</h3>
+		<p>
+		Your log files must be protected, because they are essential to instance recovery.
+		If available, hardware mirroring should be used in preference to Oracle's log file multiplexing, to avoid the CPU cost of multiple writes.
+		Otherwise, multiplexing should be used in preference to software mirroring, to avoid the cost of dirty region logging.
+		However, log file multiplexing should only be used if asynchronous writes are available.
+		Otherwise writes to each member of the log file group will have to be completed in series for every log write,
+		resulting in a dramatic reduction in LGWR performance.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				Using fast disks
+			</font>
+		</h3>
+		<p>
+		The best way to optimize individual log file writes is to use a disk array with a large write cache.
+		If your disk array is tunable, you may be able to disable read caching for the log files
+		and dedicate the entire cache allocation for those disks to write caching.
+		You may also be able to allocate a disproportionate amount of cache to those disks.
+		</p>
+		<p>
+		If you don't have the luxury of a disk array with a large cache to optimize log file writes, then the next best thing is to use fast disks.
+		When we speak of fast disks, it is the rotational speed that is important rather than the average seek time,
+		because log file writes are logically sequential (and should be physically sequential too).
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				Should log files be alternated between disks?
+			</font>
+		</h3>
+		<p>
+		Log file disks should be dedicated to a single log file to ensure that no other process,
+		not even ARCn, will access the log file disks while LGWR is writing to them.
+		Let us repeat the point to make this advice explicit.
+		We are not advising you to alternate multiple log files between two or three disks.
+		We are advising you not to.
+		Rather, you should ensure that the ARCn processes will always be able to archive each online log file
+		more quickly than LGWR can write through the remaining log files (as discussed in the <b><a href="archived_log_files.htm">next tip</a></b>).
+		</p>
+		<p>
+		If redo generation is light, then just two large log files on two separate disk pairs will be sufficient.
+		However, we recommend three large log files on three separate mirrored pairs for most instances.
+		This allows for moderately fast redo generation and the occasional use of the ALTER SYSTEM SWITCH LOGFILE command.
+		For instances that must support sustained fast redo generation, or that archive the log files to multiple destinations,
+		four or more log files, each on separate mirrored disk pairs, may be required.
+		However, it is often better to increase the stripe breadth of the archive destination area to improve archival performance,
+		than to use a larger number of online log file disks to increase the archival window.
+		</p>
+		<p>
+		Also, given that you are using a whole disk for each log file,
+		that log file should of course be created at the beginning of the disk (on the outside cylinders) where the transfer rate is optimal.
+		The rest of the disk should not be left vacant, lest somebody decide to use it.
+		We recommend that you create a tablespace called DONT_TOUCH and fill it up with old copies of some application data
+		so that it looks like an archival area, and then make it read-only and forget about it.
+		Some people prefer to use the rest of the log file disks for a file system that is reserved for exports.
+		However, it is much more difficult to keep itchy fingers away from a large unused file system than a large full tablespace,
+		and better export space is normally available elsewhere, such as in the archive destination file systems.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				Why should you use dedicated controllers?
+			</font>
+		</h3>
+		<p>
+		A further optimization that is recommended for log files is to have a dedicated disk controller for each log file disk.
+		The difference between the peak and sustained transfer rates that can be achieved through an I/O controller
+		is largely due to arbitration between multiple devices sharing that controller.
+		Having a dedicated controller removes the arbitration overhead from log file I/O resulting in response time improvements of up to 35%.
+		Failing that, you should at least ensure that the log file disks have the highest priority addresses on the controller's bus.
+		For the SCSI protocols, the controller itself has the highest priority address, which is 7,
+		and the device with ID 6 has the next highest priority and so on.
+		Also, if you do have to share a controller with other disks, you should ensure that they are of the same type.
+		One slow disk, or worse still a tape drive, can dramatically increase the arbitration overhead.
+		</p>
+		
+		<hr noshade align="left" width="300" size="2" color="black">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="1000">
+					<font size="2" color="#660066">
+						<strong>
+							Copyright © Ixora Pty Ltd
+						</strong>
+					</font>
+				</td>
+				<td valign="top" align="right">
+					<nobr>
+					<map name="email">
+						<area shape="rect" coords="0, 0, 32, 21" title="Feedback" href="mailto:feedback@ixora.com.au?SUBJECT=[Tip] online_log_files.htm">
+					</map>
+					<img ismap usemap="#email" border="0" alt="Send Email" src="../../images/email.gif" width="32" height="21">
+					<map name="home">
+						<area shape="rect" coords="0, 0, 28, 28" title="Home" href="/">
+					</map>
+					<img ismap usemap="#home" border="0" alt="Home" src="../../images/home.gif" width="28" height="28">
+					</nobr>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

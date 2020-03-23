@@ -1,0 +1,25 @@
+# Akadia AG, Arvenweg 4, CH-3604 Thun                           tnsnames.ora
+# --------------------------------------------------------------------------
+#
+# File:       tnsnames.ora
+#
+# Autor:      Martin Zahn, 25.03.2004
+#
+# Purpose:    Connection File for all Net Clients
+#
+# Location:   $TNSADMIN
+#
+# Certified:  Oracle 10.1.0.2 on Windows 2000
+#
+# --------------------------------------------------------------------------
+
+GEN1.WORLD =
+  (DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = gentic)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SID = GEN1)
+      (SERVER = DEDICATED)
+    )
+  )

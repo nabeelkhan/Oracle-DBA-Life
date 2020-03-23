@@ -1,0 +1,118 @@
+<html><head><title>
+Finding the maximum effective multiblock read count
+</title>
+<style>
+body {background-image:url(/images/bg.jpg)}
+a:link {color:#FF6600}
+a:active {color:#660066}
+a:visited {color:#FF6600} 
+a:hover {color:#660066}
+a {font-weight:bold}
+h1 {color:#990000; font-size:150%; text-align:center}
+h2 {color:#660066; font-size:125%}
+ul {list-style-image:url(/images/li.gif); margin-left:16px}
+
+.orange {color:#FF6600}
+.purple {color:#660066}
+.brown {color:#990000}
+.h3 {font-weight:bold; color:#990000}
+</style>
+
+</head>
+<script language="javascript"><!--
+function email(addr) { return addr + '@ixora.com.au' }
+//--></script>
+
+<body>
+
+
+<div style="text-align:center; font-size:125%; font-weight:bold; color:#660066">Oracle Performance Tuning Tips</div>
+
+
+
+<h1>Finding the maximum effective multiblock read count</h1>
+
+As explained <a href="large_multiblock_reads.htm">here</a>
+you should use the maximum effective multiblock read size when using unbuffered I/O.
+Unfortunately, finding and using the maximum effective multiblock read count possible for your database is not always easy.
+The first trap to be aware of is that Oracle does not complain about attempts to set the multiblock read count
+to values that are larger than the maximum value allowed under the operating system.
+It just silently sets the parameter to the maximum allowed value
+(or <i>db_block_buffers</i>/4, if your cache size less than 4 times the maximum allowed value).
+<p>
+The second trap to be aware of is that even if you set the multiblock read count to the maximum allowed value for your operating system,
+Oracle might not respect that setting anyway.
+This has to do with which system call, <i>read</i>() or <i>readv</i>(), is being used,
+whether the datafile is raw or file system based, and the overhead of I/O system calls under that operating system.
+The details are sufficiently complex that it is best to simply establish the maximum effective multiblock read count with a test.
+On Unix you can use the APT script <a href=/scripts/io_opt.htm#multiblock_read_test>multiblock_read_test.sql</a> to do this.
+It simply performs a full table scan with event 10046 set at level 8,
+and then looks at parameter <i>p3</i> of the <i>db file scattered read</i> waits
+to find the size of the multiblock reads actually being performed.
+<p>
+Prior to Oracle9<i>i</i>, it is important that you <i><b>not</b></i> set the <i>db_file_multiblock_read_count</i> parameter
+to a value greater than this maximum effective value.
+This is because the optimizer is influenced in its choice of execution plans by the value of this parameter,
+and if it is allowed to think that full scans are any cheaper than they in fact are,
+then it will sometimes choose full table scans rather than index based access
+when in fact an index based access path would be faster.
+Oracle9<i>i</i>, has a new multiblock I/O costing model
+that can cost full scans more accurately based on statistics about the typical multiblock read size and response time.
+These statistics can be gathered with DBMS_STATS.GATHER_SYSTEM_STATS.
+Of course, in the absence of such statistics, the old costing model will be used.
+<p>
+If you are using the maximum effective multiblock read size
+and find that the optimizer is choosing inappropriate full table scans,
+you may be tempted to reduce the multiblock read size
+to convince the optimizer to choose index based access paths.
+However, in such cases it is better to understate the cost of index based access by tuning the <i>optimizer_index_cost_adj</i> parameter,
+rather than to reduce the multiblock I/O size, because that would also sacrifice I/O efficiency.
+<p>
+<hr noshade align=left width=300 size=2 color=black>
+<table cellspacing=0 cellpadding=0 width=100%><tr>
+<td valign=top>
+<div style="font-size:80%; font-weight:bold; color:#660066">
+© Ixora Pty Ltd. &nbsp; All rights reserved.<br>
+
+
+
+05-Apr-2002
+</div>
+</td>
+
+<map name=searches>
+<area coords=3,3,33,25 href=/search.html>
+</map>
+
+<script language=javascript><!--
+document.write('<map name=question><area coords=3,3,15,25 href="mailto:' + email('questions') + '?SUBJECT=About http://www.ixora.com.au/tips/max_multiblock_read.htm"></map>')
+document.write('<map name=feedback><area coords=3,3,25,25 href="mailto:' + email('feedback') + '?SUBJECT=About http://www.ixora.com.au/tips/max_multiblock_read.htm"></map>')
+// --></script>
+
+<map name=up1level>
+<area coords=3,3,25,25 href=./>
+</map>
+<map name=homepage>
+<area coords=3,3,25,25 href=/>
+</map>
+
+<td valign=top align=right>
+<nobr>
+
+<img ismap border=0 usemap=#searches src=/images/search.gif width=36 height=28 alt=Search>
+&nbsp;
+
+<img ismap border=0 usemap=#question src=/images/q.gif alt=Questions>
+&nbsp;
+<img ismap border=0 usemap=#feedback src=/images/feedback.gif alt=Feedback>
+&nbsp;
+
+<img ismap border=0 usemap=#up1level src=/images/up_one.gif alt=Up>
+&nbsp;
+<img ismap border=0 usemap=#homepage src=/images/home.gif alt=Home>
+
+</nobr>
+</td>
+</tr></table>
+</body></html>
+

@@ -1,0 +1,800 @@
+a6f
+<HTML>
+<HEAD>
+<META name=vsisbn content="067230886x">
+<META name=vstitle content="Oracle Performance Tuning and Optimization">
+<META name=vsauthor content="Edward Whalen">
+<META name=vsimprint content="Sams">
+<META name=vspublisher content="Macmillan Computer Publishing">
+<META name=vspubdate content="04/01/96">
+<META name=vscategory content="Archive,Databases: Relational Databases">
+
+
+
+
+<TITLE>Oracle Performance Tuning and Optimization:Review of Tuning Guidelines</TITLE>
+
+<!-- HEADER -->
+
+<STYLE type="text/css"> 
+ <!--
+ A:hover  {
+ 	color : Red;
+ }
+ -->
+</STYLE>
+
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<script>
+<!--
+function displayWindow(url, width, height) {
+         var Win = window.open(url,"displayWindow",'width=' + width +',height=' + height + ',resizable=1,scrollbars=yes');
+	if (Win) {
+		Win.focus();
+	}
+}
+//-->
+</script>
+<SCRIPT>
+<!--
+function popUp(url) {
+        var Win = window.open(url,"displayWindow",'width=400,height=300,resizable=1,scrollbars=yes');
+	if (Win) {
+		Win.focus();
+	}
+}
+//-->
+</SCRIPT>
+
+<script language="JavaScript1.2">
+<!--
+function checkForQuery(fm) {
+  /* get the query value */
+  var i = escape(fm.query.value);
+  if (i == "") {
+      alert('Please enter a search word or phrase');
+      return false;
+  }                  /* query is blank, dont run the .jsp file */
+  else return true;  /* execute the .jsp file */
+}
+//-->
+</script>
+
+</HEAD>
+
+<body background="/images/back.jpg" bgcolor="#FFFFFF" link="#003399" alink="#FF0000" vlink="#003399" topmargin=0 leftmargin=0 marginheight=0 marginwidth=0>
+
+<table bgcolor="#003366" width="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td colspan="3">
+		
+		<table width="100%">
+			<tr valign="top">
+				<td bgcolor="#003366">&nbsp;&nbsp;<a href="http://www.earthweb.com" target="resource window"><img src="/images/ew_logo.jpg" width="109" height="93" vspace="5" alt="EarthWeb" border="0"></a>&nbsp;&nbsp;&nbsp;</td>
+				<td bgcolor="#003366" nowrap>
+
+<!--  Begin Ads ITK.BOOKS.DATABASE //-->
+
+<A HREF="/adclick.html/CID=00000349ba50285a00000000/site=corpitk/area=corpitk.books.database/aamsz=468x60" target="_blank"><IMG SRC="http://adimages.earthweb.com/images/ads/spidercatcher.gif?" %%HEIGHT%% %%WIDTH%% ALT="Click Here!"  BORDER="0"></A>
+
+
+<!-- ITK.BOOKS.DATABASE End Ads //--></td>
+				<td bgcolor="#003366" nowrap>
+
+<!--  Begin Ads ITKBAN.FRONT //-->
+
+<A HREF="/adclick.html/CID=00000ac5ba50285a00000000/site=corpitk/area=corpitk.books.database/aamsz=160x60/position=top" target="_blank"><IMG SRC="http://adimages.earthweb.com/images/ads/160x60/spider_catcher160x60.gif?" %%HEIGHT%% %%WIDTH%% ALT=""  BORDER="0"></A>
+
+
+<!-- ITKBAN.FRONT End Ads //-->
+990
+</td>
+<td><a href="CITK1a2b3c4d5e6f7g8h9idefcon4.html">
+<img src="/images/dotblue.gif" border="0" height="1" width="1" align="right"></a></td>
+			</tr>
+		</table>
+		
+		</td>
+	</tr>
+		
+	<tr>
+		<td height="1" colspan="3" bgcolor="#003366"><img src="/images/dotclear.gif" border=0 alt=""></td>
+	</tr>
+</table>
+
+<!-- END HEADER -->
+
+
+<!-- BEGIN SUB HEADER -->
+
+<table bgcolor="#003366" cellpadding="0" cellspacing="0" border="0" width="100%">
+
+<!-- ITK TOPNAV -->
+	
+	<tr>
+		<td align="left" valign="top" nowrap><a href="/"><img src="/images/top_tabs/home_off.gif" alt="Home" border="0"></a><a href="/content/corp.html"><img src="/images/top_tabs/subscribe.gif" alt="Subscribe" border="0"></a><a href="/search/"><img src="/images/top_tabs/search.gif" alt="Search" border="0"></a><a href="/faq/faq.html"><img src="/images/top_tabs/faq.gif" alt="FAQ" border="0"></a><a href="/sitemap.html"><img src="/images/top_tabs/sitemap.gif" alt="Sitemap" border="0"></a><a href="/contactus.html"><img src="/images/top_tabs/contact_us.gif" alt="Contact Us" border="0"></a></td> 
+	</tr>
+	
+<!-- END of ITK TOPNAV -->
+
+<!-- ITK LOGO and newsletter sign up -->
+
+</table>
+	
+<table cellpadding="0" cellspacing="0" border="0" width="100%">
+
+	<tr>
+		<td align="left" valign="top" nowrap><img src="/images/itk_logo_sm.jpg" alt="" border="0"></td>
+		<td align="right"><font face="verdana, sans-serif" size="1">
+
+<script language="JavaScript">
+<!-- 
+
+var days = new Array(8);
+days[1] = "Sunday";
+days[2] = "Monday";
+days[3] = "Tuesday";
+days[4] = "Wednesday";
+days[5] = "Thursday";
+days[6] = "Friday";
+days[7] = "Saturday";
+
+var months = new Array(13);
+months[1] = "January";
+months[2] = "February";
+months[3] = "March";
+months[4] = "April";
+months[5] = "May";
+months[6] = "June";
+months[7] = "July";
+months[8] = "August";
+months[9] = "September";
+months[10] = "October";
+months[11] = "November";
+months[12] = "December";
+
+var dateObj = new Date()
+var wday = days[dateObj.getDay() + 1]
+var lmonth = months[dateObj.getMonth() + 1]
+var date = dateObj.getDate()
+var fyear = dateObj.getYear()
+if (fyear <1000) fyear += 1900;
+document.write(wday + ", " + lmonth + " " + date + ", " + fyear)
+                
+//-->
+</script>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>
+<br><br>
+
+<!-- <img src="/images/enterprise_logo.gif" width="254" height="51" border="0"> --></td>
+	</tr>
+</table>
+
+<!-- END ITK LOGO and newsletter sign up-->
+	
+<!-- begin of ITK left NAV -->
+
+<!-- BEGIN LEFT NAVBAR -->
+
+
+1000
+
+<!-- BEGIN LEFT NAVBAR -->
+
+	<table border="0" cellpadding="0" cellspacing="0">
+	
+	
+		<tr>
+		<td width="145" valign="top" align="left" rowspan=8>
+		
+	<!-- KEYWORD SEARCH -->
+<script language="JavaScript1.2">
+<!--
+function checkForQuery(fm) {
+  /* get the query value */
+  var i = escape(fm.query.value);
+  if (i == "") {
+      alert('Please enter a search word or phrase');
+      return false;
+  }                  /* query is blank, dont run the .jsp file */
+  else return true;  /* execute the .jsp file */
+}
+//-->
+</script>
+ 
+	
+	<form name="keyword" method="POST" action="http://ewsearch.earthweb.com:80/jsp/k2search/ewkwk2search.jsp" onSubmit=" return checkForQuery(this); ">
+
+<img src="/images/keyword_searcha.gif" vspace="5" width="145" alt="" border="0">
+<INPUT type="hidden" name="collection" value="corpitk">
+<INPUT type="hidden" name="altcoll" value="bookscorpitk">
+<INPUT type="hidden" name="hl" value="on">
+<INPUT name="sortspec" type=hidden value="vspubdate desc score desc">
+<INPUT name=fields type=hidden value="vdkvgwkey score vstitle vsauthor vsisbn vspublisher vspubdate">		
+<INPUT name=imageprefix type=hidden value="http://corpitk.earthweb.com">
+<INPUT name=ssiFolder type=hidden value="corpitkads">
+		
+		<table width="145" border="0" cellpadding="0" cellspacing="0">
+		<tr>
+		<td width="145">&nbsp;&nbsp;<input type="text" name="query" value="" size="11">&nbsp;<input type="image" width=28 height=23 border=0 value="Go" name="Go" src="/images/go.gif" align=absmiddle><br>
+			<font face="arial, helvetica" size="2">
+			<img src="/images/dotclear.gif" width="1" height="5" alt="" border="0"><br>
+			
+			&nbsp;&nbsp;<a href="/search/search-tips.html"><img src="/images/arrows_blue.gif" alt="" border="0"><font size="1" color="#ffffff">Search Tips</font></a><br>
+			&nbsp;&nbsp;<a href="/search/"><img src="/images/arrows_blue.gif" alt="" border="0"><font size="1" color="#ffffff">Advanced Search</font></a><br>
+			
+			</font>
+			
+		</td>
+		<td width="5"><img src="/images/dotclear.gif" width=5 height=10 hspace="5" alt="" border="0"></td>
+		</tr>
+		</table>
+	</form>
+		
+		
+<!-- BROWSE BY TOPIC -->
+		
+
+<form name="meta" method="POST" action="http://ewsearch.earthweb.com:80/jsp/k2search/ewmetak2search.jsp" onSubmit=" return checkForQuery(this); ">
+
+
+
+<img src="/images/publication_searcha.gif" width="145" alt="" border="0">
+<INPUT type="hidden" name="collection" value="bookscorpitk">
+<INPUT type="hidden" name="altcoll" value="corpitk">
+<INPUT type="hidden" name="hl" value="on">
+<INPUT name="sortspec" type=hidden value="vspubdate desc score desc">
+<INPUT name=fields type=hidden value="vdkvgwkey score vstitle vsauthor vspublisher vspubdate">
+<INPUT name=imageprefix type=hidden value="http://corpitk.earthweb.com">
+<INPUT name=ssiFolder type=hidden value="corpitkads">
+		
+<table width="145" border="0" cellpadding="0" cellspacing="0">
+	
+			<tr>
+			<td valign="top">
+			&nbsp;&nbsp;<input type="text" name="query" value="" size="11">&nbsp;<input type="image" width=28 height=23 border=0 value="Go" name="Go" src="/images/go.gif" align=absmiddle><br><font face="arial, helvetica" size="2">
+			&nbsp;&nbsp;<SELECT NAME="metatags" style="font-size: 12; font-family: sans-serif;" size="1">
+			<option value="vstitle" SELECTED>Title
+			<option value="vsauthor">Author
+			<option value="vspublisher">Publisher
+			<option value="vsisbn">ISBN			
+			</SELECT><br><br></font>
+			</td>
+			</tr>
+</table>
+</form>
+
+<form action="" name="catlist">	
+<table width="145" border="0" cellpadding="0" cellspacing="0">				
+			<tr>
+			<td valign="top">
+			<img src="/images/jump_topica.gif" width="145" alt="" border="0">
+			</td>
+			</tr>
+			<tr>
+			<td width="145">
+				
+	        	<font face="Arial,helvetica" size="1">
+				&nbsp;&nbsp;<SELECT NAME="cat" onChange='top.location.href=this.options[selectedIndex].value;' style="font-size: 10; font-family: sans-serif;">
+                        <option value="" selected>Please Select
+                        <option value="">-----------
+						<option value="/reference/dir.ai.html">Artificial Intel
+						<option value="/reference/dir.busman.ht
+ad1
+ml">Business &amp; Mgmt
+                        <option value="/reference/dir.components.html">Components
+                        <option value="/reference/dir.contentmanagement.html">Content Mgmt
+                        <option value="/reference/dir.certification1.html">Certification
+                        <option value="/reference/dir.databases.html">Databases
+                        <option value="/reference/dir.enterprisemanagement1.html">Enterprise Mgmt
+                        <option value="/reference/dir.funandgames1.html">Fun/Games
+                        <option value="/reference/dir.groupwareandcollaboration1.html">Groupware
+                        <option value="/reference/dir.hardware1.html">Hardware
+                        <option value="/reference/dir.ibmredbooks.html">IBM Redbooks
+                        <option value="/reference/dir.intranetandextranetdevelopment1.html">Intranet Dev
+                        <option value="/reference/dir.middleware.html">Middleware
+                        <option value="/reference/dir.multimediaandgraphicdesign1.html">Multimedia
+                        <option value="/reference/dir.networkservices1.html">Networks 
+                        <option value="/reference/dir.operatingsystems.html">OS
+                        <option value="/reference/dir.productivityapplications1.html">Productivity Apps
+                        <option value="/reference/dir.programminglanguages.html">Programming Langs
+                        <option value="/reference/dir.security1.html">Security  
+						<option value="/reference/dir.softwareengineering1.html">Soft Engineering
+                        <!-- <option value="/reference/dir.ewtraining1.html">Training Guides -->
+                        <option value="/reference/dir.userinterfaces.html">UI
+                        <option value="/reference/dir.webservices.html">Web Services
+                        <option value="/reference/dir.webmasterskills1.html">Webmaster
+                        <option value="/reference/dir.y2k1.html">Y2K
+                        <option value="">-----------
+                        <option value="/reference/whatsnew.html">New Arrivals
+                        </SELECT>
+						</font>
+			
+		</td>
+		</tr>
+	</table>
+	</form>
+	
+<!-- LEFT NAV SEARCH END -->
+
+<table border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td>
+<a href="/desktop/"><img src="/images/desktop_icona.gif" border=0 alt="Go to ITKnowledge Enterprise"></a><br><br></td>
+	</tr>
+</table>
+
+<!-- END LEFT NAVBAR -->
+
+
+
+<!-- END LEFT NAVBAR -->
+	
+	<td width="15"><img src="/images/dotclear.gif" width="15" alt="" border="0"></td>
+
+<!-- end of ITK left NAV -->
+
+<!-- begin main content -->
+	
+	<td width="100%" valign="top" align="left">
+		<br>
+
+<!-- END SUB HEADER -->
+
+
+
+674
+<!-- Created by dB Page Builder.  http://www.pchelponline.com/bluestem -->
+
+<!--Begin Content Column -->
+
+<TABLE border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td width=75 valign=top>
+<img src="/images/sm_covers/067230886x.gif" width=60 height=73 alt="Oracle Performance Tuning and Optimization" border="1">
+</td>
+<td align="left">
+    <font face="arial, helvetica" size="-1" color="#336633"><b>Oracle Performance Tuning and Optimization</b></font>
+    <br>
+    <font face="arial, helvetica" size="-1"><i>by Edward Whalen</i>
+    <br>
+    Sams,&nbsp;Macmillan Computer Publishing
+    <br>
+    <b>ISBN:</b>&nbsp;067230886x<b>&nbsp;&nbsp;&nbsp;Pub Date:</b>&nbsp;04/01/96</font>
+</td>
+</tr>
+</table>
+<P>
+<FORM name= "search2" method="POST" action="http://ewsearch.earthweb.com:80/jsp/k2search/ewintrak2search.jsp" onSubmit=" return checkForQuery(this); ">
+<INPUT type="hidden" name="collection" value="corpitk">
+<INPUT type="hidden" name="altcoll" value="bookscorpitk">
+<INPUT type="hidden" name="hl" value="on">
+<INPUT name="sortspec" type=hidden value="score desc">
+<INPUT name="fields" type=hidden value="vdkvgwkey score vstitle vsisbn vsauthor vspublisher vspubdate">
+<INPUT name="imageprefix" type=hidden value="http://corpitk.earthweb.com">
+<INPUT name="ssiFolder" type=hidden value="corpitk">
+<INPUT type="hidden" name="bookid" value="corpitk.earthweb.comreferencepro067230886x">
+
+<font face="arial, helvetica" size=2><b>Search this book:</b></font><br>
+<INPUT NAME="query" size=25 VALUE="">&nbsp;<input type="image" width=28 height=23 border=0 value="Go" name="Go" src="/images/go.gif" align=absmiddle>
+
+</form>
+
+
+22 
+
+<!-- Empty Reference Subhead -->
+1000
+
+
+<!--ISBN=067230886x//-->
+<!--TITLE=Oracle Performance Tuning and Optimization//-->
+<!--AUTHOR=Edward Whalen//-->
+<!--PUBLISHER=Macmillan Computer Publishing//-->
+<!--IMPRINT=Sams//-->
+<!--APPENDIX=A//-->
+<!--PAGES=APPX-A//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch38/576-578.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ewtoc.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H2 ALIGN="CENTER"><FONT COLOR="#000077"><I>Part VII<BR>References
+</I></FONT></H2>
+<TABLE WIDTH="90%">
+<TR>
+<TD WIDTH="8%"><B>Appendix</B>
+<TD WIDTH="5%"><B>A</B>
+<TD WIDTH="80%">Review of Tuning Guidelines
+<TR>
+<TD>
+<TD><B>B</B>
+<TD>Quick Reference
+<TR>
+<TD>
+<TD><B>C</B>
+<TD>Flowcharts
+<TR>
+<TD>
+<TD><B>D</B>
+<TD>Glossary
+<TR>
+<TD>
+<TD><B>E</B>
+<TD>Oracle Tuning Parameters
+<TR>
+<TD>
+<TD><B>F</B>
+<TD>Contents of the CD-ROM
+</TABLE>
+<H2><A NAME="Heading1"></A><FONT COLOR="#000077">Appendix A<BR>Review of Tuning Guidelines
+</FONT></H2>
+<P>This appendix is intended as a quick reference to many of the topics presented throughout this book.
+</P>
+<H3><A NAME="Heading2"></A><FONT COLOR="#000077">RDBMS Tuning</FONT></H3>
+<P>The following sections review many of the concepts presented in Part II, &#147;Tuning the Server.&#148; They review some of the areas of importance and how to find and overcome performance bottlenecks. The following sections relate primarily to the tuning parameters for the OS and Oracle.
+</P>
+<H4 ALIGN="LEFT"><A NAME="Heading3"></A><FONT COLOR="#000077">SGA</FONT></H4>
+<P>The System Global Area (SGA) contains the shared pool, the redo log buffer, and the database block buffers.
+</P>
+<P><FONT SIZE="+1"><B>Shared Pool</B></FONT></P>
+<P>The shared pool contains the library cache, the data dictionary cache, and the shared session area (with the multithreaded server).
+</P>
+<P><FONT SIZE="+1"><B>Library Cache</B></FONT></P>
+<P>The library cache contains the shared SQL and PL/SQL areas. You can improve performance by both increasing the cache-hit rate in the library cache and by speeding access to the library cache by holding infrequently used SQL statements in cache longer.
+</P>
+<P>The V$LIBRARYCACHE table contains statistics about how well you are using the library cache. The important columns to view in this table are PINS and RELOADS:</P>
+<DL>
+<DD><B>&#149;</B>&nbsp;&nbsp;<I>PINS:</I> The number of times the item in the library cache was executed.
+<DD><B>&#149;</B>&nbsp;&nbsp;<I>RELOADS:</I> The number of times the library cache missed and the library object was reloaded.
+</DL>
+<P>A low number of reloads relative to the number of executions indicates a high cache-hit rate.
+</P>
+<P><FONT SIZE="+1"><B>Data Dictionary Cache</B></FONT></P>
+<P>The data dictionary cache contains a set of tables and views that Oracle uses as a reference to the database. It is here that Oracle stores information about both the logical and physical structure of the database.
+</P>
+<P>To check the efficiency of the data dictionary cache, check the cache-hit rate. Statistics for the data dictionary cache are stored in the dynamic performance table V$ROWCACHE (the data dictionary cache is sometimes known as the <I>row cache</I>). The important columns to view in this table are GETS and GETMISSES:</P>
+<DL>
+<DD><B>&#149;</B>&nbsp;&nbsp;<I>GETS:</I> The total number of requests for the particular item.
+<DD><B>&#149;</B>&nbsp;&nbsp;<I>GETMISSES:</I> The total number of requests resulting in cache misses.
+</DL>
+<P>A low number of cache misses are expected, especially during startup, when the cache has not been populated.
+</P>
+<P><FONT SIZE="+1"><B>Shared Session Information</B></FONT></P>
+<P>In a multithreaded server configuration, the session information is also stored in the shared pool. This information includes the private SQL areas as well as sort areas. It is important to make sure that you do not run out of memory for this shared session information.
+</P>
+<P>To determine wheth
+1000
+er you need to increase space for these shared sessions, you can extract the sum of memory allocated for all sessions and the maximum amount of memory allocated for sessions from the dynamic performance table V$SESSTAT. If the maximum amount of memory used is high, it may be necessary to increase the size of the shared pool. Because the shared pool is used for other functions as well (such as the library cache and the data dictionary cache), it is a good idea to increase the size of the shared pool to accommodate the additional memory usage. If you have enough memory in your system, increase the shared pool by the maximum amount of memory used by the shared server processes. If you have a limited amount of memory, use the sum of memory allocated to sessions (obtained when an average number of users were connected and running) as the basis for the amount of memory for the shared pool.</P>
+<P><FONT SIZE="+1"><B>Database Block Buffer Cache</B></FONT></P>
+<P>Probably the most important Oracle cache in the system is the buffer cache. The buffer cache makes up the majority of the Oracle SGA and is used for every query and update in the system.
+</P>
+<P>The statistics for the buffer cache are kept in the dynamic performance table V$SYSSTAT. The important columns to view in this table are listed here:</P>
+<DL>
+<DD><B>&#149;</B>&nbsp;&nbsp;<I>PHYSICAL READS:</I> The total number of requests that result in a disk access. This is a cache miss.
+<DD><B>&#149;</B>&nbsp;&nbsp;<I>DB BLOCK GETS:</I> The number of requests for blocks in current mode.
+<DD><B>&#149;</B>&nbsp;&nbsp;<I>CONSISTENT GETS:</I> The number of requests for blocks in consistent mode. Buffers are typically retrieved in consistent mode for queries.
+</DL>
+<P>The sum of the values in DB BLOCK GETS and CONSISTENT GETS represents the total number of requests for data.
+</P>
+<P>The cache-hit ratio is determined using this formula:</P>
+<!-- CODE SNIP //-->
+<PRE>
+Cache Hit Ratio = 1 - ( PHYSICAL READS / ( DB BLOCK GETS &#43; CONSISTENT GETS))
+</PRE>
+<!-- END CODE SNIP //-->
+<P>The block buffers are the most important area of the SGA and must be tuned because of the large effect they have on the system and the amount of resources they consume.
+</P>
+<H4 ALIGN="LEFT"><A NAME="Heading4"></A><FONT COLOR="#000077">Performance Enhancements</FONT></H4>
+<P>I prefer to separate the performance-enhancement options from the general tuning of Oracle. Performance enhancements tend to be things that may or may not help your configuration and application; in fact, they may sometimes hurt if you&#146;re not careful. On the other hand, tuning parameters always helps, based on correct interpretation of Oracle statistics. The following sections review a few of the enhancements you have seen throughout the book.
+</P>
+<P><FONT SIZE="+1"><B>Block Size</B></FONT></P>
+<P>Depending on your configuration and data access patterns, you may be able to benefit from using a larger block size. With a larger block size, under certain circumstances, you get the benefit of less wasted space and more efficient I/O. Here are a few guidelines that may help you decide whether changing the size of <TT>DB_BLOCK_SIZE</TT> can benefit you:</P>
+<DL>
+<DD><B>&#149;</B>&nbsp;&nbsp;OLTP systems benefit from smaller blocks. If your application is OLTP in nature, you will not benefit from larger blocks. OLTP data typically fits well in the default block size; larger blocks would unnecessarily eject blocks from the SGA.
+<DD><B>&#149;</B>&nbsp;&nbsp;DSS systems benefit from larger blocks. In the DSS system in which table scans are common, retrieving more data at a time results in a performance increase.
+<DD><B>&#149;</B>&nbsp;&nbsp;Larger databases benefit from larger blocks. Larger databases see a space benefit from less wastage per block.
+<DD><B>&#149;</B>&nbsp;&nbsp;Databases with large rows will benefit from larger blocks. If your rows are extremely large (such as images or text) and don&#146;t fit in the default block, you will see a definite benefit from a larger block size.
+</DL>
+<P>Because c
+1000
+hanging the block size unnecessarily causes increased I/O overhead, this change <I>does</I> carry some risk. Change the block size with caution.</P>
+<P><FONT SIZE="+1"><B>Clusters</B></FONT></P>
+<P>A <I>cluster</I>, sometimes called an <I>index cluster</I>, is an optional method of storing tables in an Oracle database. Within a cluster, multiple related tables are stored together to improve access time to the related items. Clusters are useful in cases where related data is often accessed together. The existence of a cluster is transparent to users and to applications; the cluster affects only how data is stored.</P>
+<P>A cluster can be useful for tables in which data is primarily accessed together in a join. In such situations, the reduced I/O needed to bring the additional data into the SGA and the fact that the data is already cached can be a big advantage.</P>
+<P>However, for situations in which the tables have a large number of <TT>INSERT</TT> statements or the data is not frequently accessed together, a cluster is not useful and should not be used.</P>
+<P>Do not cluster tables if full-table scans are often performed on only one of the tables in the cluster. The additional space required by the cluster and the additional I/O reduces performance.</P>
+<P><FONT SIZE="+1"><B>Reduce Fragmentation</B></FONT></P>
+<P>Fragmentation is the condition that occurs when pieces of the database are no longer contiguous. Fragmentation can consist of <I>disk fragmentation</I> or <I>tablespace fragmentation</I>. Both of these types of fragmentation usually affect performance.</P>
+<P>Disk fragmentation usually causes multiple I/Os to occur when one I/O would have been sufficient (for example, with chained or migrated rows). Disk fragmentation can also be caused when the extents that make up the database segments are noncontiguous, which can happen with excessive dynamic growth.</P>
+<P>Tablespace fragmentation is caused by the dropping and creation of segments. This can create large free areas between segments, which result in the inefficient use of space and excessive disk seeks over the empty areas. Tablespace fragmentation can also prevent Oracle from taking advantage of multiblock reads.</P>
+<P>One way to eliminate fragmentation is to export the table or tablespace data, remove and re-create the table or tablespace, and import the data. By eliminating fragmentation, you can reduce excessive I/Os and CPU usage, streamlining data access. Any overhead and unnecessary I/Os you can reduce will improve system performance.</P>
+<P><FONT SIZE="+1"><B>Hash Clusters</B></FONT></P>
+<P>A hash cluster is similar to a cluster except that it uses a hash function rather than an index to reference the cluster key. A hash cluster stores the data based on the result of a hash function. The hash function is a numeric function that determines the data block in the cluster based on the value of the cluster key.
+</P>
+<P>To achieve good performance from a hash cluster, you must meet the following criteria:</P>
+<DL>
+<DD><B>&#149;</B>&nbsp;&nbsp;The cluster key value is unique
+<DD><B>&#149;</B>&nbsp;&nbsp;The majority of queries are equality queries on the cluster key
+<DD><B>&#149;</B>&nbsp;&nbsp;The size of the table is static (very little growth occurs)
+<DD><B>&#149;</B>&nbsp;&nbsp;The value of the cluster key does not change
+</DL>
+<P>If you can take advantage of hashing by meeting these strict criteria, you will see very good performance. Hashing is extremely efficient under the right conditions; however, having a hash cluster under the wrong conditions can cause some performance degradation.
+</P>
+<P><FONT SIZE="+1"><B>Indexes</B></FONT></P>
+<P>An index, like the index in this book, is an optional structure designed to help you achieve faster access to your data. When optimally configured and used, indexes can significantly reduce I/O to the data files and greatly improve performance. You must first decide whether an index is appropriate for the data and access patterns in your particular system. Having decided to use an index, you 
+1000
+must decide which columns to index. Indexing appropriately can greatly improve performance by reducing I/Os and speeding access times.
+</P>
+<P>Careful planning and periodic testing with SQL Trace can lead to very effective use of indexes, with optimal performance being the outcome.</P>
+<P><FONT SIZE="+1"><B>Multiblock Reads</B></FONT></P>
+<P>When performing table scans, Oracle has the capability to read more than one block at a time, thus speeding I/Os. By reading more than one block at a time, a larger chunk of data can be read from the disk, eliminating some disk seeks. By reducing disk seeks and reading larger blocks, both I/O and CPU overhead are reduced.
+</P>
+<P>The amount of data read in a multiblock read is specified by the Oracle initialization parameter <TT>DB_FILE_MULTIBLOCK_READ_COUNT</TT>. The value for this parameter should always be set high because there is rarely any disadvantage in doing so. The size of the individual I/O requests depends on both <TT>DB_FILE_MULTIBLOCK_READ_COUNT</TT> and <TT>DB_BLOCK_SIZE</TT>. A good value for multiblock reads is 64K.</P>
+<P><FONT SIZE="+1"><B>Multiblock Writes</B></FONT></P>
+<P>Multiblock writes are similar in nature to multiblock reads and have many of the same requirements. The multiblock write feature is new with Oracle version 7.3. Under certain conditions, you can now perform multiblock writes.
+</P>
+<P>Multiblock writes are available through the direct path loader as well as through sorts and index creations. As with multiblock reads, multiblock writes reduce I/O and CPU overhead by writing multiple database blocks in one larger I/O operation.</P>
+<P>The amount of data written in a multiblock write is specified by the Oracle initialization parameter <TT>DB_FILE_MULTIBLOCK_WRITE_COUNT</TT>. The size of the individual I/O requests depends on both <TT>DB_FILE_MULTIBLOCK_WRITE_COUNT</TT> and <TT>DB_BLOCK_SIZE</TT>. As with multiblock reads, a good value is 64K.</P>
+<P><FONT SIZE="+1"><B>Oracle Parallel Query Option</B></FONT></P>
+<P>The Oracle Parallel Query option makes it possible for some Oracle functions to be processed by multiple server processes. The functions affected are queries, index creation, data loading, and recovery. For each of these functions, the general principle is the same: Keep the processing going while Oracle is waiting for I/O.
+</P>
+<P>For most queries, the time spent waiting for the data to be retrieved from disk usually overshadows the amount of time actually spent processing the results. With the Parallel Query option, you can compensate for this &#147;wasted time&#148; by using several server processes to execute the query. While one process is waiting for I/Os to complete, other processes can execute. If you are running on a Symmetric Multiprocessor (SMP) computer, a cluster, or a Massively Parallel Processing (MPP) machine, you can take maximum advantage of the Parallel Query option.</P>
+<P>The amount of parallelism can be tuned with several of the Oracle initialization parameters:</P>
+<TABLE WIDTH="100%"><TR>
+<TH COLSPAN="2"><HR>
+<TR>
+<TH WIDTH="40%" ALIGN="LEFT">Parameter
+<TH WIDTH="60%" ALIGN="LEFT">Description
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+<TD VALIGN="TOP"><TT>PARALLEL_DEFAULT_MAX_SCANS</TT>
+<TD>Specifies the maximum number of query servers to used by default for a query. This valued is used <I>only</I> if no value is specified in a <TT>PARALLEL</TT> hint or in the <TT>PARALLEL</TT> definition clause. This parameter limits the number of query servers used by default when the value of <TT>PARALLEL_DEFAULT_SCANSIZE</TT> is used by the query coordinator.
+<TR>
+<TD VALIGN="TOP"><TT>PARALLEL_DEFAULT_SCANSIZE</TT>
+<TD>Specifies the number of query servers to be used for a particular table. The size of the table divided by <TT>PARALLEL_DEFAULT_SCANSIZE</TT> determines the number of query servers, up to <TT>PARALLEL_DEFAULT_MAX_SCANS</TT>.
+<TR>
+<TD VALIGN="TOP"><TT>PARALLEL_MAX_SERVERS</TT>
+<TD>Maximum number of query servers or parallel recovery processes available for this instance.
+<TR>
+<TD VALIGN="TOP">
+1000
+<TT>RECOVERY_PARALLELISM</TT>
+<TD>The number of processes to be used for instance or media recovery. A large value can greatly reduce instance recovery time. A value of zero or 1 indicates that parallel recovery will not be done and that recovery will be serial. A good value for this parameter is in the range of the number of disks you have (up to 50).
+<TR>
+<TD COLSPAN="2"><HR>
+</TABLE>
+<P>I am a real fan of the Parallel Query option. I have seen great improvements from the use of parallel queries as well as dramatic reductions in recovery time when the parallel recovery feature is used.
+</P>
+<P><FONT SIZE="+1"><B>Oracle Parallel Server Option</B></FONT></P>
+<P>The Oracle Parallel Server option is one of the most innovative and impressive options available from Oracle. With the Parallel Server option, you can cluster several computers together using a shared-disk subsystem and have multiple Oracle instances access the same database. If your application is suitable, you can see very good scalability from adding additional computers.
+</P>
+<P>The Oracle Parallel Server option uses a sophisticated locking mechanism in conjunction with a shared-disk subsystem to allow multiple instances to access the same data. If you have an application that can take advantage of the Oracle Parallel Server architecture, you should see some very good performance improvements.</P>
+<P>The two areas that can most influence the performance of your parallel server system are data partitioning and PCM lock management. Both of these can make a huge difference in the performance of your system.</P>
+<DL>
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Partitioning.</B> By properly partitioning your data to reduce lock traffic and contention for blocks between servers, you can enhance performance. Try to balance your users so that the users accessing the same tables are on the same machine; doing so can reduce contention for locks.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>PCM locks.</B> By carefully managing the number of locks on each table, you can enhance performance. Tables with a lot of traffic between nodes should have more locks than tables with less contention. By balancing the number of locks, you can reduce overhead.
+</DL>
+<BLOCKQUOTE>
+<P><FONT SIZE="-1"><HR><B>TIP:&nbsp;&nbsp;</B>By taking advantage of read-only tablespaces when applicable, you can reduce the number of PCM locks in your system. Because read-only tablespaces do not allow updates, no locking is necessary.<HR></FONT>
+</BLOCKQUOTE>
+<P><FONT SIZE="+1"><B>Spin Counts</B></FONT></P>
+<P>Multiprocessor environments may benefit by tuning the parameter <TT>SPIN_COUNT</TT>. Under normal circumstances, if a latch is not available, the process sleeps for a while and then wakes up to try the latch again. If you are on a multiprocessor system, it is likely that the process holding the latch is currently processing on another CPU and will be finished in a short time. By setting <TT>SPIN_COUNT</TT> to a value greater than zero, the process spins while counting down from <TT>SPIN_COUNT</TT> to zero. If the latch is still not available, the process goes to sleep.</P>
+<P>Setting <TT>SPIN_COUNT</TT> can hurt performance if you&#146;re not careful. This parameter should be set only for multiprocessor computers and should be monitored for effectiveness. A good value to try is 2000. The value of <TT>SPIN COUNT</TT> specifies how many times the process will spin before putting itself to sleep. Because the speed of processors varies, the time it takes to spin also varies, but the speed of the other process holding the desired resource also vary with the speed of the processor.</P>
+<H3><A NAME="Heading5"></A><FONT COLOR="#000077">OS Tuning</FONT></H3>
+<P>OS tuning is very specific and dependent on the OS you are running. There are, however, some general guidelines you can follow.
+</P>
+<H4 ALIGN="LEFT"><A NAME="Heading6"></A><FONT COLOR="#000077">OS Tuning Goals</FONT></H4>
+<P>The general goal in tuning the server operating system is to simply provide the resources Oracle needs to function optimally. H
+1000
+ere&#146;s a list of several areas that need attention:
+</P>
+<TABLE WIDTH="100%"><TR>
+<TH COLSPAN="2"><HR>
+<TR>
+<TH WIDTH="20%" ALIGN="LEFT">OS Area
+<TH WIDTH="80%" ALIGN="LEFT">Comments
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+<TD VALIGN="TOP">Memory
+<TD>Enough memory should be allocated to Oracle to hold the entire SGA in physical memory. If your SGA pages out, performance is severely degraded. Paging out of user processes should also be avoided.
+<TR>
+<TD VALIGN="TOP">I/O
+<TD>The I/O subsystem should be tuned to have the least amount of overhead possible. By reducing overhead, the performance of the entire system is increased.
+<TR>
+<TD VALIGN="TOP">Processes
+<TD>The system should be configured to handle the required number of processes necessary to support your users.
+<TR>
+<TD COLSPAN="2"><HR>
+</TABLE>
+<P>These and other OS features should be used with the goal of reducing system overhead. Any extra CPU time spent in the OS is CPU time not spent processing Oracle.
+</P>
+<H4 ALIGN="LEFT"><A NAME="Heading7"></A><FONT COLOR="#000077">OS Features</FONT></H4>
+<P>You should make use of any OS feature that can reduce overhead. Although these features vary from platform to platform and are OS specific, some common areas are listed here:
+</P>
+<TABLE WIDTH="100%"><TR>
+<TH COLSPAN="2"><HR>
+<TR>
+<TH WIDTH="30%" ALIGN="LEFT">Feature
+<TH WIDTH="70%" ALIGN="LEFT">Comment
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+<TD VALIGN="TOP">Post-wait semaphore
+<TD>This feature is available on some platforms and reduces some of the overhead associated with traditional semaphores and scheduling.
+<TR>
+<TD VALIGN="TOP">Scheduling parameters
+<TD>Some OSes allow you to adjust scheduling to reduce the amount of preemption in the system. If available, use this feature.
+<TR>
+<TD VALIGN="TOP">Cache affinity
+<TD>Cache affinity is available in some operating systems and should be used with caution. Although some application such as decision support can benefit, OLTP may suffer slightly from the effects of cache affinity.
+<TR>
+<TD VALIGN="TOP">Asynchronous I/O (AIO)
+<TD>Most operating systems have AIO available; you should use it. The use of AIO reduces I/O processing overhead.
+<TR>
+<TD COLSPAN="2"><HR>
+</TABLE>
+<P>All these OS features were designed to reduce excess overhead that takes away from user processing. By optimizing your OS to reduce overhead, you can enhance total system throughput.
+</P>
+<H3><A NAME="Heading8"></A><FONT COLOR="#000077">I/O Tuning</FONT></H3>
+<P>The I/O system should be designed and implemented with the following goals in mind:
+</P>
+<DL>
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Isolate sequential I/O.</B> By isolating sequential I/O so that it is purely sequential to the disk, you can greatly enhance throughput. Any random I/O to these disks degrades performance. Writes to the redo log are sequential.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Spread out random I/O.</B> Random I/O performance can be increased by adding more disk drives to the system and spreading out the I/Os among the disks. I/Os to the data files are typically random (especially in OLTP systems).
+</DL>
+<P>By following these guidelines and planning your system so that your disk drives can support the amount of disk I/O demanded of them, I/O should not be a problem.
+</P>
+<H3><A NAME="Heading9"></A><FONT COLOR="#000077">System Design</FONT></H3>
+<P>Part III, &#147;Configuring the System,&#148; looked at several types of systems and determined the data access patterns, the system load, and optional features that can enhance performance. The systems that were reviewed are listed here:
+</P>
+<TABLE WIDTH="100%"><TR>
+<TH COLSPAN="2"><HR>
+<TR>
+<TH WIDTH="30%" ALIGN="LEFT">System
+<TH WIDTH="70%" ALIGN="LEFT">Description
+<TR>
+<TD COLSPAN="2"><HR>
+<TR>
+<TD VALIGN="TOP">OLTP
+<TD>Characteristics include many users, high I/O rates, much random I/O, and response-time constraints. The Oracle Parallel Server option is possibly a win for OLTP systems.
+<TR>
+<TD VALIGN="TOP">Batch
+<TD>Characteristics include system load-time constraints, index build-t
+1000
+ime constraints, and long-running queries. The Oracle Parallel Query option can benefit the typical batch system. Large block sizes also help.
+<TR>
+<TD VALIGN="TOP">DSS
+<TD>Characteristics include system load-time constraints, index build-time constraints, and long-running queries. The Oracle Parallel Query option definitely benefits the typical DSS system. Large block sizes and multiblock reads also help. The Oracle Parallel Server option may also benefit the DSS system.
+<TR>
+<TD VALIGN="TOP">Data warehouse
+<TD>The characteristics of a data warehouse system are much like those of a super DSS system: a huge amount of data, large queries, and heavy I/O usage. Both the Parallel Query and Parallel Server options may benefit the data warehouse system.
+<TR>
+<TD VALIGN="TOP">BLOBs
+<TD>BLOBs require significant I/O and response time. Data-feed interruption cannot be tolerated. Large block sizes are a must.
+<TR>
+<TD VALIGN="TOP">Parallel server
+<TD>The Oracle parallel server system can be enhanced by carefully partitioning tasks and allocating PCM locks efficiently. Because the parallel server system involves two or more systems working together, balancing transactions and functions is crucial.
+<TR>
+<TD VALIGN="TOP">Optimal backup
+<TD>If backup and recovery time is critical, there are several ways your system can be configured to optimize for these tasks.
+<TR>
+<TD VALIGN="TOP">Miscellaneous
+<TD>Other Oracle products (Oracle Financials, Oracle WebSystem, and others) have their own unique characteristics and types of enhancements.
+<TR>
+<TD COLSPAN="2"><HR>
+</TABLE>
+<P>By looking at various types of systems and examining their characteristics, Part III, &#147;Configuring the System,&#148; gave you a feel for how these systems operate. By understanding the systems, you have a better idea of how to tune them for optimal performance.
+</P>
+<H3><A NAME="Heading10"></A><FONT COLOR="#000077">Application Tuning</FONT></H3>
+<P>Part IV, &#147;Tuning SQL,&#148; looked at tuning the application, which mainly involves tuning the SQL statements themselves. Several chapters explained how to tune specific SQL statements and how to use Oracle features to your advantage. Here is a list of some of the important topics discussed in Part IV:
+</P>
+<DL>
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Using</B> <TT>EXPLAIN PLAN</TT>. By using <TT>EXPLAIN PLAN</TT>, you can analyze the execution plan the optimizer has chosen for the SQL statement.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Using SQL Trace.</B> By using SQL Trace, you can analyze the execution of the SQL statement and determine any potential bottlenecks.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Tuning SQL statements.</B> You can improve performance by making SQL statements take advantage of such things as indexes, clusters, and hash clusters.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Using the Oracle optimizer.</B> You learned how the optimizer works and how you can best take advantage of it.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Using procedures and packages.</B> You learned how to use procedures, functions, and packages to improve performance.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Providing for data integrity.</B> You learned about the importance of data integrity and how to optimally provide for it.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Using hints.</B> You learned how to use hints to take advantage of information you know about the data and application.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Miscellaneous topics.</B> The last chapter of Part IV provided tips and miscellaneous topics concerning the tuning of SQL statements.
+</DL>
+<P>By now, you should have an idea about the importance of tuning your SQL statements. You should also know how to take advantage of various Oracle features to improve the performance of those statements.
+</P>
+<H3><A NAME="Heading11"></A><FONT COLOR="#000077">Client Tuning</FONT></H3>
+<P>Part V, &#147;Tuning the Client,&#148; looked at the client computer itself. You learned about some of the things that can affect client performance and how to solve those problems. You also looked at how to 
+faf
+tune the client system and how to take advantage of some popular graphical development tools. You saw how to use these tools to improve the performance of the SQL statements generated by those tools. Here is a list of some of the key topics in Part V:
+</P>
+<DL>
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Client bottlenecks.</B> You learned which parts of the client are likely to become bottlenecks: the application, the network, and the client hardware.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Memory.</B> Make sure that your client machine has enough memory to run the application. Memory is typically the only hardware performance problem on the client machine.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>CPU.</B> As applications become increasingly more robust and feature rich, the need for faster CPUs is also increasing. You may have to upgrade your CPU if it is not fast enough.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Network.</B> Although network performance is usually not a problem, it can be in some situations. Make sure that your LAN segments are not overloaded.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Use compiled applications.</B> Some application development tools use an interpretive language. For best performance, use a compiled application.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Use 32-bit applications.</B> If you are running Windows NT or Windows 95, be sure that you use 32-bit applications; 16-bit applications are not as efficient on these systems.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Use native drivers.</B> Although using ODBC can make connections to various servers more convenient, it hurts performance. Use native drivers whenever possible.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Optimize SQL.</B> Even though your application may have been developed by a GUI development tool, you still may have to optimize your SQL statements.
+</DL>
+<P>You should now understand what affects the performance of the client machine and how to solve those problems. Part V of this book also introduced middleware products and how they can be used to improve the overall performance of your configuration.
+</P>
+<H3><A NAME="Heading12"></A><FONT COLOR="#000077">Network Tuning</FONT></H3>
+<P>Part VI, &#147;Tuning the Network,&#148; looked at the capacity of the network and how you can tune it. The real way to tune the physical network is to stay within its capacity. As your needs grow, you must improve the capacity of your network.
+</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="../ch38/576-578.html">Previous</A></TD>
+<TD><A HREF="../ewtoc.html">Table of Contents</A></TD>
+<TD><A HREF="../ewtoc.html">Next</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+
+<!-- all of the reference materials (books) have the footer and subfoot reveresed -->
+<!-- reference_subfoot = footer -->
+<!-- reference_footer = subfoot -->
+
+<!-- BEGIN SUB FOOTER -->
+	<br>
+	<img src="/images/dotclear.gif" width="5" height="7" border="0">
+	</TD>
+    </TR>
+	</TABLE>
+	
+	<table width="100%" border=0 cellpadding=0 cellspacing=0>
+	<tr>
+		<td align="left" width="160"><img src="/images/bot_curve.jpg" width="160" alt="" border="0"></td>
+		<td align="left" valign="top" nowrap><a href="/"><img src="/images/top_tabs/home_bot.gif" alt="home" border="0"></a><a href="/content/corp.html"><img src="/images/top_tabs/subscribe_bot.gif" alt="subscribe" border="0"></a><a href="/search/"><img src="/images/top_tabs/search_bot.gif" alt="search" border="0"></a><a href="/faq/faq.html"><img src="/images/top_tabs/faq_bot.gif" alt="faq" border="0"></a><a href="/sitemap.html"><img src="/images/top_tabs/sitemap_bot.gif" alt="sitemap" border="0"></a><a href="/contactus.html"><img src="/images/top_tabs/contact_us_bot.gif" alt="contactus" border="0"></a><img src="/images/dotclear.gif" width=260 height="1" alt="" border="0"></td> 
+	</tr>
+	</table>
+		
+	<table width="100%" bgcolor="#003366" border=0 cellpadding=0 cellspacing=0>
+	<tr>
+		<td align="left" width=145><img src="/images/clear_pixel.gif" width=145 height="1" alt="" border="0"></td>
+				
+<!-- END SUB FOOTER -->
+
+
+6fc
+<!-- all of the books have the footer and subfoot reveresed -->
+<!-- reference_subfoot = footer -->
+<!-- reference_footer = subfoot -->
+
+<!-- FOOTER -->
+			
+<td align="left" bgcolor="#003366">
+<table border="0" cellspacing="10" cellpadding="5">
+<tr>
+<td align="center">
+<font face="arial, helvetica" size="1" color="#cccccc"><b><a href="/products.html"><font color="#0099CC">Products</font></a>&nbsp;|&nbsp; <a href="/contactus.html"><font color="#0099CC">Contact Us</font></a>&nbsp;|&nbsp; <a href="/aboutus.html"><font color="#0099CC">About Us</font></a>&nbsp;|&nbsp; <a href="http://www.earthweb.com/dlink.corp|privacy-jhtml.72.0.-.-.jhtml" target="resource window"><font color="#0099CC">Privacy</font></a> &nbsp;|&nbsp; <a href="http://www.itmarketer.com/" target="resource window"><font color="#0099CC">Ad Info</font></a> &nbsp;|&nbsp; <a href="/"><font color="#0099CC">Home</font></a></b>
+<br><br>Use of this site is subject to certain <a href="/agreement.html"><font color="#0099CC">Terms &amp; Conditions</font></a>, <a href="/copyright.html"><font color="#0099CC">Copyright &copy; 1996-2000 EarthWeb Inc.</font></a> All rights reserved.  Reproduction whole or in part in any form or medium without express written <a href="http://www.earthweb.com/dlink.corp|permissions-jhtml.72.0.-.-.jhtml" target="resource window"><font color="#0099CC">permission</font></a> of EarthWeb is prohibited. Read EarthWeb's <A HREF="http://www.earthweb.com/dlink.corp|privacy-jhtml.72.0.-.-.jhtml" target="resource window"><font color="#0099CC">privacy</font></A> statement.</font><br><br>
+</td>
+</tr>
+</table>
+
+<a href="CITK1a2b3c4d5e6f7g8h9idefcon4.html">
+<img src="/images/dotclear.gif" border="0" height="1" width="1" align="left"></a>
+</td>
+		</tr>
+</table>
+</BODY>
+</HTML>
+
+<!-- END FOOTER -->
+4  
+
+
+
+0
+

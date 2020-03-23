@@ -1,0 +1,264 @@
+Doc ID:  Note:1013221.6 
+Subject:  RECOVERING FROM A LOST DATAFILE IN A ROLLBACK TABLESPACE 
+
+Doc ID:         Note:28812.1
+Subject:        Rollback Segment Needs Recovery
+
+Chris Marquez
+Oracle DBA
+
+
+====================================
+Drop Rollback or UNDO Tablspace With Active / Corrupt / "NEEDS RECOVERY" 
+Segments
+====================================
+------------------------------------
+The Issue:
+------------------------------------
+
+---SQL*PLUS
+SQL> alter database mount;
+Database altered.
+
+SQL> alter database open;
+*
+ERROR at line 1:
+ORA-03113: end-of-file on communication channel
+
+        __OR__
+
+---alert.log
+        Errors in file /o01/app/oracle/admin/report/bdump/report_smon_1295.trc: 
+        ORA-01578: ORACLE data block corrupted (file # 2, block # 192423)
+        ORA-01110: data file 2: '/o01/oradata/report/undotbs01.dbf'
+*OR*
+        Tue May 31 13:56:41 2005
+        Errors in file /o01/app/oracle/admin/report/bdump/report_smon_1646.trc:
+        ORA-01595: error freeing extent (16) of rollback segment (4))
+        ORA-00607: Internal error occurred while making a change to a data block
+        ORA-00600: internal error code, arguments: [4193], [1088], [992], [], 
+[], [], [], []
+*OR EVEN*
+        Sun Jul 17 01:25:56 2005
+        Errors in file /oracle//bdump/orcl_j001_115070.trc:
+        ORA-00603: ORACLE server session terminated by fatal error
+        ORA-00600: internal error code, arguments: [kteuPropTime-2], [], [], 
+[], [], [], [], []
+
+
++++++++++++++++++++++++++++++++++++++
+A. IF YOU CAN STILL OPEN THE DATABASE
++++++++++++++++++++++++++++++++++++++
+------------------------------------
+UNDO/RBS Seem OK!?
+------------------------------------
+col segment_name format a15
+select segment_name, status from dba_rollback_segs;
+SEGMENT_NAME    STATUS
+--------------- ------------------------------------------------
+SYSTEM          ONLINE 
+_SYSSMU1$       ONLINE 
+_SYSSMU2$       ONLINE 
+...
+
+------------------------------------
+Edit init.ora to Comment UNDO/RBS parameters
+------------------------------------
+---vi init.ora
+        #undo_management=AUTO
+        #undo_tablespace=UNDOTBS
+        #undo_retention = 18000
+
+------------------------------------
+UNDO/RBS Issue Obvious now!
+------------------------------------
+shutdown
+startup
+col segment_name format a15
+select segment_name, status from dba_rollback_segs;
+SEGMENT_NAME    STATUS
+--------------- ------------------------------------------------
+SYSTEM          ONLINE 
+_SYSSMU1$       PARTLY AVAILABLE 
+_SYSSMU2$       OFFLINE 
+...
+
+
++++++++++++++++++++++++++++++++++++++
+B. IF YOU CAN *NOT* OPEN THE DATABASE
++++++++++++++++++++++++++++++++++++++
+
+------------------------------------
+Edit init.ora to Comment UNDO/RBS parameters & ADD "_smu_debug_mode", event 
+10015
+------------------------------------
+---vi init.ora
+        #undo_management=AUTO
+        #undo_tablespace=UNDOTBS
+        #undo_retention = 18000
+
+        # _smu_debug_mode simply collects diagnostic information for support 
+purposes
+        _smu_debug_mode=1
+        # Event 10015 is the undo segment recovery tracing event.
+        # Use this to identify corrupted rollback/undo segments when a database 
+cannot be started.
+        event="10015 trace name context forever, level 10"
+
+------------------------------------
+startup Again
+------------------------------------
+SQL> startup nomount pfile=/.../init.ora.UNOD_PARAM;
+ORACLE instance started.
+SQL> alter database mount;
+Database altered.
+SQL> alter database open;
+alter database open
+*
+ERROR at line 1:
+ORA-03113: end-of-file on communication channel
+
+
+------------------------------------
+View event="10015 trace file for corrupted rollback/undo segments
+------------------------------------
+udump/> more orcl_ora_815334.trc
+....
+Recovering rollback segment _SYSSMU2$
+UNDO SEG (BEFORE RECOVERY): usn = 2  Extent Control Header
+  -----------------------------------------------------------------
+
+
+
++++++++++++++++++++++++++++++++++++++
+NOW FIX CORRUPTED SEGMENTS
++++++++++++++++++++++++++++++++++++++
+
+------------------------------------
+Edit init.ora to "force" Rollback or UNDO offline
+------------------------------------
+        SQL>select '"'||segment_name||'"'||',' from sys.dba_rollback_segs where 
+tablespace_name = 'UNDOTBS' 
+
+---vi init.ora
+For example TRADITIONAL ROLLBACK SEGMENTS:
+        _OFFLINE_ROLLBACK_SEGMENTS=(rbs1,rbs2)
+        _CORRUPTED_ROLLBACK_SEGMENTS=(rbs1,rbs2)
+
+For example AUM UNDO TABLESPACE (SEGMENTS):
+        _OFFLINE_ROLLBACK_SEGMENTS=("_SYSSMU8$", "_SYSSMU9$", "_SYSSMU10$", 
+"_SYSSMU30$", "_SYSSMU31$", "_SYSSMU32$", "_SYSSMU34$","_SYSSMU35$")
+        _CORRUPTED_ROLLBACK_SEGMENTS=("_SYSSMU8$", "_SYSSMU9$", "_SYSSMU10$", 
+"_SYSSMU30$", "_SYSSMU31$", "_SYSSMU32$", "_SYSSMU34$","_SYSSMU35$")
+
+---UNDO/RBS Issue Is Real (bad)!
+shutdown
+startup
+col segment_name format a15
+select segment_name, status from dba_rollback_segs;
+SEGMENT_NAME    STATUS
+--------------- ------------------------------------------------
+SYSTEM          ONLINE 
+_SYSSMU1$       NEEDS RECOVERY
+_SYSSMU2$       OFFLINE 
+...
+
+
+------------------------------------
+Drop Rollback or UNDO Segments:
+------------------------------------
+        SQL>select 'drop rollback segment '||'"'||segment_name||'"'||';' from 
+sys.dba_rollback_segs  where tablespace_name = 'UNDOTBS1' 
+
+DROP ROLLBACK SEGMENT rbs1;  
+DROP ROLLBACK SEGMENT _SYSSMU1$;
+DROP ROLLBACK SEGMENT _SYSSMU2$;
+...
+
+---UNDO/RBS All Gone...Easy and Simple to Drop UNDO/RBS Tablespace.
+shutdown
+startup
+col segment_name format a15
+select segment_name, status from dba_rollback_segs;
+SEGMENT_NAME    STATUS
+--------------- ------------------------------------------------
+SYSTEM          ONLINE 
+
+1 rows selected.
+
+
+
+------------------------------------
+Drop The Rollback or UNDO Tablespace
+------------------------------------
+col FILE_NAME for a60
+col BYTES for 999,999,999,999,999
+select FILE_ID, BYTES, FILE_NAME from dba_data_files where TABLESPACE_NAME 
+='UNDOTBS';
+   FILE_ID                BYTES FILE_NAME
+---------- -------------------- 
+------------------------------------------------------------
+         2        6,291,456,000 /o01/oradata/report/undotbs01.dbf
+
+
+SQL>DROP TABLESPACE RBS INCLUDING CONTENTS;
+
+SQL> DROP TABLESPACE UNDOTBS INCLUDING CONTENTS and datafiles;
+Tablespace dropped.
+
+[oracle@util1 orcl920]$ ls -ltr /o01/oradata/report/undotbs01.dbf
+ls: /o01/oradata/orcl920/undotbs01.dbf: No such file or directory
+
+
+------------------------------------
+RE-Create The Rollback or UNDO Tablespace
+------------------------------------
+SQL> CREATE UNDO TABLESPACE "UNDOTBS" DATAFILE 
+'/o01/oradata/orcl920/undotbs01.dbf' SIZE 500M REUSE AUTOEXTEND OFF;
+Tablespace created.
+
+[oracle@util1 orcl920]$ ls -ltr /o01/oradata/report/undotbs01.dbf
+-rw-r-----    1 oracle   dba      1048584192 May 16 17:50 
+/o01/oradata/report/undotbs01.dbf
+
+
+------------------------------------
+Edit init.ora to Comment _OFFLINE_ROLLBACK_SEGMENTS= and UNcomment "undo_", 
+"rbs" parameters.
+------------------------------------
+---vi init.ora
+        #_OFFLINE_ROLLBACK_SEGMENTS
+
+        undo_management=AUTO
+        undo_tablespace=UNDOTBS
+        undo_retention = 18000
+
+---UNDO/RBS Issue GONE!
+shutdown
+startup
+col segment_name format a15
+select segment_name, status from dba_rollback_segs;
+SEGMENT_NAME    STATUS
+--------------- ------------------------------------------------
+SYSTEM          ONLINE
+_SYSSMU11$      ONLINE
+_SYSSMU12$      ONLINE
+...
+11 rows selected.
+
+---alert.log
+Mon May 16 17:50:02 2005
+Database Characterset is WE8ISO8859P1
+replication_dependency_tracking turned off (no async multimaster replication 
+found)
+Completed: ALTER DATABASE OPEN
+
+
+-----------------------------------
+DOCS
+-----------------------------------
+Doc ID:  Note:1013221.6 
+Subject:  RECOVERING FROM A LOST DATAFILE IN A ROLLBACK TABLESPACE 
+
+Doc ID:         Note:28812.1
+Subject:        Rollback Segment Needs Recovery

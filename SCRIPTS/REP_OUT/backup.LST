@@ -1,0 +1,37 @@
+SYSTEM@orakic> SELECT NAME, a.status, DECODE (b.status, 'Active', 'Backup', 'Normal') arc,
+  2         enabled, bytes, change#, TIME ARCHIVE
+  3    FROM sys.v_$datafile a, sys.v_$backup b
+  4   WHERE a.file# = b.file#;
+Date: 04/06/05                                                                                                       Page:   1      
+Time: 12:34 PM                                       Database File Backup Status                                     SYSTEM         
+                                                        orakic database                                                             
+                                                                                                                                    
+NAME                                        STATUS  Backup ENABLED         BYTES    CHANGE# ARCHIVE                                 
+------------------------------------------- ------- ------ ---------- ---------- ---------- ---------                               
+/u01/ORADATA/orakic/orakic/system01.dbf     SYSTEM  Normal READ WRITE  786432000          0                                         
+/u01/ORADATA/orakic/orakic/undotbs01.dbf    ONLINE  Normal READ WRITE 1572864000          0                                         
+/u01/ORADATA/orakic/orakic/drsys01.dbf      ONLINE  Normal READ WRITE   20971520          0                                         
+/u01/ORADATA/orakic/orakic/example01.dbf    ONLINE  Normal READ WRITE  314572800          0                                         
+/u01/ORADATA/orakic/orakic/indx01.dbf       ONLINE  Normal READ WRITE   26214400          0                                         
+/u01/ORADATA/orakic/orakic/odm01.dbf        ONLINE  Normal READ WRITE   20971520          0                                         
+/u01/ORADATA/orakic/orakic/tools01.dbf      ONLINE  Normal READ WRITE  314572800          0                                         
+/u01/ORADATA/orakic/orakic/users01.dbf      ONLINE  Normal READ WRITE   33554432          0                                         
+/u01/ORADATA/orakic/orakic/xdb01.dbf        ONLINE  Normal READ WRITE  104857600          0                                         
+/u01/ORADATA/orakic/orakic/EDP.dbf          ONLINE  Normal READ WRITE  536870912          0                                         
+/u01/ORADATA/orakic/orakic/FIN7IDXTAB.dbf   ONLINE  Normal READ WRITE 3171483648          0                                         
+/u01/ORADATA/orakic/orakic/FIN7IDX_NYR.dbf  ONLINE  Normal READ WRITE 1610612736          0                                         
+/u01/ORADATA/orakic/orakic/FIN7LIFE.dbf     ONLINE  Normal READ WRITE  268435456          0                                         
+/u01/ORADATA/orakic/orakic/FINAL7.dbf       ONLINE  Normal READ WRITE 1610612736          0                                         
+/u01/ORADATA/orakic/orakic/LIFE.dbf         ONLINE  Normal READ WRITE 2097152000          0                                         
+/u01/ORADATA/orakic/orakic/PAYROLL.dbf      ONLINE  Normal READ WRITE   16777216          0                                         
+/u01/ORADATA/orakic/orakic/PREMIA.dbf       ONLINE  Normal READ WRITE 6392709120          0                                         
+/u01/ORADATA/orakic/orakic/PREMIDXTAB.dbf   ONLINE  Normal READ WRITE 3221225472          0                                         
+/u01/ORADATA/orakic/orakic/SHARES.dbf       ONLINE  Normal READ WRITE  134217728          0                                         
+/u01/ORADATA/orakic/orakic/SHS_DATA.dbf     ONLINE  Normal READ WRITE  536870912          0                                         
+/u01/ORADATA/orakic/orakic/LIFE_1.dbf       ONLINE  Normal READ WRITE  524288000          0                                         
+/u01/ORADATA/orakic/orakic/FINAL7_1.dbf     ONLINE  Normal READ WRITE  524288000          0                                         
+/u01/ORADATA/orakic/orakic/FIN7IDX_NYR_1.db ONLINE  Normal READ WRITE  524288000          0                                         
+f                                                                                                                                   
+                                                                                                                                    
+/u01/ORADATA/orakic/orakic/NK_DBA1.dbf      ONLINE  Normal READ WRITE  536870912          0                                         
+SYSTEM@orakic> SPOOL off

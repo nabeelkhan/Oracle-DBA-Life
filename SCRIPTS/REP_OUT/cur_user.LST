@@ -1,0 +1,14 @@
+Press <Enter> to continue...Date: 07/04/2003              Kuwait Insurance Co.               Page:   1      
+Time: 07:59 AM            DATABASE CURRENT USERS REPORT          PREMPROD       
+                              ORAKIC database                                   
+                                                                                
+USERNAME                       # OF LOGINS                                      
+------------------------------ -----------                                      
+FIN7LIFE                                 2                                      
+FINAL7                                   8                                      
+LIFEPROD                                 6                                      
+PREMPROD                                66                                      
+SYS                                     11                                      
+
+5 rows selected.
+

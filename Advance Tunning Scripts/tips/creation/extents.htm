@@ -1,0 +1,275 @@
+<html>
+	<head>
+		<title>
+			Planning Extents
+		</title>
+		<style>
+			<!-- a:hover{color:#660066;} -->
+		</style>
+	</head>
+	<body background="../../images/bg.jpg" link="#FF6600" vlink="#FF6600" alink="#660066">
+		
+		<h2 align="center">
+			<font color="#990000">
+				Planning Extents
+			</font>
+		</h2>
+		It is often said that there is another dimension to space, which is time.
+		For DBAs that is the time that they spend managing their database space.
+		That time is often considerable, and matched only by the strength of their opinions on the matter.
+		The options are many, and the differences between versions are profound, making this a difficult topic to discuss.
+		Nevertheless, the issue must be addressed prior to database creation,
+		lest you end up with a mess that is going to waste a lot of time for both the DBA and the database.
+		
+		<h3>
+			<font color="#660066">
+				Does extent size matter?
+			</font>
+		</h3>
+		Yes, extent size does matter, but not greatly.
+		Nevertheless, all extents should be a multiple of the multiblock read size.
+		Otherwise, when a full table or index scan is performed,
+		an extra multiblock read will be required to read the last few blocks of each extent, except probably the last one.
+		This is because multiblock reads never span extent boundaries, even if the extents happen to be contiguous,
+		and even in a locally managed tablespace.
+		<p>
+		Consider for example the table T<sup>1</sup> illustrated below.
+		It is comprised of 8 extents of 50 blocks each.
+		The first block is the segment header, there are 389 data blocks in use, and there are 10 free blocks above the high water mark.
+		With a multiblock read count of 16 blocks, and assuming none of the blocks are already in the cache,
+		a full table scan on this table will require 4 data block reads per extent, except the last - a total of 31 multiblock reads.
+		<p align="center">
+		<img src="extents_bad.gif" alt="Multiblock reads for a poor extent size" border="1" width="505" height="163">
+		<p>
+		If the table is rebuilt as T<sup>2</sup> with an extent size that is an exact multiple of the multiblock read size,
+		then the number of multiblock reads required to scan the table is minimized.
+		This is illustrated in the figure below.
+		The table is now comprised of 5 extents of 80 blocks each.
+		So, a full table scan now requires 5 multiblock reads per extent, or a total of 25 multiblock reads.
+		<p align="center">
+		<img src="extents_good.gif" alt="Multiblock reads for a good extent size" border="1" width="505" height="231">
+		<p>
+		Please note that it was not the reduction in the number of extents as such that made the difference.
+		There would be no further saving in rebuilding the table with a single extent of 400 blocks.
+		The number of multiblock reads required to scan the table would still be 25.
+		
+		<h3>
+			<font color="#660066">
+				Does the number of extents matter?
+			</font>
+		</h3>
+		It is necessary to dwell on this briefly because some DBAs are reluctant to allow more than a few extents in any segment
+		in the mistaken belief that such "fragmentation" degrades performance.
+		This myth was started by the Oracle documentation for the export utility in version 3, and is still abroad.
+		Within reason, the performance impact of multiple extents is almost insignificant if they are sized correctly.
+		Indeed, some senior Oracle developers have stated that extents can be allowed to proliferate,
+		even to thousands of extents per segment "without a significant impact on performance".
+		However, that statement needs to be carefully qualified, and even then it is too generous.
+
+		<h4>
+			<font color="#990000">
+				Dictionary Managed Tablespaces
+			</font>
+		</h4>
+		In dictionary managed tablespaces, every extent is represented by a row in the data dictionary.
+		Free extents are recorded in the FET$ table, which is clustered in the C_TS# cluster.
+		Because it is created without a SIZE clause, one block is reserved in the cluster for each tablespace.
+		However, if a tablespace ever has more free extents than can be accommodated in a single cluster block,
+		then cluster block chaining will be necessary.
+		This chaining cannot be repaired without recreating the database,
+		and can have a significant impact on data dictionary performance and space management transactions in particular.
+		Ideally, the number of free extents in a tablespace should never be greater than can be recorded in the primary cluster block for that tablespace,
+		which is about 500 free extents for a database with an 8K database block size.
+		<p>
+		Used extents are recorded in the data dictionary in the UET$ table, which is clustered in the C_FILE#_BLOCK# cluster.
+		This data dictionary cluster is sized on the assumption that segments will have an average of just 4 or 5 extents each.
+		Unless your data dictionary was specifically customized prior to database creation to allow for more used extents per segment,
+		then creating segments with thousands of extents will cause excessive cluster block chaining in this cluster.
+		Excessive numbers of used and/or free extents can also distort the operation of the dictionary cache LRU mechanism.
+		So extents should not be allowed to proliferate, but it is because of the performance impact on the data dictionary and dictionary cache,
+		rather than any supposed impact of full table scan performance.
+		<p>
+		The performance impact of a proliferation of extents is most obvious when attempting to drop a segment with a large number of extents.
+		There are anecdotes of such operations taking days, or taking so long that is was quicker to rebuild the database.
+
+		<h4>
+			<font color="#990000">
+				Locally Managed Tablespaces
+			</font>
+		</h4>
+		Extents in locally managed tablespaces are not represented in the data dictionary at all.
+		Free space is represented in a bitmap that is stored in the tablespace itself,
+		and used extents are only recorded in the extent map in the segment header block of each segment,
+		and if necessary, in additional extent map blocks within the segments.
+		This is a great blessing in every respect but one - namely that this information is not cached in the dictionary cache.
+		It must be obtained from the database blocks every time that it is required,
+		and if those blocks are not in the buffer cache, that involves I/O and potentially lots of it.
+		For example, a query against the DBA_EXTENTS view
+		could well have to read every segment header and every additional extent map block in the entire database.
+		For this reason, we recommend that the number of extents per segment in locally managed tablespaces be limited to
+		the number of rows that can be accommodated in the extent map within the segment header block -
+		that is, approximately (<em>db_block_size</em> / 16) - 7.
+		<blockquote>
+			<small>
+				There is one case in which data dictionary updates are required for space management operations in locally managed tablespaces.
+				Namely, if tablespace quotas are used.
+				The total amount of space used against each quota is maintained in the TSQ$ table, which is clustered in the C_USER# cluster.
+				However, updates to this table do not require the ST enqueue, and so there is no serialization risk at this point.
+			</small>
+		</blockquote>
+		
+		<h3>
+			<font color="#660066">
+				Should all extents be the same size?
+			</font>
+		</h3>
+		For dictionary managed tablespaces, it is strongly recommended that all extents in each tablespace should be a uniform size,
+		or at least a uniform set of sizes, to prevent or control fragmentation.
+		If all extents are the same size, then there will be no unusable free space fragments (except possibly one, right at the end of each datafile).
+		Hence it will never be necessary for Oracle to attempt to coalesce free space fragments when searching for a free extent.
+		This greatly simplifies space management planning, and also optimizes the recursive transactions used for extent space management.
+		<p>
+		The performance of these space management transactions for dictionary managed tablespaces is critical,
+		because they are single threaded on the ST (Space Transaction) enqueue.
+		This is necessary to ensure that the changes made by space transactions to the data dictionary are atomic.
+		So whenever a segment in a dictionary managed tablespace is created or extended or shrunk or freed,
+		the ST enqueue must be held for the duration of that transaction, to the exclusion of all other such space management transactions.
+		Contention for the ST enqueue can be a problem, particularly in parallel segment creation operations.
+		To reduce the risk of contention for the ST enqueue, space management transactions should be both minimized and optimized,
+		and adopting a fixed extent size policy is an important part of the strategy.
+		<blockquote>
+			<small>
+				It is interesting to note that it is possible for a space transaction against a dictionary managed tablespace
+				to require a recursive space transaction.
+				For example, to coalesce free extents the free extent rows for the tablespace must be sorted.
+				This sort may require the creation of a temporary segment, which involves a space transaction.
+				That space transaction may in turn trigger its rollback segment to extend, which involves another space transaction.
+				Recursive space transactions do not attempt to coalesce free space.
+				They just fail if a big enough free extent is not immediately available.
+			</small>
+		</blockquote>
+		
+		<h4>
+			<font color="#990000">
+				Oracle 7.3
+			</font>
+		</h4>
+		In version 7.3 (not that anyone should be creating 7.3 databases anymore),
+		a fixed extent size policy is best implemented by specifying a DEFAULT STORAGE clause for each tablespace,
+		with equal INITIAL and NEXT extent size and zero PCTINCREASE,
+		and then allowing the storage parameters of the segments to be taken from their tablespaces.
+		However, there are a few traps to be aware of.
+		<p>
+		Unless your extents are less than 5 blocks, Oracle rounds the extent size up to a multiple of 5 blocks.
+		For example, if your multiblock read count is 16 blocks and you attempt to allocate extents of 48 blocks (3 multiblock reads),
+		then you will actually get extents of 50 blocks as in the example at the beginning of this tip.
+		Extents may be enlarged further if their allocation would otherwise leave a free space fragment of less than 5 blocks.
+		Oracle will only fail to round an extent size up to a multiple of 5 blocks, if it cannot allocate an extent of the enlarged size.
+		It is unfortunate that Oracle chose 5 as the multiple for rounding up extent sizes, rather than a binary power such as 4 or 8.
+		As a result, multiblock reads will not align to extent boundaries unless all extents are a multiple of 5 blocks
+		as well as being a multiple of the multiblock read size.
+		<p>
+		Another feature of Oracle that can undermine a fixed extent size policy is extent trimming.
+		When Oracle7 creates a table or index in parallel, each of the final set of parallel query slaves writes to its own temporary segment.
+		The temporary segments are then merged into a single data segment,
+		and the unused part of the final extent is trimmed off and returned to the free extent table.
+		Under a fixed extent size policy, the small free extents that are trimmed off are unusable.
+		Extent trimming can be disabled by setting event 10901.
+		<blockquote>
+			<samp>
+				event = "10901 trace name context forever"
+			</samp>
+		</blockquote>
+		If you have adopted a fixed extent size policy, and have no tablespaces with a non-zero default PCTINCREASE value,
+		you can also save SMON the trouble of checking for free extents to coalesce every 5 minutes when it wakes up to perform its timeout actions.
+		This further reduces the risk of contention for the ST enqueue.
+		The event setting to disable free extent coalescing by SMON is 10269.
+		<blockquote>
+			<samp>
+				event = "10269 trace name context forever"
+			</samp>
+		</blockquote>
+		Even if you have not adopted a fixed extent size policy,
+		this last event should be set in the parameter file of all but one instance of a parallel server database
+		to prevent contention between the instances for space management resources.
+		Similarly, event 10061 should be set in all but one instance of a parallel server database,
+		to ensure that only that instance will check for stray temporary segments to clean up.
+		By default, SMON performs this check once every 2 hours and 5 minutes.
+		<blockquote>
+			<small>
+				Please note that if multiple event settings are included in the parameter file, as contemplated here,
+				then no other parameter settings must be placed between them.
+				Otherwise, only the last set of consecutive event settings will be effective.
+			</small>
+		</blockquote>
+		Another event setting that is sometimes used in connection with a fixed extent size policy is event 10268.
+		This event prevents forward coalescing when freeing extents.
+		Forward coalescing means that whenever an extent is being freed,
+		Oracle checks to see whether there is already a free extent immediately following the extent about to be freed.
+		If so, it deletes that row of the free extent table and inserts a new free extent row for the combined free space.
+		When freeing multiple extents, Oracle frees them in reverse order to increase the chances of being able to perform forward coalescing.
+		<p>
+		Forward coalescing is not necessary under a fixed extent size policy,
+		because the extents being freed are exactly the size that will be required when they are later reused.
+		However, forward coalescing also reduces the risk of cluster block chaining in C_TS# and should therefore not normally be disabled.
+		
+		<h4>
+			<font color="#990000">
+				Oracle 8.0
+			</font>
+		</h4>
+		One of the most under-valued features of Oracle8 is ability to specify a MINIMUM EXTENT size for each tablespace.
+		This feature makes adopting a fixed extent size policy much easier.
+		If you specify a minimum extent size that is a multiple of the multiblock read size,
+		Oracle will not allocate extents of less than that size and will round all extent sizes up to a multiple thereof.
+		This prevents unwanted rounding to a multiple of 5 blocks, prevents unwanted extent trimming,
+		and even lets you get away with values of PCTINCREASE other than 0 and 100 without introducing severe fragmentation problems.
+		We strongly recommend the use of this feature for all Oracle 8.0 tablespaces.
+
+		<h4>
+			<font color="#990000">
+				Oracle 8.1
+			</font>
+		</h4>
+		Adopting a fixed extent size policy is even easier still under version 8.1, because locally managed tablespaces support it explicitly.
+		Locally managed tablespaces can also be created with the AUTOALLOCATE policy.
+		However, this is less efficient in terms of both space and algorithmic complexity than the UNIFORM SIZE policy.
+		We strongly recommend the use of the locally managed uniform size policy for all Oracle 8.1 tablespaces, except SYSTEM.
+
+		<p>
+		<hr noshade width="300" size="2" color="black">
+		<p>
+		Our only reservation in recommending a fixed extent size policy is that we have often seen it implemented badly.
+		Firstly, a fixed extent size policy is no excuse for a proliferation of extents.
+		Secondly, the fact that two segments have the same extent size requirements,
+		does not necessarily mean that they should be placed in the same tablespace and reside on the same disks.
+		Segments that have incompatible I/O patterns should reside on separate disks.
+		If that means having multiple tablespaces with the same fixed extent size, so be it.
+		<p>
+
+		<hr noshade align="left" width="300" size="2" color="black">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="1000">
+					<font size="2" color="#660066">
+						<strong>
+							Copyright © Ixora Pty Ltd
+						</strong>
+					</font>
+				</td>
+				<td valign="top" align="right">
+					<nobr>
+					<map name="email">
+						<area shape="rect" coords="0, 0, 32, 21" title="Feedback" href="mailto:feedback@ixora.com.au?SUBJECT=[Tip] extents.htm">
+					</map>
+					<img ismap usemap="#email" border="0" alt="Send Email" src="../../images/email.gif" width="32" height="21">
+					<map name="home">
+						<area shape="rect" coords="0, 0, 28, 28" title="Home" href="/">
+					</map>
+					<img ismap usemap="#home" border="0" alt="Home" src="../../images/home.gif" width="28" height="28">
+					</nobr>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

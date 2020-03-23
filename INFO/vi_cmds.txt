@@ -1,0 +1,30 @@
+  cc  Changes a line.
+
+  cw  Changes a word.
+
+  D   Deletes the rest of the line (d$) and puts it into the undo buffer.
+
+  d   Must be followed by a movement command.  Deletes the specified region
+      of text.  If more than part of a line is affected, the text is saved in
+      the numeric buffers.  A count is passed through to the move command.
+      If the command is dd, the whole of the current line is deleted.
+
+  dd  Deletes a line and puts it into the undo buffer.
+
+  dw  Deletes a word and puts it into the undo buffer.
+
+  J   Joins lines.
+
+  rx  Replaces the current character with the character specified by x.
+
+  R   Overwrites characters.
+
+  s   Substitutes characters (cl).
+
+  S   Substitutes lines (cc).
+
+  u   Undoes the previous change.
+
+  x   Deletes a character.
+
+  X   Deletes characters before cursor (dh).

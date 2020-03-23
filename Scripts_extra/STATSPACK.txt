@@ -1,0 +1,57 @@
+--check the size of tools tablespace 
+select tablespace_name,sum(bytes)/1000000 
+from dba_free_space 
+where tablespace_name='TOOLS' 
+group by tablespace_name 
+/ 
+CONN SYS/ORACLE AS SYSDBA 
+--if less than 100mb then 
+alter database datafile '------' 
+resize 100m 
+/ 
+--if there is no TOOLS tablespace 
+create tablepsace TOOLS 
+datafile 'c:\------\tools01.dbf' 
+size 100m 
+extent management dictionary--optional 
+/ 
+-- To create the user and packages for using the STATSPACK 
+SQL>  @%ORACLE_HOME%\rdbms\admin\SPCREATE.SQL 
+
+-- To take the snapshot 
+SQL>  CONNECT perfstat/perfstat 
+SQL>  EXECUTE statspack.snap; 
+/ 
+-- To select the snap id 
+SELECT SNAP_ID FROM STATS$SNAPSHOT 
+/ 
+-- To take more snaoshorts 
+SQL>  EXECUTE statspack.snap; 
+/ 
+-- To select the snap id 
+SELECT SNAP_ID FROM STATS$SNAPSHOT 
+/ 
+--TO PRODUCE REPORT WHEN PROMPT ENETER THE SNAP_ID's WHICH WAS QUERIED BEFORE 
+SQL>  @%ORACLE_HOME%\rdbms\admin\spreport 
+/ 
+--TO TRUNCATE 
+@%ORACLE_HOME%\rdbms\admin\sptrunc 
+/ 
+
+****************************----- 
+--USING UTLBSTAT AND UTLESTAT 
+1-CONN SYS/ORACLE AS SYSDBA 
+2- ALTER SYSTEM SET TIMED_STATISTICS=TRUE 
+2- @%ORACLE_HOME%\RDBMS\ADMIN\UTLBSTAT 
+3-PERFORM SOME ACTIONS 
+4- @%ORACLE_HOME%\RDBMS\ADMIN\UTLESTAT 
+
+@@spctab
+--  Create the statistics Package
+@@@%ORACLE_HOME%\rdbms\admin\spcpkg
+
+
+
+
+
+

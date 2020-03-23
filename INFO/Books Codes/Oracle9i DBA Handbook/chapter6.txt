@@ -1,0 +1,625 @@
+Scripts from chapter 6 of ORACLE9i DBA Handbook.  See the readme.doc file for details.
+
+
+
+drop table dbs;
+
+rem * This table will store information about instances*/
+
+create table DBS
+(Db_Nm        VARCHAR2(8),     /*instance name*/
+ Host_Nm      VARCHAR2(8),     /*host (server) name*/
+ Description  VARCHAR2(80))    /*instance description*/
+tablespace CC
+storage (initial 64K next 64K pctincrease 0);
+
+drop table FILES;
+
+rem /*This table will store information about datafiles*/
+
+create table FILES
+(Db_Nm        VARCHAR2(8),     /*instance name*/
+TS            VARCHAR2(30),    /*tablespace name*/
+Check_Date    DATE,            /*date entry was made */
+File_Nm       VARCHAR2(80),    /*file name*/
+Blocks        NUMBER,          /*size of the file*/
+Bytes         NUMBER,          /*size of the file in bytes*/
+primary key(Db_Nm, TS, Check_Date,File_Nm))
+tablespace CC
+storage (initial 128K next 128K pctincrease 0);
+
+drop view FILES_TS_VIEW;
+
+rem /*This view groups the file sizes by tablespace*/
+
+create view FILES_TS_VIEW as
+select
+   Db_Nm,                      /*instance name*/
+   TS,                         /*tablespace name*/
+   Check_Date,                 /*date entry was made */
+   SUM(Blocks) Sum_File_Blocks, /*blocks allocated for ts*/
+   SUM(Bytes)  Sum_File_Bytes  /*bytes allocated for ts*/
+from FILES
+group by
+   Db_Nm,
+   TS,
+   Check_Date;
+
+drop table SPACES;
+
+rem /*This table will store information about free space*/
+
+create table SPACES
+(Db_Nm        VARCHAR2(8),   /*instance name*/
+TS            VARCHAR2(30),  /*tablespace name*/
+Check_Date    DATE,          /*date entry was made */
+Count_Free_Blocks NUMBER,    /*number of free extents*/
+Sum_Free_Blocks   NUMBER,    /*free space, in Ora blocks*/
+Max_Free_Blocks   NUMBER,    /*largest free extent */ 
+Sum_Free_Bytes    NUMBER,    /*free space, in bytes*/
+primary key (Db_Nm, Ts, Check_Date))
+tablespace CC
+storage (initial 128K next 128K pctincrease 0);
+
+drop table EXTENTS;
+
+rem /*This table will store information about extents */
+
+create table EXTENTS
+(Db_Nm   VARCHAR2(8),      /*instance name*/
+TS       VARCHAR2(30),     /*tablespace name*/
+Seg_Owner    VARCHAR2(30), /*segment owner*/
+Seg_Name VARCHAR2(32),     /*segment name*/
+Seg_Type VARCHAR2(17),     /*segment type*/
+Extents  NUMBER,           /*number of extents allocated*/
+Blocks   NUMBER,           /*number of blocks allocated*/
+Check_Date    DATE        /*date entry was made */
+) tablespace CC
+storage (initial 128K next 128K pctincrease 0);
+
+create index I_EXTENTS$KEYS 
+on EXTENTS(Db_Nm, TS, Seg_Owner, Seg_Name, Check_Date)
+tablespace CCINDX
+storage (initial 128K next 128K pctincrease 0);
+
+
+create database link CASE
+connect to system identified by m99yhvasd44e
+using 'case';
+
+
+
+
+# file:  ins_cc1
+#
+# This script is run once daily to insert records into the
+# CC1 database recording the space usage of the databases
+# listed in inserts.sql file called by this file. New 
+# databases need to have new links created in CC1 and have 
+# to have entries in the inserts.sql script. 
+#
+ORACLE_SID=cc1; export ORACLE_SID
+ORAENV_ASK=NO; export ORAENV_ASK
+. oraenv
+cd /orasw/dba/CC1
+sqlplus <<EOF
+connect system/manager as SYSDBA;
+start inserts
+shutdown
+EOF
+
+
+
+
+rem
+rem  file:  inserts.sql
+rem  location:  /orasw/dba/CC1
+rem  Called from ins_cc1 shell script.
+rem  New entries must be made here every time a new database
+rem  is added to the system.
+rem
+set verify off
+@ins_all CASE
+@ins_all CC1
+analyze table FILES compute statistics;
+analyze table SPACES compute statistics;
+analyze table EXTENTS compute statistics;
+@space_watcher
+@extent_watcher
+
+
+
+
+rem
+rem  file:  ins_all.sql
+rem  location:  /orasw/dba/CC1
+rem  Used to perform all inserts into CC1 monitoring 
+rem  tables. This script is called from inserts.sql for 
+rem  each instance.
+rem  For best results, name the database links after the
+rem  instances they access.
+rem
+insert into FILES
+   (Db_Nm,
+   TS,
+   Check_Date,
+   File_Nm,
+   Blocks, 
+   Bytes)
+select
+   UPPER('&&1'),     /*insert database link,instance name*/
+   Tablespace_Name,  /*tablespace name*/
+   TRUNC(SysDate),   /*date query is being performed*/
+   File_Name,        /*full name of database file*/
+   Blocks,           /*number of database blocks in file*/
+   Bytes             /*number of bytes in the file*/
+from sys.DBA_DATA_FILES@&&1
+/
+commit;
+rem
+insert into SPACES
+   (Db_Nm,
+   Check_Date,
+   TS,
+   Count_Free_Blocks,
+   Sum_Free_Blocks,
+   Max_Free_Blocks,
+   Sum_Free_Bytes)
+select
+   UPPER('&&1'),     /*insert database link,instance name*/
+   TRUNC(SysDate),   /*date query is being performed*/
+   Tablespace_Name,  /*tablespace name*/
+   COUNT(Blocks),    /*num. of free space entries */
+   SUM(Blocks),      /*total free space in the tablespace*/
+   MAX(Blocks),       /*largest free extent in the ts*/
+   SUM(Bytes)        /*total free bytes in the tablespace*/
+from sys.DBA_FREE_SPACE@&&1
+group by Tablespace_Name
+/
+commit;
+rem
+insert into EXTENTS
+   (Db_Nm,
+   TS,
+   Seg_Owner,
+   Seg_Name,
+   Seg_Type,
+   Extents,
+   Blocks,
+   Check_Date)
+select
+   UPPER('&&1'),    /*insert database link,instance name*/
+   Tablespace_Name, /*tablespace name*/
+   Owner,           /*owner of the segment*/
+   Segment_Name,    /*name of the segment*/
+   Segment_Type,    /*type of segment (ex. TABLE, INDEX)*/
+   Extents,         /*number of extents in the segment*/
+   Blocks,         /*number of database blocks in segment*/
+   TRUNC(SysDate)   /*date the query is being performed*/
+from sys.DBA_SEGMENTS@&&1
+where Extents>999         /*only record extended segments*/
+or Segment_Type = 'ROLLBACK'   /*or rollback segments*/
+/
+commit;
+rem
+undefine 1
+
+
+
+
+rem
+rem  file:  space_watcher.sql
+rem  location:  /orasw/dba/CC1
+rem  Called from inserts.sql
+rem
+column Db_Nm format A8
+column TS format A20
+column Week4 format 999 heading "1Wk|Ago"
+column Week3 format 999 heading "2Wks|Ago"
+column Week2 format 999 heading "3Wks|Ago"
+column Week1 format 999 heading "4Wks|Ago"
+column Today format 999
+column Change format 999
+
+set pagesize 60
+break on Db_Nm skip 2
+ttitle center 'Tablespaces whose PercentFree values have -
+decreased 5 pct this month' skip 2
+
+select
+   SPACES.Db_Nm,
+   SPACES.TS,
+   MAX(DECODE(SPACES.Check_Date, TRUNC(SysDate-28),
+      ROUND(100*Sum_Free_Blocks/Sum_File_Blocks),0)) Week1,
+   MAX(DECODE(SPACES.Check_Date, TRUNC(SysDate-21),
+      ROUND(100*Sum_Free_Blocks/Sum_File_Blocks),0)) Week2,
+   MAX(DECODE(SPACES.Check_Date, TRUNC(SysDate-14),
+      ROUND(100*Sum_Free_Blocks/Sum_File_Blocks),0)) Week3,
+   MAX(DECODE(SPACES.Check_Date, TRUNC(SysDate-7),
+      ROUND(100*Sum_Free_Blocks/Sum_File_Blocks),0)) Week4,
+   MAX(DECODE(SPACES.Check_Date, TRUNC(SysDate),
+      ROUND(100*Sum_Free_Blocks/Sum_File_Blocks),0)) Today,
+   MAX(DECODE(SPACES.Check_Date, TRUNC(SysDate),
+      ROUND(100*Sum_Free_Blocks/Sum_File_Blocks),0)) -
+   MAX(DECODE(SPACES.Check_Date, TRUNC(SysDate-28),
+      ROUND(100*Sum_Free_Blocks/Sum_File_Blocks),0)) Change
+from SPACES, FILES_TS_VIEW FTV
+where SPACES.Db_Nm = FTV.Db_Nm          /*same DB name*/
+and SPACES.TS = FTV.TS                  /*same TS name*/
+and SPACES.Check_Date = ftv.Check_Date  /*same check date*/
+and exists                              /*does ts exist?*/
+   (select 'x' from spaces x
+   where x.db_nm = SPACES.db_nm
+   and x.ts = SPACES.ts
+   and x.Check_Date = TRUNC(SysDate))
+group by
+   SPACES.Db_Nm,
+   SPACES.Ts
+having               /*has percentfree dropped 5 pct?*/
+(  MAX(DECODE(SPACES.Check_Date, TRUNC(SysDate),
+         ROUND(100*Sum_Free_Blocks/Sum_File_Blocks),0)) -
+   MAX(DECODE(SPACES.Check_Date, TRUNC(SysDate-28),
+         ROUND(100*Sum_Free_Blocks/Sum_File_Blocks),0))
+>5    )
+or                  /*is percentfree less than 10?*/
+( MAX(DECODE(SPACES.Check_Date, TRUNC(SysDate),
+      ROUND(100*Sum_Free_Blocks/Sum_File_Blocks),0)) <10)
+order by SPACES.Db_Nm, 
+   DECODE(MAX(DECODE(SPACES.Check_Date,TRUNC(SysDate),
+     ROUND(100*Sum_Free_Blocks/Sum_File_Blocks),0)) -
+   MAX(DECODE(SPACES.Check_Date, TRUNC(SysDate-28),
+     ROUND(100*Sum_Free_Blocks/Sum_File_Blocks),0)),0,9999,
+   MAX(DECODE(SPACES.Check_Date,TRUNC(SysDate),
+     ROUND(100*Sum_Free_Blocks/Sum_File_Blocks),0)) -
+   MAX(DECODE(SPACES.Check_Date, TRUNC(SysDate-28),
+     ROUND(100*Sum_Free_Blocks/Sum_File_Blocks),0))),
+   MAX(DECODE(SPACES.Check_Date,TRUNC(SysDate),
+     ROUND(100*Sum_Free_Blocks/Sum_File_Blocks),0))
+
+spool space_watcher.lst
+/
+spool off
+
+
+
+
+rem
+rem  file:  ext_watcher.sql
+rem  location:  /orasw/dba/CC1
+rem  Called from inserts.sql
+rem
+column Db_Nm format A8
+column TS format A18
+column Seg_Owner format a14
+column Seg_Name format a32
+column Seg_Type format a8
+column Blocks format 99999999
+column Week4 format 9999 heading "1Wk|Ago"
+column Week3 format 9999 heading "2Wks|Ago"
+column Week2 format 9999 heading "3Wks|Ago"
+column Week1 format 9999 heading "4Wks|Ago"
+column Today format 9999
+column Change format 9999
+
+set pagesize 60 linesize 132
+break on Db_Nm skip 2 on TS skip 1 on Seg_Owner
+ttitle center 'Segments whose extent count is over 1000' -
+skip 2
+
+select
+   EXTENTS.Db_Nm,
+   EXTENTS.TS,
+   EXTENTS.Seg_Owner,
+   EXTENTS.Seg_Name,
+   EXTENTS.Seg_Type,
+   MAX(DECODE(EXTENTS.Check_Date, TRUNC(SysDate),
+         Blocks,0)) Blocks,
+   MAX(DECODE(EXTENTS.Check_Date, TRUNC(SysDate-28),
+         Extents,0)) Week1,
+   MAX(DECODE(EXTENTS.Check_Date, TRUNC(SysDate-21),
+         Extents,0)) Week2,
+   MAX(DECODE(EXTENTS.Check_Date, TRUNC(SysDate-14),
+         Extents,0)) Week3,
+   MAX(DECODE(EXTENTS.Check_Date, TRUNC(SysDate-7),
+         Extents,0)) Week4,
+   MAX(DECODE(EXTENTS.Check_Date, TRUNC(SysDate),
+         Extents,0)) Today,
+   MAX(DECODE(EXTENTS.Check_Date, TRUNC(SysDate),
+         Extents,0)) -
+   MAX(DECODE(EXTENTS.Check_Date, TRUNC(SysDate-28),
+         Extents,0)) Change
+from EXTENTS
+where exists  /*did this segment show up today?*/
+   (select 'x' from EXTENTS x
+   where x.Db_Nm = EXTENTS.Db_Nm
+   and x.TS = EXTENTS.TS
+   and x.Seg_Owner = EXTENTS.Seg_Owner
+   and x.Seg_Name = EXTENTS.Seg_Name
+   and x.Seg_Type = EXTENTS.Seg_Type
+   and x.Check_Date = TRUNC(SysDate))
+group by
+   EXTENTS.Db_Nm,
+   EXTENTS.TS,
+   EXTENTS.Seg_Owner,
+   EXTENTS.Seg_Name,
+   EXTENTS.Seg_Type
+order by EXTENTS.Db_Nm, EXTENTS.TS, 
+   DECODE(MAX(DECODE(EXTENTS.Check_Date,TRUNC(SysDate),
+         Extents,0)) -
+   MAX(DECODE(EXTENTS.Check_Date, TRUNC(SysDate-28),
+         Extents,0)),0,-9999,
+   MAX(DECODE(EXTENTS.Check_Date,TRUNC(SysDate),
+         Extents,0)) -
+   MAX(DECODE(EXTENTS.Check_Date, TRUNC(SysDate-28),
+         Extents,0))) desc,
+   MAX(DECODE(EXTENTS.Check_Date,TRUNC(SysDate),
+         Extents,0)) desc
+
+spool extent_watcher.lst
+/
+spool off
+
+
+
+
+rem
+rem space_summary.sql
+rem  parameter 1: database link name
+rem  parameter 2: check date
+rem
+rem  to call this report from within sqlplus:
+rem  @space_summary link_name Check_Date 
+rem
+rem  Example:
+rem  @space_summary CASE 27-MAY-01 
+rem
+set pagesize 60 linesize 132 verify off feedback off 
+set newpage 0
+column TS heading 'Tablespace' format A18
+column File_Nm heading 'File nm' format A40
+column Blocks heading 'Orablocks'
+column Percentfree format 999.99
+column Diskblocks format 99999999
+column Cfb format 9999999 heading 'NumFrExts'
+column Mfb format 9999999 heading 'MaxFrExt'
+column Sfb format 9999999 heading 'SumFrBl'
+column Dfrb format 9999999 heading 'DiskFrBy'
+column SumFileBy format 9999999 heading 'SumFileBy'
+column Bytes heading 'Bytes'
+column Maxfrpct heading 'MaxFrPct' format 9999999
+
+break on TS
+ttitle center 'Oracle Tablespaces in ' &&1 skip center -
+'Check Date = ' &&2 skip 2 center
+spool &&1._space_summary.lst
+select
+   Ts,                    /*tablespace name*/
+   File_Nm,               /*file name*/
+   Blocks,                /*Oracle blocks in the file*/
+   Bytes                  /*bytes in the file*/ 
+  from FILES
+ where Check_Date = '&&2'
+   and Db_Nm = UPPER('&&1')
+ order by TS, File_Nm
+/
+ttitle center 'Oracle Free Space Statistics for ' &&1 -
+skip center '(Extent Sizes in Oracle blocks)' skip center -
+ 'Check Date = ' &&2 skip 2
+select
+   SPACES.TS,                    /*tablespace name*/
+   SPACES.Count_Free_Blocks Cfb, /*number of free extents*/
+   SPACES.Max_Free_Blocks Mfb,   /*lgst free extent*/
+   SPACES.Sum_Free_Blocks Sfb,   /*sum of free space*/
+   ROUND(100*Sum_Free_Blocks/Sum_File_Blocks,2)
+        Percentfree,             /*percent free in TS*/
+   ROUND(100*Max_Free_Blocks/Sum_Free_Blocks,2)
+    Maxfrpct,                /*ratio of largest extent to sum*/
+   SPACES.Sum_Free_Bytes Dfrb, /*disk bytes free*/
+   Sum_File_Bytes SumFileBy    /*disk bytes allocated*/
+ from SPACES, FILES_TS_VIEW FTV
+where SPACES.Db_Nm = FTV.Db_Nm
+  and SPACES.TS = FTV.TS
+  and SPACES.Check_Date = FTV.Check_Date
+  and SPACES.Db_Nm = UPPER('&&1')
+  and SPACES.Check_Date = '&&2'
+/
+spool off
+undefine 1
+undefine 2
+undefine 3
+
+
+
+
+delete from FILES
+ where Check_Date < sysdate-60;
+commit;
+
+delete from SPACES
+ where Check_Date < sysdate-60;
+commit;
+
+delete from EXTENTS
+ where Check_Date < sysdate-60;
+commit;
+
+
+
+
+clear columns
+clear breaks
+column Drive format A5
+column File_Name format A30
+column Blocks_Read format 99999999
+column Blocks_Written format 99999999
+column Total_IOs format 99999999
+set linesize 80 pagesize 60 newpage 0 feedback off
+ttitle skip center "Database File I/O Information" skip 2
+break on report
+compute sum of Blocks_Read on report
+compute sum of Blocks_Written on report
+compute sum of Total_IOs on report
+
+select substr(DF.Name,1,5) Drive,
+       SUM(FS.Phyblkrd+FS.Phyblkwrt) Total_IOs,
+       SUM(FS.Phyblkrd) Blocks_Read,
+       SUM(FS.Phyblkwrt) Blocks_Written
+  from V$FILESTAT FS, V$DATAFILE DF
+ where DF.File#=FS.File#
+ group by substr(DF.Name,1,5)
+ order by Total_IOs desc;
+
+
+
+
+clear breaks
+clear computes
+break on Drive skip 1 on report
+compute sum of Blocks_Read on Drive
+compute sum of Blocks_Written on Drive
+compute sum of Total_IOs on Drive
+compute sum of Blocks_Read on Report
+compute sum of Blocks_Written on Report
+compute sum of Total_IOs on Report
+ttitle skip center "Database File I/O by Drive" skip 2
+
+select substr(DF.Name,1,5) Drive,
+       DF.Name File_Name,
+       FS.Phyblkrd+FS.Phyblkwrt Total_IOs,
+       FS.Phyblkrd Blocks_Read,
+       FS.Phyblkwrt Blocks_Written
+  from V$FILESTAT FS, V$DATAFILE DF
+ where DF.File#=FS.File#
+ order by Drive, File_Name desc;
+
+
+
+
+rem
+rem  file:  over_extended.sql
+rem  parameters:  database link name (instance name), multiplier
+rem
+rem  The "multiplier" value should always be greater than 1.
+rem  Example:  To see segments that are within 20 percent of
+rem  their maximum extension, set the multiplier to 1.2.
+rem
+rem  Example call:
+rem  @over_extended CASE 1.2
+rem
+
+select
+   Owner,                  /*owner of segment*/
+   Segment_Name,           /*name of segment*/
+   Segment_Type,           /*type of segment*/
+   Extents,                /*number of extents already acquired*/
+   Blocks                  /*number of blocks already acquired*/
+from DBA_SEGMENTS@&&1 s
+where                      /*for cluster segments*/
+(S.Segment_Type = 'CLUSTER' and exists
+(select 'x' from DBA_CLUSTERS@&&1 c
+where C.Owner = S.Owner
+and C.Cluster_Name = S.Segment_Name
+and C.Max_Extents < S.Extents*&&2))
+or                         /*for table segments*/
+(s.segment_type = 'TABLE' and exists
+(select 'x' from DBA_TABLES@&&1 t
+where T.Owner = S.Owner
+and T.Table_Name = S.Segment_Name
+and T.Max_Extents < S.Extents*&&2))
+or                         /*for index segments*/
+(S.Segment_Type = 'INDEX' and exists
+(select 'x' from DBA_INDEXES@&&1 i
+where I.Owner = S.Owner
+and I.Index_Name = S.Segment_Name
+and I.Max_Extents < S.Extents*&&2))
+or                         /*for rollback segments*/
+(S.Segment_Type = 'ROLLBACK' and exists
+(select 'x' from DBA_ROLLBACK_SEGS@&&1 r
+where R.Owner = S.Owner
+and R.Segment_Name = S.Segment_Name
+and R.Max_Extents < S.Extents*&&2))
+order by 1,2
+
+spool &&1._over_extended.lst
+/
+spool off
+undefine 1
+undefine 2
+
+
+
+
+select Owner, Segment_Name, Segment_Type 
+  from DBA_SEGMENTS
+ where Next_Extent >
+(select SUM(Bytes) from DBA_FREE_SPACE
+  where Tablespace_Name = DBA_SEGMENTS.Tablespace_Name);
+
+
+
+
+select Owner, Segment_Name, Segment_Type 
+  from DBA_SEGMENTS
+ where Next_Extent>
+(select MAX(Bytes) from DBA_FREE_SPACE
+  where Tablespace_Name = DBA_SEGMENTS.Tablespace_Name);
+
+
+
+
+column Owner format A12
+column Table_Name format A20
+column Empty format 99999
+column Pctusd format 999.99
+
+select T.Owner,
+       T.Table_Name, 
+       S.Segment_Type, 
+       T.Blocks Used,
+       T.Empty_Blocks Empty, 
+       S.Blocks Allocated, 
+       T.Blocks/S.Blocks Pctusd
+  from DBA_TABLES T, DBA_SEGMENTS S
+ where T.Owner = S.Owner
+   and T.Table_Name = S.Segment_Name
+   and S.Segment_Type = 'TABLE'
+   and T.Blocks/S.Blocks > 0.95
+ order by 7  desc
+
+
+
+
+column Owner format A12
+column Table_Name format A20
+column Empty format 99999
+column Pctusd format 999.99
+
+select T.Owner,
+       T.Table_Name, 
+       S.Segment_Type, 
+       T.Blocks Used,
+       T.Empty_Blocks Empty, 
+       S.Blocks Allocated, 
+       T.Blocks/S.Blocks Pctusd
+  from DBA_TABLES T, DBA_SEGMENTS S
+ where T.Owner = S.Owner
+   and T.Table_Name = S.Segment_Name
+   and S.Segment_Type = 'TABLE'
+   and T.Blocks/S.Blocks > 0.95
+union all
+select I.Owner,
+       I.Index_Name, 
+       S.Segment_Type, 
+       I.Leaf_Blocks Used,
+       S.Blocks-1-I.Leaf_Blocks Empty, 
+       S.Blocks Allocated, 
+       I.Leaf_Blocks/S.Blocks Pctusd
+  from DBA_INDEXES I, DBA_SEGMENTS S
+ where I.Owner = S.Owner
+   and I.Index_Name = S.Segment_Name
+   and S.Segment_Type = 'INDEX'
+   and I.Leaf_Blocks/S.Blocks > 0.95
+order by 7 desc, 2, 1
+
+
+

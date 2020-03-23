@@ -1,0 +1,187 @@
+<html><head><title>
+Note the 'db_block_checksum' parameter setting
+</title>
+<style>
+body {background-image:url(/images/bg.jpg)}
+a:link {color:#FF6600}
+a:active {color:#660066}
+a:visited {color:#FF6600} 
+a:hover {color:#660066}
+a {font-weight:bold}
+h1 {color:#990000; font-size:150%; text-align:center}
+h2 {color:#660066; font-size:125%}
+ul {list-style-image:url(/images/li.gif); margin-left:16px}
+
+.orange {color:#FF6600}
+.purple {color:#660066}
+.brown {color:#990000}
+.h3 {font-weight:bold; color:#990000}
+</style>
+
+</head>
+<script language="javascript"><!--
+function email(addr) { return addr + '@ixora.com.au' }
+//--></script>
+
+<body>
+
+
+<div style="text-align:center; font-size:125%; font-weight:bold; color:#660066">Oracle Performance Tuning Tips</div>
+
+
+
+<h1>Note the <i>db_block_checksum</i> parameter setting</h1>
+
+You may have noticed that the default value for the <i>db_block_checksum</i> parameter is TRUE in Oracle 9<i>i</i> and above,
+whereas it was FALSE in previous versions.
+Although this makes it much less likely that minor data corruptions will go unnoticed,
+there is also a performance cost of which you should be aware.
+<p>
+If this parameter is set to TRUE,
+then whenever a data block or logfile block is about to be written to disk,
+the process performing the write first calculates and saves a checksum in the <a href=/notes/cache_header.htm>block header</a>.
+Similarly, whenever a data block or logfile block is read from disk,
+the process performing the read immediately recalculates and verifies the checksum if present
+(but only if <i>db_block_checksum</i> is set to TRUE).
+If the parameter is set to FALSE,
+then checksums are only computed and checked for blocks in the SYSTEM tablespace,
+file header blocks and controlfile blocks.
+If checksum verification fails, an ORA-01578, ORA-00368 or ORA-00227 error is raised,
+depending on whether the checksum error affects a data block, logfile or controlfile block.
+<p>
+The checksum is a simple XOR of all the data in the block,
+and as such takes a small but noticeable amount of CPU time to compute.
+This has to be done for every I/O operation.
+The extra CPU time required for writes is of less concern than the extra CPU time required for reads,
+because writes are typically performed in the background by DBWn and LGWR
+and foreground processes should not normally wait for the services of these processes.
+However, the extra CPU time required for reads is sustained by foreground processes
+and thus impacts end user response times directly.
+<p>
+The <a href=http://otn.oracle.com/docs/products/oracle9i/doc_library/release2/server.920/a96536/ch136.htm target=r>Oracle
+documentation</a> acknowledges this impact and indicates that the overhead is typically in the order of 1% to 2%.
+That is true <i>on average</i>!
+However, the impact on I/O intensive queries on a system with moderate to high CPU usage can be much worse than that.
+The following comparison on an otherwise idle system shows a 4% difference in elapsed time and an 8% difference in CPU usage.
+On a busy system with not much spare CPU capacity, the impact on the response time of such queries rises to about 10%,
+and it increases further if the application uses mostly index-based access paths rather than full table scans to fetch its data.
+<p>
+The Oracle documentation has long recommended that the checksum facility be enabled.
+This is now the default, and in general it should be accepted.
+However, if your application is I/O intensive and you are short on CPU capacity, then you might want to disable it.
+<nospell><blockquote><table border=1 cellspacing=0 cellpadding=3 bgcolor=white><tr><td><pre>
+SQL> show parameters db_block_checksum
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+db_block_checksum                    boolean     FALSE
+SQL> set timing on
+SQL> select count(*) from checksum_off;
+
+  COUNT(*)
+----------
+     10000
+
+Elapsed: 00:00:49.02
+SQL> set timing off
+SQL> select
+  2    n.name,
+  3    m.value
+  4  from
+  5    sys.v_$mystat  m,
+  6    sys.v_$statname	n
+  7  where
+  8    m.statistic# in (12, 42, 164) and
+  9    n.statistic# = m.statistic#
+ 10  /
+
+NAME                                                                  VALUE
+---------------------------------------------------------------- ----------
+CPU used by this session                                                183
+physical reads                                                        10182
+no work - consistent read gets                                        10360
+</td></tr></table></blockquote>
+</nospell>
+<p>
+<nospell><blockquote><table border=1 cellspacing=0 cellpadding=3 bgcolor=white><tr><td><pre>
+SQL> show parameters db_block_checksum
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+db_block_checksum                    boolean     TRUE
+SQL> set timing on
+SQL> select count(*) from checksum_on;
+
+  COUNT(*)
+----------
+     10000
+
+Elapsed: 00:00:51.02
+SQL> set timing off
+SQL> select
+  2    n.name,
+  3    m.value
+  4  from
+  5    sys.v_$mystat  m,
+  6    sys.v_$statname	n
+  7  where
+  8    m.statistic# in (12, 42, 164) and
+  9    n.statistic# = m.statistic#
+ 10  /
+
+NAME                                                                  VALUE
+---------------------------------------------------------------- ----------
+CPU used by this session                                                198
+physical reads                                                        10182
+no work - consistent read gets                                        10361
+</td></tr></table></blockquote>
+</nospell>
+<p>
+<hr noshade align=left width=300 size=2 color=black>
+<table cellspacing=0 cellpadding=0 width=100%><tr>
+<td valign=top>
+<div style="font-size:80%; font-weight:bold; color:#660066">
+© Ixora Pty Ltd. &nbsp; All rights reserved.<br>
+
+
+
+20-Nov-2002
+</div>
+</td>
+
+<map name=searches>
+<area coords=3,3,33,25 href=/search.html>
+</map>
+
+<script language=javascript><!--
+document.write('<map name=question><area coords=3,3,15,25 href="mailto:' + email('questions') + '?SUBJECT=About http://www.ixora.com.au/tips/db_block_checksum.htm"></map>')
+document.write('<map name=feedback><area coords=3,3,25,25 href="mailto:' + email('feedback') + '?SUBJECT=About http://www.ixora.com.au/tips/db_block_checksum.htm"></map>')
+// --></script>
+
+<map name=up1level>
+<area coords=3,3,25,25 href=./>
+</map>
+<map name=homepage>
+<area coords=3,3,25,25 href=/>
+</map>
+
+<td valign=top align=right>
+<nobr>
+
+<img ismap border=0 usemap=#searches src=/images/search.gif width=36 height=28 alt=Search>
+&nbsp;
+
+<img ismap border=0 usemap=#question src=/images/q.gif alt=Questions>
+&nbsp;
+<img ismap border=0 usemap=#feedback src=/images/feedback.gif alt=Feedback>
+&nbsp;
+
+<img ismap border=0 usemap=#up1level src=/images/up_one.gif alt=Up>
+&nbsp;
+<img ismap border=0 usemap=#homepage src=/images/home.gif alt=Home>
+
+</nobr>
+</td>
+</tr></table>
+</body></html>
+

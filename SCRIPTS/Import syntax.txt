@@ -1,0 +1,16 @@
+imp system/oracle@repdb2 file=C:\nk\dmps
+\tabsrpt_Full_NowRows_060808.dmp indexfile=c:\nk\test.sql
+
+
+imp system/oracle@repdb2 file=C:\nk\dmps
+\tabsrpt_Full_NowRows_060808.dmp indexfile=c:\nk\test.sql full=y
+
+
+
+imp system/oracle@repdb2 file=c:\nk\dmps
+\tabsrpt_Full_NowRows_060808.dmp log=c:\nk\3.log ignore=y fromuser=TABS touser=T
+ABS
+
+imp system/oracle@repdb2 file=c:\nk\dmps
+\tabsrpt_Full_NowRows_060808.dmp log=c:\nk\3.log ignore=y fromuser=TABS touser=T
+ABS buffer=1048576

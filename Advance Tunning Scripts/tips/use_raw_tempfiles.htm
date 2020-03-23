@@ -1,0 +1,128 @@
+<html><head><title>
+Use raw tempfiles
+</title>
+<style>
+body {background-image:url(/images/bg.jpg)}
+a:link {color:#FF6600}
+a:active {color:#660066}
+a:visited {color:#FF6600} 
+a:hover {color:#660066}
+a {font-weight:bold}
+h1 {color:#990000; font-size:150%; text-align:center}
+h2 {color:#660066; font-size:125%}
+ul {list-style-image:url(/images/li.gif); margin-left:16px}
+
+.orange {color:#FF6600}
+.purple {color:#660066}
+.brown {color:#990000}
+.h3 {font-weight:bold; color:#990000}
+</style>
+
+</head>
+<script language="javascript"><!--
+function email(addr) { return addr + '@ixora.com.au' }
+//--></script>
+
+<body>
+
+
+<div style="text-align:center; font-size:125%; font-weight:bold; color:#660066">Oracle Performance Tuning Tips</div>
+
+
+
+<h1>Use raw tempfiles</h1>
+
+Oracle does not format every block of a tempfile when it is created.
+Instead, Oracle just writes the file header block and space management bitmaps and then seeks to the end of the file to format the last block.
+This is why tempfile creation is so quick by comparison with datafile creation.
+Almost all of the blocks of the new tempfile are left unformatted.
+Under most file systems this results in the creation of a <b><i>sparse file</i></b>.
+No storage space is allocated to the unformatted blocks.
+File system space is only allocated as required when data is actually written to the tempfile blocks.
+<p>
+If file system space is oversubscribed, it is possible for Oracle to get an ENOSPC error when attempting to write to a sparse tempfile.
+If so, a fatal ORA-07248 error will be returned.
+This risk can be eliminated by manually converting sparse tempfiles to dense files.
+This can be done by shutting down all instances and
+copying the tempfiles using an operating system file copy utility that does not preserve the holes in sparse files.
+Alternatively, the risk can be eliminated by using raw tempfiles.
+<p>
+Raw tempfiles are preferable because of the following issues with I/O to file system based tempfiles.
+<ol>
+<li>
+Because each Oracle process writes to and reads from the tempfiles directly,
+it is common for tempfiles to sustain relatively high write concurrency.
+This makes tempfiles particularly prone to contention for <a href=/notes/inode_locks.htm>file system read/write locks</a> (inode locks).
+Some operating system performance analysis tools (such as <b>glance</b> under HP-UX) identify inode lock contention explicitly.
+Otherwise, the problem must be inferred from the particularly poor response times for concurrent writes,
+frequently with only modest physical disk utilization.
+Raw I/O eliminates file system read/write locks, so no such contention is possible.
+<p>
+<li>
+Tempfile I/O operations are typically large.
+Large I/O operations can be performed very efficiently using raw or direct I/O.
+But much of this efficiency is lost if the tempfile I/O is buffered,
+because  large buffered I/O requests are fragmented and serviced as a series of distinct single-buffer physical I/O operations.
+This is particularly inefficient for large writes, because a full rotational latency is sustained between each pair of component physical writes.
+<p>
+<li>
+Oracle makes heavy use of <a href=/notes/asynchronous_io.htm>asynchronous I/O</a> against tempfiles.
+Therefore it is important that an asynchronous I/O facility be available, and that it be efficient.
+Raw tempfiles normally enable efficient kernelized asynchronous I/O,
+whereas file system based tempfiles only support threaded asynchronous I/O, if that.
+<p>
+</ol>
+<p>
+These performance problems cannot be addressed by using Quick I/O, as in the case of datafiles,
+because Veritas do not support the use of Quick I/O for tempfiles.
+Raw tempfiles can be used even in environments that do not have any facility to backup raw disk,
+because tempfiles should not be backed up.
+<p>
+<hr noshade align=left width=300 size=2 color=black>
+<table cellspacing=0 cellpadding=0 width=100%><tr>
+<td valign=top>
+<div style="font-size:80%; font-weight:bold; color:#660066">
+© Ixora Pty Ltd. &nbsp; All rights reserved.<br>
+
+
+
+05-Apr-2002
+</div>
+</td>
+
+<map name=searches>
+<area coords=3,3,33,25 href=/search.html>
+</map>
+
+<script language=javascript><!--
+document.write('<map name=question><area coords=3,3,15,25 href="mailto:' + email('questions') + '?SUBJECT=About http://www.ixora.com.au/tips/use_raw_tempfiles.htm"></map>')
+document.write('<map name=feedback><area coords=3,3,25,25 href="mailto:' + email('feedback') + '?SUBJECT=About http://www.ixora.com.au/tips/use_raw_tempfiles.htm"></map>')
+// --></script>
+
+<map name=up1level>
+<area coords=3,3,25,25 href=./>
+</map>
+<map name=homepage>
+<area coords=3,3,25,25 href=/>
+</map>
+
+<td valign=top align=right>
+<nobr>
+
+<img ismap border=0 usemap=#searches src=/images/search.gif width=36 height=28 alt=Search>
+&nbsp;
+
+<img ismap border=0 usemap=#question src=/images/q.gif alt=Questions>
+&nbsp;
+<img ismap border=0 usemap=#feedback src=/images/feedback.gif alt=Feedback>
+&nbsp;
+
+<img ismap border=0 usemap=#up1level src=/images/up_one.gif alt=Up>
+&nbsp;
+<img ismap border=0 usemap=#homepage src=/images/home.gif alt=Home>
+
+</nobr>
+</td>
+</tr></table>
+</body></html>
+

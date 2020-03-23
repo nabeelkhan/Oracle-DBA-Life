@@ -1,0 +1,85 @@
+ops$tkyte@ORA9IR2> alter session set sql_trace=true;
+Session altered.
+ 
+ops$tkyte@ORA9IR2> @mystat "user commits"
+ops$tkyte@ORA9IR2> set echo off
+ 
+NAME                                VALUE
+------------------------------ ----------
+user commits                            1
+ 
+ops$tkyte@ORA9IR2> create table tttt ( x int );
+ 
+Table created.
+ 
+ops$tkyte@ORA9IR2> @mystat "user commits"
+ops$tkyte@ORA9IR2> set echo off
+ 
+NAME                                VALUE
+------------------------------ ----------
+user commits                            2
+ 
+ops$tkyte@ORA9IR2> drop table tttt;
+ 
+Table dropped.
+
+ops$tkyte@ORA9IR2> @mystat "user commits"
+ops$tkyte@ORA9IR2> set echo off
+ 
+NAME                                VALUE
+------------------------------ ----------
+user commits                            2
+ 
+
+ops$tkyte@ORA9IR2> @gettrace
+ops$tkyte@ORA9IR2> column trace new_val TRACE
+ops$tkyte@ORA9IR2>
+ops$tkyte@ORA9IR2> select c.value || '/' || d.instance_name || '_ora_' || a.spid 
+|| '.trc' trace
+from v$process a, v$session b, v$parameter c, v$instance d
+where a.addr = b.paddr
+and b.audsid = userenv('sessionid')
+and c.name = 'user_dump_dest'
+    /
+ 
+TRACE
+-------------------------------------------------------------------------------
+/home/ora9ir2/admin/ora9ir2/udump/ora9ir2_ora_11397.trc
+
+
+
+--Find out ur trace file and from os level run following:
+
+$ tkprof orakic_ora_298552.trc sp-traced.lst
+
+==================================================
+OR 
+
+use this from os level to generate the insert statement from 
+tkprod
+==================================================
+
+$ tkprof orakic_ora_369130.trc civilid_TIMMED_EXP.lst EXPLAIN=PREMPROD/PREMPROD TABLE=PREMPROD.nk_plan_table INSERT=STOREA.SQL SYS=NO
+ 
+ops$tkyte@ORA9IR2>
+ops$tkyte@ORA9IR2> !grep XCTEND 
+/home/ora9ir2/admin/ora9ir2/udump/ora9ir2_ora_11397.trc
+XCTEND rlbk=0, rd_only=1
+XCTEND rlbk=0, rd_only=1
+XCTEND rlbk=0, rd_only=0
+XCTEND rlbk=0, rd_only=1
+XCTEND rlbk=0, rd_only=1
+ 
+ops$tkyte@ORA9IR2> @mystat "user commits"
+ops$tkyte@ORA9IR2> set echo off
+ 
+NAME                                VALUE
+------------------------------ ----------
+user commits                            2
+ 
+
+user commits says "2" but I've actually had 5 transaction end records in my 
+trace file already.
+
+if you trace it, you'll find it is some "create" trigger that is issuing a 
+commit (CDC, MDSYS, XDB, something..).  But the recursive sql is committed.

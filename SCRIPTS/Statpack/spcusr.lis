@@ -1,0 +1,307 @@
+... Installing Required Packages
+
+Package created.
+
+
+Grant succeeded.
+
+
+View created.
+
+
+Package body created.
+
+
+Package created.
+
+
+Synonym created.
+
+
+Grant succeeded.
+
+
+View created.
+
+
+Synonym created.
+
+
+View created.
+
+
+Synonym created.
+
+
+View created.
+
+
+Synonym created.
+
+
+View created.
+
+
+Synonym created.
+
+
+View created.
+
+
+Synonym created.
+
+
+View created.
+
+
+Synonym created.
+
+... Creating PERFSTAT user ...
+
+Choose the PERFSTAT user's password.
+
+Not specifying a password will result in the installation FAILING
+
+Specify PERFSTAT password
+Enter value for perfstat_password: prefstat
+prefstat
+
+PL/SQL procedure successfully completed.
+
+
+User created.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Grant succeeded.
+
+
+Below are the list of online tablespaces in this database.
+Decide which tablespace you wish to create the STATSPACK tables
+and indexes.  This will also be the PERFSTAT user's default tablespace.
+
+Specifying the SYSTEM tablespace will result in the installation
+FAILING, as using SYSTEM for performance data is not supported.
+
+Press <Enter> to continue...
+TABLESPACE_NAME                CONTENTS                                                                                                                                                                                                                                       
+------------------------------ ---------                                                                                                                                                                                                                                      
+DRSYS                          PERMANENT                                                                                                                                                                                                                                      
+EDP                            PERMANENT                                                                                                                                                                                                                                      
+EXAMPLE                        PERMANENT                                                                                                                                                                                                                                      
+FIN7IDXTAB                     PERMANENT                                                                                                                                                                                                                                      
+FIN7IDX_NYR                    PERMANENT                                                                                                                                                                                                                                      
+FIN7LIFE                       PERMANENT                                                                                                                                                                                                                                      
+FIN7TEMP                       TEMPORARY                                                                                                                                                                                                                                      
+FINAL7                         PERMANENT                                                                                                                                                                                                                                      
+INDX                           PERMANENT                                                                                                                                                                                                                                      
+LIFE                           PERMANENT                                                                                                                                                                                                                                      
+LIFETEMP                       TEMPORARY                                                                                                                                                                                                                                      
+ODM                            PERMANENT                                                                                                                                                                                                                                      
+OTHRTEMP                       TEMPORARY                                                                                                                                                                                                                                      
+PAYROLL                        PERMANENT                                                                                                                                                                                                                                      
+PREMIA                         PERMANENT                                                                                                                                                                                                                                      
+PREMIDXTAB                     PERMANENT                                                                                                                                                                                                                                      
+PREMTEMP                       TEMPORARY                                                                                                                                                                                                                                      
+SHARES                         PERMANENT                                                                                                                                                                                                                                      
+SHS_DATA                       PERMANENT                                                                                                                                                                                                                                      
+SHS_TEMP                       TEMPORARY                                                                                                                                                                                                                                      
+TEMP                           TEMPORARY                                                                                                                                                                                                                                      
+TOOLS                          PERMANENT                                                                                                                                                                                                                                      
+UNDOTBS1                       UNDO                                                                                                                                                                                                                                           
+USERS                          PERMANENT                                                                                                                                                                                                                                      
+XDB                            PERMANENT                                                                                                                                                                                                                                      
+
+25 rows selected.
+
+
+Specify PERFSTAT user's default   tablespace
+Enter value for default_tablespace: TOOLS
+Using TOOLS for the default tablespace
+
+PL/SQL procedure successfully completed.
+
+
+User altered.
+
+
+User altered.
+
+
+Choose the PERFSTAT user's temporary tablespace.
+
+Specifying the SYSTEM tablespace will result in the installation
+FAILING, as using SYSTEM for the temporary tablespace is not recommended.
+
+Specify PERFSTAT user's temporary tablespace.
+Enter value for temporary_tablespace: TEMP
+Using TEMP for the temporary tablespace
+
+
+PL/SQL procedure successfully completed.
+
+
+User altered.
+
+
+NOTE:
+SPCUSR complete. Please check spcusr.lis for any errors.
+

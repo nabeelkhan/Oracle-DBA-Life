@@ -1,0 +1,146 @@
+<html>
+	<head>
+		<title>
+			Planning Datafiles
+		</title>
+		<style>
+			<!-- a:hover{color:#660066;} -->
+		</style>
+	</head>
+	<body background="../../images/bg.jpg" link="#FF6600" vlink="#FF6600" alink="#660066">
+		
+		<h2 align="center">
+			<font color="#990000">
+				Planning Datafiles
+			</font>
+		</h2>
+		Disk load balancing is a matter relocating datafiles on disks in order to minimize waiting time in the I/O subsystem.
+		To facilitate <b><a href="../tuning/disk_load.htm">disk load balancing</a></b>,
+		it strongly recommended that all ordinary datafiles be exactly the same size, and that a uniform stripe breadth be adopted.
+		
+		<h3>
+			<font color="#660066">
+				Why uniformly sized datafiles?
+			</font>
+		</h3>
+		In disk load balancing, datafiles are moved around to spread the I/O load evenly across the available disks.
+		If the datafiles are arbitrarily sized, you will be severely limited in how you can rearrange them,
+		but if they are uniformly sized, you will have maximum flexibility.
+		<p>
+		The datafile size should be chosen in proportion to the total size of the database with an allowance for database growth.
+		If the datafiles are too large, then the free space will be unnecessarily fragmented between tablespaces.
+		However, a proliferation of small datafiles should also be avoided, because most datafile headers must be updated for most checkpoints,
+		and each Oracle process' memory usage is in part proportional to the number of datafiles that it has open.
+		There the number of datafiles also impacts the rate at which DBWn attempts to write,
+		and thus a proliferation of small datafiles increases the risk of <em>write complete waits</em>.
+		<p>
+		When choosing a datafile size for a database that will be created on raw logical volumes,
+		remember that allowance needs to be made for logical volume control block, if any, and a single datafile header block.
+		That is, the SIZE specified in the <em>filespec</em> clause of the CREATE TABLESPACE command
+		must be at least that much smaller than the logical volume in which it is being created.
+		128K is an adequate allowance in all cases.
+		<blockquote>
+			<small>
+				Also, remember that locally managed tablespaces have a 64K bitmap after the datafile header block.
+				This means that the SIZE of a locally managed tablespace with a uniform extent allocation policy
+				should be a multiple of the extent size plus 64K, otherwise the final "extent" will be too small to be used.
+			</small>
+		</blockquote>
+		
+		<h3>
+			<font color="#660066">
+				Why a uniform stripe breadth?
+			</font>
+		</h3>
+		These uniformly sized datafiles should be divided into two data protection classes, namely RAID-5 and striping with mirroring.
+		Within each of these classes, all datafiles should be uniformly striped.
+		You should adopt a modest stripe breadth that is well suited to your disk technology, and stick to it religiously.
+		Your logical volume naming conventions should encode both the data protection class and disk region, and possibly the stripe breadth as well.
+		<p>
+		Using a uniform stripe breadth within each data protection class gives you maximum flexibility in disk load balancing.
+		And using a modest stripe breath enables you to maintain the required I/O separation.
+		<p>
+		It is sometimes objected that some database segments require higher concurrency and thus broader striping
+		than the moderate stripe breadth proposed above for all datafiles.
+		In most cases, this can be catered for by ensuring that these segments have extents in a number of such datafiles residing on different sets of disks.
+		If however a single extent will contain a hot spot that requires higher concurrency, then separate provision should be made for that tablespace only.
+		
+		<h3>
+			<font color="#660066">
+				What naming convention?
+			</font>
+		</h3>
+		We recommended above that the naming convention for logical volumes should encode both the data protection class and disk region,
+		and possibly the stripe breadth as well.
+		However, the naming convention for the file systems or symbolic links to which they map
+		should encode the database name, tablespace name and tablespace relative datafile number instead.
+		This is intended to reduce the risk of administrative error during backup and restore operations.
+		Note that it is assumed here that symbolic links will be used to refer to raw logical volumes.
+		This assists both in datafile identification and in disk load balancing.
+		<p>
+		The naming conventions adopted should not be overly verbose, particularly those used for directory names.
+		Long pathname components prevent all subordinate pathnames from being cached in the DNLC (name cache),
+		which is used by the operating system for pathname to inode translations.
+		For many operating systems, a long pathname component is defined as anything longer than 14 bytes.
+		Further, because directories are searched linearly, frequently opened files (such as subdirectories) should be created first in their directories.
+		It is also better have a deeper directory structure with a low branching factor,
+		rather than a shallower directory structure with many files in each directory.
+		However, the absolute pathname to all datafiles (and raw logical volumes) should be limited to 59 bytes if possible.
+		<blockquote>
+			<small>
+				Also, beware of allowing large numbers of files to accumulate in the archive, audit and dump destination directories.
+				If this does occur, the directory concerned should be entirely removed and then recreated.
+			</small>
+		</blockquote>
+		
+		<hr noshade width="300" size="2" color="black">
+		
+		<p>
+		If you have uniformly sized datafiles with clearly differentiated I/O characteristics,
+		and a moderate number of tablespaces with well-differentiated I/O requirements,
+		then you will then be ideally equipped to perform disk load balancing.
+		<ul>
+			<li>
+			Because all datafiles are the same size, any set of datafiles can be exchanged as required.
+			<li>
+			Because the tablespaces are well differentiated, the V$FILESTAT statistics can be relied upon to characterize the I/O.
+			<ul>
+				<li>
+				The ratio of blocks read to read operations can be used to derive an indicator of the degree of sequential reading as opposed to random reading.
+				<li>
+				The ratio of write operations to read operations shows whether the I/O is at all write-intensive.
+				<li>
+				And, most importantly, the total number of read and write operations serves as an indicator of I/O load.
+			</ul>
+			<li>
+			Finally, because the characteristics of all logical volumes are well known,
+			it is a relatively simple matter to balance disk workload almost perfectly, as long as you have enough distinct disks.
+		</ul>
+		
+		
+		<hr noshade align="left" width="300" size="2" color="black">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="1000">
+					<font size="2" color="#660066">
+						<strong>
+							Copyright © Ixora Pty Ltd
+						</strong>
+					</font>
+				</td>
+				<td valign="top" align="right">
+					<nobr>
+					<map name="email">
+						<area shape="rect" coords="0, 0, 32, 21" title="Feedback" href="mailto:feedback@ixora.com.au?SUBJECT=[Tip] datafiles.htm">
+					</map>
+					<img ismap usemap="#email" border="0" alt="Send Email" src="../../images/email.gif" width="32" height="21">
+					<map name="home">
+						<area shape="rect" coords="0, 0, 28, 28" title="Home" href="/">
+					</map>
+					<img ismap usemap="#home" border="0" alt="Home" src="../../images/home.gif" width="28" height="28">
+					</nobr>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

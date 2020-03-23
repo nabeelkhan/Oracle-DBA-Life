@@ -1,0 +1,99 @@
+
+One of the really stupid things about Oracle 'imp' is that 'imp's fail if the same source tablespace does not exist on the target Oracle database. Generally, the easiest method to resolve this problem is to create a target tablespace with the same name as the source tablespace.
+
+If, however, you cannot create the same tablespace name on the target system, then the only alternative that I have found is to do the following steps (on the target database):
+
+1) Execute an 'imp' command similar to the following:
+
+CODE
+imp file=<dump file name> userid=<username>/<password>@<tns alias> indexfile=<some file name.sql>
+(The above 'imp' command should appear on a single command line, not on multiple lines.) The key to success here is the "indexfile" entry...it creates a text file with all of the "CREATE" statements of all of the tables and indexes that appear in your dump file.
+
+2) Using a flat text editor (such as Notepad) edit the "indexfile", replacing all of the references to the source tablespace to become the target tablespace that you desire. Save the changes.
+
+3) Using SQL*Plus (or some other SQL script executor), run the edited "indexfile" script. This "pre-creates" the tables and indexes in the tablespace(s) that you specified via your edits.
+
+4) Re-import your original dump file to load the data into your empty tables/indexes. Be sure to instruct the 'imp' utility to 'ignore the existence of your objects' using the bold parameter, in the following code:
+CODE
+imp file=<dump file name> userid=<username>/<password>@<tns alias> ignore=y
+Let us know how either of these alternative solutions works for you. 
+Mufasa
+(aka Dave of Sandy, Utah, USA)
+[www.dasages.com: Providing low-cost remote Database Admin services]
+Click here to join Utah Oracle Users Group on Tek-Tips if you use Oracle in Utah USA.
+ 
+ 
+Turkbear (TechnicalUser) 18 Apr 06 10:51  
+Hi,
+If you set a default tablespace for the user account
+doing the import and are sure the original tablespace name does not exist in the target system, then IMP will import that exported data into the default tablespace..( use the ignore='Y' option)
+
+Even if the original tablespace exists, if you set a quota of 0 on it for the IMP user, the IMP user's default tablespace will be used instead..
+
+
+
+
+
+To Paraphrase:"The Help you get is proportional to the Help you give.."
+
+ 
+ 
+SantaMufasa (TechnicalUser) 18 Apr 06 10:59  
+Turkbear,
+
+Could you please post a copy-and-paste "proof of concept" on your above suggestions? My experience has always been that the above process that you suggest fails to achieve the stated objectives. If the process does work, then your "proof of concept" should show me what I'm missing/doing wrong. 
+Mufasa
+(aka Dave of Sandy, Utah, USA)
+[www.dasages.com: Providing low-cost remote Database Admin services]
+Click here to join Utah Oracle Users Group on Tek-Tips if you use Oracle in Utah USA.
+ 
+ 
+Turkbear (TechnicalUser) 18 Apr 06 11:19  
+Hi,
+OK..I'll have to dig around since it has been a while ( I mean a couple of years) since I tried this, but I am pretty sure it worked..( I am getting old however and, who knows, maybe someone implanted a false memory  )
+
+
+
+
+To Paraphrase:"The Help you get is proportional to the Help you give.."
+
+ 
+ 
+Turkbear (TechnicalUser) 18 Apr 06 11:46  
+Hi,
+I exported a table from one instance ( whsd in our setup) and imported it into another ( ces9d )
+The tablespace names were quite different:
+
+New location ( target of IMP with IGNORE='Y'):
+
+CODE
+SQL> connect system@ces9d
+Enter password: ********
+Connected.
+  1  select tablespace_name,table_name from all_tables
+  2* where table_name = 'BCA_ALIAS'
+SQL> /
+
+TABLESPACE_NAME                TABLE_NAME
+------------------------------ ------------------------------
+SYSTEM                         BCA_ALIAS
+
+Original location :
+
+CODE
+
+SQL> connect system@whsd
+Enter password: *******
+Connected.
+SQL>  select tablespace_name,table_name from all_tables
+  2   where table_name = 'BCA_ALIAS';
+
+TABLESPACE_NAME                TABLE_NAME
+------------------------------ ------------------------------
+CONFIDENTIAL1D                 BCA_ALIAS
+
+SQL> 
+
+In the target system my default tablespace was used, not the original one ( which does not exist in that instance)..
+ 
+ 

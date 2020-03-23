@@ -1,0 +1,86 @@
+Date: 02/04/03                                                   Page:   1      
+Time: 10:49 AM            CALCULATED STATISTICS REPORT           NK_DBA         
+                              ORAKIC database                                   
+                                                                                
+NAME                                                                  VALUE     
+---------------------------------------------------------------- ----------     
+Startup Date: 22-jan-03 20:37:38                                          0     
+CUMMULATIVE HIT RATIO                                            .827172485     
+SYS UNDO HDR WAIT CONTENTION                                              0     
+SYS UNDO BLK WAIT CONTENTION                                              0     
+UNDO BLK WAIT CONTENTION                                                  0     
+UNDO HDR WAIT CONTENTION                                          .00003229     
+Rollback Wait %                                                  .000250435     
+Library Reload %                                                 .197970726     
+redo log space requests                                                6559     
+redo log space wait time                                             200525     
+Non-Index Lookups Ratio                                          .002482751     
+table fetch by rowid                                               10825062     
+table fetch continued row                                             12695     
+sorts (memory)                                                       380741     
+sorts (disk)                                                            378     
+Data Dictionary Miss Percent                                     2.25754108     
+RECURSIVE CALLS PER USER                                         50.4226789     
+Free List Contention Ratio                                                0     
+TOTAL ALLOCATED MEG                                              16125.8125     
+TOTAL USED MEG                                                   9254.08594     
+TOTAL SGA SIZE                                                    638553880     
+messages                                                         .000092697     
+enqueue hash chains                                              .000124452     
+channel operations parent latch                                  .000188639     
+cache buffers lru chain                                          .000140693     
+checkpoint queue latch                                           .000859368     
+cache buffers chains                                             .000078218     
+redo allocation                                                  .003489856     
+undo global data                                                 .000011979     
+row cache objects                                                .000173799     
+shared pool                                                      .000113392     
+library cache                                                    .000269296     
+library cache pin                                                .000035918     
+library cache pin allocation                                     .000011019     
+DATABASE LINK                                                             2     
+FUNCTION                                                                136     
+INDEX PARTITION                                                         104     
+JAVA CLASS                                                             1166     
+PROCEDURE                                                               672     
+PACKAGE BODY                                                            168     
+PACKAGE                                                                 191     
+OPERATOR                                                                 27     
+MATERIALIZED VIEW                                                         2     
+LOB                                                                     315     
+LIBRARY                                                                  26     
+JAVA SOURCE                                                               8     
+JAVA RESOURCE                                                            17     
+XML SCHEMA                                                               10     
+VIEW                                                                    351     
+TYPE BODY                                                                33     
+TYPE                                                                    283     
+TRIGGER                                                                 335     
+Date: 02/04/03                                                   Page:   2      
+Time: 10:49 AM            CALCULATED STATISTICS REPORT           NK_DBA         
+                              ORAKIC database                                   
+                                                                                
+NAME                                                                  VALUE     
+---------------------------------------------------------------- ----------     
+TABLE PARTITION                                                          28     
+TABLE                                                                  2744     
+SYNONYM                                                               11749     
+SEQUENCE                                                                791     
+RULE SET                                                                 15     
+QUEUE                                                                    32     
+INDEXTYPE                                                                 9     
+INDEX                                                                  2585     
+EVALUATION CONTEXT                                                       10     
+DIMENSION                                                                 5     
+data block waits                                                          1     
+segment header waits                                                      1     
+undo header waits                                                        20     
+data block time                                                           0     
+segment header time                                                       1     
+undo header time                                                          9     
+Shared Pool Used                                                 162.741951     
+Shared Pool Available                                             93.258049     
+Shared SQL%                                                      61.1534415     
+
+71 rows selected.
+

@@ -1,0 +1,10 @@
+SYSTEM@orakic>  SELECT   thread#, group#, sequence#, bytes, members, archived, status,
+  2  first_change#, first_time
+  3  FROM v$log
+  4  ORDER BY thread#, group#;
+   THREAD#     GROUP#  SEQUENCE#      BYTES    MEMBERS ARC STATUS           FIRST_CHANGE# FIRST_TIM                                
+---------- ---------- ---------- ---------- ---------- --- ---------------- ------------- ---------                                
+         1          1       2585  104857600          1 YES INACTIVE             347055274 06-APR-05                                
+                    2       2586  104857600          1 YES INACTIVE             347111242 06-APR-05                                
+                    3       2587  104857600          1 NO  CURRENT              347141494 06-APR-05                                
+SYSTEM@orakic> SPOOL off

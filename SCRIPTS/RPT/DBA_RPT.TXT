@@ -1,0 +1,131 @@
+			DBA Reports v2.0 for ORACLE
+		dba_rpt.txt checked out on 12/22/99 17:05:13 version 1.36
+Report 
+Name		Description or Function
+-----------	------------------------------------------------------------------------
+	---- Informational Reports (Many don't require DBA privilege) ----
+cnt_exts		Lists Objects and the number of allocated extents
+col_priv		Privileges by Table and Column for grantor/grantee
+db_disks		Lists disks by tablespace (only usefull for filesystems mounted at /)
+db_files		All datafiles by tablespaces
+db_indx		Index definitions (extents, size, pctfree, ...)
+db_logs		Information about redo log files
+db_parms	The parameters used to start the database
+db_profl		User Profiles which enforce resource limits
+db_rbk		List Rollback segment information including optimal size
+db_segmt	All allocated segments for specified tablespace
+db_syns		All synonyms defined in the database
+db_tbls		Table definitions (extents, size, pctfree, ...)
+db_tbsp		Tablespaces defined that match a wildcard
+db_user		User definitions with many filtering and ordering options
+dbblocks	Report of table actual size versus extents allocated and projected size
+dbfileio		Shows files and I/O for all DB files - Must be run as SYS
+diskcntr		Correlates disks and hardware controllers to datafiles and tablespaces
+		  (requires a table to be created and loaded: disk_controller see script)
+dbszv7		Report of table and index projected size and current size v7 formula
+exp_plan	Queries the plan_table for a specific statement id to explain an SQL
+hit_rati		Calculates Statistics: buffer hit ratio,Cache Gets/Misses Ratio, Redo log
+lstalsql		Lists ALL SQL in the v$sqlarea and orders by either reads or reads/execs
+lstauact		Lists object audit activity by user and start and end time (audit must be on)
+lstaudit		Lists user connect audit activity for a user (audit must be on)
+lstauopt		Lists current audit options when setting audit on database objects (audit must be on)
+lstbhobj		Lists X$BH objects with multiple incarnations (entries) in the SGA - must be run as SYS
+lstdblnk		Lists defined database links by owner and link name
+lstdbmap	Shows a mapping of allocated and free space for a tablespace (similar to mapper)
+lstdbsz7		Lists table using the analyze command and shows space left for row inserts
+lstcache		Lists objects in the SGA which may be candidates for pinning in the SGA
+lstcolcn		Constraints for columns such as NOT NULL, CHECK, ...
+lstconst		Column referential constraints for foreign and primary keys
+lst_deps		Lists dependencies between objects such as Procedures, Functions, ...
+lst_diff		Lists differences between a reference owner's object and another owner
+lstfiles		Lists all files for the DB except the init.ora.  Usefull to check backup strategies.
+lstfilst		Report on file I/O statistics with times (times are if Timed Statistics are on).
+lstindx		All indexes for matching an owner and/or object wildcard
+lstindst		Index statistics matching an owner and/or object wildcard
+lstlock		List locked processes for which there are dependent lock holders
+lstltchh		List latch holders and SQL running for that latch - must be run as SYS
+lstobjns		Lists object which have NO statistics on them
+lstobjxt		Lists objects with a next extent larger than the largest free space in a tablespace
+lstpackg		List defined Package/Procedure/Function information for owner or name
+		  (suitable for re-creating the object from this report)
+lstparms		List ALL init.ora parameters including hidden ones - must be run as SYS
+lstpid		List the SQL statements by ORACLE SID/PID (useful for tracking latch holders)
+lstplprm		Lists the PL/SQL parameters and return values for Packages/Functions/Procedures
+lstprdpf		Lists the SQL*Plus product user profile entries by user
+lstrbkst		Lists the rollback segment statistics by rollback segment name
+lstrbktr		Lists the rollback segments being used for an ORACLE user or OS user
+lstseq		Lists the defines sequences by owner and sequence name
+lstslock		A simplistic listing of transaction dependent locks - may be faster than lstlock
+lst_snap		List defined Snapshots and refresh information for owner and/or object name
+lstsql		List the SQL statements for a user's session and filter by disk/buffer reads
+lstsysst		Reports on System Statistics from V$SYSSTAT
+lsttbcol		All columns definitions and comments matching an owner and/or object wildcard
+lsttbl		Tables and comments matching an owner and/or object wildcard
+lsttblcn		Uses a table of object row counts to show growth from week to week
+lsttblnk		Tables  WITHOUT  primary keys for an owner and/or object wildcard
+lsttrg		Lists defined triggers for owner, table, trigger owner and trigger name
+lsttsqta		Lists the tablespace quotas by user and tablespace
+lsttbst		Table and  column statistics matching an owner and/or object wildcard
+lstuser		Lists user session  info with using the OS parent/shadow process id and/or ORACLE sid/pid
+roles		All roles that exist in the Database
+rolepriv		Description of roles granted to users and to roles
+reltbls		Attempts to match tables and columns to unique index definitions 
+		  (good for v6 to v7 transition to determine foreign key constraints that 
+		  should be defined.  Also this is a good report for developers that need 
+		  to know how a column is referenced (the foreign column name) in another table.
+obj_exts		Allocated extents by tablespace and object
+tbspfree		Free space by datafile and tablespace 
+sys_priv		Description of system privileges granted to users and to roles
+tab_priv		Privileges on a Table or Object and grantor/grantee
+user_hit		Hit ratio and I/O Statistics by user and process
+
+	---- Defragmentation utils to compress v6 extents (read cmp_exts.txt for help) ----
+		     
+< cmp_exts.txt lists the procedure >
+bef_aftr		Shows before and after picture for coallescing operation prior to performing
+cntg_tbl		Creates a table of contiguous space which is a candidate for coallescing
+gncrts		Generates a script to create and drop an object causing the ORACLE kernel 
+		  to coallesce the free space
+fragindx		Fragmentation index for a tablespace
+mapper		Maps object positions and freespace for a tablespace.
+
+	---- ORACLE Financials  utils  ----
+lstcnapp		List Defined Applications and programs for the Concurrent Manager
+lstcncon		List Conflicts for either running Concurrent programs or all Concurrent programs
+lstcncur		Lists jobs in the ORACLE Applications Concurrent Manager by phase,status, user
+lstcnjob		Lists jobs for each Concurrent Manager and thier process id's and status
+lstcnmgr		List concurrent manager processes with OS process id and ORACLE process id
+lstcnspr		List concurrent manager specialization rules
+lstreqst		Lists statistics concerning Concurrent Manager jobs (max, min run time...)
+lstusrre		List User Responsibilities given by Responsibility (active or inactive)
+
+	---- Utilities for Generating scripts to re-create DDL for an object ----
+gncrtdb		Creates SQL to recreate the database and logfiles
+gncrtdbl		Creates SQL to recreate the database links
+gncrtcon		Creates SQL for all constraints from existing objects for an owner and object name
+gncrtind	Creates SQL for all indexes from existing objects for an owner and/or tablespace/table name
+gncrtixp	Creates SQL for indexes with the projected size from dbszv7 run and update similar to gncrtind
+gncrtrbk		Creates SQL for all rollback segments matching an object wildcard
+gncrtspr		Creates SQL for granting system privileges for a grantee and privilege
+gncrtsyn		Creates SQL for synonyms for a owner, synonym name, table owner, table name
+gncrttpr		Creates SQL for granting table privileges from a grantor to grantee by table name
+gncrtcpr		Creates SQL for granting column privileges from a grantor to grantee by table name
+gncrtrol		Creates SQL to create roles matching a wildcard
+gncrttab		Creates SQL for all tables matching an owner and/or tablespace/table name wildcard
+gncrttbp		Creates SQL for tables with the projected size from dbszv7 run and update similar to gncrttab
+gncrttbs		Creates SQL for all tablespaces matching an owner and/or tablespace name wildcard
+gncrttrg		Creates SQL for defined Triggers for owner and/or table name 
+gncrtusr		Creates SQL to create all users matching a wildcard
+gncrtvw		Creates SQL for all views matching an owner and/or object wildcard
+gnrfcon		Generates Foreign/Unique/Primary constraints for an owner, tablespace or table
+
+	---- General Utilities for Generating scripts to perform maintenance/DBA functions ----
+gnaltcmp	Generates the commands to compile INVALID objects in order of dependency
+gnanalyz	Creates SQL to Analyze all objects 
+gnctl		Creates xxxxx.ctl scripts for SQL*Loader to use to load DB objects
+gndefrag		Creates SQL script to defragment v7 tablespaces
+gnkillse		Creates SQL to kill sessions owned by a user
+gninsrt		Generates generic insert statements based on DB objects
+gnpinprc	Creates a PL/SQL procedure to pin procedures in the SGA based on number of executions
+gnslct		Generates generic select statements based on DB objects
+modobj	Modifiesa Table/Index next extent to be the maximum free segment size in a tablespace

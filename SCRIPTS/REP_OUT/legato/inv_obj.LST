@@ -1,0 +1,334 @@
+Date: 02/04/03                                                   Page:   1      
+Time: 10:49 AM              Invalid Database Objects             NK_DBA         
+                              ORAKIC database                                   
+                                                                                
+Object     Object                                                               
+Owner      Name                           OBJECT_TYPE                           
+---------- ------------------------------ ------------------                    
+Last Change                                                                     
+Date                                                                            
+--------------------                                                            
+SYS        /1bac42ec_XDBRequestStream     JAVA CLASS                            
+21-JAN-03 08:59:31                                                              
+                                                                                
+SYS        /7b43fbca_XDBServletResponse   JAVA CLASS                            
+21-JAN-03 08:59:31                                                              
+                                                                                
+SYS        /86ba7ff3_XDBServletContext    JAVA CLASS                            
+21-JAN-03 08:59:31                                                              
+                                                                                
+SYS        /a7359489_XDBServletContainer  JAVA CLASS                            
+21-JAN-03 08:59:31                                                              
+                                                                                
+SYS        /dcd824bd_XDBServletConfig     JAVA CLASS                            
+21-JAN-03 08:59:31                                                              
+                                                                                
+SYS        /dd6f585b_XDBServletRequest    JAVA CLASS                            
+21-JAN-03 08:59:31                                                              
+                                                                                
+SYS        /f00055ae_XDBServletRequestPar JAVA CLASS                            
+21-JAN-03 08:59:31                                                              
+                                                                                
+SYS        ALL_REPGROUPED_COLUMN          VIEW                                  
+12-MAY-02 02:56:51                                                              
+                                                                                
+SYS        ALL_REPPARAMETER_COLUMN        VIEW                                  
+12-MAY-02 02:57:11                                                              
+                                                                                
+SYS        DBA_REPGROUPED_COLUMN          VIEW                                  
+12-MAY-02 02:56:50                                                              
+                                                                                
+SYS        DBA_REPPARAMETER_COLUMN        VIEW                                  
+12-MAY-02 02:57:09                                                              
+                                                                                
+SYS        DBMS_REPCAT_AUTH               PACKAGE BODY                          
+12-MAY-02 02:59:49                                                              
+                                                                                
+SYS        DBMS_REPCAT_RGT_CUST           PACKAGE BODY                          
+12-MAY-02 04:55:42                                                              
+                                                                                
+SYS        DBMS_REPCAT_UTL4               PACKAGE BODY                          
+12-MAY-02 04:55:33                                                              
+                                                                                
+SYS        USER_REPGROUPED_COLUMN         VIEW                                  
+12-MAY-02 02:56:51                                                              
+                                                                                
+SYS        USER_REPPARAMETER_COLUMN       VIEW                                  
+12-MAY-02 02:57:12                                                              
+                                                                                
+Date: 02/04/03                                                   Page:   2      
+Time: 10:49 AM              Invalid Database Objects             NK_DBA         
+                              ORAKIC database                                   
+                                                                                
+Object     Object                                                               
+Owner      Name                           OBJECT_TYPE                           
+---------- ------------------------------ ------------------                    
+Last Change                                                                     
+Date                                                                            
+--------------------                                                            
+SYS        _ALL_REPCOLUMN_GROUP           VIEW                                  
+12-MAY-02 04:54:15                                                              
+                                                                                
+SYS        _ALL_REPCONFLICT               VIEW                                  
+12-MAY-02 04:54:20                                                              
+                                                                                
+SYS        _ALL_REPGROUPED_COLUMN         VIEW                                  
+12-MAY-02 04:54:14                                                              
+                                                                                
+SYS        _ALL_REPPARAMETER_COLUMN       VIEW                                  
+12-MAY-02 04:54:20                                                              
+                                                                                
+SYS        _ALL_REPRESOLUTION             VIEW                                  
+12-MAY-02 04:54:16                                                              
+                                                                                
+SYS        oracle/xdb/servlet/XDBCookie   JAVA CLASS                            
+21-JAN-03 08:59:31                                                              
+                                                                                
+SCOTT      DEMOREF                        PACKAGE BODY                          
+23-JAN-03 12:16:41                                                              
+                                                                                
+SCOTT      TRG_PT_GL_POLICY               TRIGGER                               
+23-JAN-03 12:16:47                                                              
+                                                                                
+PREMPROD   ADJEND                         PACKAGE BODY                          
+23-JAN-03 12:16:41                                                              
+                                                                                
+PREMPROD   F_GET_FC_OPBAL                 FUNCTION                              
+23-JAN-03 03:13:03                                                              
+                                                                                
+PREMPROD   F_GET_LC_OPBAL                 FUNCTION                              
+23-JAN-03 03:13:03                                                              
+                                                                                
+PREMPROD   POL_APPR_3                     PACKAGE BODY                          
+23-JAN-03 12:16:45                                                              
+                                                                                
+PREMPROD   PP_CREATE_INSERT_STMT          PROCEDURE                             
+23-JAN-03 03:13:06                                                              
+                                                                                
+FINAL7     P_NUM_TO_CHAR                  PROCEDURE                             
+23-JAN-03 02:04:08                                                              
+                                                                                
+FINAL7     T                              PROCEDURE                             
+23-JAN-03 12:15:10                                                              
+                                                                                
+LIFEPROD   IL_OLD_PREM_DTLS_VALUE_INSERT  PROCEDURE                             
+23-JAN-03 03:16:14                                                              
+                                                                                
+Date: 02/04/03                                                   Page:   3      
+Time: 10:49 AM              Invalid Database Objects             NK_DBA         
+                              ORAKIC database                                   
+                                                                                
+Object     Object                                                               
+Owner      Name                           OBJECT_TYPE                           
+---------- ------------------------------ ------------------                    
+Last Change                                                                     
+Date                                                                            
+--------------------                                                            
+FIN7LIFE   F_GET_FC_OPBAL                 FUNCTION                              
+23-JAN-03 03:14:36                                                              
+                                                                                
+PREMIAEDP  ADJDOCGEN                      PACKAGE BODY                          
+23-JAN-03 12:16:39                                                              
+                                                                                
+PREMIAEDP  ADJEND                         PACKAGE                               
+23-JAN-03 12:16:27                                                              
+                                                                                
+PREMIAEDP  ADJEND                         PACKAGE BODY                          
+23-JAN-03 12:16:40                                                              
+                                                                                
+PREMIAEDP  ADJPDOC                        PACKAGE                               
+23-JAN-03 12:16:22                                                              
+                                                                                
+PREMIAEDP  ADJPDOC                        PACKAGE BODY                          
+23-JAN-03 12:16:31                                                              
+                                                                                
+PREMIAEDP  FOREX_ADJ                      PROCEDURE                             
+23-JAN-03 12:14:18                                                              
+                                                                                
+PREMIAEDP  F_CHK_DRCR_SUM                 PROCEDURE                             
+23-JAN-03 12:14:18                                                              
+                                                                                
+PREMIAEDP  F_GET_FC_OPBAL                 FUNCTION                              
+23-JAN-03 12:16:09                                                              
+                                                                                
+PREMIAEDP  F_GET_LC_BAL                   PROCEDURE                             
+23-JAN-03 12:14:19                                                              
+                                                                                
+PREMIAEDP  F_GET_LC_OPBAL                 FUNCTION                              
+23-JAN-03 12:16:11                                                              
+                                                                                
+PREMIAEDP  F_GET_MAIN_FC_OPBAL            FUNCTION                              
+23-JAN-03 12:16:11                                                              
+                                                                                
+PREMIAEDP  F_GET_MAIN_LC_OPBAL            FUNCTION                              
+23-JAN-03 12:16:13                                                              
+                                                                                
+PREMIAEDP  F_GET_SUB_LC_BAL               PROCEDURE                             
+23-JAN-03 12:15:27                                                              
+                                                                                
+PREMIAEDP  F_MAIN_LEVEL_SUM               PROCEDURE                             
+23-JAN-03 12:15:29                                                              
+                                                                                
+PREMIAEDP  F_MAIN_YEAR_SUM                PROCEDURE                             
+23-JAN-03 12:15:23                                                              
+                                                                                
+Date: 02/04/03                                                   Page:   4      
+Time: 10:49 AM              Invalid Database Objects             NK_DBA         
+                              ORAKIC database                                   
+                                                                                
+Object     Object                                                               
+Owner      Name                           OBJECT_TYPE                           
+---------- ------------------------------ ------------------                    
+Last Change                                                                     
+Date                                                                            
+--------------------                                                            
+PREMIAEDP  F_UPD_ACNT_BAL                 PROCEDURE                             
+23-JAN-03 12:13:42                                                              
+                                                                                
+PREMIAEDP  F_UPD_DOC_DT_CHANGE            PROCEDURE                             
+23-JAN-03 12:15:20                                                              
+                                                                                
+PREMIAEDP  F_VAL_ACNT_CURR_COMBN          PROCEDURE                             
+23-JAN-03 12:14:06                                                              
+                                                                                
+PREMIAEDP  F_VAL_DUP_DOC                  PROCEDURE                             
+23-JAN-03 12:15:40                                                              
+                                                                                
+PREMIAEDP  F_VAL_NARRATION                PROCEDURE                             
+23-JAN-03 12:15:31                                                              
+                                                                                
+PREMIAEDP  INSROWS                        PROCEDURE                             
+23-JAN-03 12:13:44                                                              
+                                                                                
+PREMIAEDP  L_FIN_INS_DETAIL               PROCEDURE                             
+23-JAN-03 12:13:13                                                              
+                                                                                
+PREMIAEDP  POL_APPR_3                     PACKAGE BODY                          
+23-JAN-03 12:16:31                                                              
+                                                                                
+PREMIAEDP  PP_CREATE_INSERT_STMT          PROCEDURE                             
+23-JAN-03 12:14:01                                                              
+                                                                                
+PREMIAEDP  STP_FM_ACNT_ANLY               PROCEDURE                             
+23-JAN-03 12:14:01                                                              
+                                                                                
+PREMIAEDP  STP_FM_ACNT_ANLY_LEVEL         PROCEDURE                             
+23-JAN-03 12:14:01                                                              
+                                                                                
+PREMIAEDP  STP_FM_ACNT_COMP               PROCEDURE                             
+23-JAN-03 12:14:01                                                              
+                                                                                
+PREMIAEDP  STP_FM_ACNT_CURR               PROCEDURE                             
+23-JAN-03 12:14:01                                                              
+                                                                                
+PREMIAEDP  STP_FM_ANLY_LEVEL              PROCEDURE                             
+23-JAN-03 12:13:16                                                              
+                                                                                
+PREMIAEDP  STP_FM_MAIN_ACCOUNT            PROCEDURE                             
+23-JAN-03 12:14:03                                                              
+                                                                                
+PREMIAEDP  STP_FM_MAIN_SUB                PROCEDURE                             
+23-JAN-03 12:14:03                                                              
+                                                                                
+Date: 02/04/03                                                   Page:   5      
+Time: 10:49 AM              Invalid Database Objects             NK_DBA         
+                              ORAKIC database                                   
+                                                                                
+Object     Object                                                               
+Owner      Name                           OBJECT_TYPE                           
+---------- ------------------------------ ------------------                    
+Last Change                                                                     
+Date                                                                            
+--------------------                                                            
+PREMIAEDP  STP_FM_SUB_ACCOUNT             PROCEDURE                             
+23-JAN-03 12:14:03                                                              
+                                                                                
+PREMIAEDP  STP_FM_YEARLY_BUDGET           PROCEDURE                             
+23-JAN-03 12:13:13                                                              
+                                                                                
+PREMIAEDP  STP_FT_BOUNCED_CHEQUE          PROCEDURE                             
+23-JAN-03 12:14:04                                                              
+                                                                                
+PREMIAEDP  STP_FT_CASH_RIMB               PROCEDURE                             
+23-JAN-03 12:15:53                                                              
+                                                                                
+PREMIAEDP  STP_FT_CJV_DETAIL              PROCEDURE                             
+23-JAN-03 12:15:54                                                              
+                                                                                
+PREMIAEDP  STP_FT_CORRECTION_JV           PROCEDURE                             
+23-JAN-03 12:15:54                                                              
+                                                                                
+PREMIAEDP  STP_FT_CUR_TRANS_DETAIL        PROCEDURE                             
+23-JAN-03 12:13:26                                                              
+                                                                                
+PREMIAEDP  STP_FT_CUR_TRANS_HEADER        PROCEDURE                             
+23-JAN-03 12:13:26                                                              
+                                                                                
+PREMIAEDP  STP_FT_OS                      PROCEDURE                             
+23-JAN-03 12:14:19                                                              
+                                                                                
+PREMIAEDP  STP_FT_PDC                     PROCEDURE                             
+23-JAN-03 12:13:53                                                              
+                                                                                
+PREMIAEDP  STP_FT_PRV_TRANS_DETAIL        PROCEDURE                             
+23-JAN-03 12:13:52                                                              
+                                                                                
+PREMIAEDP  STP_FT_PRV_TRANS_HEADER        PROCEDURE                             
+23-JAN-03 12:13:52                                                              
+                                                                                
+PREMIAEDP  STP_FT_REVERSAL_JV             PROCEDURE                             
+23-JAN-03 12:13:51                                                              
+                                                                                
+PREMIAEDP  STP_FT_UNPOSTED_TRANS_DETAIL   PROCEDURE                             
+23-JAN-03 12:15:20                                                              
+                                                                                
+PREMIAEDP  STP_FT_UNPOSTED_TRANS_HEADER   PROCEDURE                             
+23-JAN-03 12:15:20                                                              
+                                                                                
+PREMIAEDP  TRG_PS_DRCR_TMP                TRIGGER                               
+23-JAN-03 12:17:30                                                              
+                                                                                
+Date: 02/04/03                                                   Page:   6      
+Time: 10:49 AM              Invalid Database Objects             NK_DBA         
+                              ORAKIC database                                   
+                                                                                
+Object     Object                                                               
+Owner      Name                           OBJECT_TYPE                           
+---------- ------------------------------ ------------------                    
+Last Change                                                                     
+Date                                                                            
+--------------------                                                            
+FINAL7EDP  FOREX_ADJ                      PROCEDURE                             
+23-JAN-03 12:15:34                                                              
+                                                                                
+FINAL7EDP  F_GET_FC_OPBAL                 FUNCTION                              
+23-JAN-03 12:16:09                                                              
+                                                                                
+FINAL7EDP  F_GET_LC_OPBAL                 FUNCTION                              
+23-JAN-03 12:16:09                                                              
+                                                                                
+FINAL7EDP  F_GET_SUB_LC_BAL               PROCEDURE                             
+23-JAN-03 12:16:00                                                              
+                                                                                
+FINAL7EDP  F_MAIN_LEVEL_SUM               PROCEDURE                             
+23-JAN-03 12:15:35                                                              
+                                                                                
+FINAL7EDP  F_MAIN_YEAR_SUM                PROCEDURE                             
+23-JAN-03 12:15:36                                                              
+                                                                                
+FINAL7EDP  PM_CURRENCY                    VIEW                                  
+23-JAN-03 12:13:03                                                              
+                                                                                
+FINAL7EDP  STP_FT_CASH_RIMB               PROCEDURE                             
+23-JAN-03 12:14:24                                                              
+                                                                                
+LIFEEDP    TRG_PT_IL_SURR_MAT_VALUES      TRIGGER                               
+23-JAN-03 12:17:53                                                              
+                                                                                
+                                                                                
+Date: 02/04/03                                                   Page:   1      
+Time: 10:49 AM           Non-SYS Owned Tables in SYSTEM          NK_DBA         
+                              ORAKIC database                                   
+                                                                                
+                                                                                
+                                                                                

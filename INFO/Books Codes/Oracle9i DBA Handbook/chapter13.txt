@@ -1,0 +1,158 @@
+Scripts from chapter 13 of ORACLE9i DBA Handbook.  See the readme.doc file for details.
+
+
+(DESCRIPTION=
+      (ADDRESS=
+            (PROTOCOL=TCP)
+            (HOST=HQ)
+            (PORT=1521))
+      (CONNECT DATA=
+            (SID=LOC)))
+
+
+
+LOC =(DESCRIPTION=
+      (ADDRESS=
+            (PROTOCOL=TCP)
+            (HOST=HQ)
+            (PORT=1521))
+      (CONNECT DATA=
+            (SERVICE_NAME=LOC)))
+
+
+sqlplus hr/puffinstuff@LOC;
+
+
+LISTENER =
+  (ADDRESS_LIST =
+        (ADDRESS=
+          (PROTOCOL=IPC)
+          (KEY= loc.world)
+        )
+        (ADDRESS=
+          (PROTOCOL=TCP)
+          (HOST= HR)
+          (POER=1521)
+        )
+   ) 
+SID_LIST_LISTENER =
+ (SID_DESC =
+      (GLOBAL_DBNAME = loc.world)
+      (ORACLE_HOME = D:\oracle\ora90)
+      (SID_NAME = loc)
+    )
+  )
+
+
+LOC=
+  (DESCRIPTION=  
+   (ADDRESS =
+        (PROTOCOL = TCP)
+        (HOST = HQ)
+        (PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVICE_NAME = loc)
+      (INSTANCE_NAME = loc)
+    )
+)
+
+sqlplus hr/puffinstuff@LOC
+
+
+CMAN=
+  (ADDRESS=(PROTOCOL=tcp)(HOST=proxysvr)(PORT=1630))
+  (ADDRESS=(PROTOCOL=tcps)(HOST=192.23.34.234)(PORT=2484))
+CMAN_ADMIN=
+  (ADDRESS=(PROTOCOL=tcp)(HOST=proxysvr)(PORT=1830))
+CMAN_RULES=
+  (RULE=(SRC=194.34.228.123)(DST=HR)(SRV=*)(ACT=accept)))
+  (RULE=(SRC=194.34.228.124)(DST=HR)(SRV=*)(ACT=reject)))
+CMAN_PROFILE=
+  (PARAMETER_LIST=
+    (LOG_LEVEL=2)
+    (TRACING=on))
+
+
+cmctl start cman
+
+
+lsnrctl start
+
+lsnrctl start my_lsnr
+
+
+lsnrctl status
+
+
+ps -ef | grep tnslsnr
+
+lsnrctl version
+
+
+create database link HR_LINK
+connect to HR identified by PUFFINSTUFF
+using 'loc';
+
+
+create view LOCAL_EMPLOYEE_VIEW
+as
+select * from EMPLOYEE@HR_LINK
+where Office='ANNAPOLIS';
+
+
+create public synonym EMPLOYEE for EMPLOYEE@HR_LINK;
+
+
+create database link HR_LINK
+connect to HR identified by PUFFINSTUFF
+using 'loc';
+
+create table EMPLOYEE
+as
+select * from EMPLOYEE@HR_LINK;
+
+
+set copycommit 1
+set arraysize 1000
+copy from HR/PUFFINSTUFF@loc -
+create EMPLOYEE -
+using -
+select * from EMPLOYEE
+
+
+LOC =(DESCRIPTION=
+      (SDU=2048)
+      (ADDRESS=
+            (PROTOCOL=TCP)
+            (HOST=HQ)
+            (PORT=1521))
+      (CONNECT DATA=
+            (SID=loc)))
+
+
+
+LISTENER =
+  (ADDRESS_LIST =
+        (ADDRESS=
+          (PROTOCOL=IPC)
+          (KEY= loc.world)
+        )
+   ) 
+SID_LIST_LISTENER =
+  (SID_LIST =
+    (SID_DESC =
+      (SDU=2048)
+      (SID_NAME = loc)
+      (Oracle_HOME = /orasw/app/oracle/product/8.0.3.1)
+    )
+  )
+
+
+nslookup txhost
+
+
+
+
+
+

@@ -1,0 +1,1332 @@
+#! /bin/ksh
+
+# ------------------------------------------------------------------------
+# Filename:   sx
+# Version 3.2.02
+# Purpose:    sqlplus replacement shell with added functionality
+#             (scroll through command history, extra commands, etc.)
+# Notes:      execute "$0 -?" for help
+#
+# Customize:  (find #CUSTOM on text)
+#   You have to set the password you want to use.
+#   A few lines before it, you can set the PROMPT_VAL you want to use,
+#   'SQL > ' for example.
+#   If you run on Oracle8, you must go to ddl feature and change 2 
+#   lines  (one uncomment, one comment) for ddl statements to work.
+#
+# Known bugs
+#   Sometimes when you exit from sx, a 'defunct' process will remain.
+#
+#   If you execute 'man ' unix comand from sx '!' doesn't works well, and the 
+# terminal keeps on 'noecho' mode (see stty -1). If you execute man |pg, works
+# fine. Workaround: export PAGER="pg"
+#
+#   Now, at connect time, you get:     Enter user-name: Connected.
+# May be not the best way to do the connection, but prevents the user/passwd 
+# from showing in ps -ef. I've tries with '/nologin' and other ways but nothing 
+# works best.
+#
+# History:
+#  15/02/99 add desc2, primary, and index commands 
+#  15/04/99 correct some little bugs
+#  15/06/99 add help, tindex and ddl statements
+#   1/07/99 correct ddl statement (add constraints and unique index no works)
+#   7/07/99 trap ctrl-c on first password input (stty -echo)
+#   8/07/99 change disable constraint by drop/recreate constraint on ddl 
+#           include drop table statement on ddl
+#  15/07/99 change some feautures using (on english version) reserved words.
+#           also correct ddl feature for version 7.3.2
+#  19/07/99 change /dev/tty for exec `tty` command
+#           also change conection to can't any people see usr/pwd with ps
+#  21/07/99 correct a bug that ocurs if run the script like another user(su)
+#  21/10/99 add the new feature 'db'
+#  21/10/99 correct the script to implement the use of 'store'
+#
+# - Jorge Martin-Maldonado <jormarti@syseca.es>
+#
+#  Thanks to Jared dba_list (oracle@telelists.com) for all the help i received
+#  from all the suscribers
+#  Also thanks to Martin Kolar (martin.kolar@spt.cz) who helps me a lot to
+#  find & correct bugs and to enhance this script
+# ----------------------------------------------------------------------------
+
+# Print Help on screen
+
+if [ "_$1" = "_-h"  -o "_$1" = "_-?" ] ; then
+  cat 1>&2 <<EOF
+Use:$0 -h [commands], where [-h] or [-?] - displays this help screen
+       [commands ...] - standard sqlplus command line options
+ $0 executes standard sqlplus with some added functionality:
+ - "help script" gives this help
+ - Command history that works like ksh history
+   (Commands are stored in a file and recycled every 1000 statements. This 
+   history remains active between sessions and database instances.
+ - You can configure this script to directly connect to a default user/instance
+ - Execute HOME/.sqlrc (if exists) at the beginning of the session.
+ - DROP and TRUNCATE command ask for confirmation (works only if you type it 
+   in, or do a GET statement. Will not work for pl/scripts execution
+ - "desc2 [table]" shows full table description with enhanced output
+ - "primary [table]" shows description of the primary keys
+ - "index [index_name]" describes the specified index
+ - "tindex [table]" shows description of all indexes of table
+ - "ddl [table]" extract to screen ddl of all object referred to the table
+   include: drop all references constraints
+         create cluster if the table use it
+         create table with constraints, index, comments and triggers
+         create all references constraints
+ - "db " shows tablespace usage excluding system tablespace
+
+EOF
+  exit
+fi
+
+# save terminal configuration
+SAVETERM="$(stty -g 2>/dev/null)"
+export PAGER="pg" #workaround for execution of !man 
+TTY=`tty`
+
+# verify if can run Ok (you only can get your history as user who made login)
+OWNER=`ls -lL ${TTY} |tr -s " " " " |cut -f 3 -d " "` #owner of ${TTY}
+if [ ${OWNER} != `whoami` ]; then   # Who am i now?
+  echo "You are on 'su `whoami`' exec. You can't access ${OWNER} history"
+  TTY=/dev/tty
+fi
+
+# Variable definitions we need
+REAL="sqlplus"
+#CUSTOM
+PROMPT_VAL="&promp "
+
+# If this is not a real terminal (stdin) change to the REAL tool and stop script
+[[ -t 0 ]] || exec ${REAL} $@
+
+USER=""
+PASSWD=""
+# Uncomment and customize the next 2 lines if you want automatic connection
+#CUSTOM
+USER="tcp"
+PASSWD="tcp"
+
+# if you don't put user/passwd for security (any people edit script?)
+if [ -z "${USER}" ]
+then
+# ask for user/passwd, and validate it (max 3 times)
+  trap "stty echo;exit" 2
+  for i in 1 2 3 ; do
+    unset username password
+    echo "User : `stty echo`\c"
+    read username
+    echo "Password[@Tns] : `stty -echo`\c"
+    read password
+    echo ""
+    stty echo
+    USER="`echo ${username}|sed 's/ //g'`"
+    PASSWD="`echo ${password}|sed 's/ //g'`"
+    ${REAL} -s >/dev/null 2>&1 <<EOF
+${USER}/${PASSWD}
+whenever sqlerror exit 1
+select USER from dual;
+exit 0
+EOF
+    if [ "$?" != "0" ]
+    then
+      echo "Invalid user/passwd@TNS. \n"
+      USER=""
+      PASSWD=""
+      if [ ${i} -eq 3 ]
+      then
+        unset username password
+        echo "User error. Abort.\n"
+        exit 1
+      fi
+    else
+      break
+    fi
+  done
+fi
+
+unset username password
+# set the name of the edit file
+SQLTEMP="/tmp/afiedt.$LOGNAME.buf"
+
+# set the name of the conf file
+SQLCONF="/tmp/storeconf${LOGNAME}.sql"
+
+# History size, with name and size of history file
+set -o vi
+HISTFILE=/tmp/.hist_sql${LOGNAME}
+HISTSIZE=1000
+
+# Determines the default editor (VISUAL, EDITOR, vi), exit if none is found
+EDITOR=${VISUAL:-$EDITOR} 
+EDITOR=${EDITOR:-"vi"} 
+whence ${EDITOR} >/dev/null 2>&1 || {
+  echo "ERROR: Cannot find a valid editor to use.\n"
+ exit 1
+}
+ 
+# Exec the redirection of the shell
+( 
+# change the interrupts 1, 3 y 15 (hangup, quit y kill)
+  trap "exit" 1 3 15
+# Inhibit also interrupt 2
+  trap "" 2
+# connect on invisible mode (history, ps, etc) user/passwd
+print "${USER}/${PASSWD}"
+print "set sqlprompt ''"
+
+# if the .sqlrc file exists, execution it
+if [[ -f ${HOME}/.sqlrc ]]; then
+  print "@${HOME}/.sqlrc"
+fi
+
+# Params execute once at start
+if [ ! -z $* ]; then
+    print "$*"
+fi
+
+# at begin exec, say to user how get the help
+print "prompt 'TYPE help script FOR A HELP'"
+print "set sqlprompt '${PROMPT_VAL}'"
+# if the statement is not exit or quit, continue loop
+  while [[ "$l" != quit && "$l" != exit && "$l" != QUIT && "$l" != EXIT ]];
+  do
+# Read from stdin, and keep on history (-s)
+    read -s l <${TTY} >${TTY} 2>&1
+# analyse the statement, and the tool we use,
+    [[ -n "$l" ]] && [[ ${REAL} = "sqlplus" ]] && { 
+      set $l
+      case $1 in
+# invoke host editor
+       ed|edi|edit|ED|EDI|EDIT)
+# number of params > 1
+         if [ ! -z ${3} ];then
+           echo "Invalid file name." >${TTY}
+           echo "Can't exec ed(it) statement." >${TTY}
+           print
+           continue
+         fi
+         FILE=${2}
+# if we want use buffer (no params), save it to a file, and edit it.
+         if [[ -z ${2} ]];then
+           print "save ${SQLTEMP} replace" 
+           FILE=${SQLTEMP}
+         fi
+         eval ${EDITOR} ${FILE} < ${TTY} >${TTY} 2>&1
+# write the file edited to the screen
+         [[ ${FILE} = ${SQLTEMP} ]] && print "get ${FILE}"
+         continue;;
+# to connect
+        conn|conne|connec|connect|CONN|CONNE|CONNEC|CONNECT)
+# more than 1 parameter. continue, it got error
+         if [ ! -z ${3} ];then
+             echo "to many parameters" > ${TTY}
+             continue
+         fi
+         export username=${2}
+         if [[ -z ${2} ]];then
+# no parameter
+            echo "User : \c" > ${TTY}
+            read username
+         fi
+# one parameter, has paswwd inside?
+         export tns=`echo ${username} | cut -f2 -d'@'`
+         if [ "${tns}x" = "${username}x" ];then
+            export tns=""
+         fi
+         export username=`echo ${username} | cut -f1 -d'@'`
+         export password=`echo ${username} | cut -f2 -d'/'`
+         if [ "${password}x" = "${username}x" ];then
+            export password=""
+         fi
+         export username=`echo ${username} | cut -f1 -d'/'`
+# no passwd
+         if [ "${password}x" = "x" ];then
+            if [ "${tns}x" = "x" ];then
+               echo "Passwrd[@Tns] : `stty -echo`\c" > ${TTY}
+            else
+               echo "Passwrd : `stty -echo`\c" > ${TTY}
+            fi
+            read password
+            echo "" > ${TTY}
+            stty echo
+            export password
+         fi
+         if [ "${password}x" != "x" ];then
+            export password=/${password}
+         fi
+         if [ "${tns}x" != "x" ];then
+            export tns=@${tns}
+         fi
+         print "connect ${username}${password}${tns}"
+# Exec the glogin to set changes on the new instance (variable sqlpromt, etc)
+# Comment the next line if you don't want to do it
+         print "@${ORACLE_HOME}/sqlplus/admin/glogin.sql"
+         unset username
+         unset password
+         unset tns
+         continue;;
+        
+# Confirm DROP statement
+        drop|DROP)
+         export sino=j
+         while [[ "${sino}x" != "Yx" && "${sino}x" != "Nx" ]];
+         do 
+            echo "Do you want drop $2 `echo $3|cut -f 1 -d ';'`? (Y/N) : \c" > ${TTY}
+            read sino
+            if [ "${sino}x" = "nx" ];then
+               export sino=N
+            fi
+            if [ "${sino}x" = "yx" ];then
+               export sino=Y
+            fi
+         done
+         if [ "${sino}x" = "Yx" ];then
+            print "$l"
+         else
+            print
+         fi
+         unset sino
+         continue;;
+
+# Confirm TRUNCATE statement
+        truncate|TRUNCATE|trun|trunc|trunct|TRUN|TRUNC|TRUNCT)
+         export sino=j
+         while [[ "${sino}x" != "Yx" && "${sino}x" != "Nx" ]];
+         do 
+            echo "Are you sure? (Y/N) : \c" > ${TTY}
+            read sino
+            if [ "${sino}x" = "nx" ];then
+               export sino=N
+            fi
+            if [ "${sino}x" = "yx" ];then
+               export sino=Y
+            fi
+         done
+         if [ "${sino}x" = "Yx" ];then
+            print "$l"
+         else
+            print
+         fi
+         unset sino
+         continue;;
+
+# Implement help script statement
+       help|HELP)
+         export param=${2}
+				 print "store set ${SQLCONF} CREATE"
+         print "set sqlprompt ''"
+         print "set pagesize 1000"
+         print "set verify off"
+         print "set feed 10"
+         print "set feedback off"
+         print "set heading off"
+         print "ttitle ' '"
+         if [ "${param}x" = "scriptx" -o "${param}x" = "SCRIPTx" ];then
+						print "prompt ' '"
+            print "prompt 'Use: $0 -h [commands], where [-h] or [-?] - displays this help screen'"
+            print "prompt '      [commands ...] - standard sqlplus command line options'"
+            print "prompt ' $0 executes standard sqlplus with some added functionality:'"
+            print "prompt ' -"help script" gives this help'"
+            print "prompt ' -Command history that works like ksh history'"
+            print "prompt '  (Commands are stored in a file and recycled every 1000 statements. This '"
+            print "prompt '  history remains active between sessions and database instances.'"
+            print "prompt ' -You can configure this script to directly connect to a default user/instance'"
+            print "prompt ' -Execute HOME/.sqlrc (if exists) at the beginning of the session.'"
+            print "prompt ' -DROP and TRUNCATE command ask for confirmation (works only if you type it '"
+            print "prompt '  in, or do a GET statement. Will not work for pl/scripts execution'"
+            print "prompt ' -"desc2 [table]" shows full table description with enhenced output.'"
+            print "prompt ' -"primary [table]" shows description of the primary keys'"
+            print "prompt ' -"index [index_name]" describes the specified index'"
+            print "prompt ' -"tindex [table]" shows description of all indexes of table'"
+            print "prompt ' -"ddl [table]" extract ddl of all object referred to the table'"
+            print "prompt '   include: drop all references constraints'"
+            print "prompt '            create cluster if the table use it'"
+            print "prompt '            create table with constraints, index, comments and triggers'"
+            print "prompt '            create all references constraints'"
+            print "prompt ' -"db " shows tablespace usage excluding system tablespace'"
+         else
+            print "$l"
+         fi
+				 print "ttitle off"
+				 print "@${SQLCONF}"
+				 print "!rm -f ${SQLCONF}"
+         continue;;
+
+# Implement desc2 statement
+        desc2|DESC2)
+         export TABLA=${2}
+				 print "store set ${SQLCONF} CREATE"
+         print "set sqlprompt ''"
+         print "set pagesize 1000"
+         print "set verify off"
+         print "set feed 10"
+         print "set feedback off"
+         print "column COL FORMAT a20"
+         print "column COMMENTS FORMAT a59"
+         print "column COMMENTS WORD_WRAPPED"
+         print "COLUMN CONSTRAINT_REL FORMAT A45"
+         print "break on CONSTRAINT nodup"
+         print "prompt DESCRIPTION OF ${TABLA}"
+         print "DESC ${TABLA}"
+         print "ttitle 'CONSTRAINTS OF ${TABLA}'"
+         print "SELECT A.CONSTRAINT_NAME || '(' || A.CONSTRAINT_TYPE || ')' CONSTRAINT,B.TABLE_NAME || '(' || A.R_CONSTRAINT_NAME || ')' CONSTRAINT_REL FROM ALL_CONSTRAINTS A, ALL_CONSTRAINTS B WHERE A.TABLE_NAME LIKE UPPER('${TABLA}') AND A.CONSTRAINT_NAME NOT LIKE 'SYS%' AND B.CONSTRAINT_NAME = A.R_CONSTRAINT_NAME ORDER BY A.CONSTRAINT_NAME, B.TABLE_NAME;"
+         print "SELECT CONSTRAINT_NAME CONSTRAINT,COLUMN_NAME || '(' || SUBSTR(TO_CHAR(POSITION), 0, 2) || ')' COL FROM ALL_CONS_COLUMNS WHERE TABLE_NAME LIKE UPPER('${TABLA}') AND CONSTRAINT_NAME NOT LIKE 'SYS%' ORDER BY CONSTRAINT_NAME, POSITION;"
+         print "ttitle 'INDEXES OF ${TABLA}'"
+         print "break on INDEX nodup"
+         print "SELECT A.INDEX_NAME INDX,A.COLUMN_NAME || '(' || SUBSTR(TO_CHAR(A.COLUMN_POSITION), 0, 2) || ')' COL, DECODE(UNIQUENESS, 'UNIQUE', 'YES', 'NO') UNQ FROM ALL_IND_COLUMNS A, ALL_INDEXES B WHERE A.TABLE_NAME LIKE UPPER('${TABLA}') AND A.TABLE_NAME = B.TABLE_NAME AND A.TABLE_OWNER = B.TABLE_OWNER AND A.INDEX_NAME = B.INDEX_NAME AND A.INDEX_OWNER = B.OWNER ORDER BY A.INDEX_NAME, A.COLUMN_POSITION;"
+         print "ttitle 'COMMENTS OF ${TABLA}'"
+         print "SELECT COLUMN_NAME COL,COMMENTS  FROM ALL_COL_COMMENTS WHERE TABLE_NAME LIKE UPPER('${TABLA}') ORDER BY COLUMN_NAME;"
+				 print "ttitle off"
+				 print "@${SQLCONF}"
+				 print "!rm -f ${SQLCONF}"
+         continue;;
+
+# Implement primary statement
+       primary|prim|prima|primar|PRIMARY|PRI|PRIM|PRIMA|PRIMAR)
+         export TABLA=${2}
+				 print "store set ${SQLCONF} CREATE"
+         print "set sqlprompt ''"
+         print "set pagesize 1000"
+         print "set verify off"
+         print "set feed 10"
+         print "set feedback off"
+         print "break on PRIMARY nodup"
+         print "COLUMN POSITION NOPRINT"
+         print "ttitle 'Primary key of ${TABLA}'"
+         print "SELECT b.constraint_name PRIMARY,b.column_name COL,b.position FROM ALL_CONSTRAINTS a,ALL_CONS_COLUMNS b WHERE b.TABLE_NAME=UPPER('${TABLA}') AND a.CONSTRAINT_TYPE = 'P' AND a.CONSTRAINT_NAME = b.CONSTRAINT_NAME AND a.TABLE_NAME = b.TABLE_NAME AND a.OWNER = b.OWNER ORDER BY PRIMARY,COL;"
+				 print "ttitle off"
+				 print "@${SQLCONF}"
+				 print "!rm -f ${SQLCONF}"
+         continue;;
+
+# Implement tindex statement
+       tindex|TINDEX|tinde|tind|TINDE|TIND)
+         export TABLA=${2}
+				 print "store set ${SQLCONF} CREATE"
+         print "set sqlprompt ''"
+         print "set pagesize 1000"
+         print "set verify off"
+         print "set feed 10"
+         print "set feedback off"
+         print "column COL FORMAT a20"
+         print "column COMMENTS FORMAT a59"
+         print "column COMMENTS WORD_WRAPPED"
+         print "COLUMN CONSTRAINT_REL FORMAT A45"
+         print "ttitle 'INDEXES OF ${TABLA}'"
+         print "break on INDEX_NAME nodup"
+         print "SELECT A.INDEX_NAME,A.COLUMN_NAME || '(' || SUBSTR(TO_CHAR(A.COLUMN_POSITION), 0, 2) || ')' COL, DECODE(UNIQUENESS, 'UNIQUE', 'YES', 'NO') UNQ FROM ALL_IND_COLUMNS A, ALL_INDEXES B WHERE A.TABLE_NAME LIKE UPPER('${TABLA}') AND A.TABLE_NAME = B.TABLE_NAME AND A.TABLE_OWNER = B.TABLE_OWNER AND A.INDEX_NAME = B.INDEX_NAME AND A.INDEX_OWNER = B.OWNER ORDER BY A.INDEX_NAME, A.COLUMN_POSITION;"
+				 print "ttitle off"
+				 print "@${SQLCONF}"
+				 print "!rm -f ${SQLCONF}"
+         continue;;
+
+# Implement  index statement
+       index|inde|ind|INDEX|INDE|IND)
+         export INDICE=${2}
+				 print "store set ${SQLCONF} CREATE"
+         print "set sqlprompt ''"
+         print "set pagesize 1000"
+         print "set verify off"
+         print "set feed 10"
+         print "set feedback off"
+         print "break on INDEX nodup"
+         print "COLUMN POSITION NOPRINT"
+         print "ttitle 'INDICE ${INDICE}'"
+         print "break on INDEX nodup"
+         print "SELECT A.INDEX_NAME INDX,A.COLUMN_NAME || '(' || SUBSTR(TO_CHAR(A.COLUMN_POSITION), 0, 2) || ')' COL, DECODE(UNIQUENESS, 'UNIQUE', 'YES', 'NO') UNQ FROM ALL_IND_COLUMNS A, ALL_INDEXES B WHERE A.INDEX_NAME LIKE UPPER('${INDICE}') AND A.TABLE_NAME = B.TABLE_NAME AND A.TABLE_OWNER = B.TABLE_OWNER AND A.INDEX_NAME = B.INDEX_NAME AND A.INDEX_OWNER = B.OWNER ORDER BY A.INDEX_NAME, A.COLUMN_POSITION;"
+				 print "ttitle off"
+				 print "@${SQLCONF}"
+				 print "!rm -f ${SQLCONF}"
+         continue;;
+
+# Implement ddl statement
+       ddl|DDL)
+         export TABLA=${2}
+				 print "store set ${SQLCONF} CREATE"
+         print "set sqlprompt ''"
+         print "set echo off "
+         print "set trims on"
+         print "set sqln off"
+         print "set verify off"
+         print "set feedback off"
+         print "set feed 10"
+         print "set pause off"
+         print "set serveroutput on"
+         print "ttitle off"
+         print "prompt 'Generating ddl for ${TABLA}. Please wait'"
+# Declare cursors and variables to make ddl
+         print "declare"
+# Exists table?
+         print "cursor val is"
+         print "select owner, table_name from all_tables "
+         print "where table_name = upper('${TABLA}'); "
+         print "var val%ROWTYPE;"
+# References constraints
+         print "cursor pre (s_own VARCHAR2,s_tab VARCHAR2) is"
+         print "select a.owner, a.constraint_name, a.table_name "
+         print "from all_constraints a, all_constraints b"
+         print "where a.r_constraint_name = b.constraint_name and"
+         print "a.constraint_type = 'R' and"
+         print "b.table_name = s_tab and "
+         print "b.owner = s_own and"
+         print "b.owner = a.r_owner;"
+         print "prr pre%ROWTYPE;"
+# Table data
+         print "cursor ctc (s_own VARCHAR2,s_tab VARCHAR2) is"
+         print "select upper(owner) capown,upper(table_name) captab,"
+         print "pct_free,pct_used,decode(ini_trans,0,1) initrans,"
+         print "decode(max_trans,0,1) maxtrans,tablespace_name,"
+         print "cluster_name,initial_extent,next_extent,min_extents,"
+         print "max_extents,freelists,freelist_groups,pct_increase"
+         print "from sys.dba_tables"
+         print "where owner = s_own and"
+         print "table_name = s_tab"
+         print "order by owner,table_name;"
+         print "ctr ctc%ROWTYPE;"
+# Cluster data
+         print "cursor clu (s_own VARCHAR2,s_cluster VARCHAR2) is"
+         print "select upper(owner) capown2, upper(cluster_name) capclu2,"
+         print "tablespace_name,pct_free,pct_used,key_size,"
+         print "decode(ini_trans,0,1) initrans,"
+         print "decode(max_trans,0,1) maxtrans,initial_extent,next_extent,"
+         print "min_extents,max_extents,pct_increase,freelists,"
+         print "freelist_groups"
+         print "from sys.dba_clusters"
+         print "where owner = s_own and"
+         print "cluster_name = s_cluster;"
+         print "clr clu%ROWTYPE;"
+# Cluster column data
+         print "cursor ccu (s_own VARCHAR2,s_cluster VARCHAR2,"
+         print "s_tabla varchar2) is"
+         print "select upper(a.clu_column_name) clucolname,"
+         print "upper(a.tab_column_name) tabcolname,"
+         print "upper(data_type) datatype,data_length,data_precision,"
+         print "data_scale,default_length"
+         print "from sys.dba_clu_columns a, sys.dba_tab_columns b"
+         print "where a.owner = s_own and"
+         print "a.owner = b.owner and"
+         print "a.cluster_name = s_cluster and"
+         print "a.table_name = s_tabla and"
+         print "a.table_name = b.table_name and"
+         print "a.tab_column_name = b.column_name;"
+         print "crc ccu%ROWTYPE;"
+# Cluster index
+         print "cursor iuc (s_own VARCHAR2,s_cluster varchar2) is"
+         print "select upper(owner) own, upper(index_name) indexname,pct_free,"
+         print "upper(table_name),ini_trans,max_trans,tablespace_name,"
+         print "min_extents, max_extents,freelists"
+         print "from  sys.dba_indexes"
+         print "where owner = s_own and "
+         print "table_name = s_cluster and"
+         print "table_type = 'CLUSTER'"
+         print "order by owner,index_name;"
+         print "iur iuc%ROWTYPE;"
+# Compress mode for storage sizes
+         print "cursor csc (s_own VARCHAR2,s_tab VARCHAR2) is"
+         print "select bytes from sys.dba_segments"
+         print "where segment_name = s_tab and"
+         print "owner = s_own and"
+         print "segment_type = 'TABLE';"
+         print "csr csc%ROWTYPE;"
+# Table column data
+         print "cursor ccc (c_own VARCHAR2,c_tab VARCHAR2) is"
+         print "select upper(column_name) colname,upper(data_type) datatype,"
+         print "data_length,data_precision,data_scale,"
+         print "nullable,default_length,data_default,column_id"
+         print "from sys.dba_tab_columns"
+         print "where table_name = c_tab and"
+         print "owner = c_own"
+         print "order by column_id;"
+         print "ccr ccc%ROWTYPE;"
+# Constraints data (primary and unique types)
+         print "cursor ptp (s_own VARCHAR2,c_tab VARCHAR2,c_type VARCHAR2) is"
+         print "select upper(a.owner) owner, upper(a.constraint_name) conname,"
+         print "b.tablespace_name,b.pct_free,decode(b.ini_trans,0,1) initrans,"
+         print "decode(b.max_trans,0,1) maxtrans,b.initial_extent,"
+         print "b.next_extent,b.min_extents,b.max_extents,"
+         print "b.pct_increase,b.freelists,b.freelist_groups"
+         print "from  sys.dba_constraints a, sys.dba_indexes b"
+         print "where a.table_name = c_tab and"
+         print "a.owner = s_own and"
+         print "a.constraint_type = c_type and"
+         print "a.owner = b.owner and"
+         print "a.constraint_name = b.index_name and"
+         print "a.table_name = b.table_name;"
+         print "ptr ptp%ROWTYPE;"
+# Constraints columns data
+         print "cursor pcp (c_own VARCHAR2,c_cons VARCHAR2) is"
+         print "select upper(column_name) colname, position"
+         print "from  sys.dba_cons_columns"
+         print "where owner= c_own and"
+         print "constraint_name = c_cons"
+         print "order by position;"
+         print "pcr pcp%ROWTYPE;"
+# Foreign key data
+         print "cursor ftp (c_own VARCHAR2,c_tab VARCHAR2,c_type VARCHAR2) is"
+         print "select upper(a.owner) owner, upper(a.constraint_name) conname,"
+         print "upper(a.r_owner) rowner, upper(a.r_constraint_name) rconname,"
+         print "upper(b.table_name) tabname"
+         print "from  sys.dba_constraints a, sys.dba_constraints b"
+         print "where a.table_name = c_tab and"
+         print "a.constraint_type = c_type and"
+         print "a.owner = c_own and"
+         print "a.r_owner = b.owner and"
+         print "a.r_constraint_name = b.constraint_name;"
+         print "ftr ftp%ROWTYPE;"
+# References foreign key data (other tables)
+         print "cursor ftp2 (c_own VARCHAR2,c_tab VARCHAR2,c_con VARCHAR2,"
+         print "c_type VARCHAR2) is"
+         print "select upper(a.owner) owner, upper(a.constraint_name) conname,"
+         print "upper(a.r_owner) rowner, upper(a.r_constraint_name) rconname,"
+         print "upper(b.table_name) tabname"
+         print "from  sys.dba_constraints a, sys.dba_constraints b"
+         print "where a.table_name = c_tab and"
+         print "a.constraint_type = c_type and"
+         print "a.constraint_name = c_con and"
+         print "a.owner = c_own and"
+         print "a.r_owner = b.owner and"
+         print "a.r_constraint_name = b.constraint_name;"
+# Constraints check data ( withot not null ones )
+         print "cursor chk (c_own VARCHAR2,c_tab VARCHAR2) is"
+         print "select upper(oc.name) conname, c.condition"
+         print "from  sys.con$ oc, sys.obj$ o, sys.cdef$ c,sys.user$ u"
+         print "where oc.con# = c.con# and"
+         print "o.owner# = u.user# and"
+         print "u.name = c_own and"
+         print "c.obj#  = o.obj# and"
+#CUSTOM
+         print "c.type  = 1 and"
+# for oracle 8, uncomment next line, and comment previous one
+#         print "c.type#  = 1 and"
+         print "o.name  = c_tab;"
+         print "crr chk%ROWTYPE;"
+# Nonunique indexes data
+         print "cursor icc (c_own VARCHAR2,c_tab VARCHAR2) is"
+         print "select upper(owner) owner, upper(index_name) indname,"
+         print "tablespace_name,pct_free,decode(ini_trans,0,1) initrans,"
+         print "decode(max_trans,0,1) maxtrans,initial_extent,next_extent,"
+         print "min_extents,max_extents,pct_increase,freelists,"
+         print "freelist_groups"
+         print "from  sys.dba_indexes a"
+         print "where table_name = c_tab and"
+         print "owner = c_own and "
+         print "uniqueness = 'NONUNIQUE';"
+         print "icr icc%ROWTYPE;"
+# Unique indexes data (NO CONSTRAINTS)
+         print "cursor icc2 (c_own VARCHAR2,c_tab VARCHAR2) is"
+         print "select upper(owner) owner, upper(index_name) indname,"
+         print "tablespace_name,pct_free,decode(ini_trans,0,1) initrans,"
+         print "decode(max_trans,0,1) maxtrans,initial_extent,next_extent,"
+         print "min_extents,max_extents,pct_increase,freelists,"
+         print "freelist_groups from  sys.dba_indexes a"
+         print "where table_name = c_tab and owner = c_own and"
+         print "uniqueness = 'UNIQUE' and"
+         print "not exists (select 1 from sys.dba_constraints b"
+         print "where a.index_name = b.constraint_name and"
+         print "a.table_name = b.table_name and a.owner = b.owner);"
+# Index columns data
+         print "cursor irc (c_ind VARCHAR2, c_own VARCHAR2) is"
+         print "select upper(column_name) colname, column_position"
+         print "from  sys.dba_ind_columns"
+         print "where index_owner = c_own and"
+         print "index_name = c_ind"
+         print "order by column_position;"
+         print "irr irc%ROWTYPE;"
+# Table comments
+         print "cursor cot (c_tab VARCHAR2,c_own varchar2) is"
+         print "select upper(owner) owner, upper(table_name) tabname, comments"
+         print "from  sys.dba_tab_comments"
+         print "where table_name = c_tab and"
+         print "owner = c_own and "
+         print "comments is not null;"
+         print "cor cot%ROWTYPE;"
+# Columns comments
+         print "cursor col (c_tab VARCHAR2, c_own VARCHAR2) is"
+         print "select upper(owner) owner, upper(table_name) tabname,"
+         print "upper(column_name) colname, comments"
+         print "from  sys.dba_col_comments"
+         print "where owner = c_own and"
+         print "table_name = c_tab and"
+         print "comments is not null;"
+         print "cfr col%ROWTYPE;"
+# Triggers data
+         print "cursor tri (c_tab VARCHAR2, c_own VARCHAR2) is"
+         print "select description, when_clause,owner,trigger_name"
+         print "from sys.dba_triggers"
+         print "where table_name = c_tab and"
+         print "table_owner= c_own;"
+         print "trr tri%ROWTYPE;"
+# Variable definitions
+         print "mytrigger VARCHAR2(30);"
+         print "myowner VARCHAR2(30);"
+         print "cur1 PLS_INTEGER := DBMS_SQL.OPEN_CURSOR;"
+         print "rc INTEGER;"
+         print "long_piece VARCHAR2(2000);"
+         print "piece_len INTEGER := 0;"
+         print "long_len INTEGER := 0;"
+         print "cont INTEGER := 0;"
+         print "charac NUMBER;"
+         print "lista varchar2(1500); "
+         print "tabla varchar2(30):='Y';"
+# Function definition. Purpose: Write a piece of a long on separate lines 
+         print "function write_long(l_piece in varchar2,l_longi in NUMBER) "
+         print "return NUMBER is"
+         print "begin"
+         print "cont := 1;"
+         print "while ( l_longi > cont  - 1 ) loop "
+         print "charac := ascii(substr(l_piece,cont,1));"
+         print "if charac <> 10 then"
+         print "dbms_output.put(chr(charac));"
+         print "else"
+         print "dbms_output.new_line;"
+         print "end if;"
+         print "cont := cont + 1;"
+         print "end loop;"
+         print "return 0;"
+         print "end write_long;"
+# Function definition. Purpose: transforms bytes to kilobytes/Megabytes
+         print "function orac_1024(l_in in number) return varchar2 is"
+         print "begin"
+         print "if mod(l_in,(1024*1024)) = 0 then"
+         print "return to_char(l_in / (1024*1024))||'M';"
+         print "elsif mod(l_in,1024) = 0 then"
+         print "return to_char(l_in / 1024)||'K';"
+         print "else"
+         print "return to_char(l_in);"
+         print "end if;"
+         print "end orac_1024;"
+# Begin work
+         print "begin"
+         print "dbms_output.enable(1000000);"
+         print "open val;"
+         print "loop"
+         print "fetch val into var;"
+         print "exit when val%notfound;"
+         print "tabla :='X';"
+         print "open pre (var.owner,var.table_name);"
+         print "loop"
+         print "fetch pre into prr;"
+         print "exit when pre%notfound;"
+         print "dbms_output.put_line('ALTER TABLE '||prr.owner||'.'"
+         print "||prr.table_name);"
+         print "dbms_output.put_line('  DROP CONSTRAINT '||"
+         print "prr.constraint_name||';'||chr(10));"
+         print "end loop;"
+         print "close pre;"
+         print "open ctc (var.owner,var.table_name);"
+         print "loop"
+         print "fetch ctc into ctr;"
+         print "exit when ctc%notfound;"
+# Coment the 9 next lines if you want original storages sizes
+         print "open csc (ctr.capown,ctr.captab);"
+         print "fetch csc into csr;"
+         print "if csc%found then"
+         print "ctr.initial_extent := csr.bytes;"
+         print "if ctr.next_extent > ctr.initial_extent then"
+         print "ctr.next_extent := ctr.initial_extent;"
+         print "end if;"
+         print "end if;"
+         print "close csc;"
+# Coment the 9 previus lines if you want original storages sizes
+         print "if ctr.cluster_name is not null then"
+         print "open clu (var.owner,ctr.cluster_name);"
+         print "loop"
+         print "fetch clu into clr;"
+         print "exit when clu%notfound;"
+         print "dbms_output.put_line('CREATE CLUSTER '"
+         print "||clr.capown2||'.'||clr.capclu2||' (');"
+         print "open ccu(var.owner,clr.capclu2,ctr.captab);"
+         print "loop"
+         print "fetch ccu into crc;"
+         print "exit when ccu%notfound;"
+         print "if length(lista) > 0 then"
+         print "dbms_output.put_line(', ');"
+         print "lista := lista ||', ';"
+         print "end if;"
+         print "dbms_output.put(chr(34)||crc.clucolname"
+         print "||chr(34)||' '||crc.datatype);"
+         print "lista := lista||crc.tabcolname;"
+         print "if crc.datatype = 'CHAR' or"
+         print "crc.datatype = 'VARCHAR2' or"
+         print "crc.datatype = 'RAW' then"
+         print "dbms_output.put('('||crc.data_length||')');"
+         print "end if;"
+         print "if (crc.datatype= 'NUMBER' and nvl(crc.data_precision,0) != 0)"
+         print "or crc.datatype = 'FLOAT' then"
+         print "if nvl(crc.data_scale,0) = 0 then"
+         print "dbms_output.put('('||crc.data_precision||')');"
+         print "else"
+         print "dbms_output.put('('||crc.data_precision"
+         print "||','||crc.data_scale||')');"
+         print "end if;"
+         print "end if;"
+         print "end loop;"
+         print "dbms_output.put_line(')');"
+         print "if clr.pct_free is not null then"
+         print "dbms_output.put('SIZE '||"
+         print "ltrim(rtrim(orac_1024(clr.key_size))));"
+         print "end if;"
+         print "dbms_output.put(' PCTFREE '||to_char(clr.pct_free));"
+         print "dbms_output.put(' PCTUSED '||to_char(clr.pct_used));"
+         print "if clr.initrans is not null then"
+         print "dbms_output.put(' INITRANS '||to_char(clr.initrans));"
+         print "end if;"
+         print "if clr.maxtrans is not null then"
+         print "dbms_output.put(' MAXTRANS '||to_char(clr.maxtrans));"
+         print "end if;"
+         print "dbms_output.put(' STORAGE (');"
+         print "if clr.initial_extent is not null then"
+         print "dbms_output.put(' INITIAL '||"
+         print "rtrim(ltrim(orac_1024(clr.initial_extent))));"
+         print "end if;"
+         print "if clr.next_extent is not null then"
+         print "dbms_output.put(' NEXT '||orac_1024(clr.next_extent));"
+         print "end if;"
+         print "dbms_output.put_line(' MINEXTENTS '||to_char(clr.min_extents));"
+         print "dbms_output.put(' MAXEXTENTS '||to_char(clr.max_extents));"
+         print "dbms_output.put(' PCTINCREASE '||to_char(clr.pct_increase));"
+         print "dbms_output.put(' FREELISTS '||to_char(clr.freelists));"
+         print "dbms_output.put(' FREELIST GROUPS '||"
+         print "to_char(clr.freelist_groups));"
+         print "dbms_output.put_line(') TABLESPACE '||"
+         print "clr.tablespace_name||';');"
+         print "dbms_output.put_line(chr(10));"
+         print "open iuc (var.owner,clr.capclu2);"
+         print "loop"
+         print "fetch iuc into iur;"
+         print "exit when iuc%notfound;"
+         print "dbms_output.put('CREATE INDEX '||iur.own"
+         print "||'.'||iur.indexname||' ON CLUSTER '"
+         print "||clr.capclu2||' PCTFREE '||to_char(iur.pct_free));"
+         print "if iur.ini_trans is not null then"
+         print "dbms_output.put(' INITRANS '||to_char(iur.ini_trans));"
+         print "end if;"
+         print "if iur.max_trans is not null then"
+         print "dbms_output.put(' MAXTRANS '||to_char(iur.max_trans));"
+         print "end if;"
+         print "dbms_output.put(' STORAGE(MINEXTENTS '||"
+         print "to_char(iur.min_extents)||' MAXEXTENTS '||"
+         print "to_char(iur.max_extents)||' FREELISTS '||"
+         print "to_char(iur.freelists)||' ) TABLESPACE '||"
+         print "iur.tablespace_name||';');"
+         print "end loop;"
+         print "close iuc;"
+         print "dbms_output.put_line(chr(10));"
+         print "end loop;"
+         print "close clu;"
+         print "end if;"
+         print "dbms_output.put_line('--DROP TABLE '||ctr.capown||'.'||"
+         print "ctr.captab||' CASCADE CONSTRAINTS;'||chr(10));"
+         print "dbms_output.put_line('CREATE TABLE '||ctr.capown||'.'||"
+         print "ctr.captab||' (');"
+         print "open ccc(ctr.capown,ctr.captab);"
+         print "loop"
+         print "fetch ccc into ccr;"
+         print "exit when ccc%notfound;"
+         print "if ccr.column_id <> 1 then"
+         print "dbms_output.put_line(', ');"
+         print "end if;"
+         print "dbms_output.put(rpad((chr(34)||ccr.colname||chr(34)),30));"
+         print "dbms_output.put(' '||ccr.datatype);"
+         print "if ccr.datatype = 'CHAR' or ccr.datatype = 'VARCHAR2' or"
+         print "ccr.datatype = 'RAW' then"
+         print "dbms_output.put('('||ccr.data_length||')');"
+         print "end if;"
+         print "if (ccr.datatype = 'NUMBER' and nvl(ccr.data_precision,0) != 0)"
+         print "or ccr.datatype= 'FLOAT' then"
+         print "if nvl(ccr.data_scale,0) = 0 then"
+         print "dbms_output.put('('||ccr.data_precision||')');"
+         print "else"
+         print "dbms_output.put('('||ccr.data_precision||','||"
+         print "ccr.data_scale||')');"
+         print "end if;"
+         print "end if;"
+         print "if ccr.default_length != 0 then"
+         print "dbms_output.put(' DEFAULT '||ccr.data_default);"
+         print "end if;"
+         print "if ccr.nullable = 'N' then"
+         print "dbms_output.put(' NOT NULL');"
+         print "end if;"
+         print "end loop;"
+         print "close ccc;"
+         print "dbms_output.put_line(')');"
+         print "if ctr.cluster_name is not null then"
+         print "dbms_output.put_line(' CLUSTER '||ctr.cluster_name"
+         print "||' ('||ltrim(rtrim(lista))||');');"
+         print "else"
+         print "dbms_output.put('PCTFREE '||to_char(ctr.pct_free));"
+         print "dbms_output.put(' PCTUSED '||to_char(ctr.pct_used));"
+         print "if ctr.initrans is not null then"
+         print "dbms_output.put(' INITRANS '||to_char(ctr.initrans));"
+         print "end if;"
+         print "if ctr.maxtrans is not null then"
+         print "dbms_output.put(' MAXTRANS '||to_char(ctr.maxtrans));"
+         print "end if;"
+         print "dbms_output.put(' TABLESPACE '||ctr.tablespace_name);"
+         print "dbms_output.put(' STORAGE (INITIAL '||"
+         print "rtrim(ltrim(orac_1024(ctr.initial_extent))));"
+         print "dbms_output.put_line(' NEXT '||"
+         print "rtrim(ltrim(orac_1024(ctr.next_extent))));"
+         print "dbms_output.put('MINEXTENTS '||to_char(ctr.min_extents));"
+         print "dbms_output.put(' MAXEXTENTS '||to_char(ctr.max_extents));"
+         print "dbms_output.put(' PCTINCREASE '||to_char(ctr.pct_increase));"
+         print "dbms_output.put(' FREELISTS '||to_char(ctr.freelists));"
+         print "dbms_output.put(' FREELIST GROUPS '||"
+         print "to_char(ctr.freelist_groups));"
+         print "dbms_output.put_line(');');"
+         print "end if;"
+         print "open chk(var.owner,ctr.captab);"
+         print "loop"
+         print "fetch chk into crr;"
+         print "exit when chk%notfound;"
+         print "dbms_output.put(chr(10));"
+         print "dbms_output.put_line('ALTER TABLE '||ctr.capown"
+         print "||'.'||ctr.captab||' ADD CONSTRAINT '||crr.conname);"
+         print "dbms_output.put_line('CHECK ('||"
+         print "ltrim(rtrim(crr.condition))||');');"
+         print "end loop;"
+         print "close chk;"
+         print "open ptp(var.owner,ctr.captab,'P');"
+         print "loop"
+         print "fetch ptp into ptr;"
+         print "exit when ptp%notfound;"
+         print "dbms_output.put(chr(10));"
+         print "dbms_output.put_line('ALTER TABLE '||ctr.capown"
+         print "||'.'||ctr.captab||' ADD CONSTRAINT '||ptr.conname);"
+         print "dbms_output.put('PRIMARY KEY (');"
+         print "open pcp(ptr.owner,ptr.conname);"
+         print "loop"
+         print "fetch pcp into pcr;"
+         print "exit when pcp%notfound;"
+         print "if pcr.position <> 1 then"
+         print "dbms_output.put(', ');"
+         print "end if;"
+         print "dbms_output.put(chr(34)||pcr.colname||chr(34));"
+         print "end loop;"
+         print "close pcp;"
+         print "dbms_output.put_line(')');"
+         print "dbms_output.put('USING INDEX ');"
+         print "dbms_output.put('PCTFREE '||to_char(ptr.pct_free));"
+         print "if ptr.initrans is not null then"
+         print "dbms_output.put(' INITRANS '||to_char(ptr.initrans));"
+         print "end if;"
+         print "if ptr.maxtrans is not null then"
+         print "dbms_output.put(' MAXTRANS '||to_char(ptr.maxtrans));"
+         print "end if;"
+         print "dbms_output.put(' TABLESPACE '||ptr.tablespace_name);"
+         print "dbms_output.put(' STORAGE (INITIAL '||"
+         print "rtrim(ltrim(orac_1024(ptr.initial_extent))));"
+         print "dbms_output.put_line(' NEXT '||"
+         print "rtrim(ltrim(orac_1024(ptr.next_extent))));"
+         print "dbms_output.put('MINEXTENTS '||to_char(ptr.min_extents));"
+         print "dbms_output.put(' MAXEXTENTS '||to_char(ptr.max_extents));"
+         print "dbms_output.put(' PCTINCREASE '||to_char(ptr.pct_increase));"
+         print "dbms_output.put(' FREELISTS '||to_char(ptr.freelists));"
+         print "dbms_output.put(' FREELIST GROUPS '||"
+         print "to_char(ptr.freelist_groups));"
+         print "dbms_output.put_line(');');"
+         print "end loop;"
+         print "close ptp;"
+         print "open ptp(var.owner,ctr.captab,'U');"
+         print "loop"
+         print "fetch ptp into ptr;"
+         print "exit when ptp%notfound;"
+         print "dbms_output.put(chr(10));"
+         print "dbms_output.put_line('ALTER TABLE '||ctr.capown"
+         print "||'.'||ctr.captab||' ADD CONSTRAINT '||ptr.conname);"
+         print "dbms_output.put('UNIQUE (');"
+         print "open pcp(ptr.owner,ptr.conname);"
+         print "loop"
+         print "fetch pcp into pcr;"
+         print "exit when pcp%notfound;"
+         print "if pcr.position <> 1 then"
+         print "dbms_output.put(', ');"
+         print "end if;"
+         print "dbms_output.put(chr(34)||pcr.colname||chr(34));"
+         print "end loop;"
+         print "close pcp;"
+         print "dbms_output.put_line(')');"
+         print "dbms_output.put('USING INDEX ');"
+         print "dbms_output.put('PCTFREE '||to_char(ptr.pct_free));"
+         print "if ptr.initrans is not null then"
+         print "dbms_output.put(' INITRANS '||to_char(ptr.initrans));"
+         print "end if;"
+         print "if ptr.maxtrans is not null then"
+         print "dbms_output.put(' MAXTRANS '||to_char(ptr.maxtrans));"
+         print "end if;"
+         print "dbms_output.put(' TABLESPACE '||ptr.tablespace_name);"
+         print "dbms_output.put(' STORAGE (INITIAL '||"
+         print "rtrim(ltrim(orac_1024(ptr.initial_extent))));"
+         print "dbms_output.put_line(' NEXT '||"
+         print "rtrim(ltrim(orac_1024(ptr.next_extent))));"
+         print "dbms_output.put('MINEXTENTS '||to_char(ptr.min_extents));"
+         print "dbms_output.put(' MAXEXTENTS '||to_char(ptr.max_extents));"
+         print "dbms_output.put(' PCTINCREASE '||to_char(ptr.pct_increase));"
+         print "dbms_output.put(' FREELISTS '||to_char(ptr.freelists));"
+         print "dbms_output.put(' FREELIST GROUPS '||"
+         print "to_char(ptr.freelist_groups));"
+         print "dbms_output.put_line(');');"
+         print "end loop;"
+         print "close ptp;"
+         print "open ftp(var.owner,ctr.captab,'R');"
+         print "loop"
+         print "fetch ftp into ftr;"
+         print "exit when ftp%notfound;"
+         print "dbms_output.put(chr(10));"
+         print "dbms_output.put_line('ALTER TABLE '||ctr.capown||"
+         print "'.'||ctr.captab||' ADD CONSTRAINT '||ftr.conname);"
+         print "dbms_output.put('FOREIGN KEY (');"
+         print "open pcp(ftr.owner,ftr.conname);"
+         print "loop"
+         print "fetch pcp into pcr;"
+         print "exit when pcp%notfound;"
+         print "if pcr.position <> 1 then"
+         print "dbms_output.put(', ');"
+         print "end if;"
+         print "dbms_output.put(chr(34)||pcr.colname||chr(34));"
+         print "end loop;"
+         print "close pcp;"
+         print "dbms_output.put_line(')');"
+         print "open pcp(ftr.rowner,ftr.rconname);"
+         print "loop"
+         print "fetch pcp into pcr;"
+         print "exit when pcp%notfound;"
+         print "if pcr.position = 1 then"
+         print "dbms_output.put('REFERENCES '||"
+         print "ftr.rowner||'.'||ftr.tabname||' (');"
+         print "else"
+         print "dbms_output.put(' ,');"
+         print "end if;"
+         print "dbms_output.put(chr(34)||pcr.colname||chr(34));"
+         print "end loop;"
+         print "close pcp;"
+         print "dbms_output.put_line(');');"
+         print "end loop;"
+         print "close ftp;"
+         print "open icc(var.owner,ctr.captab);"
+         print "loop"
+         print "fetch icc into icr;"
+         print "exit when icc%notfound;"
+         print "dbms_output.put(chr(10));"
+         print "dbms_output.put_line('CREATE INDEX '||icr.owner||"
+         print "'.'||icr.indname||' ON '||ctr.capown||'.'||ctr.captab);"
+         print "dbms_output.put('(');"
+         print "open irc(icr.indname,icr.owner);"
+         print "loop"
+         print "fetch irc into irr;"
+         print "exit when irc%notfound;"
+         print "if irr.column_position <> 1 then"
+         print "dbms_output.put(', ');"
+         print "end if;"
+         print "dbms_output.put(chr(34)||irr.colname||chr(34));"
+         print "end loop;"
+         print "close irc;"
+         print "dbms_output.put_line(')');"
+         print "dbms_output.put('PCTFREE '||to_char(icr.pct_free));"
+         print "if icr.initrans is not null then"
+         print "dbms_output.put(' INITRANS '||to_char(icr.initrans));"
+         print "end if;"
+         print "if icr.maxtrans is not null then"
+         print "dbms_output.put(' MAXTRANS '||to_char(icr.maxtrans));"
+         print "end if;"
+         print "dbms_output.put_line(' TABLESPACE '||icr.tablespace_name);"
+         print "dbms_output.put('STORAGE (INITIAL '||"
+         print "rtrim(ltrim(orac_1024(icr.initial_extent))));"
+         print "dbms_output.put(' NEXT '||"
+         print "rtrim(ltrim(orac_1024(icr.next_extent))));"
+         print "dbms_output.put(' MINEXTENTS '||to_char(icr.min_extents));"
+         print "dbms_output.put(' MAXEXTENTS '||to_char(icr.max_extents));"
+         print "dbms_output.put_line(' PCTINCREASE '||"
+         print "to_char(icr.pct_increase));"
+         print "dbms_output.put('FREELISTS '||to_char(icr.freelists));"
+         print "dbms_output.put(' FREELIST GROUPS '||"
+         print "to_char(icr.freelist_groups));"
+         print "dbms_output.put_line(');');"
+         print "end loop;"
+         print "close icc;"
+         print "open icc2(var.owner,ctr.captab);"
+         print "loop"
+         print "fetch icc2 into icr;"
+         print "exit when icc2%notfound;"
+         print "dbms_output.put(chr(10));"
+         print "dbms_output.put_line('CREATE UNIQUE INDEX '||icr.owner||'.'||"
+         print "icr.indname||' ON '||ctr.capown||'.'||ctr.captab);"
+         print "dbms_output.put('(');"
+         print "open irc(icr.indname,icr.owner);"
+         print "loop"
+         print "fetch irc into irr;"
+         print "exit when irc%notfound;"
+         print "if irr.column_position <> 1 then"
+         print "dbms_output.put(', ');"
+         print "end if;"
+         print "dbms_output.put(chr(34)||irr.colname||chr(34));"
+         print "end loop;"
+         print "close irc;"
+         print "dbms_output.put_line(')');"
+         print "dbms_output.put('PCTFREE '||to_char(icr.pct_free));"
+         print "if icr.initrans is not null then"
+         print "dbms_output.put(' INITRANS '||to_char(icr.initrans));"
+         print "end if;"
+         print "if icr.maxtrans is not null then"
+         print "dbms_output.put(' MAXTRANS '||to_char(icr.maxtrans));"
+         print "end if;"
+         print "dbms_output.put_line(' TABLESPACE '||icr.tablespace_name);"
+         print "dbms_output.put('STORAGE (INITIAL '||"
+         print "rtrim(ltrim(orac_1024(icr.initial_extent))));"
+         print "dbms_output.put(' NEXT '||"
+         print "rtrim(ltrim(orac_1024(icr.next_extent))));"
+         print "dbms_output.put(' MINEXTENTS '||to_char(icr.min_extents));"
+         print "dbms_output.put(' MAXEXTENTS '||to_char(icr.max_extents));"
+         print "dbms_output.put_line(' PCTINCREASE '||"
+         print "to_char(icr.pct_increase));"
+         print "dbms_output.put('FREELISTS '||to_char(icr.freelists));"
+         print "dbms_output.put(' FREELIST GROUPS '||"
+         print "to_char(icr.freelist_groups));"
+         print "dbms_output.put_line(');');"
+         print "end loop;"
+         print "close icc2;"
+         print "open cot(ctr.captab,ctr.capown);"
+         print "loop"
+         print "fetch cot into cor;"
+         print "exit when cot%notfound;"
+         print "dbms_output.put(chr(10));"
+         print "dbms_output.put_line('COMMENT ON TABLE '||"
+         print "cor.owner||'.'||cor.tabname||' IS '||chr(39)||"
+         print "ltrim(rtrim(cor.comments))||chr(39)||';');"
+         print "end loop;"
+         print "close cot;"
+         print "open col(ctr.captab,ctr.capown);"
+         print "loop"
+         print "fetch col into cfr;"
+         print "exit when col%notfound;"
+         print "dbms_output.put(chr(10));"
+         print "dbms_output.put_line('COMMENT ON COLUMN '||"
+         print "cfr.owner||'.'||cfr.tabname||'.'||cfr.colname);"
+         print "dbms_output.put('   IS '||chr(39));"
+         print "dbms_output.put_line(ltrim(rtrim(cfr.comments))||chr(39)||';');"
+         print "end loop;"
+         print "close col;"
+         print "end loop;"
+         print "close ctc;"
+         print "open tri(var.table_name,var.owner);"
+         print "dbms_sql.parse(cur1,"
+         print "'select trigger_body from sys.dba_triggers'||"
+         print "' where trigger_name = :mytrigger and'||"
+         print "' owner = :myowner', dbms_sql.native);"
+         print "loop"
+         print "fetch tri into trr;"
+         print "exit when tri%notfound;"
+         print "dbms_output.put_line(chr(10));"
+         print "dbms_output.put_line('CREATE OR REPLACE TRIGGER ');"
+         print "dbms_output.put_line(ltrim(rtrim(trr.description)));"
+         print "if trr.when_clause is not null then"
+         print "dbms_output.put_line('WHEN ( ');"
+         print "dbms_output.put_line(ltrim(rtrim(trr.when_clause)));"
+         print "dbms_output.put_line(' )');"
+         print "end if;"
+         print "dbms_sql.define_column_long(cur1,1);"
+         print "dbms_sql.bind_variable(cur1,'mytrigger',trr.trigger_name);"
+         print "dbms_sql.bind_variable(cur1,'myowner',trr.owner);"
+         print "rc := dbms_sql.execute_and_fetch(cur1,FALSE);"
+         print "long_len := 0;"
+         print "loop"
+         print "dbms_sql.column_value_long(cur1,1,2000,long_len,"
+         print "long_piece,piece_len);"
+         print "exit when piece_len = 0;"
+         print "rc := write_long (long_piece,piece_len);"
+         print "long_len := long_len + piece_len;"
+         print "end loop;"
+         print "end loop;"
+         print "dbms_sql.close_cursor(cur1);"
+         print "close tri;"
+         print "dbms_output.put_line(chr(10));"
+         print "open pre (var.owner,var.table_name);"
+         print "loop"
+         print "fetch pre into prr;"
+         print "exit when pre%notfound;"
+         print "open ftp2(prr.owner,prr.table_name,prr.constraint_name,'R');"
+         print "loop"
+         print "fetch ftp2 into ftr;"
+         print "exit when ftp2%notfound;"
+         print "dbms_output.put_line('ALTER TABLE '||prr.owner||'.'||"
+         print "prr.table_name||' ADD CONSTRAINT '||ftr.conname);"
+         print "dbms_output.put('FOREIGN KEY (');"
+         print "open pcp(ftr.owner,ftr.conname);"
+         print "loop"
+         print "fetch pcp into pcr;"
+         print "exit when pcp%notfound;"
+         print "if pcr.position <> 1 then"
+         print "dbms_output.put(', ');"
+         print "end if;"
+         print "dbms_output.put(chr(34)||pcr.colname||chr(34));"
+         print "end loop;"
+         print "close pcp;"
+         print "dbms_output.put_line(')');"
+         print "open pcp(ftr.rowner,ftr.rconname);"
+         print "loop"
+         print "fetch pcp into pcr;"
+         print "exit when pcp%notfound;"
+         print "if pcr.position = 1 then"
+         print "dbms_output.put('REFERENCES '||"
+         print "ftr.rowner||'.'||ftr.tabname||' (');"
+         print "else"
+         print "dbms_output.put(' ,');"
+         print "end if;"
+         print "dbms_output.put(chr(34)||pcr.colname||chr(34));"
+         print "end loop;"
+         print "close pcp;"
+         print "dbms_output.put_line(');'||chr(10));"
+         print "end loop;"
+         print "close ftp2;"
+         print "end loop;"
+         print "close pre;"
+         print "end loop;"
+         print "close val;"
+         print "if tabla <> 'X' then"
+         print "dbms_output.put_line(chr(10)||"
+         print "'The table doesn''t exist');"
+         print "end if;"
+         print "end;"
+         print "/"
+				 print "ttitle off"
+				 print "@${SQLCONF}"
+				 print "!rm -f ${SQLCONF}"
+         continue;;
+    db|DB)
+				 print "store set ${SQLCONF} CREATE"
+         print "set sqlprompt ''"
+         print "set echo off "
+         print "set trims on"
+         print "set sqln off"
+         print "set verify off"
+         print "set feedback off"
+         print "set feed 10"
+         print "set pause off"
+         print "set serveroutput on"
+         print "ttitle off"
+         print "prompt 'Generating DB usage. Please wait'"
+	       print "declare"
+	       print "v_total_blocks number;"
+	       print "v_total_bytes number;"
+	       print "v_unused_blocks number;"
+	       print "v_unused_bytes number;"
+	       print "v_file_id number;"
+	       print "v_block_id number;"
+	       print "v_last_block number;"
+	       print "v_used number;"
+	       print "v_owner varchar2(12);"
+	       print "v_segment varchar2(80);"
+	       print "v_type char(1);"
+	       print "wtbs varchar2(30);"
+	       print "tab_tot number;"
+	       print "total_bytes number;"
+	       print "unused_bytes number;"
+	       print "used_bytes number;"
+	       print "free_bytes number;"
+	       print "t_tab_tot number := 0;"
+	       print "t_total_bytes number := 0;"
+	       print "t_unused_bytes number := 0;"
+	       print "t_used_bytes number := 0;"
+	       print "t_free_bytes number := 0;"
+	       print "cursor tbs is"
+	       print "select tablespace_name "
+	       print "from sys.dba_tablespaces "
+	       print "where tablespace_name != 'SYSTEM'; "
+	       print "cursor object_c (w_tbs varchar2) is"
+	       print "select owner, 'I', index_name"
+	       print "from sys.dba_indexes "
+	       print "where tablespace_name = w_tbs"
+	       print "union"
+	       print "select owner, 'T', table_name"
+	       print "from sys.dba_tables "
+	       print "where tablespace_name = w_tbs"
+	       print "union"
+	       print "select owner, 'C', cluster_name"
+	       print "from sys.dba_clusters "
+	       print "where tablespace_name = w_tbs;"
+	       print "begin"
+	       print "dbms_output.enable(32000);"
+	       print "dbms_output.put_line( 'Tablespace	Total	Free	Alloc.	Used	Unused');"
+	       print "dbms_output.put_line( '------------------------------------------------------');"
+	       print "open tbs;"
+	       print "total_bytes := 0;"
+	       print "unused_bytes := 0;"
+	       print "used_bytes := 0;"
+	       print "free_bytes := 0;"
+	       print "loop"
+	       print "fetch tbs into wtbs;"
+	       print "exit when tbs%NOTFOUND;"
+	       print "open object_c(wtbs);"
+	       print "loop"
+	       print "fetch object_c into v_owner, v_type, v_segment;"
+	       print "exit when object_c%NOTFOUND;"
+	       print "IF v_type = 'I' then "
+	       print "dbms_space.unused_space(v_owner, v_segment, 'INDEX', v_total_blocks, v_total_bytes, v_unused_blocks, v_unused_bytes, v_file_id, v_block_id, v_last_block);"
+	       print "total_bytes := total_bytes + v_total_bytes;"
+	       print "unused_bytes := unused_bytes + v_unused_bytes;"
+	       print "v_used := v_total_bytes - v_unused_bytes;"
+	       print "used_bytes := used_bytes + v_used;"
+	       print "ELSIF v_type = 'T' THEN "
+	       print "dbms_space.unused_space(v_owner, v_segment, 'TABLE', v_total_blocks, v_total_bytes, v_unused_blocks, v_unused_bytes, v_file_id, v_block_id, v_last_block);"
+	       print "total_bytes := total_bytes + v_total_bytes;"
+	       print "unused_bytes := unused_bytes + v_unused_bytes;"
+	       print "v_used := v_total_bytes - v_unused_bytes;"
+	       print "used_bytes := used_bytes + v_used;"
+	       print "ELSIF v_type = 'C' THEN "
+	       print "dbms_space.unused_space(v_owner, v_segment, 'CLUSTER', v_total_blocks, v_total_bytes, v_unused_blocks, v_unused_bytes, v_file_id, v_block_id, v_last_block);"
+	       print "total_bytes := total_bytes + v_total_bytes;"
+	       print "unused_bytes := unused_bytes + v_unused_bytes;"
+	       print "v_used := v_total_bytes - v_unused_bytes;"
+	       print "used_bytes := used_bytes + v_used;"
+	       print "END IF;"
+	       print "end loop;"
+	       print "close object_c;"
+	       print "select trunc(sum (bytes)/1024/1024,1) into tab_tot from"
+	       print "sys.dba_data_files where "
+	       print "tablespace_name = wtbs;"
+	       print "total_bytes := trunc(total_bytes/1024/1024,1);"
+	       print "used_bytes := trunc(used_bytes/1024/1024,1);"
+	       print "unused_bytes := trunc(unused_bytes/1024/1024,1);"
+	       print "free_bytes := tab_tot - total_bytes;"
+	       print ""
+	       print "t_tab_tot := t_tab_tot + tab_tot;"
+	       print "t_total_bytes := t_total_bytes + total_bytes;"
+	       print "t_used_bytes := t_used_bytes + used_bytes;"
+	       print "t_unused_bytes := t_unused_bytes + unused_bytes;"
+	       print "t_free_bytes := t_free_bytes + free_bytes;"
+         print "dbms_output.put_line(rpad(wtbs,16)||rpad(tab_tot,8)||rpad(free_bytes,8)||rpad(total_bytes,8)||rpad(used_bytes,8)||rpad(unused_bytes,8));"
+	       print "end loop; "
+	       print "close tbs;"
+	       print "dbms_output.put_line( '------------------------------------------------------');"
+         print " dbms_output.put_line(rpad('Total',16)||rpad(t_tab_tot,8)||rpad(t_free_bytes,8)||rpad(t_total_bytes,8)||rpad(t_used_bytes,8)||rpad(t_unused_bytes,8));"
+	       print "end;"
+         print "/"
+				 print "ttitle off"
+				 print "@${SQLCONF}"
+				 print "!rm -f ${SQLCONF}"
+         continue;;
+      esac
+}
+
+# If it's a shell statement, execute it (eval)
+    if [[ -n "$l" && -z "${l##!*}" ]];then
+     if [ ! -z ${l#!} ]; then
+       eval ${l#!} <${TTY} >${TTY} 
+     else
+       eval $SHELL < ${TTY} > ${TTY} 
+     fi
+      print
+    else
+# Else, we put on stdout, for sqlplus execution
+      print "$l"
+    fi
+  done 
+) | ${REAL}
+
+# At end, restore terminal configuration, and drop temporary file
+stty ${SAVETERM} 2>/dev/null
+trap - 1 2 3 15
+/bin/rm -f ${SQLTEMP}
+exit 0
+# End of File

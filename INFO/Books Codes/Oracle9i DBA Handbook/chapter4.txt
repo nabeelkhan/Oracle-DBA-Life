@@ -1,0 +1,191 @@
+Scripts from chapter 4 of ORACLE9i DBA Handbook.  See the readme.doc file for details.
+
+
+alter table COUNTRY cache storage (buffer_pool KEEP);
+
+
+clear breaks
+clear computes
+break on Drive skip 1 on report
+compute sum of Blocks_Read on Drive
+compute sum of Blocks_Written on Drive
+compute sum of Total_IOs on Drive
+compute sum of Blocks_Read on Report
+compute sum of Blocks_Written on Report
+compute sum of Total_IOs on Report
+ttitle skip center "Database File I/O by Drive" skip 2
+
+select substr(DF.Name,1,5) Drive,
+       DF.Name File_Name,
+       FS.Phyblkrd+FS.Phyblkwrt Total_IOs,
+       FS.Phyblkrd Blocks_Read,
+       FS.Phyblkwrt Blocks_Written
+  from V$FILESTAT FS, V$DATAFILE DF
+ where DF.File#=FS.File#
+ order by Drive, File_Name desc;
+
+
+select Buffer_Gets,
+       Disk_Reads,
+       Executions,
+       Buffer_Gets/Executions B_E,
+       SQL_Text 
+  from V$SQL
+ order by Disk_Reads desc;
+
+
+> tar /dev/rmt/1hc /db0[1-8]/oracle/CASE
+
+
+create tablespace CODES_TABLES
+datafile '/u01/oracle/VLDB/codes_tables.dbf'
+size 10M
+extent management local uniform size 256K;
+
+
+create tablespace DATA_SMALL
+datafile '/u01/oracle/VLDB/data_small.dbf'
+size 10M
+extent management local uniform size 1M;
+
+create tablespace DATA_MEDIUM
+datafile '/u02/oracle/VLDB/data_medium.dbf'
+size 100M
+extent management local uniform size 4M;
+
+create tablespace DATA_LARGE
+datafile '/u03/oracle/VLDB/data_large.dbf'
+size 1000M
+extent management local uniform size 16M;
+
+
+alter index JOB_PK rebuild
+tablespace INDEXES
+storage (initial 10M next 10M pctincrease 0);
+
+
+alter database default temporary tablespace TEMP;
+
+
+select Property_Value
+  from DATABASE_PROPERTIES
+ where Property_Name = 'DEFAULT_TEMP_TABLESPACE';
+
+
+alter tablespace TEMP temporary;
+
+
+alter tablespace TEMP permanent;
+
+
+alter tablespace DATA coalesce;
+
+
+alter database
+datafile '/db05/oracle/CC1/data01.dbf' resize 200M;
+
+
+create tablespace DATA
+datafile '/db05/oracle/CC1/data01.dbf' size 200M
+autoextend ON
+next 10M
+maxsize 250M;
+
+
+
+alter tablespace DATA
+add datafile '/db05/oracle/CC1/data02.dbf'
+size 50M
+autoextend ON
+maxsize 300M;
+
+
+SQL> connect / as sysdba;
+SQL> startup mount CC1;
+SQL> alter database rename file
+  2> '/db01/oracle/CC1/data01.dbf' to
+  3> '/db02/oracle/CC1/data01.dbf';
+
+
+alter tablespace DATA offline;
+
+
+alter tablespace DATA rename datafile
+'/db01/oracle/CC1/data01.dbf' to
+'/db02/oracle/CC1/data01.dbf';
+
+
+alter tablespace DATA online;
+
+
+SQL> connect / as sysdba;
+SQL> startup mount CC1;
+SQL> alter database rename file 
+  2> '/db05/oracle/CC1/redo01CC1.dbf' to
+  3> '/db02/oracle/CC1/redo01CC1.dbf';
+
+
+alter database datafile '/db05/oracle/CC1/data01.dbf' 
+resize 80M;
+
+
+declare
+        VAR1 number;
+        VAR2 number;
+        VAR3 number;
+        VAR4 number;
+        VAR5 number;
+        VAR6 number;
+        VAR7 number;
+begin
+   dbms_space.unused_space('OPS$CC1','SPACES','TABLE',
+                          VAR1,VAR2,VAR3,VAR4,VAR5,VAR6,VAR7);
+   dbms_output.put_line('OBJECT_NAME       = SPACES');
+   dbms_output.put_line('---------------------------');
+   dbms_output.put_line('TOTAL_BLOCKS      = '||VAR1);
+   dbms_output.put_line('TOTAL_BYTES       = '||VAR2);
+   dbms_output.put_line('UNUSED_BLOCKS     = '||VAR3);
+   dbms_output.put_line('UNUSED_BYTES      = '||VAR4);
+   dbms_output.put_line('LAST_USED_EXTENT_FILE_ID  = '||VAR5);
+   dbms_output.put_line('LAST_USED_EXTENT_BLOCK_ID = '||VAR6);
+   dbms_output.put_line('LAST_USED_BLOCK   = '||VAR7);
+end;
+/
+
+
+alter table SPACES deallocate unused keep 80K;
+
+
+alter index IU_SPACES$DB_TS_CD rebuild
+storage (initial 16M next 16M pctincrease 0)
+tablespace INDX_1;
+
+
+alter index EMP$DEPT_NO rebuild online
+storage (initial 16M next 16M pctincrease 0)
+tablespace INDX_1;
+
+
+create database cc1;
+
+
+create tablespace USERS_2;
+
+create tablespace USERS_3
+datafile size 500M, size 500M;
+
+
+alter tablespace USERS_3
+add datafile size 300M;
+
+alter database add logfile;
+
+
+alter database rename file '/u01/oracle/CC1/ora_users_3_erj42201.dbf'
+to 'u04/oracle/CC1/ora_users_3_erj42201.dbf';
+
+
+drop tablespace USERS_3;
+
+
+

@@ -1,0 +1,6 @@
+    FROM sys.v$log
+             *
+ERROR at line 3:
+ORA-00942: table or view does not exist 
+
+

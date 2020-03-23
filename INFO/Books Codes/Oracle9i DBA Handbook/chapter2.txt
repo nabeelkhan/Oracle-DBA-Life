@@ -1,0 +1,52 @@
+Scripts from chapter 2 of ORACLE9i DBA Handbook.  See the readme.doc file for details.
+
+alter database
+add logfile group 4
+('/db01/oracle/CC1/log_1c.dbf',
+ '/db02/oracle/CC1/log_2c.dbf') size 5M;
+
+alter database
+add logfile member '/db03/oracle/CC1/log_3c.dbf'
+ to group 4;
+
+
+create public database link HR_LINK
+connect to HR identified by PUFFINSTUFF
+using 'hq';
+
+
+select * from EMPLOYEE@HR_LINK
+ where  Office='ANNAPOLIS';
+
+
+create view LOCAL_EMP
+    as select * from EMPLOYEE@HR_LINK
+ where Office='ANNAPOLIS';
+
+grant select on LOCAL_EMP to PUBLIC;
+
+
+HQ =(DESCRIPTION=
+      (ADDRESS=
+            (PROTOCOL=TCP)
+            (HOST=HQ)
+            (PORT=1521))
+      (CONNECT DATA=
+            (SID=loc)))
+
+
+
+
+S817.us.oracle.com =
+  (DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = sdg-lap)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVICE_NAME = S817.us.oracle.com)
+    )
+  )
+
+
+
+

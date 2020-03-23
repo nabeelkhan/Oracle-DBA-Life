@@ -1,0 +1,299 @@
+Scripts from chapter 5 of ORACLE9i DBA Handbook.  See the readme.doc file for details.
+
+
+
+create role APPLICATION_USER;
+grant CREATE SESSION to APPLICATION_USER;
+grant APPLICATION_USER to username;
+
+
+execute DBMS_RESOURCE_MANAGER.CREATE_PENDING_AREA();
+
+
+execute DBMS_RESOURCE_MANAGER.CREATE_PLAN -
+ (Plan => 'DEVELOPERS', -
+  Comment => 'Developers, in Development database');
+
+
+execute DBMS_RESOURCE_MANAGER_PRIVS.GRANT_SYSTEM_PRIVILEGE -
+ (grantee_name => 'Martha',  -
+  admin_option => TRUE);
+
+
+execute DBMS_RESOURCE_MANAGER.CREATE_CONSUMER_GROUP -
+ (Consumer_Group => 'Online_developers', -
+  Comment => 'Online developers');
+
+execute DBMS_RESOURCE_MANAGER.CREATE_CONSUMER_GROUP -
+ (Consumer_Group => 'Batch_developers', -
+  Comment => 'Batch developers');
+
+
+execute DBMS_RESOURCE_MANAGER.CREATE_PLAN_DIRECTIVE -
+ (Plan => 'DEVELOPERS', -
+  Group_or_subplan => 'Online_developers', -
+  Comment => 'online developers', -
+  Cpu_p1 => 75, -
+  Cpu_p2=> 0, -
+  Parallel_degree_limit_p1 => 12);
+
+execute DBMS_RESOURCE_MANAGER.CREATE_PLAN_DIRECTIVE -
+ (Plan => 'DEVELOPERS', -
+  Group_or_subplan => 'Batch_developers', -
+  Comment => 'Batch developers', -
+  Cpu_p1 => 25, -
+  Cpu_p2 => 0, -
+  Parallel_degree_limit_p1 => 6);
+
+
+alter system set initial_consumer_group = 'DAYTIME_USERS';
+
+alter system set initial_consumer_group = 'BATCH_USERS';
+
+
+execute DBMS_RESOURCE_MANAGER.VALIDATE_PENDING_AREA();
+execute DBMS_RESOURCE_MANAGER.SUBMIT_PENDING_AREA();
+
+create outline YTD_SALES 
+   for category DEVELOPMENT
+    on 
+select Year_to_Date_Sales 
+  from SALES
+ where region = 'SOUTH'
+   and period = 1;
+
+alter outline YTD_SALES rebuild;
+
+alter outline YTD_SALES rename to YTD_SALES_REGION;
+
+alter outline YTD_SALES_REGION change category to DEFAULT;
+
+execute OUTLN_PKG.DROP_UNUSED;
+
+execute OUTLN_PKG.DROP_BY_CAT -
+  (category_name => 'DEVELOPMENT');
+
+execute OUTLN_PKG.UPDATE_BY_CAT -
+ (old_category_name => 'DEVELOPMENT', -
+  new_category_name => 'TEST');
+
+
+create tablespace DATA_1M
+datafile '/u01/oracle/VLDB/data_1m.dbf'
+size 100M
+extent management local uniform size 1M;
+
+create tablespace DATA_MEDIUM
+datafile '/u01/oracle/VLDB/data_4m.dbf'
+size 400M
+extent management local uniform size 4M;
+
+create tablespace DATA_LARGE
+datafile '/u01/oracle/VLDB/data_16m.dbf'
+size 16000M
+extent management local uniform size 16M;
+
+select
+   COUNT(DISTINCT(column name))/    /* Num of records in table*/
+   COUNT(*)  rows_per_key           /* Num of cluster key values*/
+from tablename;
+
+select
+   AVG(NVL(VSIZE(cluster key column),0)) Avg_Key_Length
+ from TABLE1;
+
+
+create global temporary table MY_TEMP_TABLE
+(Name     VARCHAR2(25),
+ Street   VARCHAR2(25),
+ City     VARCHAR2(25))
+on commit delete rows;
+
+
+create type ADDRESS_TY as object
+(Street   VARCHAR2(50),
+City      VARCHAR2(25),
+State     CHAR(2),
+Zip       NUMBER);
+/
+
+
+create table CUSTOMER
+(Name     VARCHAR2(25),
+Address   ADDRESS_TY);
+
+
+insert into CUSTOMER values
+('Joe',ADDRESS_TY('My Street', 'Some City', 'ST', 10001));
+
+
+create table CUSTOMER
+(Name     VARCHAR2(25),
+Address   ADDRESS_TY);
+
+
+select C.Address.Street from CUSTOMER  C;
+
+
+create table CUSTOMER
+(Name        VARCHAR2(25) primary key,
+ Street      VARCHAR2(50),
+ City        VARCHAR2(25),
+ State       CHAR(2),
+ Zip         NUMBER);
+
+
+create view CUSTOMER_OV (Name, Address) as
+select Name,
+       ADDRESS_TY(Street, City, State, Zip)
+  from CUSTOMER;
+
+
+create or replace type CUSTOMER_TY as object
+(Name        VARCHAR2(25),
+ Street      VARCHAR2(50),
+ City        VARCHAR2(25),
+ State       CHAR(2),
+ Zip         NUMBER);
+/
+
+
+
+create view CUSTOMER_OV of CUSTOMER_TY
+  with object identifier (Name) as
+select Name, Street, City, State, Zip
+  from CUSTOMER;
+
+
+create table CUSTOMER_CALL
+(Name          VARCHAR2(25),
+ Call_Number   NUMBER,
+ Call_Date     DATE,
+ constraint CUSTOMER_CALL_PK 
+     primary key (Name, Call_Number),
+ constraint CUSTOMER_CALL_FK foreign key (Name)
+    references CUSTOMER(Name));
+
+
+create view CUSTOMER_CALL_OV as
+select MAKE_REF(CUSTOMER_OV, Name) Name,
+       Call_Number,
+       Call_Date
+  from CUSTOMER_CALL;
+
+
+select DEREF(CCOV.Name)
+  from CUSTOMER_CALL_OV CCOV
+ where Call_Date = TRUNC(SysDate);
+
+
+create type PERSON_TY as object
+(Name     VARCHAR2(25),
+ Address  ADDRESS_TY);
+/
+
+
+grant EXECUTE on ADDRESS_TY to George;
+
+
+create or replace type PERSON_TY as object
+(Name     VARCHAR2(25),
+ Address  Dora.ADDRESS_TY);
+/
+
+
+create table GEORGE_CUSTOMERS
+(Customer_ID  NUMBER,
+ Person       PERSON_TY);
+
+
+insert into GEORGE_CUSTOMERS values
+(1,PERSON_TY('SomeName',
+   Dora.ADDRESS_TY('StreetValue','CityValue','ST',11111)));
+
+
+create table GEORGE_CUSTOMERS
+(Customer_ID    NUMBER,
+ Person         PERSON_TY);
+
+
+
+select C.Customer_ID, C.Person.Name
+  from GEORGE_CUSTOMERS C;
+
+
+select C.Person.Name,
+       C.Person.Address.City
+  from GEORGE_CUSTOMERS C
+ where C.Person.Address.City like 'C%';
+
+
+create index I_GEORGE_CUSTOMERS$CITY
+on GEORGE_CUSTOMERS(Person.Address.City);
+
+
+alter system quiesce restricted;
+
+
+select Active_State from V$INSTANCE;
+
+
+alter system unquiesce;
+
+
+alter system suspend;
+
+
+select Database_Status from V$INSTANCE;
+
+
+alter system resume;
+
+
+
+alter table TABLE1 drop column Col2;
+
+alter table TABLE1 set unused column Col3;
+
+alter table TABLE1 drop unused columns;
+
+
+alter table TABLE1 drop (Col4, Col5);
+
+
+create table CUSTOMER
+(Name        VARCHAR2(25) primary key,
+ Street      VARCHAR2(50),
+ City        VARCHAR2(25),
+ State       CHAR(2),
+ Zip         NUMBER);
+
+
+execute DBMS_REDEFINITION.CAN_REDEF_TABLE('SCOTT','CUSTOMER');
+
+
+create table CUSTOMER_INTERIM
+(Name        VARCHAR2(25) primary key,
+ Street      VARCHAR2(50),
+ City        VARCHAR2(25),
+ State       CHAR(2),
+ Zip         NUMBER)
+partition by range (Name)
+ (partition PART1   values less than ('L'),
+  partition PART2   values less than (MAXVALUE))
+;
+
+
+execute DBMS_REDEFINITION.START_REDEF_TABLE -
+ ('SCOTT','CUSTOMER','CUSTOMER_INTERIM');
+
+
+execute DBMS_REDEFINITION.FINISH_REDEF_TABLE -
+  ('SCOTT','CUSTOMER','CUSTOMER_INTERIM');
+
+select Table_Name, High_Value 
+  from DBA_TAB_PARTITIONS
+ where owner = 'SCOTT';
+
+
+

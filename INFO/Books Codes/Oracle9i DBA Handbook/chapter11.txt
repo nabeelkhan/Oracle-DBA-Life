@@ -1,0 +1,372 @@
+Scripts from chapter 11 of ORACLE9i DBA Handbook.  See the readme.doc file for details.
+
+
+exp help=Y
+
+
+exp system/manager file=expdat.dmp compress=Y owner=(HR,THUMPER)
+
+
+exp demo/demo tablespaces=DATA
+
+
+break on Owner on Tablespace_Name
+column Objects format A20
+select
+      Owner,
+      Tablespace_Name,
+      COUNT(*)||' tables' Objects
+ from DBA_TABLES
+where Owner <> 'SYS'
+group by
+      Owner,
+      Tablespace_Name
+union
+select
+      Owner,
+      Tablespace_Name,
+      COUNT(*)||' indexes' Objects
+ from DBA_INDEXES
+where Owner <> 'SYS'
+group by
+      Owner,
+      Tablespace_Name;
+
+
+break on Tablespace_Name on Owner
+column Objects format A20
+select
+      Tablespace_Name,
+      Owner,
+      COUNT(*)||' tables' Objects
+ from DBA_TABLES
+where Owner <> 'SYS'
+group by
+      Tablespace_Name,
+      Owner
+union
+select
+      Tablespace_Name,
+      Owner,
+      COUNT(*)||' indexes' Objects
+ from DBA_INDEXES
+where Owner <> 'SYS'
+group by
+      Tablespace_Name,
+      Owner;
+
+
+break on Grantor skip 1 on Owner on Table_Name
+select
+      Grantor,          /*Account that made the grant*/
+      Owner,            /*Account that owns the table*/
+      Table_Name,       /*Name of the table*/
+      Grantee,          /*Account granted access*/
+      Privilege,        /*Privilege granted*/
+      Grantable         /*Granted with admin option?*/
+from DBA_TAB_PRIVS
+where Grantor ! = Owner
+order by Grantor, Owner, Table_Name, Grantee, Privilege;
+
+
+select
+      Owner,                /*Owner of the index*/
+      Index_Name,           /*Name of the index*/
+      Table_Owner,          /*Owner of the table*/
+      Table_Name            /*Name of the indexed table*/
+from DBA_INDEXES
+where Owner != Table_Owner;
+
+
+exp system/manager FILE=expdat.dmp TABLES=(Thumper.SALES)
+
+
+exp system/manager FILE=expdat.dmp TABLES=(Thumper.SALES:Part1)
+
+
+exp system/manager FILE=expdat.dmp TABLES=(THUMPER.SALES) QUERY=\"where region=\'North\'\"
+
+
+select * from SALES where region = 'NORTH';
+
+
+imp system/manager file=expdat.dmp
+imp system/manager file=expdat.dmp buffer=64000 commit=Y
+
+
+exp system/manager file=thumper.dat owner=thumper grants=N
+  indexes=Y compress=Y rows=Y
+
+imp system/manager file=thumper.dat FROMUSER=thumper TOUSER=flower
+      rows=Y indexes=Y
+
+imp system/manager file=expdat.dmp full=Y commit=Y buffer=64000
+
+imp system/manager file=expdat.dmp ignore=N rows=N commit=Y buffer=64000
+
+exp system/manager file=expdat.dmp owner=thumper
+
+
+imp system/manager file=expdat.dmp indexfile=indexes.sql full=Y
+
+imp system/manager file=expdat.dmp fromuser=thumper touser=flower
+   indexes=N commit=Y buffer=64000
+
+sqlplus flower/password
+@indexes
+
+
+> tar -cvf /dev/rmt/0hc /db0[1-9]/oracle/CC1
+
+
+
+ORACLE_SID=cc1; export ORACLE_SID
+ORAENV_ASK=NO; export ORAENV_ASK
+. oraenv
+sqlplus <<EOF1
+connect / as sysdba
+shutdown immediate;
+exit
+EOF1
+insert backup commands like the "tar" commands here
+sqlplus <<EOF2
+connect / as sysdba
+startup
+EOF2
+
+
+
+connect internal as sysdba
+startup mount cc1;
+alter database archivelog;
+alter database open;
+
+
+archive log list
+
+
+connect / as sysdba
+startup mount cc1;
+alter database noarchivelog;
+alter database open;
+
+
+select Name,
+       Value
+  from V$PARAMETER
+ where Name like 'log_archive%';
+
+
+
+#
+# Sample Hot Backup Script for a UNIX File System database
+#
+# Set up environment variables:
+ORACLE_SID=cc1; export ORACLE_SID
+ORAENV_ASK=NO; export ORAENV_ASK
+. oraenv
+#
+#   Step 1. Perform a tablespace-by-tablespace backup
+#   of the datafiles. Set each tablespace, one at a time,
+#   into begin backup state. Then back up its datafiles
+#   and return the tablespace to its normal state.
+#
+# Note for UNIX: Set up an indicator for SQL*Plus or SVRMGRL
+# (called EOFarch1 here).
+#
+svrmgrl <<EOFarch1
+connect / as sysdba
+REM
+REM   Back up the SYSTEM tablespace
+REM
+alter tablespace SYSTEM begin backup;
+!cp /db01/oracle/CC1/sys01.dbf /bckp/db01/oracle/CC1
+alter tablespace SYSTEM end backup;
+REM
+REM   Back up the RBS tablespace
+REM
+alter tablespace RBS begin backup;
+!cp /db02/oracle/CC1/rbs01.dbf /bckp/db02/oracle/CC1
+alter tablespace RBS end backup;
+REM
+REM   Back up the DATA tablespace
+REM   For the purposes of this example, this tablespace
+REM   will contain two files, data01.dbf and data02.dbf.
+REM   The * wildcard will be used in the filename.
+REM
+alter tablespace DATA begin backup;
+!cp /db03/oracle/CC1/data0*.dbf /bckp/db03/oracle/CC1
+alter tablespace DATA end backup;
+REM
+REM   Back up the INDEXES tablespace
+REM
+alter tablespace INDEXES begin backup;
+!cp /db04/oracle/CC1/indexes01.dbf /bckp/db04/oracle/CC1
+alter tablespace INDEXES end backup;
+REM
+REM   Back up the TEMP tablespace
+REM
+alter tablespace TEMP begin backup;
+!cp /db05/oracle/CC1/temp01.dbf /bckp/db05/oracle/CC1
+alter tablespace TEMP end backup;
+REM
+REM   Follow the same pattern to back up the rest
+REM   of the tablespaces.
+REM
+exit
+EOFarch1
+# REM         Step 2. Back up the archived redo log files.
+#
+#  Record which files are in the destination directory.
+#  Do this by setting an environment variable that is
+#  equal to the directory listing for the destination 
+#  directory.
+#  For this example, the log_archive_dest_1 is 
+#  /db01/oracle/arch/CC1.
+#
+FILES='ls /db01/oracle/arch/CC1/arch*.dbf'; export FILES
+#
+#  Now back up the archived redo logs to the tape
+#  device via the "tar" command, then delete them
+#  from the destination device via the "rm" command.
+#  You may choose to compress them instead.
+#
+cp $FILES /bckp/db01/oracle/CC1/arch
+rm -f $FILES
+#
+#     Step 3. Back up the control file to a disk file.
+#
+svrmgrl <<EOFarch3
+connect / as sysdba
+alter database backup controlfile to
+   '/bckp/db01/oracle/CC1/CC1controlfile.bck';
+alter database backup controlfile to trace;
+exit
+EOFarch3
+#
+#
+#  End of hot backup script. The disk-based backups
+#  can now be backed up to tape.
+
+
+
+set pagesize 0 feedback off
+
+select 
+    'alter tablespace '||Tablespace_Name||' begin backup;'
+  from DBA_TABLESPACES
+ where Status <> 'INVALID'
+
+spool alter_begin.sql
+/
+spool off
+
+
+tar -cvf /dev/rmt/0hc /db0[1-9]/oracle/CC1
+
+
+set pagesize 0 feedback off
+
+select 
+    'alter tablespace '||Tablespace_Name||' end backup;'
+  from DBA_TABLESPACES
+ where Status <> 'INVALID'
+
+spool alter_end.sql
+/
+spool off
+
+
+
+#     Step 1: IF NEEDED, stop the archiving process. This
+#     will keep additional archived redo log files from 
+#     being written to the destination directory for several
+#     seconds while file names are collected during this
+#     process.
+#
+#     If you need this step, uncomment the following 7 lines
+#svrmgrl <<EOFarch1
+#connect / as sysdba
+#archive log stop;
+#REM
+#REM   Exit Server Manager using the indicator set earlier.
+#exit
+#EOFarch1
+#
+#     Step 2: Record which files are in the destination 
+#  directory.
+#     Do this by setting an environment variable that is
+#  equal to the directory listing for the destination 
+#  directory.
+#  For this example, the log_archive_dest_1 is
+#  /db01/oracle/arch/CC1.
+#
+FILES='ls /db01/oracle/arch/CC1/arch*.dbf'; export FILES
+#
+#   Step 3: IF YOU STOPPED THE ARCHIVER IN STEP 1, go back
+#   into Server Manager and restart the archiving process. 
+#   Set an indicator (called EOFarch2 in this example).
+#
+#   If you need to execute this step, uncomment the 
+#   following 5 lines.
+#svrmgrl <<EOFarch2
+#connect / as sysdba
+#archive log start;
+#exit
+#EOFarch2
+#
+#     Step 4. Back up the archived redo logs to the tape
+#  device via the "tar" command, then delete them
+#  from the destination device via the "rm" command.
+#
+#  Edit the following command to reflect your tape device
+#  name.
+tar -rvf /dev/rmt/0hc $FILES
+#
+#     Step 5. Delete those files from the destination directory.
+#
+rm -f $FILES
+#
+#     End of archived redo log file backup script.
+
+
+
+execute DBMS_LOGMNR_D.BUILD
+('mydb_dictionary.ora',
+'G:\Oracle\Ora90\database',
+options=>DBMS_LOGMNR_D.STORE_IN_FLAT_FILE); 
+
+
+execute DBMS_LOGMNR.END_LOGMNR;
+
+
+execute DBMS_LOGMNR.ADD_LOGFILE(
+LogFileName=> '/oracle/ora90/redo01.ora',
+Options=> DBMS_LOGMNR.NEW);
+
+execute DBMS_LOGMNR.ADD_LOGFILE(
+LogFileName=> '/oracle/ora90/redo02.ora',
+Options=> DBMS_LOGMNR.NEW); 
+
+
+execute DBMS_LOGMNR.ADD_LOGFILE(
+DictFileName=> '/oracle/ora90/dictionary.ora',
+
+
+execute DBMS_LOGMNR.START_LOGMNR(
+DictFileName => '/oracle/dictionary.ora',
+StartTime => TO_DATE('01-JUNE-2001 12:31:00', DD-MON-YYYY HH:MI:SS'),
+EndTime => TO_DATE('01-JULY-2001 00:00:00', DD-MON-YYYY HH:MI:SS'));
+
+
+execute DBMS_LOGMNR.START_LOGMNR(
+DictFileName => '/oracle/dictionary.ora',
+StartScn => 125,
+EndScr => 300);
+
+
+select Sql_Redo, Sql_Undo
+  from V$LOGMNR_CONTENTS;
+
+
+

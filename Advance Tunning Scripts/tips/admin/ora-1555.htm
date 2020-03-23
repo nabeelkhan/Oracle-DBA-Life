@@ -1,0 +1,325 @@
+<html>
+	<head>
+		<title>
+			Avoiding ORA-1555 Errors
+		</title>
+		<style>
+			<!-- a:hover{color:#660066;} -->
+		</style>
+	</head>
+	<body background="../../images/bg.jpg" link="#FF6600" vlink="#FF6600" alink="#660066">
+		
+		<h2 align="center">
+			<font color="#990000">
+				Avoiding ORA-1555 Errors
+			</font>
+		</h2>
+		<p>
+		One of the most vexing problems that Oracle DBAs around the world face every day is this:
+		</p>
+		<blockquote>
+			<samp>
+				ORA-1555: snapshot too old: rollback segment number 9 with name &quot;R07&quot; too small
+			</samp>
+		</blockquote>
+		<p>
+		To most DBAs it is far from clear what might have caused the error, and even more perplexing as to how they can prevent it from occurring again.
+		But perhaps the most exasperating thing about this error is that queries are most prone to it when they have been running for a long time,
+		and thus many hours of processing can be lost.
+		</p>
+		<p>
+		The good news is that it is easy to prevent this error entirely and absolutely.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				What does the error mean?
+			</font>
+		</h3>
+		<p>
+		The ORA-1555 error means that a consistent get on a particular database block has failed.
+		</p>
+		<p>
+		When a transaction or query begins, the current SCN is recorded.
+		That SCN serves as the snapshot SCN for the query or transaction.
+		This term is derived from the requirement that the transaction or query must see a consistent snapshot of the database at that time.
+		</p>
+		<p>
+		Every block used to select rows for the query or transaction must reflect the state of the database at the snapshot SCN.
+		This applies to the selection of rows to be updated or deleted, as much as it does to the selection of rows for a query.
+		If a block has to be changed, then those changes will be applied to the current version of that block.
+		However, the selection of the rows to be changed must be based on a version of the block consistent with the snapshot SCN.
+		The temporary reconstruction of a version of the block consistent with the snapshot SCN is called a consistent get.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				Why do consistent gets fail?
+			</font>
+		</h3>
+		<p>
+		There are two types of consistent get failure: rollback failure, and cleanout failure.
+		</p>
+		<h4>
+			<font color="#990000">
+				Rollback failure
+			</font>
+		</h4>
+		<p>
+		If the block has been modified in any way by another transaction since the snapshot SCN,
+		then those changes must be rolled back for the consistent get.
+		To do so, it is necessary to read the rollback segment data blocks to which the rollback information for those changes was written.
+		</p>
+		<p>
+		However, if any of those changes were made by a discrete transaction, then there will be no rollback information,
+		because discrete transactions do not generate rollback information.
+		If so, an ORA-1555 error will be raised.
+		Similarly, an ORA-1555 error will be raised if the required rollback segment blocks are no longer available
+		because the rollback segment extent containing those blocks has been deallocated in a shrink operation, or reused by subsequent transactions.
+		</p>
+		<p>
+		Note that the rollback segment blocks required
+		are those that were used by any other transactions that have modified the block after the snapshot SCN.
+		These blocks could be in any rollback segment in the database.
+		</p>
+		<p>
+		Note further that for those blocks to be unavailable by virtue of extent reuse,
+		all extents in that rollback segment must have been used at least once since the snapshot SCN.
+		This is why the error message suggests that the rollback segment is too small.
+		</p>
+		<h4>
+			<font color="#990000">
+				Cleanout failure
+			</font>
+		</h4>
+		<p>
+		DBWn often writes a block to disk before the last transaction to modify that block has been committed.
+		If so, the interested transaction list in the block header still shows that transaction as having
+		an open interest in the block, and the row level locks in the row headers of the affected rows remain in force.
+		When the block is read for another query or transaction, <em>block cleanout</em> must be performed.
+		This involves finding out whether the previous transaction has committed, and if so its row level locks are cleaned out
+		and the commit SCN for the transaction is record in the interested transaction list entry in the block header.
+		</p>
+		<p>
+		For a consistent get, block cleanout is necessary to establish the relative sequence of
+		the commit SCN for the interested transaction and the snapshot SCN for the consistent get.
+		If the interested transaction has not yet committed, or committed after the snapshot SCN, then rollback is required as described above.
+		But if the interested transaction committed before the snapshot SCN, then no rollback of its changes is required.
+		</p>
+		<p>
+		To determine the commit SCN for an interested transaction, if it is not already recorded in the interested transaction list entry,
+		and if it is no longer active, it is necessary to consult the transaction table in the rollback segment header block that was used by that transaction.
+		The rollback segment number for the interested transaction is encoded in the interested transaction entry as part of the transaction identifier.
+		However, the header block for that rollback segment may no longer contain a record for the interested transaction,
+		because that block is also subject to change (lots of it) and the interested transaction may be ancient.
+		</p>
+		<p>
+		Fortunately, however, the consistent get does not need to determine the exact commit SCN for the interested transaction -
+		only the relative sequence of the commit SCN and the snapshot SCN.
+		It is therefore sufficient to perform a recursive consistent get
+		on the rollback segment header block of the rollback segment for the interested transaction.
+		If that consistent get is successful,
+		and if the transaction header for the interested transaction is not extant in the consistent version of its rollback segment header block,
+		and if the transaction identifier indicates that the transaction predated the snapshot SCN,
+		then it may be concluded that the interested transaction committed in relative antiquity, and so no roll back is required.
+		</p>
+		<blockquote>
+			<small>
+				(Incidentally, for current mode block cleanouts, the rollback segment header block is rolled back as far as possible,
+				and the oldest available commit SCN for any transaction in that rollback segment at that time
+				is recorded in the interested transaction list entry as the upper bound for its commit SCN.
+				In other words, the transaction is marked as having committed no later than that SCN.)
+			</small>
+		</blockquote>
+		<p>
+		However, it is possible for the consistent get on the rollback segment header block for an interested transaction to fail.
+		This may occur if the rollback information for any of the changes to that rollback segment header block since the snapshot SCN are not available.
+		These changes are written to that rollback segment itself,
+		and are therefore subject to unavailability due to extent reuse or deallocation in the same way as other changes.
+		However, there is more latitude in the case of rollback segment transaction table changes.
+		Because slots in the transaction table are reused cyclically, the rollback segment extents themselves may have to be reused many times
+		before the rollback information for the transaction header for an interested transaction will be rendered unavailable thereby.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				How can you reduce the risk?
+			</font>
+		</h3>
+		<p>
+		The following simple guidelines should be followed to reduce the risk of snapshot too old errors.
+		</p>
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="42" align="center">
+					<img src="../../images/ball.gif" width="13" height="14" vspace="2">
+				</td>
+				<td>
+					Do not run discrete transactions while sensitive queries or transactions are running,
+					unless you are confident that the data sets required are mutually exclusive.<br>&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td valign="top" width="42" align="center">
+					<img src="../../images/ball.gif" width="13" height="14" vspace="2">
+				</td>
+				<td>
+					Schedule long running queries and transactions out of hours,
+					so that the consistent gets will not need to rollback changes made since the snapshot SCN.
+					This also reduces the work done by the server, and thus improves performance.<br>&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td valign="top" width="42" align="center">
+					<img src="../../images/ball.gif" width="13" height="14" vspace="2">
+				</td>
+				<td>
+					Code long running processes as a series of restartable steps.<br>&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td valign="top" width="42" align="center">
+					<img src="../../images/ball.gif" width="13" height="14" vspace="2">
+				</td>
+				<td>
+					Shrink all rollback segments back to their optimal size manually before running a sensitive query or transaction
+					to reduce risk of consistent get rollback failure due to extent deallocation.
+					This can be done with the APT script <b><a href="../../scripts/rbs.htm#shrink_rollback_segs">shrink_rollback_segs.sql</a></b>.<br>&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td valign="top" width="42" align="center">
+					<img src="../../images/ball.gif" width="13" height="14" vspace="2">
+				</td>
+				<td>
+					Use a large optimal value on all rollback segments, to delay extent reuse.
+					For an indication of how long you might have before the problem strikes,
+					the APT script  <b><a href="../../scripts/rbs.htm#rollback_reuse_time">rollback_reuse_time.sql</a></b>
+					can be used to get the average time before rollback segment extent reuse.<br>&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td valign="top" width="42" align="center">
+					<img src="../../images/ball.gif" width="13" height="14" vspace="2">
+				</td>
+				<td>
+					Don't fetch across commits.
+					That is, don't fetch on a cursor that was opened prior to the last commit,
+					particularly if the data queried by the cursor is being changed in the current session.<br>&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td valign="top" width="42" align="center">
+					<img src="../../images/ball.gif" width="13" height="14" vspace="2">
+				</td>
+				<td>
+					Use a large database block size
+					to maximize the number of slots in the rollback segment transaction tables, and thus delay slot reuse.<br>&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td valign="top" width="42" align="center">
+					<img src="../../images/ball.gif" width="13" height="14" vspace="2">
+				</td>
+				<td>
+					Commit less often in tasks that will run at the same time as the sensitive query,
+					particularly in PL/SQL procedures, to reduce transaction slot reuse.<br>&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td valign="top" width="42" align="center">
+					<img src="../../images/ball.gif" width="13" height="14" vspace="2">
+				</td>
+				<td>
+					If necessary, add extra rollback segments to make more transaction slots available.
+				</td>
+			</tr>
+		</table>
+		<p>
+		Note that adding extra rollback segments is somewhat in conflict with using a large optimal size,
+		assuming the disk space available for rollback segments is invariant.
+		The choice of a strategy at this point should depend upon the relative risk
+		of consistent get rollback failures, as opposed to consistent get cleanout failures.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				What can you do when all else fails?
+			</font>
+		</h3>
+		<p>
+		For particularly sensitive queries and transactions, all this risk reduction is unnecessary.
+		All that is needed is to prevent the deallocation or reuse of any rollback segment extents
+		that have been used by any transaction subsequent to the snapshot SCN.
+		</p>
+		<p>
+		One simple way of doing that is to ensure that there is only one (large) rollback segment online from the time of the snapshot SCN,
+		and to explicitly use that rollback segment for the sensitive query or transaction.
+		This protects all extents in that rollback segment that may be used thereafter, from extent deallocation and reuse,
+		until the conclusion of the sensitive transaction or query.
+		</p>
+		<p>
+		A more sophisticated variation on the same theme is to leave an uncommitted transaction in every online rollback segment.
+		Of course, this introduces a risk of running out of space in the rollback segment tablespaces, but that risk is relatively easy to control.
+		The following set of APT scripts can be used to apply this technique on Unix systems.
+		</p>
+		<p>
+		<b><a href="../../scripts/sql/prevent_1555_setup.sql">prevent_1555_setup.sql</a></b>
+		<blockquote>
+			This script creates a clustered table in the SYSTEM schema that is used to implement and record the protection of rollback segments
+			from extent deallocation and reuse.
+		</blockquote>
+		<p>
+		<b><a href="../../scripts/sql/prevent_1555.sql">prevent_1555.sql</a></b>
+		<blockquote>
+			This is the main script of the set.
+			It is called to ensure protection from ORA-1555 errors for a specified number of seconds.
+			This script calls <em>protect_rbs.sql</em> in the background for each online rollback segment.
+		</blockquote>
+		<p>
+		<b><a href="../../scripts/sql/protect_rbs.sql">protect_rbs.sql</a></b>
+		<blockquote>
+			This script first shrinks the specified rollback segment to reduce the risk of running out of space in the rollback segment tablespaces.
+			It then records its protection in the control table, before leaving an uncommitted transaction sleeping for the required number of seconds.
+		</blockquote>
+		<p>
+		<b><a href="../../scripts/sql/prevent_1555_wait.sql">prevent_1555_wait.sql</a></b>
+		<blockquote>
+			This script must be run after the dummy transactions have been created in each online rollback segment.
+			It waits for all older active transactions to finish.
+			This is necessary in environments with other long-running transactions that may not yet have completed,
+			because the earlier undo for those transactions is not protected and might be required by the critical report
+			unless those transactions are allowed to finish before the critical report starts.
+		</blockquote>
+		<p>
+		<b><a href="../../scripts/sql/protected_rollback_segs.sql">protected_rollback_segs.sql</a></b>
+		<blockquote>
+			This script is used to report the protection status of the rollback segments.
+		</blockquote>
+		
+		<hr noshade align="left" width="300" size="2" color="black">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="1000">
+					<font size="2" color="#660066">
+						<strong>
+							Copyright © Ixora Pty Ltd
+						</strong>
+					</font>
+				</td>
+				<td valign="top" align="right">
+					<nobr>
+					<map name="email">
+						<area shape="rect" coords="0, 0, 32, 21" title="Feedback" href="mailto:feedback@ixora.com.au?SUBJECT=[Tip] ora-1555.htm">
+					</map>
+					<img ismap usemap="#email" border="0" alt="Send Email" src="../../images/email.gif" width="32" height="21">
+					<map name="home">
+						<area shape="rect" coords="0, 0, 28, 28" title="Home" href="/">
+					</map>
+					<img ismap usemap="#home" border="0" alt="Home" src="../../images/home.gif" width="28" height="28">
+					</nobr>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

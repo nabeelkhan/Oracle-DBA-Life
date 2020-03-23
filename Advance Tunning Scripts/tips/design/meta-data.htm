@@ -1,0 +1,105 @@
+<html>
+	<head>
+		<title>
+			Considering Introduced Meta-Data
+		</title>
+		<style>
+			<!-- a:hover{color:#660066;} -->
+		</style>
+	</head>
+	<body background="../../images/bg.jpg" link="#FF6600" vlink="#FF6600" alink="#660066">
+		
+		<h2 align="center">
+			<font color="#990000">
+				Considering Introduced Meta-Data
+			</font>
+		</h2>
+		<p>
+		Some physical database designs involve the introduction of meta-data.
+		For example, it is sometimes recommended that all of an application's code tables containing just code and description columns,
+		should be stored in one physical table by introducing a meta-data column containing the logical table name.
+		The impact of such a scheme on the application code and database workload is less severe than that associated with
+		<b><a href="redundancy.htm">introduced redundancy</a></b>.
+		But, the benefit is correspondingly unimpressive.
+		The major benefit of using a composite code table is that it increases the likelihood of code table blocks being cached in memory.
+		However, even greater benefit can be realized by storing the separate code tables in a suitable cluster,
+		without the overhead of introduced meta-data.
+		<p>
+		A more intriguing case for the possible use of meta-data is in implementing sub-types.
+		Consider an entity representing vehicles in the fleet of a hire-car company.
+		Most of the vehicles will be sedans, but some will be mini-buses and others will be light trucks.
+		These are sub-types of the vehicle entity.
+		They will have many attributes in common, but will require some special attributes also.
+		For example, the maximum load in tons, and whether it is a tray-truck or van, are attributes that apply only to the light trucks.
+		<p>
+		There are three options for mapping a super-type entity with sub-types to physical tables, in a purely relational data model.
+		
+		<h4>
+			<font color="#990000">
+				Option 1
+			</font>
+		</h4>
+		<blockquote>
+			One table is used for the common attributes, with a separate table for the special attributes of each sub-type.
+			<p>
+			While relationally appealing, this option is normally quickly eliminated on performance grounds, because of the need to constantly join the tables.
+			However, if table scans are not required, clustering the tables should be considered.
+		</blockquote>
+		
+		<h4>
+			<font color="#990000">
+				Option 2
+			</font>
+		</h4>
+		<blockquote>
+			A separate table is used for each sub-type, with columns for the common attributes, including the primary key and other candidate keys,
+			present in each table.
+			<p>
+			Triggers have to be used to enforce uniqueness constraints across the separate tables.
+			Overall, the data manipulation performance of this option is acceptable, and the query performance is good.
+		</blockquote>
+		
+		<h4>
+			<font color="#990000">
+				Option 3
+			</font>
+		</h4>
+		<blockquote>
+			A single large table is used with a meta-data column to identify the sub-type and columns for all of the special sub-type attributes.
+			<p>
+			Not null constraints over the sub-type attributes have to be implemented as check constraints referencing the meta-data column,
+			which is no great burden.
+			The data manipulation performance of this option is good, but the full table scan performance may suffer from reduced data density.
+		</blockquote>
+		
+		<p>
+		Clearly, the right trade-off between data manipulation and query performance depends on a wide variety of factors.
+		However, the introduction of meta-data in option 3 is an important option to consider.
+		<p>
+		
+		<hr noshade align="left" width="300" size="2" color="black">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="1000">
+					<font size="2" color="#660066">
+						<strong>
+							Copyright © Ixora Pty Ltd
+						</strong>
+					</font>
+				</td>
+				<td valign="top" align="right">
+					<nobr>
+					<map name="email">
+						<area shape="rect" coords="0, 0, 32, 21" title="Feedback" href="mailto:feedback@ixora.com.au?SUBJECT=[Tip] meta-data.htm">
+					</map>
+					<img ismap usemap="#email" border="0" alt="Send Email" src="../../images/email.gif" width="32" height="21">
+					<map name="home">
+						<area shape="rect" coords="0, 0, 28, 28" title="Home" href="/">
+					</map>
+					<img ismap usemap="#home" border="0" alt="Home" src="../../images/home.gif" width="28" height="28">
+					</nobr>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

@@ -1,0 +1,55 @@
+Description:    Question: How will you find your own TRACE File (say
+ORA_5310.trc), 
+while, multiple Trace files are generated
+simultaneously 
+using Same USERNAMEs with Multiple SESSIONs in Oracle? 
+Code: 
+
+Answer: 
+======= 
+Point-1: To find the Trace file Sequence Number: 
+---------------------------------------------------------------------
+
+The NAME of the TRACE file will be based on
+v$process.SPID (System Process ID). 
+- To findout the v$process.SPID, we need to know
+v$session.PADDR (Process Address) 
+and v$session.AUDSID (Audit SID). 
+- To isolate the v$session.PADDR, we need to know the
+user's SESSIONID. 
+
+Point-2: To find the tracefile Location: 
+----------------------------------------------------- 
+The trace file is located based on value of
+user_dump_dest parameter in init.ora file. 
+and its View name is v$parameter. 
+
+4.SCRIPT CODE: 
+************** 
+
+---------------Script Starts here------------- 
+
+select A.TRACE_PATH ||'> '|| B.TRACE_FILE "YOUR
+TRACEFILE WITH PATH IS:" 
+from 
+(select VALUE TRACE_PATH 
+from V$PARAMETER 
+where NAME='user_dump_dest') A, 
+(select 'ORA_'| | SPID | |'.trc' TRACE_FILE 
+from V$PROCESS 
+where ADDR= (select PADDR 
+from V$SESSION 
+where AUDSID=(select
+USERENV('SESSIONID') 
+from DUAL) ) ) B ; 
+
+---------------Script Ends here----------------- 
+
+
+
+Sample Output: 
+============= 
+
+YOUR TRACEFILE WITH PATH IS: 
+--------------------------------------------------- 
+/Oracle/product/8.1.6/admin/test/udump> ora_5310.trc

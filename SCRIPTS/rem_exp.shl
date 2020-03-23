@@ -1,0 +1,153 @@
+# FILE NAME: rem_exp.sql 
+# LOCATION:	Backup Recovery\Utilities
+# FUNCTION: Export from database on remote server  
+#  FUNCTION:
+# TESTED ON:  
+# PLATFORM:   non-specific
+# REQUIRES:   
+#
+# This is a part of the Knowledge Xpert for Oracle Administration library. 
+# Copyright (C) 2001 Quest Software 
+# All rights reserved. 
+# 
+#******************** Knowledge Xpert for Oracle Administration ********************
+# File: REMOTE_EXP */ 
+# Purpose: This file will automatically perform an export */
+#          of a database that resides on a remote server. */
+# */
+# Setup environment */
+# ORATAB is the name of the list of sids and parameters
+# */
+ORATAB=EXPTAB
+OLD_IFS=$IFS
+IFS=:
+# */
+# Start outermost loop through EXPTAB entries */
+# */
+cat $ORATAB | while read LINE
+do
+case $LINE in
+        \#*) # ignore # lines
+        ;;
+        99) exit ;;
+        *:Y) # Proceed if last field is Y #
+# */
+# Extract first set of variables into x array */
+# */
+        set -A x $LINE 
+# */
+# Extract variables from x array */
+# */
+        filesys=${x[0]}
+        freespc=${x[1]}
+        pfile=${x[2]}
+        expdir=${x[3]}
+        logdir=${x[4]}
+        orasid=${x[5]}
+# */
+# Set other needed variables */
+# */
+        dt_time=`date '+%y%m%d'`
+        exit_status=1
+        re_try=1
+# */
+# Cleanup old logs and create new one */
+# */
+# First cleanup using find on the log file location */
+# */
+        find $logdir -name 'exp_log*.log' -atime +7 -exec rm {} \;
+# */
+# Now create new log file */
+# */
+        fil_cnt=$(($(ls -C1 $logdir'exp_log_'$dt_time*.log|wc -l)+1))
+        log=$logdir'exp_log_'$dt_time'_'$fil_cnt.log
+        touch $log
+        echo 'Start export of '$orasid' on '`date'+%y%m%d%H:%M:%S'`>>$log
+# */
+# Assign some local file name variables to enhance readability */
+# */
+        explog=$logdir$orasid'_'$dt_time.log
+        expfile=$expdir$orasid'_'$dt_time.exp
+        echo 'Export filename: '$expfile.Z>>$log
+# */
+# Check the number of exports and delete oldest */
+# */
+        if (($(($(ls $expdir|grep *exp.Z|wc -l)>3)))); then
+                ls -ctr -C1 $expdir$orasid*.exp.Z|read del_file
+                echo 'Removing '$del_file>>$log
+                rm $del_file
+        fi
+# */
+# Check file space, set second value in EXPTAB to appropriate integer */
+# */
+        if (($(($(df|grep $filesys |cut -c47-54)-$freespc>0)))); then
+# */
+# Set up dual while loop around entire export and error checking section */
+# */
+        while [ ${exit_status} -ne 99 ]
+        do
+                while [ ${exit_status} -eq 1 ]
+                do
+                $ORACLE_HOME/bin/exp parfile=$pfile FILE=$expfile LOG=$explog
+# */
+                compress -f $expfile 
+# */
+# Check for errors in log, if found process */
+# For fatal, non-recoverable errors, just list to error log and exit */
+# For self correcting errors, retry at 1 hour intervals max of 3 times, */
+# then log error and exit. */
+# For informational errors, log error and exit. */
+# All errors begin with exp- or ora-, each stack will have at least 1 exp- */
+# error, since there are only 36 exp- errors, we will use them for */
+# processing */
+# */
+        if (($(grep -F -i -e'ora-' -e'exp-' $explog|wc -l)>0)); then
+                grep -F -i -e'ora-' -e'exp-' $explog>temp.lis
+                if (($(grep -F -i -ffatal_er.lis temp.lis|wc -l)>0)); then
+                        echo 'Fatal error has occured, terminating'>>$log
+                        cat temp.lis>>$log
+                        exit_status=99
+                fi
+                if [ ${exit_status} -ne 99 ]; then
+                 if (($(grep -F -i -fretry_er.lis temp.lis|wc -l)>0)); then
+                        echo 'A non-fatal error has occured, retrying'>>$log
+                        cat temp.lis>>$log
+                        rm $expfile.Z
+                        re_try=$(($re_try+1))
+                        exit_status=1
+                        echo 'Retry number: '$re_try>>$log
+                        if [ ${re_try} -eq 4 ]; then
+                                exit_status=99
+                        else
+                                sleep 3600 
+                        fi
+                 fi
+                fi
+                if [ ${re_try} -eq 1 ]; then
+                 if [ ${exit_status} -ne 99 ]; then
+                  if (($(grep -F -i -fignore_e.lis temp.lis|wc -l)>0)); then
+                        echo 'An error  considered a warning has occured'>>$log
+                        echo 'Check database tables and connections'>>$log
+                        cat temp.lis>>$log
+                        exit_status=99
+                  fi
+                 fi
+                fi
+        rm temp.lis
+        else 
+                exit_status=99
+        fi
+        done
+done
+else
+echo 'Not enough file space to perform export'>>$log
+fi
+;;
+esac
+cat $explog >>$log
+rm $explog
+echo 'Ending of '$orasid' export at '`date '+%y%m%d%H:%M:%S'`>>$log
+done
+IFS=$OLD_IFS
+
+

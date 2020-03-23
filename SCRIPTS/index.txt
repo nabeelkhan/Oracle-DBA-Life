@@ -1,0 +1,9 @@
+
+Notes on using index.xls spread sheet:
+
+This is an Excell spread sheet for doing index sizing. It isn’t pretty and doesn’t have 
+alot of bells and whistles but should do the job. You enter the table name, Index name, 
+Percent filled for non-unique indexes (we recommend 70%), blocksize, Pctfree and the 
+initrans and number of rows as the base line information. Then, you enter each column 
+and its size, be sure to allow for number columns as n/2. The spread sheet automatically 
+calculates number of blocks and the size in either M - Meg, or k - Kilobytes. 

@@ -1,0 +1,174 @@
+Scripts from chapter 16 of ORACLE9i DBA Handbook.  See the readme.doc file for details.
+
+
+
+create public database link HR_LINK
+connect to HR identified by PUFFINSTUFF
+using 'hq';
+
+
+select * from EMPLOYEE@HR_LINK
+ where Office='ANNAPOLIS';
+
+
+hq =(DESCRIPTION=
+      (ADDRESS=
+            (PROTOCOL=TCP)
+            (HOST=HQ)
+            (PORT=1521))
+      (CONNECT DATA=
+            (SID=loc))))
+
+
+create public database link HR_LINK
+connect to current_user
+using 'hq';
+
+
+select * from EMPLOYEE@HR_LINK;
+
+
+REM  In the local database: 
+REM 
+create public database link HR_LINK
+connect to current_user
+using 'hq';
+
+create view REMOTE_EMP
+as select * from EMPLOYEE@HR_LINK
+where Ename=User;
+
+
+CREATE PUBLIC DATABASE LINK loc.hq.mycorp.com
+USING 'service name';
+
+create shared database link HR_LINK_SHARED
+connect to current_user
+authenticated by HR identified by puffinstuff
+using 'hq';
+
+
+drop database link HR_LINK;
+create public database link HR_LINK
+connect to HR identified by NEWPASSWORD
+using 'hq';
+
+
+create database link SCOTT.HR_LINK
+connect to HR identified by PUFFINSTUFF
+using 'hq';
+
+
+create public database link TRIGGER_LINK
+connect to current_user
+using 'remote1';
+
+create trigger COPY_DATA
+after insert on EMPLOYEE
+for each row
+begin
+     insert into EMPLOYEE@TRIGGER_LINK
+     values
+     (:new.Empno, :new.Ename, :new.Deptno,
+     :new.Salary, :new.Birth_Date, :new.Soc_Sec_Num);
+end;
+/
+
+select Trigger_Type,
+       Triggering_Event,
+       Table_Name
+  from DBA_TRIGGERS
+ where Trigger_Name = 'COPY_DATA';
+
+set long 1000
+select Trigger_Body
+  from DBA_TRIGGERS
+ where Trigger_Name = 'COPY_DATA';
+
+create materialized view STORE_DEPT_SAL_MV
+pctfree 0 tablespace MVIEWS
+storage (initial 1M next 1M pctincrease 0)
+build deferred
+refresh complete
+enable query rewrite
+as
+select d.DNAME, sum(SAL) as tot_sum
+  from DEPT d, EMP e
+ where d.DEPTNO = e.DEPTNO
+group by d.DNAME;
+
+
+create materialized view STORE_DEPT_SAL_MV
+pctfree 0 tablespace MYMVIEWS
+storage (initial 20k next 20k pctincrease 0)
+parallel
+build immediate
+refresh fast on commit
+enable query rewrite
+as
+select d.DNAME, sum(SAL) as tot_sum
+  from DEPT d, EMP e
+ where d.DEPTNO = e.DEPTNO
+group by d.DNAME;
+
+
+alter materialized view STORE_DEPT_SAL_MV pctfree 5;
+
+drop materialized view STORE_DEPT_SAL_MV;
+
+execute DBMS_MVIEW.REFRESH('store_dept_sal_mv','c');
+
+execute DBMS_MVIEW.REFRESH('mv1,mv2,mv3','cfc');
+
+
+execute DBMS_MVIEW.REFRESH_ALL;
+
+
+execute DBMS_REFRESH.MAKE
+(name => 'emp_group',
+ list => 'local_emp, local_dept',
+ next_date => SysDate,
+ interval => 'SysDate+7');
+
+
+execute DBMS_REFRESH.CHANGE
+(name => 'emp_group',
+ next_date => null,
+ interval => 'SysDate+3');
+
+execute DBMS_REFRESH.REFRESH('emp_group');
+
+execute DBMS_REFRESH.DESTROY(name => 'emp_group');
+
+create materialized view log on EMPLOYEE
+tablespace DATA_2
+storage(initial 1M next 1M pctincrease 0)
+pctfree 5 pctused 90;
+
+alter materialized view log EMPLOYEE
+pctfree 10;
+
+drop materialized view log on EMPLOYEE;
+
+execute DBMS_MVIEW.PURGE_LOG
+(master => 'EMPLOYEE',
+    num => 1,
+   flag => 'DELETE');
+
+truncate table EMPLOYEE preserve materialized view log;
+
+truncate table EMPLOYEE purge materialized view log;
+
+
+variable jobno number;
+begin
+  DBMS_JOB.SUBMIT(:jobno,'myproc',SysDate,SysDate+1);
+  commit;
+end;
+/
+
+print jobno
+
+
+
+

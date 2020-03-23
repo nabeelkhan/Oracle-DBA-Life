@@ -1,0 +1,1319 @@
+Date: 09/05/05                                                                                                       Page:   1      
+Time: 02:55 PM                                         Expandeded Index Report                                       NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+                                                                                         U                                          
+                                                                                         n                                          
+                                                                                         i                                          
+                                                                                         q                                          
+Index                                Type   Table                             Table      u                                          
+Owner    Index                       Index  Owner    Table Name               Type       e Tablespace    Col. Name                  
+-------- --------------------------- ------ -------- ------------------------ ---------- - ------------- -------------------------  
+CTXSYS   DRC$DEL_KEY                 IOT -  CTXSYS   DR$DELETE                TABLE      U DRSYS         DEL_IDX_ID                 
+                                     TOP                                                                                            
+                                                                                                                                    
+         DRC$DEL_KEY                 IOT -  CTXSYS   DR$DELETE                TABLE      U DRSYS         DEL_IXP_ID                 
+                                     TOP                                                                                            
+                                                                                                                                    
+         DRC$DEL_KEY                 IOT -  CTXSYS   DR$DELETE                TABLE      U DRSYS         DEL_DOCID                  
+                                     TOP                                                                                            
+                                                                                                                                    
+         DRC$IXO_KEY                 IOT -  CTXSYS   DR$INDEX_OBJECT          TABLE      U DRSYS         IXO_CLA_ID                 
+                                     TOP                                                                                            
+                                                                                                                                    
+         DRC$IXO_KEY                 IOT -  CTXSYS   DR$INDEX_OBJECT          TABLE      U DRSYS         IXO_IDX_ID                 
+                                     TOP                                                                                            
+                                                                                                                                    
+         DRC$UNX_KEY                 IOT -  CTXSYS   DR$UNINDEXED             TABLE      U DRSYS         UNX_ROWID                  
+                                     TOP                                                                                            
+                                                                                                                                    
+         DRC$UNX_KEY                 IOT -  CTXSYS   DR$UNINDEXED             TABLE      U DRSYS         UNX_IXP_ID                 
+                                     TOP                                                                                            
+                                                                                                                                    
+         SYS_IOT_TOP_26322           IOT -  CTXSYS   DR$PARAMETER             TABLE      U DRSYS         PAR_NAME                   
+                                     TOP                                                                                            
+                                                                                                                                    
+         SYS_IOT_TOP_26387           IOT -  CTXSYS   DR$SQE                   TABLE      U DRSYS         SQE_NAME                   
+                                     TOP                                                                                            
+                                                                                                                                    
+         SYS_IOT_TOP_26466           IOT -  CTXSYS   DR$PENDING               TABLE      U DRSYS         PND_ROWID                  
+                                     TOP                                                                                            
+                                                                                                                                    
+         SYS_IOT_TOP_26466           IOT -  CTXSYS   DR$PENDING               TABLE      U DRSYS         PND_CID                    
+                                     TOP                                                                                            
+                                                                                                                                    
+         SYS_IOT_TOP_26436           IOT -  CTXSYS   DR$STOPWORD              TABLE      U DRSYS         SPW_WORD                   
+                                     TOP                                                                                            
+                                                                                                                                    
+         SYS_IOT_TOP_26436           IOT -  CTXSYS   DR$STOPWORD              TABLE      U DRSYS         SPW_LANGUAGE               
+                                     TOP                                                                                            
+                                                                                                                                    
+         SYS_IOT_TOP_26436           IOT -  CTXSYS   DR$STOPWORD              TABLE      U DRSYS         SPW_TYPE                   
+                                     TOP                                                                                            
+                                                                                                                                    
+         SYS_IOT_TOP_26436           IOT -  CTXSYS   DR$STOPWORD              TABLE      U DRSYS         SPW_SPL_ID                 
+                                     TOP                                                                                            
+                                                                                                                                    
+         SYS_IOT_TOP_26409           IOT -  CTXSYS   DR$THS_FPHRASE           TABLE      U DRSYS         THF_TYPE                   
+                                     TOP                                                                                            
+Date: 09/05/05                                                                                                       Page:   2      
+Time: 02:55 PM                                         Expandeded Index Report                                       NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+                                                                                         U                                          
+                                                                                         n                                          
+                                                                                         i                                          
+                                                                                         q                                          
+Index                                Type   Table                             Table      u                                          
+Owner    Index                       Index  Owner    Table Name               Type       e Tablespace    Col. Name                  
+-------- --------------------------- ------ -------- ------------------------ ---------- - ------------- -------------------------  
+                                                                                                                                    
+CTXSYS   SYS_IOT_TOP_26409           IOT -  CTXSYS   DR$THS_FPHRASE           TABLE      U DRSYS         THF_PHRASE                 
+                                     TOP                                                                                            
+                                                                                                                                    
+         SYS_IOT_TOP_26409           IOT -  CTXSYS   DR$THS_FPHRASE           TABLE      U DRSYS         THF_THP_ID                 
+                                     TOP                                                                                            
+                                                                                                                                    
+         SYS_IOT_TOP_26482           IOT -  CTXSYS   DR$PARALLEL              TABLE      U DRSYS         P_SLAVE_ID                 
+                                     TOP                                                                                            
+                                                                                                                                    
+         SYS_IOT_TOP_26482           IOT -  CTXSYS   DR$PARALLEL              TABLE      U DRSYS         P_IDX_ID                   
+                                     TOP                                                                                            
+                                                                                                                                    
+         SYS_IOT_TOP_26472           IOT -  CTXSYS   DR$ONLINE_PENDING        TABLE      U DRSYS         ONL_ROWID                  
+                                     TOP                                                                                            
+                                                                                                                                    
+         SYS_IOT_TOP_26472           IOT -  CTXSYS   DR$ONLINE_PENDING        TABLE      U DRSYS         ONL_CID                    
+                                     TOP                                                                                            
+                                                                                                                                    
+         SYS_IOT_TOP_26466           IOT -  CTXSYS   DR$PENDING               TABLE      U DRSYS         PND_PID                    
+                                     TOP                                                                                            
+                                                                                                                                    
+         SYS_IOT_TOP_26387           IOT -  CTXSYS   DR$SQE                   TABLE      U DRSYS         SQE_OWNER#                 
+                                     TOP                                                                                            
+                                                                                                                                    
+         DRC$UNX_KEY                 IOT -  CTXSYS   DR$UNINDEXED             TABLE      U DRSYS         UNX_IDX_ID                 
+                                     TOP                                                                                            
+                                                                                                                                    
+         SYS_IL0000026485C00002$$    LOB    CTXSYS   DR$STATS                 TABLE      U DRSYS                                    
+         SYS_IL0000026489C00003$$    LOB    CTXSYS   DR$PART_STATS            TABLE      U DRSYS                                    
+         DRC$IDX_COLSPEC             NORMAL CTXSYS   DR$INDEX                 TABLE      U DRSYS         IDX_OWNER#                 
+         DRC$IXP_KEY                 NORMAL CTXSYS   DR$INDEX_PARTITION       TABLE      U DRSYS         IXP_ID                     
+         DRC$IXS_NAME                NORMAL CTXSYS   DR$INDEX_SET             TABLE      U DRSYS         IXS_NAME                   
+         DRC$IXX_KEY                 NORMAL CTXSYS   DR$INDEX_SET_INDEX       TABLE      U DRSYS         IXX_IXS_ID                 
+         DRC$PRE_KEY                 NORMAL CTXSYS   DR$PREFERENCE            TABLE      U DRSYS         PRE_ID                     
+         DRC$OBJ_NAME                NORMAL CTXSYS   DR$OBJECT                TABLE      U DRSYS         OBJ_NAME                   
+         DRC$OBJ_KEY                 NORMAL CTXSYS   DR$OBJECT                TABLE      U DRSYS         OBJ_ID                     
+         DRC$OBJ_KEY                 NORMAL CTXSYS   DR$OBJECT                TABLE      U DRSYS         OBJ_CLA_ID                 
+         DRC$OAT_NAME                NORMAL CTXSYS   DR$OBJECT_ATTRIBUTE      TABLE      U DRSYS         OAT_NAME                   
+         DRC$OAT_NAME                NORMAL CTXSYS   DR$OBJECT_ATTRIBUTE      TABLE      U DRSYS         OAT_OBJ_ID                 
+         DRC$OAT_NAME                NORMAL CTXSYS   DR$OBJECT_ATTRIBUTE      TABLE      U DRSYS         OAT_CLA_ID                 
+         DRC$OAT_KEY                 NORMAL CTXSYS   DR$OBJECT_ATTRIBUTE      TABLE      U DRSYS         OAT_ID                     
+         DRC$IXX_KEY                 NORMAL CTXSYS   DR$INDEX_SET_INDEX       TABLE      U DRSYS         IXX_COLLIST                
+         DRX$OAL_ID                  NORMAL CTXSYS   DR$OBJECT_ATTRIBUTE_LOV  TABLE      N DRSYS         OAL_OAT_ID                 
+         DRX$IXV_KEY                 NORMAL CTXSYS   DR$INDEX_VALUE           TABLE      N DRSYS         IXV_OAT_ID                 
+         DRX$IXV_KEY                 NORMAL CTXSYS   DR$INDEX_VALUE           TABLE      N DRSYS         IXV_SUB_GROUP              
+         DRX$IXV_KEY                 NORMAL CTXSYS   DR$INDEX_VALUE           TABLE      N DRSYS         IXV_SUB_OAT_ID             
+Date: 09/05/05                                                                                                       Page:   3      
+Time: 02:55 PM                                         Expandeded Index Report                                       NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+                                                                                         U                                          
+                                                                                         n                                          
+                                                                                         i                                          
+                                                                                         q                                          
+Index                                Type   Table                             Table      u                                          
+Owner    Index                       Index  Owner    Table Name               Type       e Tablespace    Col. Name                  
+-------- --------------------------- ------ -------- ------------------------ ---------- - ------------- -------------------------  
+CTXSYS   DRX$IXV_KEY                 NORMAL CTXSYS   DR$INDEX_VALUE           TABLE      N DRSYS         IXV_IDX_ID                 
+         DRX$IXP_NAME                NORMAL CTXSYS   DR$INDEX_PARTITION       TABLE      U DRSYS         IXP_NAME                   
+         DRX$IXP_NAME                NORMAL CTXSYS   DR$INDEX_PARTITION       TABLE      U DRSYS         IXP_IDX_ID                 
+         DRC$SLX_KEY                 NORMAL CTXSYS   DR$SUB_LEXER             TABLE      U DRSYS         SLX_LANGUAGE               
+         DRC$SLX_KEY                 NORMAL CTXSYS   DR$SUB_LEXER             TABLE      U DRSYS         SLX_PRE_ID                 
+         DR_UNIQ_THS_PHRASE          NORMAL CTXSYS   DR$THS_PHRASE            TABLE      U DRSYS         THP_QUALIFY                
+         DR_UNIQ_THS_PHRASE          NORMAL CTXSYS   DR$THS_PHRASE            TABLE      U DRSYS         THP_THSID                  
+         DR_UNIQ_THS_BT              NORMAL CTXSYS   DR$THS_BT                TABLE      U DRSYS         THB_BT                     
+         DR_UNIQ_THS_BT              NORMAL CTXSYS   DR$THS_BT                TABLE      U DRSYS         THB_TYPE                   
+         DR_UNIQ_THS_BT              NORMAL CTXSYS   DR$THS_BT                TABLE      U DRSYS         THB_THP_ID                 
+         DR_THS_RINGID               NORMAL CTXSYS   DR$THS_PHRASE            TABLE      N DRSYS         THP_RINGID                 
+         DR_THS_BT                   NORMAL CTXSYS   DR$THS_BT                TABLE      N DRSYS         THB_TYPE                   
+         DR_THS_BT                   NORMAL CTXSYS   DR$THS_BT                TABLE      N DRSYS         THB_BT                     
+         DR_STOPLIST_UNIQ            NORMAL CTXSYS   DR$STOPLIST              TABLE      U DRSYS         SPL_OWNER#                 
+         SYS_C001672                 NORMAL CTXSYS   DR$PART_STATS            TABLE      U DRSYS         IXP_ID                     
+         SYS_C001672                 NORMAL CTXSYS   DR$PART_STATS            TABLE      U DRSYS         IDX_ID                     
+         SYS_C001671                 NORMAL CTXSYS   DR$STATS                 TABLE      U DRSYS         IDX_ID                     
+         SYS_C001623                 NORMAL CTXSYS   DR$THS_PHRASE            TABLE      U DRSYS         THP_ID                     
+         SYS_C001621                 NORMAL CTXSYS   DR$THS                   TABLE      U DRSYS         THS_NAME                   
+         SYS_C001620                 NORMAL CTXSYS   DR$THS                   TABLE      U DRSYS         THS_ID                     
+         DR_UNIQ_THS_PHRASE          NORMAL CTXSYS   DR$THS_PHRASE            TABLE      U DRSYS         THP_PHRASE                 
+         DR_STOPLIST_UNIQ            NORMAL CTXSYS   DR$STOPLIST              TABLE      U DRSYS         SPL_NAME                   
+         DR_STOPLIST_PK              NORMAL CTXSYS   DR$STOPLIST              TABLE      U DRSYS         SPL_ID                     
+         DR_SERVER_SID               NORMAL CTXSYS   DR$SERVER                TABLE      U DRSYS         SER_AUDSID                 
+         DRX$SLX_SUB_PRE_ID          NORMAL CTXSYS   DR$SUB_LEXER             TABLE      N DRSYS         SLX_SUB_PRE_ID             
+         DRX$SEC_TAG                 NORMAL CTXSYS   DR$SECTION               TABLE      N DRSYS         SEC_SGP_ID                 
+         DRX$SEC_TAG                 NORMAL CTXSYS   DR$SECTION               TABLE      N DRSYS         SEC_TAG                    
+         DRX$SEC_NAME                NORMAL CTXSYS   DR$SECTION               TABLE      N DRSYS         SEC_SGP_ID                 
+         DRX$SEC_NAME                NORMAL CTXSYS   DR$SECTION               TABLE      N DRSYS         SEC_NAME                   
+         DRC$SGP_UNIQE               NORMAL CTXSYS   DR$SECTION_GROUP         TABLE      U DRSYS         SGP_OWNER#                 
+         DRC$SGP_UNIQE               NORMAL CTXSYS   DR$SECTION_GROUP         TABLE      U DRSYS         SGP_NAME                   
+         DRC$SGP_KEY                 NORMAL CTXSYS   DR$SECTION_GROUP         TABLE      U DRSYS         SGP_ID                     
+         DRC$SEC_KEY                 NORMAL CTXSYS   DR$SECTION               TABLE      U DRSYS         SEC_ID                     
+         DRC$PRV_KEY                 NORMAL CTXSYS   DR$PREFERENCE_VALUE      TABLE      U DRSYS         PRV_OAT_ID                 
+         DRC$PRV_KEY                 NORMAL CTXSYS   DR$PREFERENCE_VALUE      TABLE      U DRSYS         PRV_PRE_ID                 
+         DRC$PRE_NAME                NORMAL CTXSYS   DR$PREFERENCE            TABLE      U DRSYS         PRE_NAME                   
+         DRC$PRE_NAME                NORMAL CTXSYS   DR$PREFERENCE            TABLE      U DRSYS         PRE_OWNER#                 
+         DRC$IXS_NAME                NORMAL CTXSYS   DR$INDEX_SET             TABLE      U DRSYS         IXS_OWNER#                 
+         DRC$IXS_KEY                 NORMAL CTXSYS   DR$INDEX_SET             TABLE      U DRSYS         IXS_ID                     
+         DRC$IXP_KEY                 NORMAL CTXSYS   DR$INDEX_PARTITION       TABLE      U DRSYS         IXP_IDX_ID                 
+         DRC$IDX_COLSPEC             NORMAL CTXSYS   DR$INDEX                 TABLE      U DRSYS         IDX_NAME                   
+         DRC$IDX_COLUMN              NORMAL CTXSYS   DR$INDEX                 TABLE      N DRSYS         IDX_TABLE#                 
+         DRC$IDX_COLUMN              NORMAL CTXSYS   DR$INDEX                 TABLE      N DRSYS         IDX_TEXT_NAME              
+         DRC$IDX_KEY                 NORMAL CTXSYS   DR$INDEX                 TABLE      U DRSYS         IDX_ID                     
+FIN7LIFE FNX_LEVEL_BAL_1             NORMAL FIN7LIFE FW_LEVEL_BAL_1           TABLE      N FIN7LIFE      LB_FORMAT_ID               
+         FNX_LEVEL_BAL_1             NORMAL FIN7LIFE FW_LEVEL_BAL_1           TABLE      N FIN7LIFE      LB_LVL_CODE                
+         FNX_LEVEL_BAL_1             NORMAL FIN7LIFE FW_LEVEL_BAL_1           TABLE      N FIN7LIFE      LB_COMP_CODE               
+Date: 09/05/05                                                                                                       Page:   4      
+Time: 02:55 PM                                         Expandeded Index Report                                       NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+                                                                                         U                                          
+                                                                                         n                                          
+                                                                                         i                                          
+                                                                                         q                                          
+Index                                Type   Table                             Table      u                                          
+Owner    Index                       Index  Owner    Table Name               Type       e Tablespace    Col. Name                  
+-------- --------------------------- ------ -------- ------------------------ ---------- - ------------- -------------------------  
+FIN7LIFE FNX_LEVEL_BAL_1             NORMAL FIN7LIFE FW_LEVEL_BAL_1           TABLE      N FIN7LIFE      LB_DIVN_CODE               
+         FNX_LEVEL_BAL_1             NORMAL FIN7LIFE FW_LEVEL_BAL_1           TABLE      N FIN7LIFE      LB_DEPT_CODE               
+         FNX_OS_01                   NORMAL FIN7LIFE FT_OS                    TABLE      N FIN7LIFE      OST_COMP_CODE              
+         FNX_OS_01                   NORMAL FIN7LIFE FT_OS                    TABLE      N FIN7LIFE      OST_ACNT_YEAR              
+         FNX_OS_01                   NORMAL FIN7LIFE FT_OS                    TABLE      N FIN7LIFE      OST_TRAN_CODE              
+         FNX_OS_01                   NORMAL FIN7LIFE FT_OS                    TABLE      N FIN7LIFE      OST_DOC_NO                 
+         FNX_OS_01                   NORMAL FIN7LIFE FT_OS                    TABLE      N FIN7LIFE      OST_MAIN_ACNT_CODE         
+         FNX_OS_01                   NORMAL FIN7LIFE FT_OS                    TABLE      N FIN7LIFE      OST_SUB_ACNT_CODE          
+         FNX_OS_01                   NORMAL FIN7LIFE FT_OS                    TABLE      N FIN7LIFE      OST_SEQ_NO                 
+         FNX_OS_02                   NORMAL FIN7LIFE FT_OS                    TABLE      N FIN7LIFE      OST_COMP_CODE              
+         FNX_OS_02                   NORMAL FIN7LIFE FT_OS                    TABLE      N FIN7LIFE      OST_REF_DOC_NO             
+         FNX_OS_02                   NORMAL FIN7LIFE FT_OS                    TABLE      N FIN7LIFE      OST_REF_TRAN_CODE          
+         FNX_OS_02                   NORMAL FIN7LIFE FT_OS                    TABLE      N FIN7LIFE      OST_REF_ACNT_YEAR          
+         FNX_OS_02                   NORMAL FIN7LIFE FT_OS                    TABLE      N FIN7LIFE      OST_REF_SEQ_NO             
+         FNX_PDC_OS_01               NORMAL FIN7LIFE FT_PDC_OS                TABLE      N FIN7LIFE      POS_COMP_CODE              
+         FNX_PDC_OS_01               NORMAL FIN7LIFE FT_PDC_OS                TABLE      N FIN7LIFE      POS_PDC_CHQ_NO             
+         FNX_UNPOSTED_OS_01          NORMAL FIN7LIFE FT_UNPOSTED_OS           TABLE      N FIN7LIFE      OST_COMP_CODE              
+         FNX_UNPOSTED_OS_01          NORMAL FIN7LIFE FT_UNPOSTED_OS           TABLE      N FIN7LIFE      OST_ACNT_YEAR              
+         FNX_UNPOSTED_OS_01          NORMAL FIN7LIFE FT_UNPOSTED_OS           TABLE      N FIN7LIFE      OST_DOC_NO                 
+         FNX_UNPOSTED_OS_01          NORMAL FIN7LIFE FT_UNPOSTED_OS           TABLE      N FIN7LIFE      OST_SUB_ACNT_CODE          
+         FNX_UNPOSTED_OS_01          NORMAL FIN7LIFE FT_UNPOSTED_OS           TABLE      N FIN7LIFE      OST_MAIN_ACNT_CODE         
+         FNX_UNPOSTED_OS_01          NORMAL FIN7LIFE FT_UNPOSTED_OS           TABLE      N FIN7LIFE      OST_SEQ_NO                 
+         FNX_UNPOSTED_OS_01          NORMAL FIN7LIFE FT_UNPOSTED_OS           TABLE      N FIN7LIFE      OST_TRAN_CODE              
+         FP_PARAMETER_NX             NORMAL FIN7LIFE FP_PARAMETER             TABLE      N FIN7LIFE      PARA_ID                    
+         FT_CUR_TRANS_DETAIL_02      NORMAL FIN7LIFE FT_CUR_TRANS_DETAIL      TABLE      N FIN7LIFE      TD_COMP_CODE               
+         FT_CUR_TRANS_DETAIL_02      NORMAL FIN7LIFE FT_CUR_TRANS_DETAIL      TABLE      N FIN7LIFE      TD_MAIN_ACNT_CODE          
+         FT_CUR_TRANS_DETAIL_02      NORMAL FIN7LIFE FT_CUR_TRANS_DETAIL      TABLE      N FIN7LIFE      TD_SUB_ACNT_CODE           
+         FT_OS_1                     NORMAL FIN7LIFE FT_OS                    TABLE      N FIN7LIFE      OST_TRAN_CODE              
+         FT_OS_1                     NORMAL FIN7LIFE FT_OS                    TABLE      N FIN7LIFE      OST_DOC_NO                 
+         FT_OS_NX_01                 NORMAL FIN7LIFE FT_OS                    TABLE      N FIN7LIFE      OST_COMP_CODE              
+         FT_OS_NX_01                 NORMAL FIN7LIFE FT_OS                    TABLE      N FIN7LIFE      OST_DOC_DT                 
+         FT_OS_NX_01                 NORMAL FIN7LIFE FT_OS                    TABLE      N FIN7LIFE      OST_MAIN_ACNT_CODE         
+         FT_OS_NX_01                 NORMAL FIN7LIFE FT_OS                    TABLE      N FIN7LIFE      OST_SUB_ACNT_CODE          
+         FT_OS_NX_02                 NORMAL FIN7LIFE FT_OS                    TABLE      N FIN7LIFE      OST_REF_KEY_NO             
+         FUX_COA_ACNT_FORMAT         NORMAL FIN7LIFE FM_COA_ACNT_FORMAT       TABLE      U FIN7LIFE      CAF_FORMAT_ID              
+         FUX_COA_ACNT_FORMAT         NORMAL FIN7LIFE FM_COA_ACNT_FORMAT       TABLE      U FIN7LIFE      CAF_MAIN_ACNT_CODE         
+         FUX_COA_ACNT_FORMAT         NORMAL FIN7LIFE FM_COA_ACNT_FORMAT       TABLE      U FIN7LIFE      CAF_LVL_CODE               
+         FUX_FS_CUR_ACNT_BAL         NORMAL FIN7LIFE FS_CUR_ACNT_BAL          TABLE      U FIN7LIFE      ABAL_COMP_CODE             
+         FUX_FS_CUR_ACNT_BAL         NORMAL FIN7LIFE FS_CUR_ACNT_BAL          TABLE      U FIN7LIFE      ABAL_CAL_MONTH             
+         FUX_FS_CUR_ACNT_BAL         NORMAL FIN7LIFE FS_CUR_ACNT_BAL          TABLE      U FIN7LIFE      ABAL_ANLY_CODE_2           
+         FUX_FS_CUR_ACNT_BAL         NORMAL FIN7LIFE FS_CUR_ACNT_BAL          TABLE      U FIN7LIFE      ABAL_ANLY_CODE_1           
+         FUX_FS_CUR_ACNT_BAL         NORMAL FIN7LIFE FS_CUR_ACNT_BAL          TABLE      U FIN7LIFE      ABAL_DEPT_CODE             
+         FUX_FS_CUR_ACNT_BAL         NORMAL FIN7LIFE FS_CUR_ACNT_BAL          TABLE      U FIN7LIFE      ABAL_DIVN_CODE             
+         FUX_FS_CUR_ACNT_BAL         NORMAL FIN7LIFE FS_CUR_ACNT_BAL          TABLE      U FIN7LIFE      ABAL_CURR_CODE             
+         FUX_FS_CUR_ACNT_BAL         NORMAL FIN7LIFE FS_CUR_ACNT_BAL          TABLE      U FIN7LIFE      ABAL_SUB_ACNT_CODE         
+         FUX_FS_CUR_ACNT_BAL         NORMAL FIN7LIFE FS_CUR_ACNT_BAL          TABLE      U FIN7LIFE      ABAL_ACNT_YEAR             
+         FUX_FS_CUR_ACNT_BAL         NORMAL FIN7LIFE FS_CUR_ACNT_BAL          TABLE      U FIN7LIFE      ABAL_CAL_YEAR              
+Date: 09/05/05                                                                                                       Page:   5      
+Time: 02:55 PM                                         Expandeded Index Report                                       NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+                                                                                         U                                          
+                                                                                         n                                          
+                                                                                         i                                          
+                                                                                         q                                          
+Index                                Type   Table                             Table      u                                          
+Owner    Index                       Index  Owner    Table Name               Type       e Tablespace    Col. Name                  
+-------- --------------------------- ------ -------- ------------------------ ---------- - ------------- -------------------------  
+FIN7LIFE FUX_FS_CUR_ACNT_BAL         NORMAL FIN7LIFE FS_CUR_ACNT_BAL          TABLE      U FIN7LIFE      ABAL_MAIN_ACNT_CODE        
+         FUX_LEVEL_BAL_1             NORMAL FIN7LIFE FW_LEVEL_BAL_1           TABLE      U FIN7LIFE      LB_COMP_CODE               
+         FUX_LEVEL_BAL_1             NORMAL FIN7LIFE FW_LEVEL_BAL_1           TABLE      U FIN7LIFE      LB_FORMAT_ID               
+         FUX_LEVEL_BAL_1             NORMAL FIN7LIFE FW_LEVEL_BAL_1           TABLE      U FIN7LIFE      LB_DEPT_CODE               
+         FUX_LEVEL_BAL_1             NORMAL FIN7LIFE FW_LEVEL_BAL_1           TABLE      U FIN7LIFE      LB_DIVN_CODE               
+         FUX_LEVEL_BAL_1             NORMAL FIN7LIFE FW_LEVEL_BAL_1           TABLE      U FIN7LIFE      LB_LVL_CODE                
+         FUX_LEVEL_BAL_REP           NORMAL FIN7LIFE FW_LEVEL_BAL_REP         TABLE      N FIN7LIFE      LBR_FORMAT_ID              
+         FUX_LEVEL_BAL_REP           NORMAL FIN7LIFE FW_LEVEL_BAL_REP         TABLE      N FIN7LIFE      LBR_LVL_CODE               
+         FUX_MAIN_LEVEL_BAL          NORMAL FIN7LIFE FW_MAIN_LEVEL_BAL        TABLE      U FIN7LIFE      MLB_COMP_CODE              
+         FUX_MAIN_LEVEL_BAL          NORMAL FIN7LIFE FW_MAIN_LEVEL_BAL        TABLE      U FIN7LIFE      MLB_FORMAT_ID              
+         FUX_MAIN_LEVEL_BAL          NORMAL FIN7LIFE FW_MAIN_LEVEL_BAL        TABLE      U FIN7LIFE      MLB_LVL_CODE               
+         FUX_MAIN_LEVEL_BAL          NORMAL FIN7LIFE FW_MAIN_LEVEL_BAL        TABLE      U FIN7LIFE      MLB_DEPT_CODE              
+         FUX_MAIN_LEVEL_BAL          NORMAL FIN7LIFE FW_MAIN_LEVEL_BAL        TABLE      U FIN7LIFE      MLB_DIVN_CODE              
+         FUX_MAIN_LEVEL_BAL          NORMAL FIN7LIFE FW_MAIN_LEVEL_BAL        TABLE      U FIN7LIFE      MLB_MAIN_ACNT_CODE         
+         FWX_LEVEL_1                 NORMAL FIN7LIFE FW_LEVEL                 TABLE      N FIN7LIFE      LS_FORMAT_ID               
+         FWX_LEVEL_1                 NORMAL FIN7LIFE FW_LEVEL                 TABLE      N FIN7LIFE      LS_LVL_CODE                
+         FWX_LEVEL_2                 NORMAL FIN7LIFE FW_LEVEL                 TABLE      N FIN7LIFE      LS_FORMAT_ID               
+         FWX_LEVEL_2                 NORMAL FIN7LIFE FW_LEVEL                 TABLE      N FIN7LIFE      LS_LVL_SEQ                 
+         FWX_MAIN_LEVEL_SUM_1        NORMAL FIN7LIFE FW_MAIN_LEVEL_SUM        TABLE      N FIN7LIFE      MLS_KEY_NO                 
+         FWX_MAIN_LEVEL_SUM_1        NORMAL FIN7LIFE FW_MAIN_LEVEL_SUM        TABLE      N FIN7LIFE      MLS_LVL_CODE               
+         FWX_MAIN_LEVEL_SUM_1        NORMAL FIN7LIFE FW_MAIN_LEVEL_SUM        TABLE      N FIN7LIFE      MLS_FORMAT_ID              
+         FWX_MAIN_LEVEL_SUM_TEMP_1   NORMAL FIN7LIFE FW_MAIN_LEVEL_SUM_TEMP   TABLE      N FIN7LIFE      MLS_KEY_NO                 
+         FWX_MAIN_LEVEL_SUM_TEMP_1   NORMAL FIN7LIFE FW_MAIN_LEVEL_SUM_TEMP   TABLE      N FIN7LIFE      MLS_FORMAT_ID              
+         FWX_MAIN_LEVEL_SUM_TEMP_1   NORMAL FIN7LIFE FW_MAIN_LEVEL_SUM_TEMP   TABLE      N FIN7LIFE      MLS_LVL_CODE               
+         FWX_MAIN_YEAR_SUM_1         NORMAL FIN7LIFE FW_MAIN_YEAR_SUM         TABLE      N FIN7LIFE      MYS_KEY_NO                 
+         FWX_MAIN_YEAR_SUM_1         NORMAL FIN7LIFE FW_MAIN_YEAR_SUM         TABLE      N FIN7LIFE      MYS_FORMAT_ID              
+         FWX_MAIN_YEAR_SUM_1         NORMAL FIN7LIFE FW_MAIN_YEAR_SUM         TABLE      N FIN7LIFE      MYS_LVL_CODE               
+         FWX_MAIN_YEAR_SUM_TEMP_1    NORMAL FIN7LIFE FW_MAIN_YEAR_SUM_TEMP    TABLE      N FIN7LIFE      MYS_KEY_NO                 
+         FWX_MAIN_YEAR_SUM_TEMP_1    NORMAL FIN7LIFE FW_MAIN_YEAR_SUM_TEMP    TABLE      N FIN7LIFE      MYS_FORMAT_ID              
+         FWX_MAIN_YEAR_SUM_TEMP_1    NORMAL FIN7LIFE FW_MAIN_YEAR_SUM_TEMP    TABLE      N FIN7LIFE      MYS_LVL_CODE               
+         FW_LEVEL_SEQUENCE_01        NORMAL FIN7LIFE FW_LEVEL_SEQUENCE        TABLE      N FIN7LIFE      LS_FORMAT_ID               
+         FW_LEVEL_SEQUENCE_01        NORMAL FIN7LIFE FW_LEVEL_SEQUENCE        TABLE      N FIN7LIFE      LS_LVL_CODE                
+         MENU_USER_MENUS_1           NORMAL FIN7LIFE MENU_USER_MENUS          TABLE      U FIN7LIFE      UM_GROUP_ID                
+         MENU_USER_MENUS_1           NORMAL FIN7LIFE MENU_USER_MENUS          TABLE      U FIN7LIFE      UM_MENU_ID                 
+         MENU_USER_MENUS_X           NORMAL FIN7LIFE MENU_USER_MENUS          TABLE      N FIN7LIFE      UM_MENU_ID                 
+         MENU_USER_MENUS_X           NORMAL FIN7LIFE MENU_USER_MENUS          TABLE      N FIN7LIFE      UM_GROUP_ID                
+         NUX_FM_ACNT_COMP_01         NORMAL FIN7LIFE FM_ACNT_COMP             TABLE      N FIN7LIFE      ACOMP_MAIN_ACNT_CODE       
+         NUX_FM_ACNT_COMP_01         NORMAL FIN7LIFE FM_ACNT_COMP             TABLE      N FIN7LIFE      ACOMP_SUB_ACNT_CODE        
+         NUX_FM_ACNT_CURR_01         NORMAL FIN7LIFE FM_ACNT_CURR             TABLE      N FIN7LIFE      ACURR_MAIN_ACNT_CODE       
+         NUX_FM_ACNT_CURR_01         NORMAL FIN7LIFE FM_ACNT_CURR             TABLE      N FIN7LIFE      ACURR_SUB_ACNT_CODE        
+         NUX_FM_ACNT_LINK_01         NORMAL FIN7LIFE FM_ACNT_LINK             TABLE      N FIN7LIFE      ALS_LINK_MAIN_ACNT_CODE    
+         NUX_FM_ACNT_LINK_01         NORMAL FIN7LIFE FM_ACNT_LINK             TABLE      N FIN7LIFE      ALS_LINK_SUB_ACNT_CODE     
+         NUX_FM_ACNT_PERIOD_01       NORMAL FIN7LIFE FM_ACNT_PERIOD           TABLE      N FIN7LIFE      APER_COMP_CODE             
+         NUX_FM_ACNT_PERIOD_01       NORMAL FIN7LIFE FM_ACNT_PERIOD           TABLE      N FIN7LIFE      APER_CAL_MONTH             
+         NUX_FM_ACNT_PERIOD_01       NORMAL FIN7LIFE FM_ACNT_PERIOD           TABLE      N FIN7LIFE      APER_CAL_YEAR              
+         NUX_FM_ACNT_PERIOD_02       NORMAL FIN7LIFE FM_ACNT_PERIOD           TABLE      N FIN7LIFE      APER_COMP_CODE             
+         NUX_FM_ACNT_PERIOD_02       NORMAL FIN7LIFE FM_ACNT_PERIOD           TABLE      N FIN7LIFE      APER_TO_DT                 
+Date: 09/05/05                                                                                                       Page:   6      
+Time: 02:55 PM                                         Expandeded Index Report                                       NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+                                                                                         U                                          
+                                                                                         n                                          
+                                                                                         i                                          
+                                                                                         q                                          
+Index                                Type   Table                             Table      u                                          
+Owner    Index                       Index  Owner    Table Name               Type       e Tablespace    Col. Name                  
+-------- --------------------------- ------ -------- ------------------------ ---------- - ------------- -------------------------  
+FIN7LIFE NUX_FM_ACNT_PERIOD_02       NORMAL FIN7LIFE FM_ACNT_PERIOD           TABLE      N FIN7LIFE      APER_FRM_DT                
+         NUX_FM_COA_LEVEL_01         NORMAL FIN7LIFE FM_COA_LEVEL             TABLE      N FIN7LIFE      LVL_FORMAT_ID              
+         NUX_FM_COA_LEVEL_01         NORMAL FIN7LIFE FM_COA_LEVEL             TABLE      N FIN7LIFE      LVL_PARENT_CODE            
+         NUX_FM_CON_GROUP_01         NORMAL FIN7LIFE FM_CON_GROUPING          TABLE      N FIN7LIFE      COG_FORMAT_ID              
+         NUX_FM_MAIN_SUB_01          NORMAL FIN7LIFE FM_MAIN_SUB              TABLE      N FIN7LIFE      MS_SUB_ACNT_CODE           
+         NUX_FM_SUB_COMP_01          NORMAL FIN7LIFE FM_SUB_COMP              TABLE      N FIN7LIFE      SCOMP_SUB_ACNT_CODE        
+         NUX_FM_SUB_CURR_01          NORMAL FIN7LIFE FM_SUB_CURR              TABLE      N FIN7LIFE      SCURR_SUB_ACNT_CODE        
+         NUX_FP_DBTRG_INTERFACE_01   NORMAL FIN7LIFE FP_DBTRG_INTERFACE       TABLE      N FIN7LIFE      DBTI_KEY_FIELD             
+         NUX_FP_REP_INFO_01          NORMAL FIN7LIFE FP_REP_INFO              TABLE      N FIN7LIFE      REP_KEY_NO                 
+         NUX_FS_PRV_ACNT_BAL_01      NORMAL FIN7LIFE FS_PRV_ACNT_BAL          TABLE      N FIN7LIFE      ABAL_COMP_CODE             
+         NUX_FS_PRV_ACNT_BAL_01      NORMAL FIN7LIFE FS_PRV_ACNT_BAL          TABLE      N FIN7LIFE      ABAL_CURR_CODE             
+         NUX_FS_PRV_ACNT_BAL_01      NORMAL FIN7LIFE FS_PRV_ACNT_BAL          TABLE      N FIN7LIFE      ABAL_DEPT_CODE             
+         NUX_FS_PRV_ACNT_BAL_01      NORMAL FIN7LIFE FS_PRV_ACNT_BAL          TABLE      N FIN7LIFE      ABAL_DIVN_CODE             
+         NUX_FS_PRV_ACNT_BAL_01      NORMAL FIN7LIFE FS_PRV_ACNT_BAL          TABLE      N FIN7LIFE      ABAL_CAL_MONTH             
+         NUX_FS_PRV_ACNT_BAL_01      NORMAL FIN7LIFE FS_PRV_ACNT_BAL          TABLE      N FIN7LIFE      ABAL_MAIN_ACNT_CODE        
+         NUX_FS_PRV_ACNT_BAL_01      NORMAL FIN7LIFE FS_PRV_ACNT_BAL          TABLE      N FIN7LIFE      ABAL_CAL_YEAR              
+         NUX_FS_PRV_ACNT_BAL_01      NORMAL FIN7LIFE FS_PRV_ACNT_BAL          TABLE      N FIN7LIFE      ABAL_SUB_ACNT_CODE         
+         NUX_FT_AJV_DETAIL_01        NORMAL FIN7LIFE FT_AJV_DETAIL            TABLE      N FIN7LIFE      AJD_DOC_CAL_YEAR           
+         NUX_FT_AJV_DETAIL_01        NORMAL FIN7LIFE FT_AJV_DETAIL            TABLE      N FIN7LIFE      AJD_DOC_CAL_MONTH          
+         NUX_FT_CASH_DISB_01         NORMAL FIN7LIFE FT_CASH_DISB             TABLE      N FIN7LIFE      DISB_COMP_CODE             
+         NUX_FT_CASH_DISB_01         NORMAL FIN7LIFE FT_CASH_DISB             TABLE      N FIN7LIFE      DISB_PETTY_CASH_NO         
+         NUX_FT_CASH_RIMB_01         NORMAL FIN7LIFE FT_CASH_RIMB             TABLE      N FIN7LIFE      RIMB_COMP_CODE             
+         NUX_FT_CASH_RIMB_01         NORMAL FIN7LIFE FT_CASH_RIMB             TABLE      N FIN7LIFE      RIMB_PETTY_CASH_NO         
+         NUX_FT_CUR_TRANS_DETAIL_01  NORMAL FIN7LIFE FT_CUR_TRANS_DETAIL      TABLE      N FIN7LIFE      TD_COMP_CODE               
+         NUX_FT_CUR_TRANS_DETAIL_01  NORMAL FIN7LIFE FT_CUR_TRANS_DETAIL      TABLE      N FIN7LIFE      TD_SEQ_NO                  
+         NUX_FT_CUR_TRANS_DETAIL_01  NORMAL FIN7LIFE FT_CUR_TRANS_DETAIL      TABLE      N FIN7LIFE      TD_DOC_NO                  
+         NUX_FT_CUR_TRANS_DETAIL_01  NORMAL FIN7LIFE FT_CUR_TRANS_DETAIL      TABLE      N FIN7LIFE      TD_TRAN_CODE               
+         NUX_FT_CUR_TRANS_HEADER_01  NORMAL FIN7LIFE FT_CUR_TRANS_HEADER      TABLE      N FIN7LIFE      TH_COMP_CODE               
+         NUX_FT_CUR_TRANS_HEADER_01  NORMAL FIN7LIFE FT_CUR_TRANS_HEADER      TABLE      N FIN7LIFE      TH_DOC_NO                  
+         NUX_FT_CUR_TRANS_HEADER_01  NORMAL FIN7LIFE FT_CUR_TRANS_HEADER      TABLE      N FIN7LIFE      TH_TRAN_CODE               
+         NUX_FT_PAY_GEN_DETAIL_01    NORMAL FIN7LIFE FT_PAY_GEN_DETAIL        TABLE      N FIN7LIFE      PGD_PGH_KEY_NO             
+         NUX_FT_PAY_GEN_EXPENSE_01   NORMAL FIN7LIFE FT_PAY_GEN_EXPENSE       TABLE      N FIN7LIFE      PGE_PGH_KEY_NO             
+         NUX_FT_PAY_GEN_HEADER_01    NORMAL FIN7LIFE FT_PAY_GEN_HEADER        TABLE      N FIN7LIFE      PGH_COMP_CODE              
+         NUX_FT_PAY_GEN_HEADER_01    NORMAL FIN7LIFE FT_PAY_GEN_HEADER        TABLE      N FIN7LIFE      PGH_DOC_NO                 
+         NUX_FT_PAY_GEN_HEADER_01    NORMAL FIN7LIFE FT_PAY_GEN_HEADER        TABLE      N FIN7LIFE      PGH_TRAN_CODE              
+         NUX_FT_PDC_OS_01            NORMAL FIN7LIFE FT_PDC_OS                TABLE      N FIN7LIFE      POS_PDC_SEQ_NO             
+         NUX_FT_PDC_OS_02            NORMAL FIN7LIFE FT_PDC_OS                TABLE      N FIN7LIFE      POS_REF_KEY_NO             
+         NUX_FT_PRV_TRANS_DETAIL_01  NORMAL FIN7LIFE FT_PRV_TRANS_DETAIL      TABLE      N FIN7LIFE      TD_COMP_CODE               
+         NUX_FT_PRV_TRANS_DETAIL_01  NORMAL FIN7LIFE FT_PRV_TRANS_DETAIL      TABLE      N FIN7LIFE      TD_TRAN_CODE               
+         NUX_FT_PRV_TRANS_DETAIL_01  NORMAL FIN7LIFE FT_PRV_TRANS_DETAIL      TABLE      N FIN7LIFE      TD_SEQ_NO                  
+         NUX_FT_PRV_TRANS_DETAIL_01  NORMAL FIN7LIFE FT_PRV_TRANS_DETAIL      TABLE      N FIN7LIFE      TD_DOC_NO                  
+         NUX_FT_PRV_TRANS_DETAIL_02  NORMAL FIN7LIFE FT_PRV_TRANS_DETAIL      TABLE      N FIN7LIFE      TD_COMP_CODE               
+         NUX_FT_PRV_TRANS_DETAIL_02  NORMAL FIN7LIFE FT_PRV_TRANS_DETAIL      TABLE      N FIN7LIFE      TD_MAIN_ACNT_CODE          
+         NUX_FT_PRV_TRANS_DETAIL_02  NORMAL FIN7LIFE FT_PRV_TRANS_DETAIL      TABLE      N FIN7LIFE      TD_SUB_ACNT_CODE           
+         NUX_FT_PRV_TRANS_HEADER_01  NORMAL FIN7LIFE FT_PRV_TRANS_HEADER      TABLE      N FIN7LIFE      TH_COMP_CODE               
+         NUX_FT_PRV_TRANS_HEADER_01  NORMAL FIN7LIFE FT_PRV_TRANS_HEADER      TABLE      N FIN7LIFE      TH_TRAN_CODE               
+         NUX_FT_PRV_TRANS_HEADER_01  NORMAL FIN7LIFE FT_PRV_TRANS_HEADER      TABLE      N FIN7LIFE      TH_DOC_NO                  
+Date: 09/05/05                                                                                                       Page:   7      
+Time: 02:55 PM                                         Expandeded Index Report                                       NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+                                                                                         U                                          
+                                                                                         n                                          
+                                                                                         i                                          
+                                                                                         q                                          
+Index                                Type   Table                             Table      u                                          
+Owner    Index                       Index  Owner    Table Name               Type       e Tablespace    Col. Name                  
+-------- --------------------------- ------ -------- ------------------------ ---------- - ------------- -------------------------  
+FIN7LIFE NUX_FT_SUPP_BILL_HEADER_01  NORMAL FIN7LIFE FT_SUPP_BILL_HEADER      TABLE      N FIN7LIFE      BILL_COMP_CODE             
+         NUX_FT_SUPP_BILL_HEADER_01  NORMAL FIN7LIFE FT_SUPP_BILL_HEADER      TABLE      N FIN7LIFE      BILL_REGN_NO               
+         NUX_FT_SUPP_BILL_HEADER_02  NORMAL FIN7LIFE FT_SUPP_BILL_HEADER      TABLE      N FIN7LIFE      BILL_COMP_CODE             
+         NUX_FT_SUPP_BILL_HEADER_02  NORMAL FIN7LIFE FT_SUPP_BILL_HEADER      TABLE      N FIN7LIFE      BILL_SUPP_CODE             
+         NUX_FT_SUPP_BILL_HEADER_02  NORMAL FIN7LIFE FT_SUPP_BILL_HEADER      TABLE      N FIN7LIFE      BILL_MAIN_ACNT_CODE        
+         PK_AAL_01                   NORMAL FIN7LIFE FM_ACNT_ANLY_LEVEL       TABLE      U FIN7LIFE      AAL_HEAD_NO                
+         PK_AAL_01                   NORMAL FIN7LIFE FM_ACNT_ANLY_LEVEL       TABLE      U FIN7LIFE      AAL_SUB_ACNT_CODE          
+
+SQL>  @check_index
+PREMPROD
+PS_DRCR
+ 14  /
+Date: 09/05/05                                                                                                       Page:   1      
+Time: 02:55 PM                                         Expandeded Index Report                                       NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+Index    Table                                                         Type                                                         
+Owner    Owner    Table Name               Index                       Index  COLUMN_POSITION Col. Name                             
+-------- -------- ------------------------ --------------------------- ------ --------------- -------------------------             
+                            U                                                                                                       
+                            n                                                                                                       
+                            i                                                                                                       
+                            q                                                                                                       
+                            u                                                                                                       
+Tablespace    Tablespace    e                                                                                                       
+------------- ------------- -                                                                                                       
+PREMPROD PREMPROD PS_DRCR                  DRCR_CUST_CODE              NORMAL               1 DRCR_CUST_CODE                        
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  DRCR_CUST_CODE              NORMAL               2 DRCR_INT_ENT_YN                       
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  DRCR_CUST_CODE              NORMAL               3 DRCR_POL_SYS_ID                       
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  DRCR_CUST_CODE              NORMAL               4 DRCR_END_NO_IDX                       
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+Date: 09/05/05                                                                                                       Page:   2      
+Time: 02:55 PM                                         Expandeded Index Report                                       NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+Index    Table                                                         Type                                                         
+Owner    Owner    Table Name               Index                       Index  COLUMN_POSITION Col. Name                             
+-------- -------- ------------------------ --------------------------- ------ --------------- -------------------------             
+                            U                                                                                                       
+                            n                                                                                                       
+                            i                                                                                                       
+                            q                                                                                                       
+                            u                                                                                                       
+Tablespace    Tablespace    e                                                                                                       
+------------- ------------- -                                                                                                       
+PREMPROD PREMPROD PS_DRCR                  DRCR_POL_SYS_ID             NORMAL               1 DRCR_POL_SYS_ID                       
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  DRCR_POL_SYS_ID             NORMAL               2 DRCR_END_NO_IDX                       
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  DRCR_POL_SYS_ID             NORMAL               3 DRCR_INT_DOC_NO                       
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  DRCR_POL_SYS_ID             NORMAL               4 DRCR_INT_ENT_YN                       
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+Date: 09/05/05                                                                                                       Page:   3      
+Time: 02:55 PM                                         Expandeded Index Report                                       NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+Index    Table                                                         Type                                                         
+Owner    Owner    Table Name               Index                       Index  COLUMN_POSITION Col. Name                             
+-------- -------- ------------------------ --------------------------- ------ --------------- -------------------------             
+                            U                                                                                                       
+                            n                                                                                                       
+                            i                                                                                                       
+                            q                                                                                                       
+                            u                                                                                                       
+Tablespace    Tablespace    e                                                                                                       
+------------- ------------- -                                                                                                       
+PREMPROD PREMPROD PS_DRCR                  DRCR_POL_SYS_ID             NORMAL               5 DRCR_DRCR_FLAG                        
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  DRCR_POL_SYS_ID             NORMAL               6 DRCR_TXN_CODE                         
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  DRCR_POL_SYS_ID             NORMAL               7 DRCR_DOC_TYPE                         
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  DRCR_POL_SYS_ID             NORMAL               8 DRCR_DOC_NO                           
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+Date: 09/05/05                                                                                                       Page:   4      
+Time: 02:55 PM                                         Expandeded Index Report                                       NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+Index    Table                                                         Type                                                         
+Owner    Owner    Table Name               Index                       Index  COLUMN_POSITION Col. Name                             
+-------- -------- ------------------------ --------------------------- ------ --------------- -------------------------             
+                            U                                                                                                       
+                            n                                                                                                       
+                            i                                                                                                       
+                            q                                                                                                       
+                            u                                                                                                       
+Tablespace    Tablespace    e                                                                                                       
+------------- ------------- -                                                                                                       
+PREMPROD PREMPROD PS_DRCR                  DRCR_POL_SYS_ID             NORMAL               9 DRCR_SUB_ACNT_CODE                    
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  DRCR_POL_SYS_ID             NORMAL              10 DRCR_CLM_SYS_ID                       
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  DRCR_POL_SYS_ID             NORMAL              11 DRCR_CUST_CODE                        
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  DRCR_POL_SYS_ID             NORMAL              12 DRCR_CURR_CODE                        
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+Date: 09/05/05                                                                                                       Page:   5      
+Time: 02:55 PM                                         Expandeded Index Report                                       NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+Index    Table                                                         Type                                                         
+Owner    Owner    Table Name               Index                       Index  COLUMN_POSITION Col. Name                             
+-------- -------- ------------------------ --------------------------- ------ --------------- -------------------------             
+                            U                                                                                                       
+                            n                                                                                                       
+                            i                                                                                                       
+                            q                                                                                                       
+                            u                                                                                                       
+Tablespace    Tablespace    e                                                                                                       
+------------- ------------- -                                                                                                       
+PREMPROD PREMPROD PS_DRCR                  DRCR_POL_SYS_ID             NORMAL              13 DRCR_SEQ_NO                           
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PIX_DRCR_3                  NORMAL               1 DRCR_POL_NO                           
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PIX_PS_DRCR_TEST            NORMAL               1 DRCR_POL_SYS_ID                       
+PREMIA        PREMIA        N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PIX_PS_DRCR_TEST            NORMAL               2 DRCR_CUST_CODE                        
+PREMIA        PREMIA        N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+Date: 09/05/05                                                                                                       Page:   6      
+Time: 02:55 PM                                         Expandeded Index Report                                       NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+Index    Table                                                         Type                                                         
+Owner    Owner    Table Name               Index                       Index  COLUMN_POSITION Col. Name                             
+-------- -------- ------------------------ --------------------------- ------ --------------- -------------------------             
+                            U                                                                                                       
+                            n                                                                                                       
+                            i                                                                                                       
+                            q                                                                                                       
+                            u                                                                                                       
+Tablespace    Tablespace    e                                                                                                       
+------------- ------------- -                                                                                                       
+PREMPROD PREMPROD PS_DRCR                  PIX_PS_DRCR_TEST            NORMAL               3 DRCR_INT_ENT_YN                       
+PREMIA        PREMIA        N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PIX_PS_DRCR_TEST            NORMAL               4 DRCR_END_NO_IDX                       
+PREMIA        PREMIA        N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PK_PS_DRCR                  NORMAL               1 DRCR_TXN_CODE                         
+PREMIA        PREMIDXTAB    U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PK_PS_DRCR                  NORMAL               2 DRCR_DOC_NO                           
+PREMIA        PREMIDXTAB    U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PK_PS_DRCR                  NORMAL               3 DRCR_SEQ_NO                           
+PREMIA        PREMIDXTAB    U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+Date: 09/05/05                                                                                                       Page:   7      
+Time: 02:55 PM                                         Expandeded Index Report                                       NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+Index    Table                                                         Type                                                         
+Owner    Owner    Table Name               Index                       Index  COLUMN_POSITION Col. Name                             
+-------- -------- ------------------------ --------------------------- ------ --------------- -------------------------             
+                            U                                                                                                       
+                            n                                                                                                       
+                            i                                                                                                       
+                            q                                                                                                       
+                            u                                                                                                       
+Tablespace    Tablespace    e                                                                                                       
+------------- ------------- -                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+PREMPROD PREMPROD PS_DRCR                  PK_PS_DRCR                  NORMAL               4 DRCR_DOC_DT                           
+PREMIA        PREMIDXTAB    U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_001             NORMAL               1 DRCR_INT_ENT_YN                       
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_001             NORMAL               2 DRCR_DOC_DT                           
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_001             NORMAL               3 DRCR_CUST_CODE                        
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_001             NORMAL               4 DRCR_TXN_CODE                         
+Date: 09/05/05                                                                                                       Page:   8      
+Time: 02:55 PM                                         Expandeded Index Report                                       NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+Index    Table                                                         Type                                                         
+Owner    Owner    Table Name               Index                       Index  COLUMN_POSITION Col. Name                             
+-------- -------- ------------------------ --------------------------- ------ --------------- -------------------------             
+                            U                                                                                                       
+                            n                                                                                                       
+                            i                                                                                                       
+                            q                                                                                                       
+                            u                                                                                                       
+Tablespace    Tablespace    e                                                                                                       
+------------- ------------- -                                                                                                       
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+PREMPROD PREMPROD PS_DRCR                  PS_DRCR_IDX_001             NORMAL               5 DRCR_DOC_NO                           
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_001             NORMAL               6 DRCR_SEQ_NO                           
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_002             NORMAL               1 DRCR_SUB_ACNT_CODE                    
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_002             NORMAL               2 DRCR_CLM_SYS_ID                       
+Date: 09/05/05                                                                                                       Page:   9      
+Time: 02:55 PM                                         Expandeded Index Report                                       NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+Index    Table                                                         Type                                                         
+Owner    Owner    Table Name               Index                       Index  COLUMN_POSITION Col. Name                             
+-------- -------- ------------------------ --------------------------- ------ --------------- -------------------------             
+                            U                                                                                                       
+                            n                                                                                                       
+                            i                                                                                                       
+                            q                                                                                                       
+                            u                                                                                                       
+Tablespace    Tablespace    e                                                                                                       
+------------- ------------- -                                                                                                       
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+PREMPROD PREMPROD PS_DRCR                  PS_DRCR_IDX_002             NORMAL               3 DRCR_DOC_DT                           
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_002             NORMAL               4 DRCR_TXN_CODE                         
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_002             NORMAL               5 DRCR_DOC_NO                           
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_003             NORMAL               1 DRCR_SUB_ACNT_CODE                    
+Date: 09/05/05                                                                                                       Page:  10      
+Time: 02:55 PM                                         Expandeded Index Report                                       NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+Index    Table                                                         Type                                                         
+Owner    Owner    Table Name               Index                       Index  COLUMN_POSITION Col. Name                             
+-------- -------- ------------------------ --------------------------- ------ --------------- -------------------------             
+                            U                                                                                                       
+                            n                                                                                                       
+                            i                                                                                                       
+                            q                                                                                                       
+                            u                                                                                                       
+Tablespace    Tablespace    e                                                                                                       
+------------- ------------- -                                                                                                       
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+PREMPROD PREMPROD PS_DRCR                  PS_DRCR_IDX_003             NORMAL               2 DRCR_CLM_SYS_ID                       
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_003             NORMAL               3 DRCR_DOC_DT                           
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_003             NORMAL               4 DRCR_TXN_CODE                         
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_003             NORMAL               5 DRCR_DOC_NO                           
+Date: 09/05/05                                                                                                       Page:  11      
+Time: 02:55 PM                                         Expandeded Index Report                                       NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+Index    Table                                                         Type                                                         
+Owner    Owner    Table Name               Index                       Index  COLUMN_POSITION Col. Name                             
+-------- -------- ------------------------ --------------------------- ------ --------------- -------------------------             
+                            U                                                                                                       
+                            n                                                                                                       
+                            i                                                                                                       
+                            q                                                                                                       
+                            u                                                                                                       
+Tablespace    Tablespace    e                                                                                                       
+------------- ------------- -                                                                                                       
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+PREMPROD PREMPROD PS_DRCR                  PS_DRCR_IDX_003             NORMAL               6 DRCR_POL_SYS_ID                       
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_003             NORMAL               7 DRCR_END_NO_IDX                       
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_004             NORMAL               1 DRCR_DRCR_FLAG                        
+PREMIA        PREMIDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_004             NORMAL               2 DRCR_MAIN_ACNT_CODE                   
+Date: 09/05/05                                                                                                       Page:  12      
+Time: 02:55 PM                                         Expandeded Index Report                                       NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+Index    Table                                                         Type                                                         
+Owner    Owner    Table Name               Index                       Index  COLUMN_POSITION Col. Name                             
+-------- -------- ------------------------ --------------------------- ------ --------------- -------------------------             
+                            U                                                                                                       
+                            n                                                                                                       
+                            i                                                                                                       
+                            q                                                                                                       
+                            u                                                                                                       
+Tablespace    Tablespace    e                                                                                                       
+------------- ------------- -                                                                                                       
+PREMIA        PREMIDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+PREMPROD PREMPROD PS_DRCR                  PS_DRCR_IDX_004             NORMAL               3 DRCR_DOC_DT                           
+PREMIA        PREMIDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_006             NORMAL               1 DRCR_CUST_CODE                        
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_006             NORMAL               2 DRCR_SEQ_NO                           
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_006             NORMAL               3 DRCR_POST_YN                          
+Date: 09/05/05                                                                                                       Page:  13      
+Time: 02:55 PM                                         Expandeded Index Report                                       NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+Index    Table                                                         Type                                                         
+Owner    Owner    Table Name               Index                       Index  COLUMN_POSITION Col. Name                             
+-------- -------- ------------------------ --------------------------- ------ --------------- -------------------------             
+                            U                                                                                                       
+                            n                                                                                                       
+                            i                                                                                                       
+                            q                                                                                                       
+                            u                                                                                                       
+Tablespace    Tablespace    e                                                                                                       
+------------- ------------- -                                                                                                       
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+PREMPROD PREMPROD PS_DRCR                  PS_DRCR_IDX_006             NORMAL               4 DRCR_TXN_CODE                         
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_006             NORMAL               5 DRCR_DOC_NO                           
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_006             NORMAL               6 DRCR_DOC_DT                           
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_007             NORMAL               1 DRCR_TXN_CODE                         
+Date: 09/05/05                                                                                                       Page:  14      
+Time: 02:55 PM                                         Expandeded Index Report                                       NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+Index    Table                                                         Type                                                         
+Owner    Owner    Table Name               Index                       Index  COLUMN_POSITION Col. Name                             
+-------- -------- ------------------------ --------------------------- ------ --------------- -------------------------             
+                            U                                                                                                       
+                            n                                                                                                       
+                            i                                                                                                       
+                            q                                                                                                       
+                            u                                                                                                       
+Tablespace    Tablespace    e                                                                                                       
+------------- ------------- -                                                                                                       
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+PREMPROD PREMPROD PS_DRCR                  PS_DRCR_IDX_007             NORMAL               2 DRCR_DOC_NO                           
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_007             NORMAL               3 DRCR_DOC_DT                           
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_009             NORMAL               1 DRCR_DEPT_CODE                        
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_009             NORMAL               2 DRCR_CUST_CODE                        
+Date: 09/05/05                                                                                                       Page:  15      
+Time: 02:55 PM                                         Expandeded Index Report                                       NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+Index    Table                                                         Type                                                         
+Owner    Owner    Table Name               Index                       Index  COLUMN_POSITION Col. Name                             
+-------- -------- ------------------------ --------------------------- ------ --------------- -------------------------             
+                            U                                                                                                       
+                            n                                                                                                       
+                            i                                                                                                       
+                            q                                                                                                       
+                            u                                                                                                       
+Tablespace    Tablespace    e                                                                                                       
+------------- ------------- -                                                                                                       
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+PREMPROD PREMPROD PS_DRCR                  PS_DRCR_IDX_009             NORMAL               3 DRCR_POL_SYS_ID                       
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_009             NORMAL               4 DRCR_END_NO_IDX                       
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_009             NORMAL               5 DRCR_MAIN_ACNT_CODE                   
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_010             NORMAL               1 DRCR_DEPT_CODE                        
+Date: 09/05/05                                                                                                       Page:  16      
+Time: 02:55 PM                                         Expandeded Index Report                                       NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+Index    Table                                                         Type                                                         
+Owner    Owner    Table Name               Index                       Index  COLUMN_POSITION Col. Name                             
+-------- -------- ------------------------ --------------------------- ------ --------------- -------------------------             
+                            U                                                                                                       
+                            n                                                                                                       
+                            i                                                                                                       
+                            q                                                                                                       
+                            u                                                                                                       
+Tablespace    Tablespace    e                                                                                                       
+------------- ------------- -                                                                                                       
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+PREMPROD PREMPROD PS_DRCR                  PS_DRCR_IDX_010             NORMAL               2 DRCR_CUST_CODE                        
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_010             NORMAL               3 DRCR_POL_SYS_ID                       
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_010             NORMAL               4 DRCR_END_NO_IDX                       
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       
+                            Q                                                                                                       
+                            U                                                                                                       
+                            E                                                                                                       
+                                                                                                                                    
+         PREMPROD PS_DRCR                  PS_DRCR_IDX_010             NORMAL               5 DRCR_MAIN_ACNT_CODE                   
+Date: 09/05/05                                                                                                       Page:  17      
+Time: 02:55 PM                                         Expandeded Index Report                                       NK_DBA         
+                                                        orakic database                                                             
+                                                                                                                                    
+Index    Table                                                         Type                                                         
+Owner    Owner    Table Name               Index                       Index  COLUMN_POSITION Col. Name                             
+-------- -------- ------------------------ --------------------------- ------ --------------- -------------------------             
+                            U                                                                                                       
+                            n                                                                                                       
+                            i                                                                                                       
+                            q                                                                                                       
+                            u                                                                                                       
+Tablespace    Tablespace    e                                                                                                       
+------------- ------------- -                                                                                                       
+PREMIA        FIN7IDXTAB    N                                                                                                       
+                            O                                                                                                       
+                            N                                                                                                       
+                            U                                                                                                       
+                            N                                                                                                       
+                            I                                                                                                       

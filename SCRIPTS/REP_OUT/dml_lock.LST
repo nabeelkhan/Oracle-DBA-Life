@@ -1,0 +1,185 @@
+Press <Enter> to continue...Date: 07/31/03                                          Kuwait Insurance Co.                                         Page:   1      
+Time: 08:47 AM                                      Report on All DML Locks Held                                     PREMPROD       
+                                                        orakic database                                                             
+                                                                                                                                    
+                                                          Mode                 Mode                                                 
+User                   SID NAME                           Held                 Requested                                            
+--------------- ---------- ------------------------------ -------------------- --------------------                                 
+PREMPROD                16 PS_RI_CLAIM_REG_EIC            Row-S (SS)           None                                                 
+PREMPROD                16 PT_CLAIM_LPO_HEAD              Row-S (SS)           None                                                 
+PREMPROD                16 PT_CLAIM_ESTIMATE              Row-X (SX)           None                                                 
+PREMPROD                16 PT_CLAIM                       Row-X (SX)           None                                                 
+PREMPROD                16 PM_COVER                       Row-S (SS)           None                                                 
+PREMPROD                16 PM_CLM_DOC_SETUP               Row-S (SS)           None                                                 
+PREMPROD                21 PM_FAC_POOL                    Row-S (SS)           None                                                 
+PREMPROD                21 PT_POL_COVER                   Row-X (SX)           None                                                 
+PREMPROD                21 PT_FAC_IN                      Row-X (SX)           None                                                 
+PREMPROD                21 PT_INST_PREM                   Row-X (SX)           None                                                 
+PREMPROD                21 PH_POLICY                      Row-X (SX)           None                                                 
+PREMPROD                21 PT_COVER_DISCOUNT              Row-X (SX)           None                                                 
+PREMPROD                21 PT_POLICY                      Row-X (SX)           None                                                 
+PREMPROD                21 PM_DEPARTMENT                  Row-S (SS)           None                                                 
+PREMPROD                21 PT_FAC_IN_COMM_TAX             Row-X (SX)           None                                                 
+PREMPROD                21 PM_SUB_CLASS                   Row-S (SS)           None                                                 
+PREMPROD                21 PM_CURRENCY                    Row-S (SS)           None                                                 
+PREMPROD                21 PT_POL_CHARGE                  Row-X (SX)           None                                                 
+PREMPROD                21 PM_ENDT_SETUP                  Row-S (SS)           None                                                 
+PREMPROD                21 PH_FAC_OUT                     Row-X (SX)           None                                                 
+PREMPROD                21 PH_FAC_PART_CUST               Row-X (SX)           None                                                 
+PREMPROD                21 PH_FAC_DEDUCTION               Row-X (SX)           None                                                 
+PREMPROD                21 PM_CUSTOMER                    Row-S (SS)           None                                                 
+PREMPROD                21 PT_RISK                        Row-X (SX)           None                                                 
+PREMPROD                21 PT_SHIP_GOOD                   Row-X (SX)           None                                                 
+PREMPROD                21 PT_FAC_OUT                     Row-X (SX)           None                                                 
+PREMPROD                21 PT_ENG_SUB_CONTRACT            Row-X (SX)           None                                                 
+PREMPROD                21 PM_POL_DOC_SETUP               Row-S (SS)           None                                                 
+PREMPROD                21 PT_ENG_CONTRACT                Row-X (SX)           None                                                 
+PREMPROD                21 PT_FAC_PART_CUST               Row-X (SX)           None                                                 
+PREMPROD                21 PT_POL_BROKER                  Row-X (SX)           None                                                 
+PREMPROD                21 PT_FAC_CUST_RETRO              Row-X (SX)           None                                                 
+PREMPROD                21 PH_FAC_CUST_RETRO              Row-X (SX)           None                                                 
+PREMPROD                21 PT_FAC_DEDUCTION               Row-X (SX)           None                                                 
+PREMPROD                26 PT_POL_COVER                   Row-X (SX)           None                                                 
+PREMPROD                26 PT_FAC_IN                      Row-S (SS)           None                                                 
+PREMPROD                26 PT_INST_PREM                   Row-S (SS)           None                                                 
+PREMPROD                26 PH_POLICY                      Row-X (SX)           None                                                 
+PREMPROD                26 PT_POL_CHARGE                  Row-X (SX)           None                                                 
+PREMPROD                26 PS_PREM_REG                    Row-X (SX)           None                                                 
+PREMPROD                26 PS_DRCR                        Row-X (SX)           None                                                 
+PREMPROD                26 PM_CUSTOMER                    Row-S (SS)           None                                                 
+PREMPROD                26 PT_RISK                        Row-S (SS)           None                                                 
+PREMPROD                26 PS_VEHICLE_SUMMARY             Row-X (SX)           None                                                 
+PREMPROD                26 PW_DRCR                        Row-X (SX)           None                                                 
+PREMPROD                26 PT_POL_BROKER                  Row-S (SS)           None                                                 
+PREMPROD                26 PH_POL_CHARGE                  Row-X (SX)           None                                                 
+PREMPROD                26 PS_MNTH_UW_STAT                Row-X (SX)           None                                                 
+FINAL7                  26 FM_TRAN_DOC_NO                 Row-X (SX)           None                                                 
+PREMPROD                26 PT_SHIP_GOOD                   Row-S (SS)           None                                                 
+PREMPROD                26 PH_POL_COVER                   Row-X (SX)           None                                                 
+PREMPROD                26 PS_PREM_REG_SI                 Row-X (SX)           None                                                 
+Press <Enter> to continue...Date: 07/31/03                                          Kuwait Insurance Co.                                         Page:   2      
+Time: 08:47 AM                                      Report on All DML Locks Held                                     PREMPROD       
+                                                        orakic database                                                             
+                                                                                                                                    
+                                                          Mode                 Mode                                                 
+User                   SID NAME                           Held                 Requested                                            
+--------------- ---------- ------------------------------ -------------------- --------------------                                 
+PREMPROD                26 PT_POLICY                      Row-X (SX)           None                                                 
+PREMPROD                26 PT_COVER_DISCOUNT              Row-S (SS)           None                                                 
+PREMPROD                32 PT_CONDITION                   Row-X (SX)           None                                                 
+PREMPROD                32 PT_POLICY                      Row-X (SX)           None                                                 
+PREMPROD                32 PM_FAC_POOL                    Row-S (SS)           None                                                 
+PREMPROD                32 PH_POLICY                      Row-X (SX)           None                                                 
+PREMPROD                32 PM_DEPARTMENT                  Row-S (SS)           None                                                 
+PREMPROD                32 PT_POLICY_APPL_CURR            Row-X (SX)           None                                                 
+PREMPROD                32 PM_POL_DOC_SETUP               Row-S (SS)           None                                                 
+PREMPROD                32 PM_SUB_CLASS                   Row-S (SS)           None                                                 
+PREMPROD                32 PM_CURRENCY                    Row-S (SS)           None                                                 
+PREMPROD                32 PM_ENDT_SETUP                  Row-S (SS)           None                                                 
+PREMPROD                32 PM_CUSTOMER                    Row-S (SS)           None                                                 
+PREMPROD                34 PM_FAC_POOL                    Row-S (SS)           None                                                 
+PREMPROD                34 PT_POLICY                      Row-X (SX)           None                                                 
+PREMPROD                34 PH_POLICY                      Row-X (SX)           None                                                 
+PREMPROD                34 PM_ENDT_SETUP                  Row-S (SS)           None                                                 
+PREMPROD                34 PM_SUB_CLASS                   Row-S (SS)           None                                                 
+PREMPROD                34 PT_POLICY_SCHEDULE             Row-X (SX)           None                                                 
+PREMPROD                34 PT_POLICY_APPL_CURR            Row-X (SX)           None                                                 
+PREMPROD                34 PT_DED_LOSS                    Row-S (SS)           None                                                 
+PREMPROD                34 PM_POL_DOC_SETUP               Row-S (SS)           None                                                 
+PREMPROD                34 PM_CURRENCY                    Row-S (SS)           None                                                 
+PREMPROD                34 PT_POL_CHARGE                  Row-X (SX)           None                                                 
+PREMPROD                34 PT_POL_COVER                   Row-X (SX)           None                                                 
+PREMPROD                34 PM_CUSTOMER                    Row-S (SS)           None                                                 
+PREMPROD                34 PM_DEPARTMENT                  Row-S (SS)           None                                                 
+PREMPROD                34 PT_COVER_DISCOUNT              Row-S (SS)           None                                                 
+PREMPROD                42 PT_CONDITION                   Row-X (SX)           None                                                 
+PREMPROD                42 PM_FAC_POOL                    Row-S (SS)           None                                                 
+PREMPROD                42 PT_POLICY_SCHEDULE             Row-S (SS)           None                                                 
+PREMPROD                42 PM_POL_DOC_SETUP               Row-S (SS)           None                                                 
+PREMPROD                42 PM_SUB_CLASS                   Row-S (SS)           None                                                 
+PREMPROD                42 PM_CURRENCY                    Row-S (SS)           None                                                 
+PREMPROD                42 PM_ENDT_SETUP                  Row-S (SS)           None                                                 
+PREMPROD                42 PM_CUSTOMER                    Row-S (SS)           None                                                 
+PREMPROD                42 PM_DEPARTMENT                  Row-S (SS)           None                                                 
+PREMPROD                42 PT_POLICY                      Row-X (SX)           None                                                 
+PREMPROD                42 PH_POLICY                      Row-X (SX)           None                                                 
+PREMPROD                51 PT_POLICY                      Row-S (SS)           None                                                 
+PREMPROD                53 PT_POL_COVER                   Row-X (SX)           None                                                 
+PREMPROD                53 PT_FAC_IN                      Row-S (SS)           None                                                 
+PREMPROD                53 PT_POLICY                      Row-X (SX)           None                                                 
+PREMPROD                53 PW_DRCR                        Row-X (SX)           None                                                 
+PREMPROD                53 PS_MNTH_UW_STAT                Row-X (SX)           None                                                 
+FINAL7                  53 FM_TRAN_DOC_NO                 Row-X (SX)           None                                                 
+PREMPROD                53 PT_SHIP_GOOD                   Row-S (SS)           None                                                 
+PREMPROD                53 PT_POL_CHARGE                  Row-S (SS)           None                                                 
+PREMPROD                53 PS_PREM_REG                    Row-X (SX)           None                                                 
+PREMPROD                53 PS_DRCR                        Row-X (SX)           None                                                 
+PREMPROD                53 PM_CUSTOMER                    Row-S (SS)           None                                                 
+PREMPROD                53 PT_RISK                        Row-S (SS)           None                                                 
+Press <Enter> to continue...Date: 07/31/03                                          Kuwait Insurance Co.                                         Page:   3      
+Time: 08:47 AM                                      Report on All DML Locks Held                                     PREMPROD       
+                                                        orakic database                                                             
+                                                                                                                                    
+                                                          Mode                 Mode                                                 
+User                   SID NAME                           Held                 Requested                                            
+--------------- ---------- ------------------------------ -------------------- --------------------                                 
+PREMPROD                53 PT_POL_BROKER                  Row-S (SS)           None                                                 
+PREMPROD                53 PS_PREM_REG_SI                 Row-X (SX)           None                                                 
+PREMPROD                53 PT_INST_PREM                   Row-S (SS)           None                                                 
+PREMPROD                53 PT_COVER_DISCOUNT              Row-S (SS)           None                                                 
+PREMPROD                53 PH_POLICY                      Row-X (SX)           None                                                 
+PREMPROD                67 PT_CONDITION                   Row-X (SX)           None                                                 
+PREMPROD                67 PM_FAC_POOL                    Row-S (SS)           None                                                 
+PREMPROD                67 PT_COVER_DISCOUNT              Row-X (SX)           None                                                 
+PREMPROD                67 PM_POL_DOC_SETUP               Row-S (SS)           None                                                 
+PREMPROD                67 PM_SUB_CLASS                   Row-S (SS)           None                                                 
+PREMPROD                67 PM_CURRENCY                    Row-S (SS)           None                                                 
+PREMPROD                67 PM_ENDT_SETUP                  Row-S (SS)           None                                                 
+PREMPROD                67 PM_CUSTOMER                    Row-S (SS)           None                                                 
+PREMPROD                67 PT_SHIPMENT                    Row-X (SX)           None                                                 
+PREMPROD                67 PM_DEPARTMENT                  Row-S (SS)           None                                                 
+PREMPROD                67 PT_POLICY                      Row-X (SX)           None                                                 
+PREMPROD                67 PH_POLICY                      Row-X (SX)           None                                                 
+PREMPROD                67 T_PT_POL_COVER_DEL             Row-X (SX)           None                                                 
+PREMPROD                67 PT_DED_LOSS                    Row-X (SX)           None                                                 
+PREMPROD                67 PT_SHIP_GOOD                   Row-X (SX)           None                                                 
+PREMPROD                67 PT_POL_COVER                   Row-X (SX)           None                                                 
+LIFEPROD                74 PT_GM_CLAIM                    Row-S (SS)           None                                                 
+LIFEPROD                74 PT_GM_CLAIM_DEDUCTIBLE         Row-S (SS)           None                                                 
+LIFEPROD                74 PT_GM_CLAIM_EMP                Row-X (SX)           None                                                 
+LIFEPROD                74 PT_GM_CLAIM_PAID               Row-S (SS)           None                                                 
+PREMPROD                81 PM_FAC_POOL                    Row-S (SS)           None                                                 
+PREMPROD                81 PT_POLICY                      Row-X (SX)           None                                                 
+PREMPROD                81 PM_DEPARTMENT                  Row-S (SS)           None                                                 
+PREMPROD                81 PT_POLICY_APPL_CURR            Row-X (SX)           None                                                 
+PREMPROD                81 PT_POL_ASSURED_DTL             Row-X (SX)           None                                                 
+PREMPROD                81 PM_POL_DOC_SETUP               Row-S (SS)           None                                                 
+PREMPROD                81 PM_SUB_CLASS                   Row-S (SS)           None                                                 
+PREMPROD                81 PM_CURRENCY                    Row-S (SS)           None                                                 
+PREMPROD                81 PT_POL_CHARGE                  Row-X (SX)           None                                                 
+PREMPROD                81 PM_ENDT_SETUP                  Row-S (SS)           None                                                 
+PREMPROD                81 PM_CUSTOMER                    Row-S (SS)           None                                                 
+PREMPROD                81 PH_POLICY                      Row-X (SX)           None                                                 
+PREMPROD                87 PM_FAC_POOL                    Row-S (SS)           None                                                 
+PREMPROD                87 PH_POLICY                      Row-X (SX)           None                                                 
+PREMPROD                87 PM_DEPARTMENT                  Row-S (SS)           None                                                 
+PREMPROD                87 PT_POLICY_APPL_CURR            Row-X (SX)           None                                                 
+PREMPROD                87 PM_POL_DOC_SETUP               Row-S (SS)           None                                                 
+PREMPROD                87 PM_SUB_CLASS                   Row-S (SS)           None                                                 
+PREMPROD                87 PM_CURRENCY                    Row-S (SS)           None                                                 
+PREMPROD                87 PT_POL_CHARGE                  Row-X (SX)           None                                                 
+PREMPROD                87 PM_ENDT_SETUP                  Row-S (SS)           None                                                 
+PREMPROD                87 PM_CUSTOMER                    Row-S (SS)           None                                                 
+PREMPROD                87 PT_POLICY                      Row-X (SX)           None                                                 
+LIFEPROD               109 PT_GM_CLAIM_EMP                Row-S (SS)           None                                                 
+PREMPROD               121 PS_MNTH_CLAIM_STAT             Row-X (SX)           None                                                 
+PREMPROD               121 PT_CLAIM                       Row-S (SS)           None                                                 
+PREMPROD               121 PT_CLAIM_ESTIMATE              Row-X (SX)           None                                                 
+Press <Enter> to continue...Date: 07/31/03                                          Kuwait Insurance Co.                                         Page:   4      
+Time: 08:47 AM                                      Report on All DML Locks Held                                     PREMPROD       
+                                                        orakic database                                                             
+                                                                                                                                    
+                                                          Mode                 Mode                                                 
+User                   SID NAME                           Held                 Requested                                            
+--------------- ---------- ------------------------------ -------------------- --------------------                                 
+PREMPROD               128 PT_POLICY                      Row-S (SS)           None                                                 

@@ -1,0 +1,85 @@
+Scripts from chapter 1 of ORACLE9i DBA Handbook.  See the readme.doc file for details.
+
+
+create database MYNEW
+maxinstances 1
+maxloghistory 1
+maxlogfiles 5
+maxlogmembers 5
+maxdatafiles 100
+datafile 'D:\oracle\oradata\mydb\system01.dbf' 
+  size 325m reuse autoextend on next 10240k maxsize unlimited
+character set WE8MSWIN1252
+national character set AL16UTF16
+logfile group 1 ('d:\oracle\oradata\mydb\redo01.log') size 100m,
+        group 2 ('d:\oracle\oradata\mydb\redo02.log') size 100m,
+        group 3 ('d:\oracle\oradata\mydb\redo03.log') size 100m
+default temporary tablespace TEMP tempfile 'd:\oracle\oradata\mydb\temp01.dbf'
+  extent management local uniform size 1m
+undo tablespace UNDO_TS datafile 'd:\oracle\oradata\mydb\temp01.dbf' 
+  size 150m reuse autoextend on next 10240k maxsize unlimited
+;
+
+
+select Name, Value, IsDefault 
+  from V$PARAMETER;
+
+
+create table EMPLOYEE
+(EmpNo            NUMBER(10)    PRIMARY KEY,
+ Name             VARCHAR2(40)  NOT NULL,
+ DeptNo           NUMBER(2)     DEFAULT 10,
+ Salary           NUMBER(7,2)   CHECK (salary<1000000),
+ Birth_Date       DATE,
+ Soc_Sec_Num      CHAR(9)       UNIQUE,
+ foreign key (DeptNo) references DEPT(DeptNo))
+tablespace USERS;
+
+
+create type NAME_TY as object
+(First_Name     VARCHAR2(25),
+Middle_Initial  CHAR(1),
+Last_Name       VARCHAR2(30),
+Suffix          VARCHAR2(5));
+/
+
+
+create table EMPLOYEE
+(EmpNo            NUMBER(10)    PRIMARY KEY,
+ Name             NAME_TY,
+ DeptNo           NUMBER(2)     DEFAULT 10,
+ Salary           NUMBER(7,2)   CHECK (salary<1000000),
+ Birth_Date       DATE,
+ Soc_Sec_Num      CHAR(9)       UNIQUE,
+ foreign key (DeptNo) references DEPT(DeptNo))
+tablespace USERS;
+
+
+create table NAME of NAME_TY;
+
+
+select Name
+  from EMPLOYEE
+ where EmpNo = 123;
+
+
+select Name
+  from EMPLOYEE
+ where EmpNo > 123;
+
+
+select MY_SUBSTR('text') from DUAL;
+
+
+create public synonym EMPLOYEE for HR.EMPLOYEE;
+
+
+create public database link MY_LINK
+connect to HR identified by PUFFINSTUFF
+using 'DB1';
+
+
+select * from EMPLOYEE@MY_LINK;
+
+create synonym EMPLOYEE for EMPLOYEE@MYLINK;
+

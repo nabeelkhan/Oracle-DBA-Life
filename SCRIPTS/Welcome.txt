@@ -1,0 +1,22 @@
+   
+                 Welcome to InstantScripts!
+
+   InstantScripts has over two hundred ready-made scripts for 
+   your Oracle administration needs.  These scripts cover all 
+   aspects of day-to-day Oracle administration, from installation 
+   to system monitoring and backup and recovery. The scripts are 
+   divided into eight categories to make finding scripts to suit 
+   your particular needs fast and easy. 
+
+   Using the search function, you can find a particular script 
+   even faster. With a mouse click, you can view the entire script,
+   and even flip back and forth between scripts.  InstantScripts 
+   also allows you to view the properties of each script.
+   
+   Not only can you use the ready-made Knowledge Xpert scripts, you 
+   can also copy them to create your own custom, User scripts.  User 
+   scripts can be modified and fine-tuned to suit your specific needs.  
+   InstantScripts stores the User scripts with the Knowledge Xpert 
+   scripts (and even sorts them to the top of their appropriate 
+   categories).  With InstantScripts, there is no more hunting around 
+   on your hard drive for your favorite and important scripts!

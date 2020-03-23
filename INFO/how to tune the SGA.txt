@@ -1,0 +1,204 @@
+Before How to tune a SGA lets Understand a little bit basic of the various contents of SGA.
+
+The SGA consist of Shared Pool,DB buffer cache,Log buffer cache.
+
+The Shared Pool again consist of Library cache,Data dictionar y cache or Row cache and UGA.
+
+The UGA consist of Cursor information,Sort information,stack space etc.
+
+
+So based on you DB requiremnts you size(tune) the memory structures properly on a continued statistics collection done by various tables. 
+
+The very imporatant point of SGA is that you have to see that it fit in to real memory.If SGA size is higher end then paging 
+
+and swapping will occur.So high I/O issue will degrade the performance.. 
+
+v$ tables or OEM or UTLBSTAT and UTLESTAT to see where contention is occuring and improve the same over a db peak times for 
+
+performance analysis. 
+
+==Tuning SHARED POOL=======================
+
+Make sure the users can share statements.
+
+Prevent statements from Being aged out due to less space in shared pool
+
+Avoid invalidations that may cause reparsing.
+
+SHARED_POOL_SIZE in init.ora determines this size.Value in bytes.Integer value
+
+Try to allot space for large memory requirement in Shared pool by using SHARED_POOL_RESERVED_SIZE and
+SHARED_POOL_MIN_ALLOC
+
+I)To know the ratio or statistics limit of three important factors based on which you can increase the size of the 
+
+SHARED_POOL_SIZE. 
+
+They are 
+
+i.The gethitratio of Librarycache should be above 90% 
+ii.The pinhitratio on the library cache should not be greater than 1%. 
+iii.The Gethitratio on the dictionary cache should be less than 15%. 
+
+III)use v$librarycache and v$rowcache tune library cache and data dictionar cache respectively.
+
+Use the 2 views i have mentioned above .Which has columns as mentioned in the 3 points.check it.If it violates then you can 
+
+increase the size of Shared_pool_size. 
+
+
+You can also very well use OEM tools for the same.
+
+====Sizing UGA in Shared pool============ 
+
+
+We can allow up to 250 bytes in the shared pool per user per open cursor.This cab be tested during the peak times with the 
+
+following query 
+
+>select sum(250*users_opening) from v$sqlarea; 
+
+In a test environments you can measure the it by selecting the number of open cursors for a test user.You can then multiply 
+
+the resulting value by the total number of users. 
+
+>select 250*value bytes_per_user from v$sesstat s,V$statname n 
+where s.statistic#=n.statistic# 
+and n.name='open cursors current' 
+and s.sid= 10; 
+
+Your application should have library cache as large as the sum of the numbers above and a additional allowance for dynamic 
+
+sql. 
+
+
+Here once gain it depends also upon the MTS or DS. 
+
+In MTS user session and cursor state information is stored in the shared pool instead of private user memory.Sort areas and 
+
+user sql statements are included in the session information.This is because the shared servers work on a per statement basis. 
+
+The total memory req for MTS the shared_pool_size should be increased and proportinally the PGA will be less. 
+
+UGA space used by the test connection 
+========================= 
+
+>select sum(value)|| 'bytes' "Total session memory" 
+from v$mystat,v$statname 
+where name='session uga memory' 
+and v$mystat.statistic#=v$statname.statistic# 
+
+UGA space used by all MTS users 
+===================== 
+
+>select sum(value)|| 'bytes' "Total session memory" 
+from v$sesstat,v$statname 
+where name='session uga memory' 
+and v$sesstat.statistic#=v$statname.statistic# 
+
+Maximum UGA space used by all MTS users 
+============================ 
+
+>select sum(value)|| 'bytes' "Total session memory" 
+from v$sesstat,v$statname 
+where name='session uga memory max' 
+and v$sesstat.statistic#=v$statname.statistic# 
+
+For all MTS connections you need to compute the amount of required space for all shared server users to put thier session 
+
+memory in the shared pool. 
+
+===================How to Tune DBuffer cache===============
+
+This value you could find from the v$sysstat table.
+
+Cache Hit ratio. 
+
+STEP==>I 
+
+The tuning goals should go like this 
+==================================== 
+i.Servers should find data in the memory. 
+ii.90% hit Ratio for OLTP systems. 
+
+The tuning techniques goes like this. 
+==================================== 
+i.increase buffer cache size 
+ii.Use multiple buffer pools 
+iii.Cache tables 
+
+STEP==>II 
+
+SELECT 1-(PHY.VALUE/(CUR.VALUE+CON.VALUE)) "CACHE HIT RATIO" FROM V$SYSSTAT CUR,V$SYSSTAT CON,V$SYSSTAT PHY WHERE CUR.NAME='db block gets' 
+AND CON.NAME='consistent gets' 
+AND PHY.NAME='physical reads'; 
+
+simple as Hit Ratio=1-(physical read/(db block gets+consistent gets)) 
+
+
+III) 
+
+How to find by Adding and Decreasing the Buffers 
+=======================================
+
+While you add say 100 buffers and to see the performance of db buffer cache 
+
+Enable DB_BLOCK_LRU_EXTENDED_STATISTICS=200 in init.ora. 
+
+V$RECENT_BUCKETS Contains statistics that estimate the perfromance of a larger cache. 
+
+use query 
+
+Select sum(count) act from V$RECENT_BUCKETS where rownum<20; 
+
+This you are doing to find the impact of additional cache hits that would have incur by increasing the cache size i.e from 100 to 120 buffers. 
+
+Now you can find the impact on the cache hit ratio by including the additional cache hits in the formula above used. 
+Since the additional buffers are reducing the physical I/O's we have to subtract the act value from the phy reads. 
+
+SELECT 1-((PHY.VALUE-act)/(CUR.VALUE+CON.VALUE)) "CACHE HIT RATIO" FROM V$SYSSTAT CUR,V$SYSSTAT CON,V$SYSSTAT PHY WHERE CUR.NAME='db block gets' 
+AND CON.NAME='consistent gets' 
+AND PHY.NAME='physical reads'; 
+
+Decreasing the buffers if the hit ratio is high and want to save excess memory by testing as follows. 
+
+V$CURRENT_BUCKETS==>use here DB_BLOCK_LRU_STATISTICS=200 
+
+and all other steps you can do here you have to add in the above formula etc.Check in docs you get infomation in this or post if you have problem in this thread. 
+
+=====Log Buffer tuning=================
+
+This is determined by the parameter LOG_BUFFER in inti.ora.
+
+LOG_BUFFER size must be a multiple of the o/s block size.
+
+Log buffer which is going to take the least piece of size in SGA can be done based on space-request ratio etc 
+
+
+Method=I 
+======== 
+
+>SELECT REQ.VALUE|| ':' ||ENTRIES.VALUE "SPACE REQUEST RATIO" FROM V$SYSSTAT REQ,V$SYSSTAT ENTRIES WHERE REQ.NAME='redo log space requests' 
+AND ENTRIES.NAME='redo entries' 
+
+Method=II 
+========= 
+
+OEM==>Diagonostic Pack==> 
+
+Performance Manager==>Load==>Redo Statistics Rate 
+Performance Manager==>Database_instance==>System Statistics 
+
+======================================
+
+
+This "How to Tune SGA" will be Updated in future.
+
+Cheers
+
+Padmam
+
+
+__________________
+Attitude:Attack every problem with enthusiasam ...as if your survival depends upon it
+

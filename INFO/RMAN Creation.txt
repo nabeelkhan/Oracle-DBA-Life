@@ -1,0 +1,274 @@
+login as: oracle
+oracle@10.0.10.21's password:
+Last login: Sun May 13 11:33:05 2007 from kwnb018.tawasultele.com
+[oracle@oracle2 ~]$ . oraenv.10
+[oracle@oracle2 ~]$ sqlplus /nolog
+
+SQL*Plus: Release 10.2.0.2.0 - Production on Sun May 13 11:50:34 2007
+
+Copyright (c) 1982, 2005, Oracle.  All Rights Reserved.
+
+SQL> conn / as sysdba
+Connected.
+
+SQL> create tablespace backup_cat_ts datafile '/u04/openview/backup_cat_data.dbf'
+  2  size 20M
+  3   EXTENT MANAGEMENT LOCAL
+  4  SEGMENT SPACE MANAGEMENT AUTO;
+
+Tablespace created.
+
+SQL> create user rman
+  2  identified by rman
+  3  DEFAULT TABLESPACE backup_cat_ts
+  4  TEMPORARY TABLESPACE temp;
+
+User created.
+
+SQL> alter user rman QUOTA UNLIMITED ON backup_cat_ts;
+
+SQL> grant sysdba to rman;
+
+Grant succeeded.
+
+SQL> grant RECOVERY_CATALOG_OWNER to rman;
+
+Grant succeeded.
+
+SQL>
+SQL> connect rman/rman
+Connected.
+SQL>
+SQL> select * from tab;
+
+SQL>
+
+
+[oracle@oracle2 ~]$ rman
+
+Recovery Manager: Release 10.2.0.2.0 - Production on Sun May 13 12:00:45 2007
+
+Copyright (c) 1982, 2005, Oracle.  All rights reserved.
+
+RMAN> connect target;
+
+connected to target database: OPENVIEW (DBID=2583792477)
+
+RMAN> connect catalog rman/rman;
+
+connected to recovery catalog database
+
+RMAN> create catalog;
+
+recovery catalog created
+
+RMAN> exit
+
+Recovery Manager complete.
+[oracle@oracle2 archback]$ rman target / CATALOG rman/rman
+
+Recovery Manager: Release 10.2.0.2.0 - Production on Mon May 28 16:11:33 2007
+
+Copyright (c) 1982, 2005, Oracle.  All rights reserved.
+
+connected to target database: OPENVIEW (DBID=2583792477)
+connected to recovery catalog database
+
+RMAN> Register database;
+
+
+
+SQL> conn rman/rman
+Connected.
+SQL> select * from tab;
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+DB                             TABLE
+NODE                           TABLE
+CONF                           TABLE
+DBINC                          TABLE
+CKP                            TABLE
+TS                             TABLE
+TSATT                          TABLE
+DF                             TABLE
+DFATT                          TABLE
+TF                             TABLE
+TFATT                          TABLE
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+OFFR                           TABLE
+RR                             TABLE
+RT                             TABLE
+ORL                            TABLE
+RLH                            TABLE
+AL                             TABLE
+BS                             TABLE
+BP                             TABLE
+BCF                            TABLE
+CCF                            TABLE
+XCF                            TABLE
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+BSF                            TABLE
+BDF                            TABLE
+CDF                            TABLE
+XDF                            TABLE
+BRL                            TABLE
+BCB                            TABLE
+CCB                            TABLE
+SCR                            TABLE
+SCRL                           TABLE
+CONFIG                         TABLE
+XAL                            TABLE
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+RSR                            TABLE
+FB                             TABLE
+RC_DATABASE                    VIEW
+RC_DATABASE_INCARNATION        VIEW
+RC_RESYNC                      VIEW
+RC_CHECKPOINT                  VIEW
+RC_TABLESPACE                  VIEW
+RC_DATAFILE                    VIEW
+RC_TEMPFILE                    VIEW
+RC_REDO_THREAD                 VIEW
+RC_REDO_LOG                    VIEW
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+RC_LOG_HISTORY                 VIEW
+RC_ARCHIVED_LOG                VIEW
+RC_BACKUP_SET                  VIEW
+RC_BACKUP_PIECE                VIEW
+RC_BACKUP_DATAFILE             VIEW
+RC_BACKUP_CONTROLFILE          VIEW
+RC_BACKUP_SPFILE               VIEW
+RC_DATAFILE_COPY               VIEW
+RC_CONTROLFILE_COPY            VIEW
+RC_BACKUP_REDOLOG              VIEW
+RC_BACKUP_CORRUPTION           VIEW
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+RC_COPY_CORRUPTION             VIEW
+RC_OFFLINE_RANGE               VIEW
+RC_STORED_SCRIPT               VIEW
+RC_STORED_SCRIPT_LINE          VIEW
+RC_PROXY_DATAFILE              VIEW
+RC_PROXY_CONTROLFILE           VIEW
+RC_RMAN_CONFIGURATION          VIEW
+RC_DATABASE_BLOCK_CORRUPTION   VIEW
+RC_PROXY_ARCHIVEDLOG           VIEW
+RC_RMAN_STATUS                 VIEW
+ROUT                           TABLE
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+RC_RMAN_OUTPUT                 VIEW
+RCVER                          TABLE
+RC_BACKUP_FILES                VIEW
+RC_RMAN_BACKUP_SUBJOB_DETAILS  VIEW
+RC_RMAN_BACKUP_JOB_DETAILS     VIEW
+RC_BACKUP_SET_DETAILS          VIEW
+RC_BACKUP_PIECE_DETAILS        VIEW
+RC_BACKUP_COPY_DETAILS         VIEW
+RC_PROXY_COPY_DETAILS          VIEW
+RC_PROXY_ARCHIVELOG_DETAILS    VIEW
+RC_BACKUP_DATAFILE_DETAILS     VIEW
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+RC_BACKUP_CONTROLFILE_DETAILS  VIEW
+RC_BACKUP_ARCHIVELOG_DETAILS   VIEW
+RC_BACKUP_SPFILE_DETAILS       VIEW
+RC_BACKUP_SET_SUMMARY          VIEW
+RC_BACKUP_DATAFILE_SUMMARY     VIEW
+RC_BACKUP_CONTROLFILE_SUMMARY  VIEW
+RC_BACKUP_ARCHIVELOG_SUMMARY   VIEW
+RC_BACKUP_SPFILE_SUMMARY       VIEW
+RC_BACKUP_COPY_SUMMARY         VIEW
+RC_PROXY_COPY_SUMMARY          VIEW
+RC_PROXY_ARCHIVELOG_SUMMARY    VIEW
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+RC_UNUSABLE_BACKUPFILE_DETAILS VIEW
+RC_RMAN_BACKUP_TYPE            VIEW
+
+90 rows selected.
+
+SQL>
+
+==================================================================
+Registering different database into same catalog done on 9i 
+NOTE: Oracle 9i can register target of 10g but not vice versa
+==================================================================
+
+[oracle@oracle1 ~]$ rman
+
+Recovery Manager: Release 9.2.0.8.0 - Production
+
+Copyright (c) 1995, 2002, Oracle Corporation.  All rights reserved.
+
+RMAN> connect target /
+
+connected to target database: OVPI (DBID=3134475605)
+
+RMAN> connect catalog rman9/rman; ---> exisits on same db
+
+connected to recovery catalog database
+recovery catalog is not installed
+
+RMAN> create catalog;
+
+recovery catalog created
+
+RMAN> Register database;
+
+database registered in recovery catalog
+starting full resync of recovery catalog
+full resync complete
+
+RMAN> exit
+
+
+Recovery Manager complete.
+
+[oracle@oracle1 ~]$ rman
+
+Recovery Manager: Release 9.2.0.8.0 - Production
+
+Copyright (c) 1995, 2002, Oracle Corporation.  All rights reserved.
+
+
+RMAN> connect target sys/openview@OVSD
+
+connected to target database: OVSD (DBID=3836426788)
+
+RMAN> connect catalog rman9/rman
+
+connected to recovery catalog database
+
+RMAN> register database;
+
+database registered in recovery catalog
+starting full resync of recovery catalog
+full resync complete
+
+RMAN> connect target sys/openview@ovo.tawasultele.com
+
+connected to target database: OPENVIEW (DBID=2583792477)
+
+RMAN> register database;
+
+database registered in recovery catalog
+starting full resync of recovery catalog
+full resync complete
+
+RMAN>
+
+

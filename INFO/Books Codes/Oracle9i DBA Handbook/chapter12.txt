@@ -1,0 +1,102 @@
+Scripts from chapter 12 of ORACLE9i DBA Handbook.  See the readme.doc file for details.
+
+
+
+rman target HR
+
+configure retention policy to none;
+
+
+configure retention policy clear;
+
+
+connect SYSTEM/MANAGER as sysdba
+ create user RMAN identified by RMAN temporary tablespace TEMP 
+default tablespace CATTBS quota unlimited on CATTBS;
+grant CONNECT, RESOURCE, RECOVERY_CATALOG_OWNER to RMAN;
+
+
+% rman target / catalog RMAN/RMAN@HR
+RMAN> create catalog
+
+
+register database;
+
+
+RUN {
+allocate channel DefaultChannel type disk
+'G:\ORACLE\ORADATA\MYDB9\b_%u_%s_%p';
+backup (database include current controlfile);
+}
+
+
+RUN {
+set allocate on;
+allocate channel for maintenance device type disk;
+allocate channel for maintenance device type sbt;
+delete backupset 2,4,6,7;
+}
+
+RUN {
+allocate channel for maintenance device type sbt;
+crosscheck backup device type sbt completed between '01-FEB-2001' and '01-MAR-2001';
+}
+
+
+run {
+  set backup copies 3
+  backup database
+  format '/dir1/%U','/dir2/%U','/dir3/%U';
+}
+
+
+run {
+  set backup copies 3
+  backup database
+  format '/dir1/%U','/dir2/%U';
+}
+
+
+
+RUN {
+...
+backup database not backed up since time '22-DEC-01 10:15:00';
+}
+
+
+
+select ROUND(Sofar/Totalwork*100,2)
+  from V$SESSION_LONGOPS;
+
+
+RUN {
+...
+recover database MYDB9 test;
+}
+
+
+RUN {
+...
+blockrecover datafile 5 block 6, datafile 8 block 7, 10, datafile 10 block 15, 67, 78;
+}
+
+
+list backup;
+
+
+
+LIST BACKUP SUMMARY;
+
+
+report need backup increments 3 database;
+
+
+
+report need backup recovery window 3 days;
+
+
+
+
+
+
+

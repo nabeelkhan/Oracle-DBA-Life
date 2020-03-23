@@ -1,0 +1,1471 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Oracle 10g PL/SQL Programming</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body>
+<table width="77%" border="0">
+  <tr>
+    <td width="25%"><img src="0072230665.jpg" width="140" height="173"></td>
+    <td width="75%"><strong>Thank you for purchasing Oracle 10g PL/SQL Programming!
+      </strong></td>
+  </tr>
+</table>
+<p>The examples provided here are divided by chapter, and match those found in
+  the book. Each chapter contains a script to create the schema with all necessary
+  permissions. The permissions granted for the schemas change between chapters,
+  so be sure to run the schema creation script for each chapter and not rely on
+  the one created in another chapter. To avoid permissions problems it is highly
+  recommended that the schema creation script we provide be used, but you may
+  also create your own schema as long as all required privileges are granted.</p>
+<p>The examples for each chapter are created to run independent of objects created
+  in other chapters. In other words - no cross-chapter dependencies. This means
+  you can jump from chapter 10 to 17, and have no problem running chapter 17's
+  examples.</p>
+<p>When creating your database, be sure to install Oracle Text as it is used for
+  examples in multiple chapters. If not installed, some examples will not work
+  and you will receive errors on schema creation. Oracle Text is included in both
+  Standard and Enterprise editions, so either release can be used.</p>
+<p>All examples were tested on Windows and Linux ports of Oracle 10g Release 1.
+  Should you have ANY problem with the examples, feel free to e-mail <a href="mail:%20Feedback@PLSQLBook.com">FEEDBACK@PLSQLBOOK.COM</a>,
+  and we will respond to the issue promptly. </p>
+<p>Thank you!</p>
+<hr>
+<h2>EXAMPLES</h2>
+<table width="100%" border="0">
+  <tr>
+    <td><a href="#CH1">Chapter 1</a></td>
+    <td><a href="#CH5">Chapter 5</a></td>
+    <td><a href="#CH9">Chapter 9</a></td>
+    <td><a href="#CH13">Chapter 13</a></td>
+    <td><a href="#CH17">Chapter 17</a></td>
+  </tr>
+  <tr>
+    <td><a href="#CH2">Chapter 2</a></td>
+    <td><a href="#CH6">Chapter 6</a></td>
+    <td><a href="#CH10">Chapter 10</a></td>
+    <td><a href="#CH14">Chapter 14</a></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a href="#CH3">Chapter 3</a></td>
+    <td><a href="#CH7">Chapter 7</a></td>
+    <td><a href="#CH11">Chapter 11</a></td>
+    <td><a href="#CH15">Chapter 15</a></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a href="#CH4">Chapter 4</a></td>
+    <td><a href="#CH8">Chapter 8</a></td>
+    <td><a href="#CH12">Chapter 12</a></td>
+    <td><a href="#CH16">Chapter 16</a></td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<hr>
+<p>&nbsp;</p>
+<h4><a name="CH1"></a>Chapter 1: Introduction to PL/SQL</h4>
+<table width="100%" border="1">
+  <tr>
+    <td width="29%"><a href="Chapter1/CreateUser.sql">CreateUser.sql</a></td>
+    <td width="71%">This script creates the plsql user for chapter 1 examples.
+      You must run this script as SYS or SYSTEM as SYSDBA. The script can be rerun.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter1/PlsqlBlock.sql">PlsqlBlock.sql</a></td>
+    <td>This script contains an example of a PL/SQL block of code.</td>
+  </tr>
+</table>
+<h4><a name="CH2"></a>Chapter 2: Using SQL*Plus and JDeveloper</h4>
+<table width="100%" border="1">
+  <tr>
+    <td width="29%"><a href="Chapter2/CreateUser.sql">CreateUser.sql</a></td>
+    <td width="71%">This script creates the plsql user for chapter 2 examples.
+      You must run this script as SYS or SYSTEM as SYSDBA. The script can be rerun.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter2/DbmsOutput.sql">DbmsOutput.sql</a></td>
+    <td>This script demonstrates the DBMS_OUTPUT package.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter2/Debug.sql">Debug.sql</a></td>
+    <td>This script demonstrates debugging PL/SQL with JDeveloper.</td>
+  </tr>
+</table>
+<h4><a name="CH3"></a>Chapter 3: PL/SQL Basics</h4>
+<table width="100%" border="1">
+  <tr>
+    <td><a href="Chapter3/CreateUser.sql">CreateUser.sql</a></td>
+    <td>This script creates the plsql user for chapter 3 examples. You must run
+      this script as SYS or SYSTEM as SYSDBA. The script can be rerun.</td>
+  </tr>
+  <tr>
+    <td width="29%"><a href="Chapter3/AnonymousBlock.sql">AnonymousBlock.sql</a></td>
+    <td width="71%">This script demonstrates the structure of an anonymous block.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter3/BindVariables.sql">BindVariables.sql</a></td>
+    <td>This script demonstrates the use of bind variables.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter3/BlockStructure.sql">BlockStructure.sql</a></td>
+    <td>This script demonstrates the structure of a block.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter3/Boolean.sql">Boolean.sql</a></td>
+    <td>This script demonstrates how to assign a value to a variable of type boolean.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter3/BooleanLiteral.sql">BooleanLiteral.sql</a></td>
+    <td>This script demonstrates Boolean literals.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter3/Case.sql">Case.sql</a></td>
+    <td>This script demonstrates CASE.</td>
+  </tr>
+  <tr>
+    <td height="23"><a href="Chapter3/CompileError.sql">CompileError.sql</a></td>
+    <td>This script demonstrates the compile time warnings generated by Oracle.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter3/CompileWarning.sql">CompileWarning.sql</a></td>
+    <td>This script demonstrates the DBMS_WARNING package.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter3/DateTimeLiteral.sql">DateTimeLiteral.sql</a></td>
+    <td>This script demonstrates Date/Time literals.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter3/Goto.sql">Goto.sql</a></td>
+    <td>This script demonstrates the GOTO command.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter3/If.sql">If.sql</a></td>
+    <td>This script demonstrates IF-THEN, IF-THEN-ELSE, and IF-THEN-ELSIF.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter3/Interval.sql">Interval.sql</a></td>
+    <td>This script demonstrates the use of the INTERVAL types.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter3/Loop.sql">Loop.sql</a></td>
+    <td>This script demonstrates LOOPs.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter3/MultiLineComment.sql">MultiLineComment.sql</a></td>
+    <td>This script demonstrates the use of multi-line comment blocks.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter3/NamedBlock.sql">NamedBlock.sql</a></td>
+    <td>This script demonstrates the structure of a named block.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter3/NestedBlock.sql">NestedBlock.sql</a></td>
+    <td>This script demonstrates a nested block.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter3/Number.sql">Number.sql</a></td>
+    <td>This script demonstrates the NUMBER datatype.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter3/PLSQL_Warnings.sql">PLSQL_Warnings.sql</a></td>
+    <td>This script demonstrates the PLSQL_WARNINGS parameter.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter3/Ref_Cursor.sql">Ref_Cursor.sql</a></td>
+    <td>This script demonstrates the use of REF CURSOR.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter3/Reserved.sql">Reserved.sql</a></td>
+    <td>This script prints a list of reserved words.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter3/SingleLineComment.sql">SingleLineComment.sql</a></td>
+    <td>This script demonstrates the use of single line comments.</td>
+  </tr>
+  <tr>
+    <td height="23"><a href="Chapter3/StringLiteral.sql">StringLiteral.sql</a></td>
+    <td>This script demonstrates the different ways in which 10g handles apostrophes.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter3/Timestamp.sql">Timestamp.sql</a></td>
+    <td>This script demonstrates the TIMESTAMP datatypes.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter3/Trigger.sql">Trigger.sql</a></td>
+    <td>This script demonstrates the use of a trigger.</td>
+  </tr>
+  <tr>
+    <td height="23"><a href="Chapter3/Variables.sql">Variables.sql</a></td>
+    <td>This script declares a variable as a constant then attempts to change
+      the assigned value.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter3/Visibility.sql">Visibility.sql</a></td>
+    <td>This script demonstrates variable visibility.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter3/WhiteSpace.sql">WhiteSpace.sql</a></td>
+    <td>This script demonstrates shows poor design when white space is not used.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter3/WrapAfter.plb">WrapAfter.plb</a></td>
+    <td>This file shows what a wrapped file looks like.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter3/WrapBefore.sql">WrapBefore.sql</a></td>
+    <td>This file is used in the example showing how to wrap PL/SQL.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter3/WrapSeed.sql">WrapSeed.sql</a></td>
+    <td>This script demonstrates the Wrap utility.</td>
+  </tr>
+</table>
+<h4><a name="CH4"></a>Chapter 4: Using SQL with PL/SQL</h4>
+<table width="100%" border="1">
+  <tr>
+    <td width="29%"><a href="Chapter4/CreateUser.sql">CreateUser.sql</a></td>
+    <td width="71%">This script creates the plsql user for chapter 4 examples.
+      You must run this script as SYS or SYSTEM as SYSDBA. The script can be rerun.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/Autonomous.sql">Autonomous.sql</a></td>
+    <td>This script demonstrates how autonomous transactions work.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/BasicSelect.sql">BasicSelect.sql</a></td>
+    <td>This script demonstrates how to use a basic select statement in a PL/SQL
+      block. </td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/ContextArea1.sql">ContextArea1.sql</a></td>
+    <td>This script shows how cursors work with the context area, and remain consistent
+      after opened.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/ContextArea2.sql">ContextArea2.sql</a></td>
+    <td>This script demonstrates how changes to the database impact processing
+      of records after a cursor is opened.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/Conversion.sql">Conversion.sql</a></td>
+    <td>This script demonstrates the TO_CHAR and TO_DATE conversion functions.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/CursorForLoop.sql">CursorForLoop.sql</a></td>
+    <td>This script demonstrates the use of the Cursor For Loop.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/CursorSubquery.sql">CursorSubquery.sql</a></td>
+    <td>This script demonstrates the use of the cursor subquery.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/CursorVariable1.sql">CursorVariable1.sql</a></td>
+    <td>This script demonstrates the use of REF CURSOR.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/CursorVariable2.sql">CursorVariable2.sql</a></td>
+    <td>This script demonstrates the use of SYS_REFCURSOR.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/DateTime.sql">DateTime.sql</a></td>
+    <td>This script demonstrates a few date functions.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/DDL.sql">DDL.sql</a></td>
+    <td>This script demonstrates how DDL doesn't work with PL/SQL.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/Delete.sql">Delete.sql</a></td>
+    <td>This script demonstrates how DELETEs work with PL/SQL.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/Error.sql">Error.sql</a></td>
+    <td>This script demonstrates error functions SQLERRM and SQLCODE.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/ExplicitAttribute.sql">ExplicitAttribute.sql</a></td>
+    <td>This script demonstrates the use of cursor attributes.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/GreatestLeast.sql">GreatestLeast.sql</a></td>
+    <td>This script demonstrates the Greatest and Least functions.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/ImplicitAttribute.sql">ImplicitAttribute.sql</a></td>
+    <td>This script demonstrates the use of cursor attributes.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/Insert.sql">Insert.sql</a></td>
+    <td>This script demonstrates how INSERTs work with PL/SQL.</td>
+  </tr>
+  <tr>
+    <td height="23"><a href="Chapter4/Level.sql">Level.sql</a></td>
+    <td>This script shows the pseudocolumn LEVEL and an example of using the levels.
+    </td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/LevelUpdate.sql">LevelUpdate.sql</a></td>
+    <td>This script shows the pseudocolumn LEVEL and an example of using the levels
+      with an update. </td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/Like.sql">Like.sql</a></td>
+    <td>This script demonstrates the use of the LIKE operator.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/LockSession1.sql">LockSession1.sql</a></td>
+    <td>This script demonstrates how transactions use locks, commits, and rollbacks.
+      This script is for the first session as noted in the book.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/LockSession2.sql">LockSession2.sql</a></td>
+    <td>This script demonstrates how transactions use locks, commits, and rollbacks.
+      This script is for the second session as noted in the book.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/Lower.sql">Lower.sql</a></td>
+    <td>This script demonstrates the LOWER function.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/NDS.sql">NDS.sql</a></td>
+    <td>This script demonstrates how NDS works with PL/SQL.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/OpenCursor.sql">OpenCursor.sql</a></td>
+    <td>This script demonstrates what happens when the number of cursors opened
+      exceeds the open_cursors value. For this example, set the value of open_cursors
+      to 20 in the init.ora file.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/RegexpLike.sql">RegexpLike.sql</a></td>
+    <td>This script demonstrates the use of the REGEXP_LIKE function.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/Round.sql">Round.sql</a></td>
+    <td>This script demonstrates the ROUND function.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/RowID.sql">RowID.sql</a></td>
+    <td>This script demonstrates the use of the rowid pseudo column.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/Savepoint.sql">Savepoint.sql</a></td>
+    <td>This script demonstrates how transactions use savepoints.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/SimpleLoop.sql">SimpleLoop.sql</a></td>
+    <td>This script shows how simple loops are written.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/TextIndex.sql">TextIndex.sql</a></td>
+    <td>This script demonstrates indexing using Oracle Text.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/Update.sql">Update.sql</a></td>
+    <td>This script demonstrates how UPDATEs work with PL/SQL.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/UpdateDual.sql">UpdateDual.sql</a></td>
+    <td>This script demonstrates how DML works with PL/SQL.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/WhereCurrentOf.sql">WhereCurrentOf.sql</a></td>
+    <td>This script demonstrates how UPDATEs work with PL/SQL and the WHERE CURRENT
+      OF clause.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter4/WhileLoop.sql">WhileLoop.sql</a></td>
+    <td>This script demonstrates the use of the WHILE loop.</td>
+  </tr>
+</table>
+<h4><a name="CH5"></a>Chapter 5: Records</h4>
+<table width="100%" border="1">
+  <tr>
+    <td width="29%"><a href="Chapter5/create_addressbook1.sql">create_addressbook1.sql</a></td>
+    <td width="71%">This script builds objects for the example with standard Oracle data types.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter5/create_function1.sql">create_function1.sql</a></td>
+    <td>This script demonstrates using a record type as a function return value.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter5/create_function2.sql">create_function2.sql</a></td>
+    <td>This script demonstrates using an object type as a function return value.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter5/create_function2e.sql">create_function2e.sql</a></td>
+    <td>This script demonstrates using an object type can not be assigned a %ROWTYPE record type.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter5/create_record1.sql">create_record1.sql</a></td>
+    <td>This script demonstrates using a record type to populate a table.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter5/create_record2.sql">create_record2.sql</a></td>
+    <td>This script demonstrates using explicit definition to define a record type.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter5/create_record3.sql">create_record3.sql</a></td>
+    <td>This script demonstrates using explicit definition to define record
+    types and a compound record type; and, the use of nested types.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter5/create_record4.sql">create_record4.sql</a></td>
+    <td>This script demonstrates using a database object to define a record type.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter5/create_record5.sql">create_record5.sql</a></td>
+    <td>This script demonstrates using compound database objects to define a record type.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter5/create_record6.sql">create_record6.sql</a></td>
+    <td>This script demonstrates using explicit definition to define record types and a compound record type; and, the use of nested types.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter5/create_record7.sql">create_record7.sql</a></td>
+    <td>This script demonstrates passing database objects as actual parameters to a procedure.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter5/create_user.sql">create_user.sql</a></td>
+    <td>This script verifies and defines the PLSQL user.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter5/query_record1.sql">query_record1.sql</a></td>
+    <td>This script verifies the success of the following programs.<br>
+    - create_record1.sql<br>
+    - create_record2.sql<br>
+    - create_record3.sql</td>
+  </tr>
+</table>
+<h4><a name="CH6"></a>Chapter 6: Collections</h4>
+<table width="100%" border="1">
+  <tr>
+    <td width="29%"><a href="Chapter6/bulk_collect1.sql">bulk_collect1.sql</a></td>
+    <td width="71%">This script demonstrates how to do a bulk collect into an associative array.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/bulk_collect2.sql">bulk_collect2.sql</a></td>
+    <td>This script demonstrates how to do a bulk collect into a nested table.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/bulk_collect3.sql">bulk_collect3.sql</a></td>
+    <td>This script demonstrates how to do a non-bulk select into elements of a PL/SQL table.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/count.sql">count.sql</a></td>
+    <td>This script demonstrates how to use the Oracle10g Collection API COUNT method against an element.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/create_addressbook2.sql">create_addressbook2.sql</a></td>
+    <td>This script builds objects for the example with standard Oracle data types
+    in all but one column. It uses a varray of VARCHAR2(30 CHAR) for the
+    ADDRESSES.STREET_ADDRESS column.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/create_addressbook2e.sql">create_addressbook2e.sql</a></td>
+    <td>This script builds objects for the example with standard Oracle data types in all but one column.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/create_addressbook3.sql">create_addressbook3.sql</a></td>
+    <td>This script builds objects for the example with standard Oracle data types
+    in all but one column.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/create_addressbook3e.sql">create_addressbook3e.sql</a></td>
+    <td>This script builds objects for the example with standard Oracle data types
+    in all but one column.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/create_assocarray1.sql">create_assocarray1.sql</a></td>
+    <td>This script builds an associative array.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/create_assocarray2.sql">create_assocarray2.sql</a></td>
+    <td>This script demonstrates you cannot traverse an associative array until elements are initialized.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/create_assocarray3.sql">create_assocarray3.sql</a></td>
+    <td>This script demonstrates you can avoid traversing an associative array
+    where no elements are initialized.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/create_assocarray4.sql">create_assocarray4.sql</a></td>
+    <td>This script demonstrates you cannot use the Collection API EXTEND method
+    to allocated space.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/create_assocarray5.sql">create_assocarray5.sql</a></td>
+    <td>This script demonstrates initialization and assignment with a numeric
+    index value to an associative array.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/create_assocarray5e.sql">create_assocarray5e.sql</a></td>
+    <td>This script demonstrates initialization and assignment with a numeric
+    index value to an associative array.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/create_assocarray6.sql">create_assocarray6.sql</a></td>
+    <td>This script demonstrates initialization and assignment with a unique
+    string index value to an associative array.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/create_nestedtable1.sql">create_nestedtable1.sql</a></td>
+    <td>This defines a three element nested table built with a three item constructor of null values.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/create_nestedtable2.sql">create_nestedtable2.sql</a></td>
+    <td>This constructs a null element nested table, then extends it one element at a time.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/create_nestedtable3.sql">create_nestedtable3.sql</a></td>
+    <td>This constructs a null element nested table type in the database, then extends it
+    one element at a time.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/create_nestedtable4.sql">create_nestedtable4.sql</a></td>
+    <td>This constructs a two varrays and one nested table type in the database,
+    then it assigns the contents of the varrays into a nested table.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/create_user.sql">create_user.sql</a></td>
+    <td>This script verifies and defines the PLSQL user.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/create_varray1.sql">create_varray1.sql</a></td>
+    <td>This defines a varray with a three element constructor of null elements.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/create_varray2.sql">create_varray2.sql</a></td>
+    <td>This defines a varray with a null element constructor and extends it one element at a time.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/create_varray3.sql">create_varray3.sql</a></td>
+    <td>This defines a varray with a three element constructor of null elements and attempt to populate it beyond three elements.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/create_varray4.sql">create_varray4.sql</a></td>
+    <td>This defines a varray with a null element constructor and extends it one element at a time
+    by a formula.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/delete.sql">delete.sql</a></td>
+    <td>This script demonstrates how to use the Oracle10g Collection API
+    DELETE method against a set of elements.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/exists.sql">exists.sql</a></td>
+    <td>This script demonstrates how to use the Oracle10g Collection API
+    EXISTS method against an element.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/extend.sql">extend.sql</a></td>
+    <td>This script demonstrates how to use the Oracle10g Collection API
+    EXTEND method against an element.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/first.sql">first.sql</a></td>
+    <td>This script demonstrates how to use the Oracle10g Collection API
+    FIRST and LAST methods against a collection.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/limit.sql">limit.sql</a></td>
+    <td>This script demonstrates how to use the Oracle10g Collection API
+    LIMIT method against a collection.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/nestedtable_dml1.sql">nestedtable_dml1.sql</a></td>
+    <td>This script demonstrates using a stored function to resolve the
+    one-to-many relation of a nested table in a row of data.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/nestedtable_dml2.sql">nestedtable_dml2.sql</a></td>
+    <td>This script demonstrates how to update nested tables.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/nestedtable_dml3.sql">nestedtable_dml3.sql</a></td>
+    <td>This script demonstrates the update of an element of a nested table
+    collection.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/nestedtable_dml4.sql">nestedtable_dml4.sql</a></td>
+    <td>This script demonstrates the update of an element of a nested table
+    collection.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/trim.sql">trim.sql</a></td>
+    <td>This script demonstrates how to use the Oracle10g Collection API
+    TRIM method against a collection.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/varray_dml1.sql">varray_dml1.sql</a></td>
+    <td>This script inserting and reading from a varray.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/varray_dml2.sql">varray_dml2.sql</a></td>
+    <td>This script demonstrates how to update varrays.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/varray_dml3.sql">varray_dml3.sql</a></td>
+    <td>This script demonstrates the update of an element of a varray
+    collection.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter6/varray_dml4.sql">varray_dml4.sql</a></td>
+    <td>This script demonstrates the update of an element of a varray
+    collection.</td>
+  </tr>
+</table>
+<h4><a name="CH7"></a>Chapter 7: Error Handling</h4>
+<p>For this set of examples, make sure you run tables.sql after creating the schema.
+  All other example scripts depend on the objects created in tables.sql.</p>
+<table width="100%" border="1">
+  <tr>
+    <td width="29%"><a href="Chapter7/CreateUser.sql">CreateUser.sql</a></td>
+    <td width="71%">This script creates the plsql user for chapter 7 examples.
+      You must run this script as SYS or SYSTEM as SYSDBA. The script can be rerun.</td>
+  </tr>
+  <tr>
+    <td height="39"><a href="Chapter7/autoRollback.sql">autoRollback.sql</a></td>
+    <td>This script demonstrates how the server will roll back the current transaction
+      if the top level block exits with an unhandled exception.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter7/DuplicateHandlers.sql">DuplicateHandlers.sql</a></td>
+    <td>This example illustrates the PLS-483 error.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter7/DupValOnIndex.sql">DupValOnIndex.sql</a></td>
+    <td>This block will raise the DUP_VAL_ON_INDEX exception.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter7/ExceptionInit.sql">ExceptionInit.sql</a></td>
+    <td>This script demonstrates the EXCEPTION_INIT pragma.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter7/OutOfScope.sql">OutOfScope.sql</a></td>
+    <td>This script demonstrates the scope of exceptions.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter7/SQLERRM.sql">SQLERRM.sql</a></td>
+    <td>This script demonstrates the use of SQLERRM.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter7/tables.sql">tables.sql</a></td>
+    <td>This script creates the tables and data used by other examples in this
+      chapter. </td>
+  </tr>
+  <tr>
+    <td><a href="Chapter7/UserDefined.sql">UserDefined.sql</a></td>
+    <td>This script demonstrates user defined exceptions.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter7/VerifyAuthors.sql">VerifyAuthors.sql</a></td>
+    <td>This procedure demonstrates the use of RAISE_APPLICATION_ERROR.</td>
+  </tr>
+</table>
+<h4><a name="CH8"></a>Chapter 8: Creating Procedures, Functions, and Packages</h4>
+<p>For this set of examples, make sure you run tables.sql after creating the schema.
+  All other example scripts depend on the objects created in tables.sql.</p>
+<table width="100%" border="1">
+  <tr>
+    <td width="29%"><a href="Chapter8/CreateUser.sql">CreateUser.sql</a></td>
+    <td width="71%">This script creates the plsql user for chapter 8 examples.
+      You must run this script as SYS or SYSTEM as SYSDBA. The script can be rerun.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter8/AddNewAuthor.sql">AddNewAuthor.sql</a></td>
+    <td>This script demonstrates how to create and call a simple procedure.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter8/AddNewBook.sql">AddNewBook.sql</a></td>
+    <td>This procedure will insert a new book into the books table. It also demonstrates
+      default parameters.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter8/callANA.sql">callANA.sql</a></td>
+    <td>This block illustrates how to call the AddNewAuthor function.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter8/CallMe.sql">CallMe.sql</a></td>
+    <td>This script demonstrates positional vs. named parameter passing.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter8/calls.sql">calls.sql</a></td>
+    <td>This script demonstrates the use of the CALL statement.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter8/callSL.sql">callSL.sql</a></td>
+    <td>This block illustrates how to call a packaged procedure which takes a
+      named type parameter.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter8/CopyFast.sql">CopyFast.sql</a></td>
+    <td>This package illustrates the possible speed benefits of NOCOPY.</td>
+  </tr>
+  <tr>
+    <td height="23"><a href="Chapter8/InventoryOps.sql">InventoryOps.sql</a></td>
+    <td>This script demonstrates a package.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter8/InventoryOps2.sql">InventoryOps2.sql</a></td>
+    <td>This version of the InventoryOps package contains an extra procedure in
+      the package body.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter8/NoCopyTest.sql">NoCopyTest.sql</a></td>
+    <td>This script illustrates the behavior of NOCOPY.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter8/noparams.sql">noparams.sql</a></td>
+    <td>This procedure and function demonstrate the syntax of calling subprograms
+      with no parameters.</td>
+  </tr>
+  <tr>
+    <td height="23"><a href="Chapter8/objectOverload.sql">objectOverload.sql</a></td>
+    <td>This script demonstrates overloading based on user defined object types.</td>
+  </tr>
+  <tr>
+    <td height="23"><a href="Chapter8/overload.sql">overload.sql</a></td>
+    <td>This version of InventoryOps demonstrates an overloaded procedure, StatusList.</td>
+  </tr>
+  <tr>
+    <td height="23"><a href="Chapter8/packageError.sql">packageError.sql</a></td>
+    <td>This package will not compile because the specification and body do not
+      match.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter8/ParameterLength.sql">ParameterLength.sql</a></td>
+    <td>This script illustrates constraints on formal parameters.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter8/parameterModes.sql">parameterModes.sql</a></td>
+    <td>These procedures are used to demonstrate the behavior of IN, OUT, and
+      IN OUT parameter modes.</td>
+  </tr>
+  <tr>
+    <td height="23"><a href="Chapter8/RaiseError.sql">RaiseError.sql</a></td>
+    <td>This script shows the behavior of exceptions raised within subprograms.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter8/Random.sql">Random.sql</a></td>
+    <td>This illustrates package initialization.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter8/tables.sql">tables.sql</a></td>
+    <td>This script creates the tables and data used by other examples in this
+      chapter. </td>
+  </tr>
+  <tr>
+    <td><a href="Chapter8/ThreeAuthors.sql">ThreeAuthors.sql</a></td>
+    <td>This script demonstrates a function and how to call it.</td>
+  </tr>
+</table>
+<h4><a name="CH9"></a>Chapter 9:</h4>
+<table width="100%" border="1">
+  <tr>
+    <td width="29%"><a href="Chapter9/anonymousDependencies.sql">anonymousDependencies.sql</a></td>
+    <td width="71%">This script demonstrates anonymous dependencies in packages.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter9/automaticInvalidation.sql">automaticInvalidation.sql</a></td>
+    <td>This script demonstrates the automatic invalidation of a subprogram.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter9/callPP.sql">callPP.sql</a></td>
+    <td>This script demonstrates call to a persistent package.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter9/create_temp_table.sql">create_temp_table.sql</a></td>
+    <td>This script builds the temporary table.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter9/DefaultPragma.sql">DefaultPragma.sql</a></td>
+    <td>This script demonstrates default PRAGMA instructions.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter9/dependencies.sql">dependencies.sql</a></td>
+    <td>This script demonstrates the behavior of dependent objects.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter9/execute.sql">execute.sql</a></td>
+    <td>This script demonstrates the behavior of the EXECUTE system privilege.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter9/forwardDeclarations.sql">forwardDeclarations.sql</a></td>
+    <td>This script demonstrates mutually exclusive subprograms.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter9/invokers.sql">invokers.sql</a></td>
+    <td>This script demonstrates invoker rights concepts.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter9/invokeRTA.sql">invokeRTA.sql</a></td>
+    <td>This script demonstrates invocation of RecordThreeAuthors package.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter9/localError.sql">localError.sql</a></td>
+    <td>This script demonstrates local subprograms must be last in the
+    declaration section.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter9/localStored.sql">localStored.sql</a></td>
+    <td>This script demonstrates a local subprogram within a stored procedure.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter9/localSub.sql">localSub.sql</a></td>
+    <td>This script demonstrates a local subprogram.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter9/OracleErrors.sql">OracleErrors.sql</a></td>
+    <td>This script demonstrates the use of a pipelined table function.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter9/overloadedLocal.sql">overloadedLocal.sql</a></td>
+    <td>This script demonstrates overloaded local procedures.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter9/OverloadRestrictReferences.sql">OverloadRestrictReferences.sql</a></td>
+    <td>This script demonstrates overloaded packages.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter9/PersistPkg.sql">PersistPkg.sql</a></td>
+    <td>This script demonstrates user defined package.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter9/PersistPkg2.sql">PersistPkg2.sql</a></td>
+    <td>This script demonstrates a serially reusable package.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter9/RecordThreeAuthors.sql">RecordThreeAuthors.sql</a></td>
+    <td>This script demonstrates a procedure with dependencies.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter9/recreateRTA.sql">recreateRTA.sql</a></td>
+    <td>This script builes RecordThreeAuthors package.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter9/remoteDependencies.sql">remoteDependencies.sql</a></td>
+    <td>This script demonstrates dependencies between objects in different
+    databases.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter9/RestrictReferences.sql">RestrictReferences.sql</a></td>
+    <td>This script demonstrates InventoryOps packages.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter9/Simple.sql">Simple.sql</a></td>
+    <td>This script demonstrates data dictionary views for valid and invalid objects.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter9/SQLFunctions.sql">SQLFunctions.sql</a></td>
+    <td>This script demonstrates how stored functions can be called from SQL.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter9/TableFunctions.sql">TableFunctions.sql</a></td>
+    <td>This script demonstrates user defined types.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter9/tables.sql">tables.sql</a></td>
+    <td>This script builds core objects for the demonstration scripts.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter9/testCallPP.sql">testCallPP.sql</a></td>
+    <td>This script demonstrates sequential calls to callPP.sql.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter9/TrustPkg.sql">TrustPkg.sql</a></td>
+    <td>This script builds TrustPkg.sql.</td>
+  </tr>
+</table>
+<h4><a name="CH10"></a>Chapter 10:</h4>
+<table width="100%" border="1">
+  <tr>
+    <td width="29%"><a href="Chapter10/cascadeRSInsert.sql">cascadeRSInsert.sql</a></td>
+    <td width="71%">This script demonstrates user defined triggers.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/CheckPrice.sql">CheckPrice.sql</a></td>
+    <td>This script demonstrates user defined trigger.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/CheckPrice2.sql">CheckPrice2.sql</a></td>
+    <td>This script demonstrates user defined trigger.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/createClasses.sql">createClasses.sql</a></td>
+    <td>This script builds the CLASSES table.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/createConnectAudit.sql">createConnectAudit.sql</a></td>
+    <td>This script builds the CONNECT_AUDIT table.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/createNonMutating.sql">createNonMutating.sql</a></td>
+    <td>This script demonstrates user defined package and triggers.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/createObjects.sql">createObjects.sql</a></td>
+    <td>This script calls several demonstration programs.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/createRegisteredStudents.sql">createRegisteredStudents.sql</a></td>
+    <td>This script builds the REGISTERED_STUDENTS table.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/createStudents.sql">createStudents.sql</a></td>
+    <td>This script builds the STUDENT table.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/createTempTable.sql">createTempTable.sql</a></td>
+    <td>This script builds the TEMP_TABLE table.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/createUser.sql">createUser.sql</a></td>
+    <td>This script creates users for Chapter 8.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/DatabaseSchema1.sql">DatabaseSchema1.sql</a></td>
+    <td>This script demonstrates user defined triggers.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/DatabaseSchema2.sql">DatabaseSchema2.sql</a></td>
+    <td>This script demonstrates user defined trigger testing.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/firingOrder.sql">firingOrder.sql</a></td>
+    <td>This script demonstrates user defined trigger sequencing.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/GenerateAuthorID.sql">GenerateAuthorID.sql</a></td>
+    <td>This script demonstrates the use of :new in a trigger.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/GenerateStudentID.sql">GenerateStudentID.sql</a></td>
+    <td>This script demonstrates user defined trigger.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/insertAcademicRecords.sql">insertAcademicRecords.sql</a></td>
+    <td>This script inserts values into STUDENTS and CLASSES tables.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/InsteadBooksAuthors.sql">InsteadBooksAuthors.sql</a></td>
+    <td>This script demonstrates user defined triggers.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/insteadOf1.sql">insteadOf1.sql</a></td>
+    <td>This script demonstrates user defined triggers.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/insteadOf2.sql">insteadOf2.sql</a></td>
+    <td>This script demonstrates user defined triggers.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/limitMajors.sql">limitMajors.sql</a></td>
+    <td>This script demonstrates user defined non-mutating trigger.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/LogConnects.sql">LogConnects.sql</a></td>
+    <td>This script demonstrates user defined triggers.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/LogCreations.sql">LogCreations.sql</a></td>
+    <td>This script builds DDL_CREATIONS table and SYSTEM trigger.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/Logger.java">Logger.java</a></td>
+    <td>This script demonstrates Java class called by a trigger.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/logInventoryChanges1.sql">logInventoryChanges1.sql</a></td>
+    <td>This script builds INVENTORY_AUDIT table and trigger w/predicates.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/logInventoryChanges2.sql">logInventoryChanges2.sql</a></td>
+    <td>This script tests the INVENTORY trigger.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/LogPkg1.sql">LogPkg1.sql</a></td>
+    <td>This script demonstrates user defined packages called from
+    triggers.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/LogPkg2.sql">LogPkg2.sql</a></td>
+    <td>This script demonstrates user defined PL/SQL wrappers to a Java program.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/pseudoRecords.sql">pseudoRecords.sql</a></td>
+    <td>This script demonstrates user defined triggers.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/samename.sql">samename.sql</a></td>
+    <td>This script demonstrates user defined triggers.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/tables.sql">tables.sql</a></td>
+    <td>This script builds tables and populates them for chapter 8.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/testLogPkg.sql">testLogPkg.sql</a></td>
+    <td>This script demonstrates calls PL/SQL wrappers to stored Java libraries.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/testNonMutating.sql">testNonMutating.sql</a></td>
+    <td>This script tests non-mutating properties.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/testTooManyMajors.sql">testTooManyMajors.sql</a></td>
+    <td>This script demonstrates a mutating violation.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter10/UpdateCategoryStats.sql">UpdateCategoryStats.sql</a></td>
+    <td>This script demonstrates a user defined triggers.</td>
+  </tr>
+</table>
+<h4><a name="CH11"></a>Chapter 11:</h4>
+<table width="100%" border="1">
+  <tr>
+    <td width="29%"><a href="Chapter11/create_messages_table.sql">create_messages_table.sql</a></td>
+    <td width="71%">This script builds table an object for DBMS_ALERT triggers.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter11/create_messenger.sql">create_messenger.sql</a></td>
+    <td>This script sends builds a package to send and receive
+    messages between users.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter11/create_pipe1.sql">create_pipe1.sql</a></td>
+    <td>This script deletes a pipe if it exists in the context of the current
+    session, then recreates it.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter11/create_pipe2.sql">create_pipe2.sql</a></td>
+    <td>This script deletes a pipe if it exists in the context of the current
+    session, then recreates it.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter11/create_pipe3.sql">create_pipe3.sql</a></td>
+    <td>This script deletes a pipe if it exists in the context of the current
+    session, recreates it, sends a message and retrieves a message from the pipe.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter11/create_pipe4.sql">create_pipe4.sql</a></td>
+    <td>This script deletes a pipe if it exists in the context of the current
+    session, recreates a private pipe, sends a message and retrieves a message
+    from the pipe.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter11/create_signal_trigger.sql">create_signal_trigger.sql</a></td>
+    <td>This script builds a trigger DBMS_ALERT signals on events
+    to the MESSAGES table.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter11/create_user.sql">create_user.sql</a></td>
+    <td>This script verifies and defines the PLSQL user. It should be run
+    as the SYSTEM user or a user that has the DBA privilege role and
+    EXECUTE with grant option on DBMS_PIPE.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter11/next_item_type1.sql">next_item_type1.sql</a></td>
+    <td>This script tests DBMS_PIPE for a private pipe.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter11/read_local.sql">read_local.sql</a></td>
+    <td>This script uses DBMS_PIPE to write a local message to
+    the implicit anonymous session pipe.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter11/read_local_error.sql">read_local_error.sql</a></td>
+    <td>This script uses DBMS_PIPE to write a local message to
+    the implicit anonymous session pipe.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter11/read_pipe.sql">read_pipe.sql</a></td>
+    <td>This script unpacks the local buffer.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter11/read_pipe.sql">read_pipe.sql</a></td>
+    <td>This script write three messages to a private or public
+    pipe by using the DBMS_PIPE package.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter11/register_interest.sql">register_interest.sql</a></td>
+    <td>This script registers interest in a DBMS_ALERT
+    to the MESSAGES table.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter11/insert_message.sql">insert_message.sql</a></td>
+    <td>This script inserts, updates and deletes a row, triggering
+    three alerts.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter11/use_messenger.sql">use_messenger.sql</a></td>
+    <td>This script demonstrates MESSENGER as a wrapper for the
+    DBMS_PIPE package.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter11/waitone.sql">waitone.sql</a></td>
+    <td>This script waits for a DBMS_ALERT alert, which is
+    triggered on DML to the MESSAGES table.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter11/write_local.sql">write_local.sql</a></td>
+    <td>This script uses DBMS_PIPE to write a local message to
+    the implicit anonymous session pipe.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter11/write_pipe.sql">write_pipe.sql</a></td>
+    <td>This script write three messages to a private or public
+    pipe by using the DBMS_PIPE package.</td>
+  </tr>
+</table>
+<h4><a name="CH12"></a>Chapter 12:</h4>
+<table width="100%" border="1">
+  <tr>
+    <td width="29%"><a href="Chapter12/create_javalib1.sql">create_javalib1.sql</a></td>
+    <td width="71%">This script demonstrates how to build a Java library wrapper.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter12/create_library1.sql">create_library1.sql</a></td>
+    <td>This script demonstrates how to create a library for an external procedure.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter12/create_library2.sql">create_library2.sql</a></td>
+    <td>This script demonstrates how to create a library for
+    an external procedure for a poorly C program that
+    fails to match the signature of the PL/SQL library.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter12/create_user.sql">create_user.sql</a></td>
+    <td>This script verifies and defines the PLSQL user. It should be run
+    as the SYSTEM user or a user that has the DBA privilege role and
+    EXECUTE with grant option on DBMS_PIPE.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter12/listener1.ora">listener1.ora</a></td>
+    <td>Standard single listener shell for listener.ora file.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter12/listener2.ora">listener2.ora</a></td>
+    <td>Standard two listener shell for listener.ora file.
+    The extproc IPC listener is separated.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter12/listener3.ora">listener3.ora</a></td>
+    <td>Standard two listener shell for listener.ora file.
+    The extproc IPC listener is separated and ENV accesses
+    multiple DDL paths</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter12/ReadFile1.java">ReadFile1.java</a></td>
+    <td>This script demonstrates how to read a file in Java.
+    It is designed as a Java library file for an Oracle
+    database stored library.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter12/tnsnames1.ora">tnsnames1.ora</a></td>
+    <td>Standard single listener shell for tnsnames.ora file.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter12/tnsnames2.ora">tnsnames2.ora</a></td>
+    <td>Standard two listener shell for tnsnames.ora file.
+    The extproc IPC listener is separated.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter12/tnsnames3.ora">tnsnames3.ora</a></td>
+    <td>Standard two listener shell for tnsnames.ora file.
+    The extproc IPC listener is separated.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter12/writestr1.c">writestr1.c</a></td>
+    <td>This script opens a file and write a single line
+    of text to the file. It is used in conjunction
+    with the create_library1.sql script.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter12/writestr2.c">writestr2.c</a></td>
+    <td>This script opens a file and write a single line
+    of text to the file. It is used in conjunction
+    with the create_library2.sql script.</td>
+  </tr>
+</table>
+<h4><a name="CH13"></a>Chapter 13:</h4>
+<table width="100%" border="1">
+  <tr>
+    <td width="29%"><a href="Chapter13/create_types.sql">create_types.sql</a></td>
+    <td width="71%">This is build types to test the Native Dynamic SQL package.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter13/create_user.sql">create_user.sql</a></td>
+    <td>This script verifies and defines the PLSQL user. It should be run
+    as the SYSTEM user or a user that has the DBA privilege role and
+    EXECUTE with grant option on DBMS_PIPE. It also has grants needed
+    by the DMBS_SQL package.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter13/dbms_sql.sql">dbms_sql.sql</a></td>
+    <td>This is designed as a working tutorial of the Oracle
+    Built-in DBMS_SQL with examples of the for key methods.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter13/dbms_sql_01.sql">dbms_sql_01.sql</a></td>
+    <td>This is designed to test the DBMS_SQL_TUTORIAL package.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter13/dbms_sql_02.sql">dbms_sql_02.sql</a></td>
+    <td>This is designed to test the DBMS_SQL_TUTORIAL package.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter13/dbms_sql_03.sql">dbms_sql_03.sql</a></td>
+    <td>This is designed to test the DBMS_SQL_TUTORIAL package.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter13/nds_null.sql">nds_null.sql</a></td>
+    <td>This is designed to demonstrate managing a null value.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter13/nds_sql_01.sql">nds_sql_01.sql</a></td>
+    <td>This is designed to test the Native Dynamic SQL package.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter13/nds_sql_02.sql">nds_sql_02.sql</a></td>
+    <td>This is designed to test the Native Dynamic SQL package.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter13/nds_sql_03.sql">nds_sql_03.sql</a></td>
+    <td>This is designed to test the Native Dynamic SQL package.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter13/nds_sqle.sql">nds_sqle.sql</a></td>
+    <td>This is designed as a working tutorial of the Oracle
+    Native Dynamic SQL (NDS) with an error in an OUT mode
+    parameter. It will compile successfully and raise a
+    runtime exception.</td>
+  </tr>
+</table>
+<h4><a name="CH14"></a>Chapter 14: Introduction to Objects</h4>
+<table width="100%" border="1">
+  <tr>
+    <td width="29%"><a href="Chapter14/CreateUser.sql">CreateUser.sql</a></td>
+    <td width="71%">This script creates the plsql user for chapter 14 examples.
+      You must run this script as SYS or SYSTEM as SYSDBA. The script can be rerun.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter14/AttributeChain.sql">AttributeChain.sql</a></td>
+    <td>This script demonstrates attribute chaining.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter14/ComplexObj.sql">ComplexObj.sql</a></td>
+    <td>This script demonstrates complex objects.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter14/ConstructorMethod.sql">ConstructorMethod.sql</a></td>
+    <td>This script demonstrates the user-defined constructor method.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter14/DynamicDispatch.sql">DynamicDispatch.sql</a></td>
+    <td>This script demonstrates dynamic dispatch/dynamic polymorphism.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter14/Inheritance.sql">Inheritance.sql</a></td>
+    <td>This script demonstrates object type inheritance.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter14/MapMethod.sql">MapMethod.sql</a></td>
+    <td>This script demonstrates the map method.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter14/MemberMethod.sql">MemberMethod.sql</a></td>
+    <td>This script demonstrates the member method.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter14/ObjInit.sql">ObjInit.sql</a></td>
+    <td>This script demonstrates object initialization.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter14/OrderMethod.sql">OrderMethod.sql</a></td>
+    <td>This script demonstrates the order method.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter14/StaticMethod.sql">StaticMethod.sql</a></td>
+    <td>This script demonstrates the static method.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter14/TypeAttribute.sql">TypeAttribute.sql</a></td>
+    <td>This script demonstrates the use of %TYPE.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter14/TypeEvolution.sql">TypeEvolution.sql</a></td>
+    <td>This script demonstrates type evolution for object maintenance.</td>
+  </tr>
+</table>
+<h4><a name="CH15"></a>Chapter 15: Objects in the Database</h4>
+<table width="100%" border="1">
+  <tr>
+    <td width="29%"><a href="Chapter15/CreateUser.sql">CreateUser.sql</a></td>
+    <td width="71%">This script creates the plsql user for chapter 15 examples.
+      You must run this script as SYS or SYSTEM as SYSDBA. The script can be rerun.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter15/AttributeChain.sql">AttributeChain.sql</a></td>
+    <td>This script demonstrates attribute chaining.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter15/ColObj.sql">ColObj.sql</a></td>
+    <td>This script demonstrates column objects.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter15/ForwardDeclaration.sql">ForwardDeclaration.sql</a></td>
+    <td>This script demonstrates forward type declarations.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter15/Inheritance.sql">Inheritance.sql</a></td>
+    <td>This script demonstrates object type inheritance.</td>
+  </tr>
+  <tr>
+    <td height="23"><a href="Chapter15/IsDangling.sql">IsDangling.sql</a></td>
+    <td>This script demonstrates how to handle dangling REFs.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter15/IsOf.sql">IsOf.sql</a></td>
+    <td>This script demonstrates the IS OF type statement.</td>
+  </tr>
+  <tr>
+    <td height="24"><a href="Chapter15/ObjectTable.sql">ObjectTable.sql</a></td>
+    <td>This script demonstrates the creation of an object table, and includes
+      an anonymous block to demonstrate DML operations against an object table.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter15/ObjectView.sql">ObjectView.sql</a></td>
+    <td>This script demonstrates object view creation.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter15/ObjMaintain.sql">ObjMaintain.sql</a></td>
+    <td>This script demonstrates type evolution.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter15/RefObj.sql">RefObj.sql</a></td>
+    <td>This script demonstrates object references using REF.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter15/Treat.sql">Treat.sql</a></td>
+    <td>This script demonstrates the TREAT function.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter15/UtlRef.sql">UtlRef.sql</a></td>
+    <td>This script demonstrates the UTL_REF package.</td>
+  </tr>
+</table>
+<h4><a name="CH16"></a>Chapter 16: Large Objects</h4>
+<table width="100%" border="1">
+  <tr>
+    <td width="29%"><a href="Chapter16/CreateUser.sql">CreateUser.sql</a></td>
+    <td width="71%">This script creates the plsql user for chapter 16 examples.
+      You must run this script as SYS or SYSTEM as SYSDBA. The script can be rerun.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter16/BfileClose.sql">BfileClose.sql</a></td>
+    <td>This script tests the DBMS_LOB.CLOSE procedure.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter16/BfileCloseAll.sql">BfileCloseAll.sql</a></td>
+    <td>This script tests the DBMS_LOB.FILECLOSEALL procedure.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter16/BfileFileExists.sql">BfileFileExists.sql</a></td>
+    <td>This script tests the DBMS_LOB.FILEEXISTS procedure.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter16/BfileIsOpen.sql">BfileIsOpen.sql</a></td>
+    <td>This script tests the DBMS_LOB.ISOPEN function.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter16/ClobCompare.sql">ClobCompare.sql</a></td>
+    <td>This script tests the DBMS_LOB.COMPARE function.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter16/Convert.sql">Convert.sql</a></td>
+    <td>This script tests the DBMS_LOB.CONVERTTOBLOB and DBMS_LOB.CONVERTTOCLOB
+      procedures.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter16/CreateLobTables.sql">CreateLobTables.sql</a></td>
+    <td>This script demonstrates storage options available for LOBs.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter16/LoadFromFile.sql">LoadFromFile.sql</a></td>
+    <td>This script tests the DBMS_LOB.LOADFROMFILE procedure.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter16/LoadLOBFromFile.sql">LoadLOBFromFile.sql</a></td>
+    <td>This script tests the DBMS_LOB.LOADLOBFROMFILE procedure.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter16/LobInsert.sql">LobInsert.sql</a></td>
+    <td>This script demonstrates LOB inserts.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter16/LobUpdate.sql">LobUpdate.sql</a></td>
+    <td>This script demonstrates LOB updates.</td>
+  </tr>
+  <tr>
+    <td height="23"><a href="Chapter16/LongToLob.sql">LongToLob.sql</a></td>
+    <td>This script demonstrates the conversion of Longs to LOBs.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter16/NclobAppend.sql">NCLOBAppend.sql</a></td>
+    <td>This script demonstrates the DBMS_LOB.APPEND procedure.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter16/Returning.sql">Returning.sql</a></td>
+    <td>This script demonstrates returning clause.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter16/TextIndex.sql">TextIndex.sql</a></td>
+    <td>This script demonstrates indexing using Oracle Text.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter16/VarrayLob.sql">VarrayLob.sql</a></td>
+    <td>This script demonstrates user-defined LOBs.</td>
+  </tr>
+</table>
+<h4><a name="CH17"></a>Chapter 17: Scheduling Tasks</h4>
+<table width="100%" border="1">
+  <tr>
+    <td width="29%"><a href="Chapter17/CreateUser.sql">CreateUser.sql</a></td>
+    <td width="71%">This script creates the plsql user for chapter 17 examples.
+      You must run this script as SYS or SYSTEM as SYSDBA. The script can be rerun.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter17/Broken.sql">Broken.sql</a></td>
+    <td>This script tests the DBMS_JOB.BROKEN procedure.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter17/Change.sql">Change.sql</a></td>
+    <td>This script tests the DBMS_JOB.CHANGE procedure.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter17/CreateJob.sql">CreateJob.sql</a></td>
+    <td>This script tests the DBMS_SCHEDULER.CREATE_JOB procedure.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter17/Remove.sql">Remove.sql</a></td>
+    <td>This script tests the DBMS_JOB.REMOVE procedure.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter17/Run.sql">Run.sql</a></td>
+    <td>This script tests the DBMS_JOB.RUN procedure.</td>
+  </tr>
+  <tr>
+    <td><a href="Chapter17/Submit.sql">Submit.sql</a></td>
+    <td>This script tests the DBMS_JOB.SUBMIT procedure.</td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<html><head><title>
+Use a large database block size
+</title>
+<style>
+body {background-image:url(/images/bg.jpg)}
+a:link {color:#FF6600}
+a:active {color:#660066}
+a:visited {color:#FF6600} 
+a:hover {color:#660066}
+a {font-weight:bold}
+h1 {color:#990000; font-size:150%; text-align:center}
+h2 {color:#660066; font-size:125%}
+ul {list-style-image:url(/images/li.gif); margin-left:16px}
+
+.orange {color:#FF6600}
+.purple {color:#660066}
+.brown {color:#990000}
+.h3 {font-weight:bold; color:#990000}
+</style>
+
+</head>
+<script language="javascript"><!--
+function email(addr) { return addr + '@ixora.com.au' }
+//--></script>
+
+<body>
+
+
+<div style="text-align:center; font-size:125%; font-weight:bold; color:#660066">Oracle Performance Tuning Tips</div>
+
+
+
+<h1>Use a large database block size</h1>
+
+Because the database block size is fixed at database creation, this is one decision that is important to get right the first time.
+For file system based datafiles, without direct I/O, the database block size must match the file system buffer size exactly,
+as explained <a href=buffered_block_size.htm>here</a>.
+However, if your database is raw, or if direct I/O is available, then you have the luxury of choosing a larger database block size.
+There are many advantages to using a large block size, but the most significant is the saving in I/O for index based access paths.
+
+<h2>How does a large block size save I/O?</h2>
+A large database block size reduces the number of reads required to probe an index and scan a range of values from its leaf blocks.
+<p align=center>
+<img src=index_8k.gif alt="An index range scan using an 8K database block size" width=425 height=110 border=1>
+<p>
+The figure above shows a hypothetical index in a database with an 8K block size.
+The figure below shows the equivalent index after the database has been rebuilt with a 16K block size.
+The most obvious difference is that the number of leaf blocks has been halved.
+As a direct result, the number of pointers to leaf blocks has been halved also.
+Because the number of leaf block pointers has been halved, the space required for the last level of branch blocks has been halved as well.
+Therefore the number of blocks at that level of the index has been reduced to one quarter.
+In general, for large indexes the space saving at each level of the B*-tree increases exponentially with the height of the tree.
+Thus the height of the tree is reduced by one level in some cases.
+<p align=center>
+<img src=index_16k.gif alt="An index range scan using a 16K database block size" width=429 height=68 border=1>
+<p>
+The shaded blocks in the figures illustrate the dual saving in logical reads due to a larger database block size.
+If the height of the tree is reduced, fewer block gets are required to traverse the tree from the root block to a leaf block.
+And in an index range scan, only half the number of single block reads are required to scan the leaf blocks.
+<p>
+Of course, these are savings in logical reads.
+But are there equivalent savings in physical reads as well?
+Of course, that depends on which blocks are cached.
+Because the index branch blocks tend to be well cached anyway,
+doubling the database block size benefits index range scans more than it benefits index probes.
+
+<h2>What about the impact on the buffer cache?</h2>
+However, we must consider whether these improvements might be negated by other factors.
+In particular, if the cache is not enlarged, the number of buffers in the cache will be halved,
+and this might have a negative impact on the cache hit rate.
+Fortunately, this is not the case if you take care to adjust the sizes of the various buffer pools appropriately.
+<p>
+<ul>
+<li>
+The number of buffers required in the RECYCLE buffer pool is not directly affected by the database block size.
+Therefore, nearly twice as much memory is required for this buffer pool.<p>
+<li>
+The amount of data cached in the KEEP buffer pool is unchanged, but more space is wasted in sparse blocks.
+So a little more memory is required in this buffer pool.<p>
+<li>
+However, far fewer buffers are required in the DEFAULT buffer pool for index branch blocks.
+(This is particularly true from version 8.1, because the new buffer cache LRU mechanism is more effective at caching branch blocks).
+So, despite that some space is used less effectively in segment header blocks and index leaf blocks,
+the memory requirements for this pool are greatly reduced.
+</ul>
+<p align=center>
+<img src=pools_8k.gif alt="The buffer pools using an 8K database block size" width=408 height=86>
+<p>
+Although circumstances vary, the reduction in the size of the DEFAULT buffer pool
+normally offsets the growth in the RECYCLE and KEEP buffer pools.
+This is illustrated in the figures above and below.
+So, contrary to popular belief, rebuilding a database with a larger database block size can be memory neutral and need not impair data caching.
+However, due care must be taken in the sizing of the buffer pools.
+<p align=center>
+<img src=pools_16k.gif alt="The buffer pools using a 16K database block size" width=408 height=86>
+<p>
+In view of this you should normally use a large database block size for unbuffered databases,
+particularly if your application is heavily dependent on the performance of index based access paths, particularly index range scans.
+
+<h2>What other factors are there?</h2>
+The database block size has many other impacts, but they all support the use of a large database block size.
+<p>
+<ul>
+<li>
+If Oracle uses the <i>readv</i>() system call for multiblock reads, a larger database block size maximizes the size of multiblock reads.
+This is because these multiblock reads are constrained in size
+by the operating system limit on the number of buffers that may be passed to the <i>readv</i>() system call.<p>
+<li>
+In parallel server databases, the number of block gets, and thus the number of PCM instance lock acquisitions, is reduced.<p>
+<li>
+Overall data density is improved, because the total amount of space taken by the fixed portion of the block headers is reduced.
+However, more care may be needed in managing data block concurrency because of the greater number of rows in each block.
+Ideally, any risk of high data block concurrency should be addressed by using partitioning strategies,
+rather than by intentionally compromising data density.<p>
+<li>
+The degree of row chaining required for very long rows is reduced.<p>
+<li>
+The degree of block chaining in the data dictionary clusters is reduced,
+as is the risk of block chaining in hash clusters used by the application for efficient primary key based look ups.<p>
+<li>
+The number of available process and transaction freelists per segment is increased.
+This can be helpful for applications with very high delete and insert concurrency requirements,
+although partitioning the key segments yields the same benefit.<p>
+<li>
+The size of the transaction tables in the rollback segment header blocks is increased.
+This reduces the risk of having to roll back to the transaction tables themselves during consistent read operations on other blocks.
+This in turn reduces the risk of snapshot too old errors
+<!-- and serializable aborts ? the error reported to a serializable transaction might be ORA-1555 anyway -->
+due to an inability to roll back the transaction tables.<p>
+<li>
+Most transactions use fewer rollback segment data blocks.
+This means that they require fewer gets on the rollback segment header block,
+and thus the risk of contention for the header blocks is reduced.<p>
+<li>
+Fewer writes are required when blocks are modified in a sequential pattern, such as for data loads and global updates.
+This also applies to the rollback segment data blocks.<p>
+<li>
+Less redo is generated when blocks are modified sequentially, because of reduced block level overhead.
+However, much more redo may be generated if blocks are modified during online backups, unless the backups are performed via RMAN.
+This is because, for each series of changes to a block, the whole block must be logged as part of the block level overhead,
+to enable recovery should the backup contain any <i>split blocks</i>.
+However, RMAN backups do not contain split blocks,
+because RMAN compares the block header and footer, and re-reads any blocks that appear to be in flux.<p>
+(Logging blocks during backups can of course be avoided by setting <i>_log_blocks_during_backup</i> to FALSE.
+But this should only be done if your datafiles are on file systems, your database block size is no larger than the file system block size,
+and your backups are performed through the file system code layer by a utility such as <i>cpio</i> or <i>tar</i>).
+</ul>
+
+<h2>What about using multiple block sizes?</h2>
+Under Oracle9<i>i</i> individual tablespaces can have a block size that differs from the database block size.
+So it is now possible to use a smaller block size for tablespaces containing tables that are never accessed sequentially.
+This can reduce the amount of memory required to cache a working set of blocks from these tables.
+It can also reduce the cost of index based access to these tables, because each physical read against a table block is slightly faster.
+Of course, this should not be considered if the database is using buffered I/O,
+because in that case the database block size must match the file system buffer size exactly.
+Also, because using a smaller block size for tables reduces the data density,
+increases the risk of chaining, and makes sequential processing less efficient,
+there are many cases in which it is better to follow the general principle of using a large block size.
+<p>
+<hr noshade align=left width=300 size=2 color=black>
+<table cellspacing=0 cellpadding=0 width=100%><tr>
+<td valign=top>
+<div style="font-size:80%; font-weight:bold; color:#660066">
+© Ixora Pty Ltd. &nbsp; All rights reserved.<br>
+
+
+
+05-Apr-2002
+</div>
+</td>
+
+<map name=searches>
+<area coords=3,3,33,25 href=/search.html>
+</map>
+
+<script language=javascript><!--
+document.write('<map name=question><area coords=3,3,15,25 href="mailto:' + email('questions') + '?SUBJECT=About http://www.ixora.com.au/tips/block_size.htm"></map>')
+document.write('<map name=feedback><area coords=3,3,25,25 href="mailto:' + email('feedback') + '?SUBJECT=About http://www.ixora.com.au/tips/block_size.htm"></map>')
+// --></script>
+
+<map name=up1level>
+<area coords=3,3,25,25 href=./>
+</map>
+<map name=homepage>
+<area coords=3,3,25,25 href=/>
+</map>
+
+<td valign=top align=right>
+<nobr>
+
+<img ismap border=0 usemap=#searches src=/images/search.gif width=36 height=28 alt=Search>
+&nbsp;
+
+<img ismap border=0 usemap=#question src=/images/q.gif alt=Questions>
+&nbsp;
+<img ismap border=0 usemap=#feedback src=/images/feedback.gif alt=Feedback>
+&nbsp;
+
+<img ismap border=0 usemap=#up1level src=/images/up_one.gif alt=Up>
+&nbsp;
+<img ismap border=0 usemap=#homepage src=/images/home.gif alt=Home>
+
+</nobr>
+</td>
+</tr></table>
+</body></html>
+

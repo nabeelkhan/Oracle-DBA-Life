@@ -1,0 +1,93 @@
+# Akadia AG, Arvenweg 4, CH-3604 Thun                           listener.ora
+# --------------------------------------------------------------------------
+# File:        listener.ora
+#
+# Autor:       Martin Zahn, 25.03.2004
+#
+# Purpose:     Configuration file for Net Listener Oracle 10.1.0
+#
+# Location:    $TNS_ADMIN
+#
+# Certified:   Oracle 10.1.0 on Windows 2000
+# --------------------------------------------------------------------------
+
+# Sets the number of seconds that the listener waits to get a
+# valid database query after it has been started.
+# Default: 10
+CONNECT_TIMEOUT_LSNR101 = 10
+
+# Sets the directory for the listener's log file.
+LOG_DIRECTORY_LSNR101 = D:\Oracle\Product\10.1.0\Network\Log
+
+# Sets the name of the listener's log file.
+# The .log extension is added automatically.
+LOG_FILE_LSNR101 = listenerFOC2.log
+
+# Sets the directory for the listener's trace file.
+TRACE_DIRECTORY_LSNR101 = D:\Oracle\Product\10.1.0\Network\Log
+
+# Sets the name of the listener's trace file.
+# The .trc extension is added automatically.
+TRACE_FILE_LSNR101 = listenerFOC2.trc
+
+# Specifies desired tracing level.
+# Values: OFF/USER/ADMIN/SUPPORT/0-16
+TRACE_LEVEL_LSNR101 = OFF
+
+# Tells the listener to contact an Onames server and register itself
+# and its services with Onames.
+USE_PLUG_AND_PLAY_LSNR101 = OFF
+
+# Tells the listener to save configuration changes to listener.ora when
+# it shuts down.  Changed parameter values will be written to the file,
+# while preserving formatting and comments.
+SAVE_CONFIG_ON_STOP_LISTENER = OFF
+
+# Sets the number of seconds that the network listener sleeps
+# before responding to the first listener control status command.
+STARTUP_WAIT_TIME_LSNR101 = 0
+
+LSNR101 =
+  (DESCRIPTION_LIST =
+    (DESCRIPTION =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = focus)(PORT = 1521))
+    )
+    (DESCRIPTION =
+      (ADDRESS = (PROTOCOL = IPC)(KEY = FOC2))
+    )
+  )
+
+# SID_LIST is no longer used for Oracle9i, but is still in LISTENER.ORA
+# for all Oracle7 and Oracle8 Client connections.
+#
+# Oracle 9i database instances register themselves with the listener
+# when started. Prior to this release, information about the instance
+# had to be manually configured in the LISTENER.ORA file.
+#
+# Important: Do not set the GLOBAL_DBNAME parameter in the
+# SID_LIST_listener_name section of the listener.ora file.
+# A statically configured global database name disables
+# connect-time failover.
+#
+# For non connect-time failover
+#
+# SID_LIST_LSNR101 =
+#   (SID_LIST =
+#     (SID_DESC =
+#       (GLOBAL_DBNAME = FOC2.WORLD)
+#       (ORACLE_HOME = D:\Oracle\Product\10.1.0)
+#       (SID_NAME = FOC2)
+#     )
+#   )
+#
+# For connect-time failover
+#
+SID_LIST_LSNR101 =
+  (SID_LIST =
+    (SID_DESC =
+      (ORACLE_HOME = D:\Oracle\Product\10.1.0)
+      (SID_NAME = FOC2)
+      (SDU = 4202)
+      (TDU = 4202)
+    )
+  )

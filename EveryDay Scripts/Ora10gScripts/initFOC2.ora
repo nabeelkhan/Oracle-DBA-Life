@@ -1,0 +1,223 @@
+# Akadia AG, Arvenweg 4, CH-3604 Thun                       initFOC2.ora
+# ----------------------------------------------------------------------
+#
+# File:       initFOC2.ora
+#
+# Autor:      Martin Zahn / 25.03.2004
+#
+# Purpose:    Instance configuration parameters
+#
+# Location:   $ORACLE_HOME\Database
+#
+# Certified:  Oracle 10.1.0.2 on Windows 2000
+# ----------------------------------------------------------------------
+
+### Global Naming
+### -------------
+# Enforce that a dblink has same name as the db it connects to
+###
+global_names                     = TRUE
+
+### Global database name is db_name.db_domain
+### -----------------------------------------
+db_name                          =  FOC2
+db_domain                        =  WORLD
+
+### Automatic Instance Registration
+### -------------------------------
+# Service registration, which provides the listener with instance information
+# such as database service names and instance names.
+###
+instance_name                    =  FOC2
+service_names                    =  FOC2
+
+### Basic Configuration Parameters
+### ------------------------------
+compatible                       =  10.1.0.2
+db_block_size                    =  4096
+db_files                         =  512
+control_files                    =  C:\Oradata\FOC2\ctl\FOC2_con01.con,
+                                    E:\Oradata\FOC2\ctl\FOC2_con02.con
+
+### Database Buffer Cache, I/O
+### --------------------------
+db_cache_size                    =  12M
+db_2k_cache_size                 =  8M
+db_8k_cache_size                 =  4M
+db_file_multiblock_read_count    =  32
+
+### Database Block Checking
+### -----------------------
+### log_block_checksum is no more supported
+###
+db_block_checking                 = true
+db_block_checksum                 = false
+
+### Automatic Tuning of parallel Query and DML statements
+### -----------------------------------------------------
+#
+# Caution !
+#
+# Be very careful when you set this parameter in OLTP and Hybrid Systems.
+# This Parameter is mainly used for DSS Systems.
+# Read chapter 26 "Tuning Parallel Execution" in the Oracle Tuning Guide.
+#
+# SHARED_POOL_SIZE: Set to a large value, including the
+#                   space required for parallel execution.
+#
+# LARGE_POOL_SIZE: Unset (defaults to a large value that includes
+#                  the space required for parallel execution).
+#
+
+# This is for automatic parallel tuning enabled
+# parallel_automatic_tuning         = true
+# shared_pool_size                  = 5000000
+
+# This are the normal parameters
+# parallel_automatic_tuning         = false                  # deprecated
+# shared_pool_size                  = 10000000
+
+# This are the necessary parameters for JAVA development
+# parallel_automatic_tuning         = false                  # deprecated
+shared_pool_size                  = 200000000
+java_pool_size                    = 100000000
+
+### Checkpointing
+### -------------
+log_checkpoint_interval           =  50000000
+log_checkpoint_timeout            =  0
+log_checkpoints_to_alert          =  true
+
+### REDO Logging
+### ------------
+log_buffer                        =  1024000
+# log_archive_start                 =  true                  # deprecated
+log_archive_dest                  =  E:\Oradata\FOC2\arc
+log_archive_format                =  FOC2_%s_%t_%r.arc
+
+### Multiplexing REDO Logging
+### ----------------------
+### You cannot use LOG_ARCHIVE_DEST_x with LOG_ARCHIVE_DEST or LOG_ARCHIVE_DUPLEX_DEST
+###
+# log_archive_dest_1                = "location=E:\Oradata\FOC2\arc1 mandatory reopen=300"
+# log_archive_dest_2                = "location=E:\Oradata\FOC2\arc2 mandatory reopen=300"
+# log_archive_dest_3                = "location=E:\Oradata\FOC2\arc3 mandatory reopen=300"
+# log_archive_dest_4                = "location=E:\Oradata\FOC2\arc4 optional reopen=300"
+# log_archive_dest_5                = "location=E:\Oradata\FOC2\arc5 optional reopen=300"
+# log_archive_min_succeed_dest      = 4
+
+### Redo Log and Recovery
+### ---------------------
+fast_start_mttr_target            =  300
+
+### Resource Manager
+### ----------------
+resource_manager_plan             = SYSTEM_PLAN
+
+### System Managed Undo
+### -------------------
+undo_management                   = AUTO
+undo_retention                    = 10800
+undo_tablespace                   = UNDO
+
+### SQL Processing, Optimizer, Sequences
+### ------------------------------------
+open_cursors                      =  1024
+cursor_space_for_time             =  false
+optimizer_mode                    =  choose
+# partition_view_enabled            =  true                  # deprecated
+# hash_join_enabled                 =  true                  # deprecated
+hash_area_size                    =  1024000
+
+### Sorting
+### -------
+sort_area_retained_size           =  128000
+sort_area_size                    =  512000
+
+### Traces, Dumps & Statistics
+### --------------------------
+user_dump_dest                    =  E:\Oradata\FOC2\Adm\udmp
+background_dump_dest              =  E:\Oradata\FOC2\Adm\bdmp
+core_dump_dest                    =  E:\Oradata\FOC2\Adm\cdmp
+utl_file_dir                      =  E:\Oradata\FOC2\Adm\utld
+max_dump_file_size                =  10240
+_trace_files_public               =  true
+sql_trace                         =  false
+timed_statistics                  =  true
+
+### Resource Limiter, Security & Auditing
+### -------------------------------------
+sql92_security                    =  true
+resource_limit                    =  true
+audit_trail                       =  none
+# max_enabled_roles                 =  128                   # deprecated
+os_authent_prefix                 =  "OPS$"
+os_roles                          =  false
+remote_os_roles                   =  false
+remote_os_authent                 =  true
+remote_login_passwordfile         =  exclusive
+
+### MTS-Configuration
+### -----------------
+###
+dispatchers                       = "(protocol=TCP)"
+
+### Job Queues
+### ----------
+job_queue_processes               =  1
+
+### Processes, Transactions, User Licensing, Locks
+### ----------------------------------------------
+processes                         =  30
+open_links                        =  64
+license_max_sessions              =  0
+license_sessions_warning          =  0
+enqueue_resources                 =  4096
+aq_tm_processes                   =  1
+
+### Parallel Query Option
+### ---------------------
+parallel_min_servers              =  2
+parallel_max_servers              =  5                   # SMALL
+# parallel_max_servers            = 4 x (number of CPUs) # MEDIUM
+# parallel_max_servers            = 4 x (number of CPUs) # LARGE
+
+### Query Rewrite for Materialized Views, Function based Indexes
+### ------------------------------------------------------------
+# query_rewrite_integrity = [enforced,trusted,stale_tolerated]
+###
+query_rewrite_enabled             = true
+query_rewrite_integrity           = stale_tolerated
+star_transformation_enabled       = false
+
+### NLS Default Settings
+### --------------------
+nls_date_format                   = 'DD.MM.YYYY:HH24:MI'
+nls_numeric_characters            = '.,'
+nls_language                      =  AMERICAN
+nls_territory                     =  AMERICA
+
+### Oracle Trace
+### ------------
+# Uncomment the following line if you wish to enable the Oracle Trace product
+# to trace server activity.  This enables scheduling of server collections
+# from the Oracle Enterprise Manager Console.
+# Also, if the oracle_trace_collection_name parameter is non-null,
+# every session will write to the named collection, as well as enabling you
+# to schedule future collections from the console.
+###
+# oracle_trace_enable               = FALSE              # deprecated
+
+### Event Tracing
+### -------------
+# Sets integrity checking for tables
+# event = "10210 trace name context forever, level 10"
+
+# Sets integrity checking for indexes
+# event = "10211 trace name context forever, level 10"
+
+# Allows export to extract all data, except the corrupted blocks
+# event = "10231 trace name context forever, level 10"
+
+# Identify corrupted rollback segment when database cannot be started
+# event = "10015 trace name context forever"

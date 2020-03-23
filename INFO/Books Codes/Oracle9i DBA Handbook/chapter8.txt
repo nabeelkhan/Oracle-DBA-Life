@@ -1,0 +1,343 @@
+Scripts from chapter 8 of ORACLE9i DBA Handbook.  See the readme.doc file for details.
+
+
+
+create index CITY_ST_ZIP_NDX
+on EMPLOYEE(City, State, Zip)
+tablespace INDEXES;
+
+select * from EMPLOYEE
+ where State='NJ';
+
+
+
+select * 
+  from EMPLOYEE
+ where Empno between 1 and 100;
+
+
+create or replace view EMPLOYEE_VIEW as
+select *  from COMPANY
+ order by Empno;
+
+
+create table EMPLOYEE_ORDERED
+    as select * from EMPLOYEE_VIEW;
+
+
+select * from EMPLOYEE
+ where UPPER(Name) = 'JONES';
+
+select * from EMPLOYEE
+ where Name = 'JONES';
+
+
+create index EMP_UPPER_NAME on
+EMPLOYEE(UPPER(Name));
+
+
+explain plan
+set Statement_Id = 'TEST'
+for
+select * from EMPLOYEE
+where City > 'Y%';
+
+
+select ID ID_plus_exp,
+Parent_ID parent_id_plus_exp,
+LPAD(' ',2*(level-1))|| /* Indent for the level */
+Operation|| /* The operation */
+DECODE(other_tag,null,'','*')|| /* will display an '*' if parallel */
+DECODE(options,null,'',' ('||options||')')|| /* display the options */
+DECODE(object_name,null,'',' of '''||object_name||'''')||
+DECODE(object_type,null,'',' '||object_type||')')||
+DECODE(id,0,decode(optimizer,null,'',' optimizer='||optimizer))||
+DECODE(cost,null,'',' (cost='||cost|| /* display cost info. */
+DECODE(cardinality,null,'',' card='||cardinality)|| /* cardinality */
+DECODE(bytes,null,'',' bytes='||bytes)||')') plan_plus_exp,
+object_node object_node_plus_exp /* parallel and remote info */
+from PLAN_TABLE
+start with ID=0 and Statement_ID='TEST'
+connect by prior ID=Parent_ID and Statement_ID='TEST'
+order by ID,Position;
+
+
+
+select SQL_Text, 
+LPAD(' ',2*(Level-1))||Operation||' '||Options||' '
+||Object_Name||' '
+||DECODE(Object_Node,'','','['||Object_Node||'] ')
+||DECODE(Optimizer,'','','['||Optimizer||'] ')
+||DECODE(id,0,'Cost = '||Position) Query
+from V$SQLAREA, V$SQL_PLAN
+where V$SQLAREA.Address = V$SQL_PLAN.Address
+and V$SQLAREA.Hash_Value = V$SQL_PLAN.Hash_Value
+connect by prior ID = Parent_ID
+and prior V$SQL_PLAN.Address = V$SQL_PLAN.Address
+and prior V$SQLAREA.Hash_Value = V$SQL_PLAN.Hash_Value
+start with ID = 0
+and V$SQLAREA.Address = V$SQL_PLAN.Address
+and V$SQLAREA.Hash_Value = V$SQL_PLAN.Hash_Value
+order by V$SQLAREA.Address;
+
+
+
+select Buffer_Gets,
+       Disk_Reads,
+       Executions,
+       Buffer_Gets/Executions B_E,
+       SQL_Text 
+  from V$SQL
+ order by Disk_Reads desc;
+
+
+select SESS.Username, 
+       SESS_IO.Block_Gets,
+       SESS_IO.Consistent_Gets,
+       SESS_IO.Physical_Reads,
+       round(100*(SESS_IO.Consistent_Gets
+          +SESS_IO.Block_Gets-SESS_IO.Physical_Reads)/
+         (decode(SESS_IO.Consistent_Gets,0,1,
+             SESS_IO.Consistent_Gets+SESS_IO.Block_Gets)),2) 
+               session_hit_ratio 
+  from V$SESS_IO sess_io, V$SESSION sess 
+ where SESS.Sid = SESS_IO.Sid 
+   and SESS.Username is not null 
+ order by Username;
+
+
+
+select Object_Name, 
+       Object_Type , 
+       count(*) Num_Buff 
+  from SYS.X$BH a, SYS.DBA_OBJECTS b 
+ where A.Obj = B.Object_Id 
+   and Owner not in ('SYS','SYSTEM') 
+ group by Object_Name, Object_Type;
+
+
+alter procedure APPOWNER.ADD_CLIENT compile;
+execute DBMS_SHARED_POOL.KEEP('APPOWNER.ADD_CLIENT','P');
+
+
+create tablespace tester
+datafile 'E:\Oracle\Oradata\orcl\tester.dbf' size 10M reuse
+default storage (initial 1M next 1M pctincrease 0);
+
+rem  The next step creates a table based on an existing table
+rem  in this database.
+
+create table TESTING 
+tablespace tester
+as select * from perftest.emp
+where rownum < 50000;
+
+select relative_fno from dba_data_files
+where tablespace_name = 'TESTER';
+
+select phyrds, phyblkrd from v$filestat where file#=n;
+
+rem  Perform a full table scan:
+
+select count(*) from testing;
+
+select phyrds, phyblkrd from v$filestat where file#=9;
+
+drop tablespace tester including contents;
+
+
+execute DBMS_UTILITY.ANALYZE_SCHEMA('APPOWNER','COMPUTE');
+
+begin
+DBMS_STATS.GATHER_TABLE_STATS('perftest','emp');
+end;
+
+
+select
+      Tablespace_Name,   /*Tablespace name*/
+      Owner,             /*Owner of the segment*/
+      Segment_Name,      /*Name of the segment*/
+      Segment_Type,      /*Type of segment (ex. TABLE, INDEX)*/
+      Extents,           /*Number of extents in the segment*/
+      Blocks,            /*Number of db blocks in the segment*/
+      Bytes              /*Number of bytes in the segment*/
+from DBA_SEGMENTS
+/
+
+
+select
+      Tablespace_Name,   /*Tablespace name*/
+      Owner,             /*Owner of the segment*/
+      Segment_Name,      /*Name of the segment*/
+      Segment_Type,      /*Type of segment (ex. TABLE, INDEX)*/
+      Extent_ID,         /*Extent number in the segment*/
+      Block_ID,          /*Starting block number for the extent*/
+      Bytes,             /*Size of the extent, in bytes*/
+      Blocks             /*Size of the extent, in Oracle blocks*/
+ from DBA_EXTENTS
+where Segment_Name = 'segment_name'
+order by Extent_ID;
+
+
+alter index EMPLOYEE_IDX monitoring usage;
+
+
+alter index EMPLOYEE_IDX nomonitoring usage;
+
+
+select 
+       Index_Name,      /* The name of the index*/
+       Table_Name,      /* The name of the table */
+       Monitoring,      /* Whether enabled (YES/NO)*/
+       Used,            /* Whether index is used (YES/NO)*/
+       Start_Monitoring, /* Timestamp when monitoring began*/
+       End_Monitoring   /* Timestamp when monitoring stopped*/
+  from V$OBJECT_USAGE;
+
+
+create tablespace CODES_TABLES
+datafile '/u01/oracle/VLDB/codes_tables.dbf'
+size 10M
+extent management local uniform size 256K;
+
+
+rem
+rem   file: mapper.sql
+rem   Parameters: the tablespace name being mapped
+rem
+rem   Sample invocation:
+rem   @mapper DEMODATA
+rem
+rem   This script generates a mapping of the space usage
+rem   (free space vs used) in a tablespace. It graphically
+rem   shows segment and free space fragmentation.
+rem
+set pagesize 60 linesize 132 verify off
+column file_id heading "File|Id"
+
+select
+      'free space' Owner,    /*"owner" of free space*/
+      '   '  Object,          /*blank object name*/
+      File_ID,               /*file ID for the extent header*/
+      Block_ID,              /*block ID for the extent header*/
+      Blocks                 /*length of the extent, in blocks*/
+ from DBA_FREE_SPACE
+where Tablespace_Name = UPPER('&&1')
+union
+select
+      SUBSTR(Owner,1,20),         /*owner name (first 20 chars)*/
+      SUBSTR(Segment_Name,1,32),  /*segment name*/
+      File_ID,                    /*file ID for extent header*/
+      Block_ID,                   /*block ID for block header*/
+      Blocks                    /*length of the extent in blocks*/
+ from DBA_EXTENTS
+where Tablespace_Name = UPPER('&&1')
+order by 3,4
+
+spool &&1._map.lst
+/
+spool off
+undefine 1
+
+
+alter tablespace DEMONDX 
+default storage (pctincrease 1);
+
+
+alter tablespace DEMONDX coalesce;
+
+
+analyze table TABLE_NAME list chained rows into CHAINED_ROWS;
+
+
+
+select
+       Owner_Name,      /*Owner of the data segment*/
+       Table_Name,      /*Name of the table with the chained rows*/
+       Cluster_Name,    /*Name of the cluster, if it is clustered*/
+       Head_RowID       /*Rowid of the first part of the row*/
+from CHAINED_ROWS;
+
+
+alter table EMPLOYEE_IOT 
+ move tablespace DATA 
+overflow tablespace DATA_OVERFLOW;
+
+
+sqlload USERID=ME/PASS CONTROL=PART1.CTL DIRECT=TRUE PARALLEL=TRUE
+sqlload USERID=ME/PASS CONTROL=PART2.CTL DIRECT=TRUE PARALLEL=TRUE
+sqlload USERID=ME/PASS CONTROL=PART3.CTL DIRECT=TRUE PARALLEL=TRUE
+
+
+truncate table EMPLOYEE drop storage;
+
+
+truncate cluster EMP_DEPT reuse storage;
+
+
+alter table EMPLOYEE
+truncate partition PART3
+drop storage;
+
+
+
+set copycommit 1
+set arraysize 1000
+copy from HR/PUFFINSTUFF@loc -
+create EMPLOYEE -
+using -
+select * from EMPLOYEE -
+where State = 'NM'
+
+
+create database link HR_LINK
+connect to HR identified by PUFFINSTUFF
+using 'loc';
+
+
+select * from EMPLOYEE@HR_LINK;
+
+select DEPT, MAX(Salary)
+  from EMPLOYEE@HR_LINK
+ group by DEPT;
+
+
+create materialized view LOCAL_EMP
+pctfree 5
+tablespace data_2
+storage (initial 100K next 100K pctincrease 0)
+refresh fast
+      start with SysDate
+      next SysDate+7
+as select * from EMPLOYEE@HR_LINK;
+
+
+create materialized view log on EMPLOYEE
+tablespace DATA
+storage (initial 10K next 10K pctincrease 0);
+
+
+
+create procedure MY_RAISE (My_Emp_No IN NUMBER, Raise IN NUMBER)
+as begin
+      update EMPLOYEE@HR_LINK
+      set Salary = Salary+Raise
+      where Empno = My_Emp_No;
+end;
+/
+
+
+execute MY_RAISE@HR_LINK(1234,2000);
+
+create synonym MY_RAISE for MY_RAISE@HR_LINK;
+execute MY_RAISE(1234,2000);
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,39 @@
+Scripts from chapter 9 of ORACLE9i DBA Handbook.  See the readme.doc file for details.
+
+
+
+connect system/manager as SYSDBA
+@spcreate
+
+
+execute STATSPACK.SNAP;
+
+
+execute STATSPACK.MODIFY_STATSPACK_PARAMETER - 
+  (i_snap_level=>5, i_buffer_gets_th=>100000);
+
+
+create or replace trigger PIN_ON_STARTUP 
+after startup on database 
+begin
+   DBMS_SHARED_POOL.KEEP ('PERFSTAT.STATSPACK', 'P');
+end;
+/
+
+
+@spreport
+
+
+execute DBMS_UTILITY.ANALYZE_SCHEMA('PERFSTAT','COMPUTE');
+
+
+commit;
+set transaction use rollback segment roll_large;
+@sppurge
+
+
+connect system/manager as SYSDBA
+@spdrop
+
+
+

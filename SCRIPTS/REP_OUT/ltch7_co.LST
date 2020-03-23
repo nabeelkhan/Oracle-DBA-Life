@@ -1,0 +1,30 @@
+Date: 06/28/05                                                   Page:   1                                                                            
+Time: 10:44 AM                                                  LATCH CONTENTION REPORT                                                NK_DBA         
+                                                                 ORAKIC database                                                                      
+                                                                                                                                                      
+NAME                              RATIO1    RATIO2                                                                                                    
+------------------------------ --------- ---------                                                                                                    
+process allocation                 .1699                                                                                                              
+session allocation                 .0006     .0000                                                                                                    
+session idle bit                   .0000     .0000                                                                                                    
+messages                           .0000     .0000                                                                                                    
+enqueue hash chains                .0001     .0000                                                                                                    
+channel operations parent latc     .0006     .0000                                                                                                    
+h                                                                                                                                                     
+                                                                                                                                                      
+cache buffers lru chain            .0028                                                                                                              
+cache buffers chains               .0106                                                                                                              
+multiblock read objects            .0001     .0000                                                                                                    
+simulator lru latch                .0043                                                                                                              
+simulator hash latch               .0000     .0000                                                                                                    
+redo allocation                    .0062     .0000                                                                                                    
+row cache enqueue latch            .0000     .0000                                                                                                    
+row cache objects                  .0004     .0000                                                                                                    
+shared pool                        .0037     .0000                                                                                                    
+library cache                      .0033     .0000                                                                                                    
+library cache pin                  .0001     .0000                                                                                                    
+virtual circuit buffers            .0024     .0000                                                                                                    
+SQL memory manager latch           .0445                                                                                                              
+
+19 rows selected.
+

@@ -1,0 +1,48 @@
+ops$tkyte@ORA9IR2> create or replace package body demo_pkg
+  2  as
+  3  begin
+  4          for i in 1 .. 255
+  5          loop
+  6                  if ( chr(i) not between 'a' and 'z' )
+  7                     and
+  8                     ( chr(i) not between 'A' and 'Z' )
+  9                     and
+ 10                     ( chr(i) not between '0' and '9' )
+ 11                     and
+ 12                     ( chr(i) not in ( '-', '_' ) )
+ 13                  then
+ 14                          g_bad_chars := g_bad_chars || chr(i);
+ 15                  end if;
+ 16          end loop;
+ 17  end;
+ 18  /
+ 
+Package body created.
+ 
+ops$tkyte@ORA9IR2>
+ops$tkyte@ORA9IR2>
+ops$tkyte@ORA9IR2> drop table t;
+ 
+Table dropped.
+ 
+ops$tkyte@ORA9IR2>
+ops$tkyte@ORA9IR2> create table t ( str varchar2(30) );
+ 
+Table created.
+ 
+ops$tkyte@ORA9IR2> insert into t values ( '5%@%52345-fafdA_5@$#' );
+ 
+1 row created.
+ 
+ops$tkyte@ORA9IR2>
+ops$tkyte@ORA9IR2> begin
+  2          for x in ( select translate( str, 'a'||demo_pkg.g_bad_chars, 'a' ) 
+str from t )
+  3          loop
+  4                  dbms_output.put_line( x.str );
+  5          end loop;
+  6  end;
+  7  /
+552345-fafdA_5
+ 
+PL/SQL procedure successfully completed.

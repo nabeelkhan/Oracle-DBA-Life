@@ -1,0 +1,84 @@
+Scripts from chapter 14 of ORACLE9i DBA Handbook.  See the readme.doc file for details.
+
+
+
+apache -k start
+apache -k shutdown
+
+apachectl 
+
+
+apachectl shutdown
+
+kill -9 'cat $ORACLE_HOME/Apache/Apache/logs/httpd.pid`
+
+
+ServerRoot "D:\Oracle\Ora90\Apache\Apache" 
+
+DocumentRoot "D:\Oracle\Ora90\Apache\Apache\htdocs"
+
+DocumentRoot "/www"
+
+
+mkdir /usr/local/apache 
+cd /usr/local/apache 
+mkdir bin conf logs 
+chown root . bin conf logs 
+chgrp root . bin conf logs 
+chmod 755 . bin conf logs 
+
+
+webcachectl start
+
+
+<?xml version="1.0"?>
+<!DOCTYPE INVALIDATION SYSTEM "internal:///invalidation.dtd">
+<INVALIDATION>
+   <URL EXP="url" PREFIX="YES|NO">
+      <VALIDITY LEVEL="validity" REFRESHTIME="seconds"/>
+      <COOKIE NAME="cookie_name" VALUE="value" NONEXIST="YES|NO"/>
+      <HEADER NAME="HTTP_request_header" VALUE="value"/>
+   </URL>
+</INVALIDATION>
+
+
+<?xml version="1.0"?>
+<!DOCTYPE INVALIDATIONRESULT [
+<!ELEMENT INVALIDATIONRESULT (URL+)>
+<!ELEMENT URL   EMPTY>
+<!ATTLIST URL
+          EXPR          CDATA   #REQUIRED
+          ID            CDATA   #REQUIRED
+          STATUS        CDATA   #REQUIRED
+          NUMINV        CDATA   #REQUIRED
+>
+]>
+<INVALIDATIONRESULT>
+   <URL EXPR="url" ID="id" STATUS="status" NUMINV="number">
+</INVALIDATIONRESULT>
+
+
+
+OCIEnvCreate((dvoid**)&envhp,
+   (ub4) OCI_DEFAULT | OCI_CACHE,
+   (dvoid *)0,
+   (dvoid * (*)(dvoid *, size_t))0,
+   (dvoid * (*)(dvoid *, dvoid *, size _t))0,
+   (void (*)(dvoid , dvoid *))0,
+   (size_t)0,
+   (dvoid **)0))
+
+
+OCIAttrSet((dvoid *)stmthp1,
+   (ub4)OCI_HYPE_STMT,
+   (dvoid *)&rem,
+   (ub4)0,
+   (ub4)OCI_ATTR_NO_CACHE,
+   errhp1)
+
+
+
+
+
+
+

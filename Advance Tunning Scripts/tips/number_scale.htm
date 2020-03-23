@@ -1,0 +1,194 @@
+<html><head><title>
+Specify scale for NUMBERs
+</title>
+<style>
+body {background-image:url(/images/bg.jpg)}
+a:link {color:#FF6600}
+a:active {color:#660066}
+a:visited {color:#FF6600} 
+a:hover {color:#660066}
+a {font-weight:bold}
+h1 {color:#990000; font-size:150%; text-align:center}
+h2 {color:#660066; font-size:125%}
+ul {list-style-image:url(/images/li.gif); margin-left:16px}
+
+.orange {color:#FF6600}
+.purple {color:#660066}
+.brown {color:#990000}
+.h3 {font-weight:bold; color:#990000}
+</style>
+
+</head>
+<script language="javascript"><!--
+function email(addr) { return addr + '@ixora.com.au' }
+//--></script>
+
+<body>
+
+
+<div style="text-align:center; font-size:125%; font-weight:bold; color:#660066">Oracle Performance Tuning Tips</div>
+
+
+
+<h1>Specify scale for NUMBERs</h1>
+
+Many developers do not specify a precision for NUMBER columns.
+This may be in order to minimize the work that would be needed to increase that precision should the application's requirements change,
+but it is often just a matter of habit.
+And although it is possible using the undocumented <tt>(*,<i>scale</i>)</tt> syntax to specify a scale without a precision,
+this is not normally done.
+If no precision and no scale are specified for an Oracle NUMBER column then it can contain arbitrary floating point numbers,
+and floating point numbers can be large.
+<p>
+In most cases this has no performance impact because the columns in fact only contain integers
+and the number of bytes required to store an integer is no more than one plus half the number of significant digits
+(<a href=/notes/number_representation.htm>more</a>).
+However, large floating point values may be stored in these columns if their values are sometimes computed using floating point arithmetic.
+In particular, when saving the results of floating point arithmetic to a NUMBER column,
+if there is no scale, or if the scale is further to the right than the least significant digit of precision in the result,
+then rounding will not be performed
+(<a href=/notes/numeric_datatypes.htm>more</a>)
+and thus the full storage precision will be used.
+<p>
+Here is an example.
+We will create a table with two NUMBER columns.
+The first will have no scale.
+The other will have a scale of 4 digits.
+Note the difference in storage space required when we then insert the same value to these two columns.
+Although the values are the same,
+the column without any scale takes 21 bytes to store the number,
+whereas the column with a small scale takes just 2 bytes to store the same number.
+<p>
+<nospell><blockquote><table border=1 cellspacing=0 cellpadding=3 bgcolor=white><tr><td><pre>
+SQL> create table numbers (n1 number, n2 number(10,4));
+
+Table created.
+
+SQL> insert into numbers values (3*(1/3), 3*(1/3));
+
+1 row created.
+
+SQL> select * from numbers;
+
+        N1         N2
+---------- ----------
+         1          1
+
+1 row selected.
+
+SQL> select vsize(n1), vsize(n2) from numbers;
+
+ VSIZE(N1)  VSIZE(N2)
+---------- ----------
+        21          2
+
+1 row selected.
+
+</td></tr></table></blockquote>
+</nospell>
+<p>
+The value inserted was expressed as <tt>3*(1/3)</tt> for the illustration above
+to force the use of floating point arithmetic during the statement execution.
+The brackets were needed to prevent the optimizer from simplifying the expression before execution.
+The example below uses the <i>log</i> function to illustrate the same point
+and to show that the scale must be to the left of the least significant digit of precision
+to ensure that the results of floating point expression evaluation are rounded prior to storage.
+Unless this rounding occurs, the full precision of the column will be used for data storage.
+<p>
+<nospell><blockquote><table border=1 cellspacing=0 cellpadding=3 bgcolor=white><tr><td><pre>
+SQL> create table numbers (n1 number, n2 number(*,38), n3 number(*,37));
+
+Table created.
+
+SQL> insert into numbers values (log(2, 4), log(2, 4), log(2, 4));
+
+1 row created.
+
+SQL> select * from numbers;
+
+        N1         N2         N3
+---------- ---------- ----------
+         2          2          2
+
+1 row selected.
+
+SQL> select vsize(n1), vsize(n2), vsize(n3) from numbers;
+
+ VSIZE(N1)  VSIZE(N2)  VSIZE(N3)
+---------- ---------- ----------
+        21         21          2
+
+1 row selected.
+
+</td></tr></table></blockquote>
+</nospell>
+In this case because the value 2 has its most significant digit one place to the left of the decimal point,
+one byte is needed for digits to the left of the decimal point
+leaving 19 bytes for digits to the right of the decimal point.
+These 19 bytes can hold at most 38 digits, of which the last might not be accurate.
+Thus the scale must be no greater than 37 digits right of the decimal point to ensure rounding prior to storage.
+For larger values a smaller scale would be needed.
+<p>
+Because most Oracle NUMBER columns just store integers and are never subject to floating point arithmetic,
+this waste of space is not very widespread despite that developers often fail to specify the scale of NUMBERs.
+However, where it does occur it reduces table data density
+which in turn increases table scan I/O, uses cache memory less effectively, and reduces index efficiency.
+Therefore, it is good to be in the habit of always specifying at least a scale for real NUMBERs, if not a precision as well.
+For integers, if a precision is specified then a scale of 0 is implied,
+otherwise the scale should be set to zero explicitly using the NUMBER(*,0) datatype specification
+or a synonymous ANSI datatype specification.
+<p>
+Our <a href=/scripts/io_opt.htm#unscaled_numbers>unscaled_numbers.sql</a> script
+can be used to check an existing database for columns that are wasting space
+because of this issue and therefore might be impacting performance.
+By default it identifies NUMBER columns for which no scale has been specified
+and which have an average data length of more than 9 bytes (more than 15 digits).
+<p>
+<hr noshade align=left width=300 size=2 color=black>
+<table cellspacing=0 cellpadding=0 width=100%><tr>
+<td valign=top>
+<div style="font-size:80%; font-weight:bold; color:#660066">
+© Ixora Pty Ltd. &nbsp; All rights reserved.<br>
+
+
+
+16-Apr-2002
+</div>
+</td>
+
+<map name=searches>
+<area coords=3,3,33,25 href=/search.html>
+</map>
+
+<script language=javascript><!--
+document.write('<map name=question><area coords=3,3,15,25 href="mailto:' + email('questions') + '?SUBJECT=About http://www.ixora.com.au/tips/number_scale.htm"></map>')
+document.write('<map name=feedback><area coords=3,3,25,25 href="mailto:' + email('feedback') + '?SUBJECT=About http://www.ixora.com.au/tips/number_scale.htm"></map>')
+// --></script>
+
+<map name=up1level>
+<area coords=3,3,25,25 href=./>
+</map>
+<map name=homepage>
+<area coords=3,3,25,25 href=/>
+</map>
+
+<td valign=top align=right>
+<nobr>
+
+<img ismap border=0 usemap=#searches src=/images/search.gif width=36 height=28 alt=Search>
+&nbsp;
+
+<img ismap border=0 usemap=#question src=/images/q.gif alt=Questions>
+&nbsp;
+<img ismap border=0 usemap=#feedback src=/images/feedback.gif alt=Feedback>
+&nbsp;
+
+<img ismap border=0 usemap=#up1level src=/images/up_one.gif alt=Up>
+&nbsp;
+<img ismap border=0 usemap=#homepage src=/images/home.gif alt=Home>
+
+</nobr>
+</td>
+</tr></table>
+</body></html>
+

@@ -1,0 +1,82 @@
+ACTION PLAN
+============
+for the repostory database you need to install the patch manually with opatch. It coul dnot installed wit
+h the patching routine.
+Please install the patch manually as described in README for 4193286
+
+eos (end of section)
+
+Regards,
+Bernd Kattein 
+
+05-JUN-05 12:49:18 GMT
+
+Email Update button has been pressed: Sending email to khannabeel@msn.com. 
+
+
+06-JUN-05 09:46:03 GMT
+
+New info : NABEELKHAN : If its not a repostory database and I want to apply a 
+
+patch throught EM site how can I write the setups in EM site (4th Step) of 
+
+applyin patch to shutdown 
+and restart services?
+
+
+07-JUN-05 14:03:06 GMT
+
+.
+UPDATE
+=======
+
+Hello Nabeel,
+
+.
+ACTION PLAN
+============
+I guess the best way is use scripts:
+1.Write a sql script to logon as sysdba and shutdown the database and one for startup:
+e.g.:
+## up.sql
+connect sys/<pw> as sysdba
+startup
+exit
+## down.sql
+connect sys/<pw> as sysdba
+shutdown immediate
+exit
+.
+2. Write a shell script which shutdown and/or startup the database:
+e.g.:
+# /bin/sh
+
+echo Database shutdown
+echo Set the environment variables
+export ORACLE_HOME=...
+export ORACLE_SID=....
+....
+echo Shutdown the database
+$ORACLE_HOME/bin/sqlplus /nolog @<path>/down.sql
+echo Database down
+exit
+
+# /bin/sh
+
+echo Database start
+echo Set the environment variables
+export ORACLE_HOME=...
+export ORACLE_SID=....
+....
+echo Start the database
+$ORACLE_HOME/bin/sqlplus /nolog @<path>/up.sql
+echo Database up
+exit
+3. Copy teh script to the nodes you like to shutdown and startup
+4. Edit the script in step 4 and run the scripts ad the points you need running this 
+script
+
+eos (end of section)
+
+Regards,
+Bernd Kattein 

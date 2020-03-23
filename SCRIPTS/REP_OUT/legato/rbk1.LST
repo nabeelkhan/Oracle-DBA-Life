@@ -1,0 +1,18 @@
+Date: 02/04/03                                                   Page:   1      
+Time: 10:49 AM              ROLLBACK SEGMENT STORAGE             NK_DBA         
+                              ORAKIC database                                   
+                                                                                
+               CUR         OPTL                  AVE          AVE               
+ROLLBACK   EXTENTS         SIZE SHRINKS       SHRINK        TRANS STATUS        
+---------- ------- ------------ ------- ------------ ------------ --------      
+SYSTEM           7                    0            0            0 ONLINE        
+_SYSSMU1$        2                    6    3,320,490       63,592 ONLINE        
+_SYSSMU10$       2                    7    1,647,762       63,376 ONLINE        
+_SYSSMU2$        2                   21    5,342,744       63,376 ONLINE        
+_SYSSMU3$        2                   14   12,625,042       63,592 ONLINE        
+_SYSSMU4$        2                   12    1,054,037       63,592 ONLINE        
+_SYSSMU5$        8                   10    3,768,320      181,235 ONLINE        
+_SYSSMU6$        3                    3    2,140,842       69,520 ONLINE        
+_SYSSMU7$        2                   11    4,009,611       63,376 ONLINE        
+_SYSSMU8$        2                    7    3,192,539       63,592 ONLINE        
+_SYSSMU9$        2                    7    1,357,531       63,376 ONLINE        

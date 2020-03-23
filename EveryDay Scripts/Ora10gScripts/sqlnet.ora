@@ -1,0 +1,18 @@
+# Akadia AG, Arvenweg 4, CH-3604 Thun                             sqlnet.ora
+# --------------------------------------------------------------------------
+#
+# File:       sqlnet.ora
+#
+# Autor:       Martin Zahn, 25.03.2004
+#
+# Purpose:    Configuration File for all Net Clients
+#
+# Location:   $TNSADMIN
+#
+# Certified:  Oracle 10.1.0.2 on Windows 2000
+#
+# --------------------------------------------------------------------------
+TRACE_LEVEL_CLIENT = OFF
+NAMES.DIRECTORY_PATH = (TNSNAMES)
+NAMES.DEFAULT_DOMAIN = WORLD
+NAME.DEFAULT_ZONE = WORLD

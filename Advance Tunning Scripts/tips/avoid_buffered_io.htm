@@ -1,0 +1,127 @@
+<html><head><title>
+Avoid buffered I/O
+</title>
+<style>
+body {background-image:url(/images/bg.jpg)}
+a:link {color:#FF6600}
+a:active {color:#660066}
+a:visited {color:#FF6600} 
+a:hover {color:#660066}
+a {font-weight:bold}
+h1 {color:#990000; font-size:150%; text-align:center}
+h2 {color:#660066; font-size:125%}
+ul {list-style-image:url(/images/li.gif); margin-left:16px}
+
+.orange {color:#FF6600}
+.purple {color:#660066}
+.brown {color:#990000}
+.h3 {font-weight:bold; color:#990000}
+</style>
+
+</head>
+<script language="javascript"><!--
+function email(addr) { return addr + '@ixora.com.au' }
+//--></script>
+
+<body>
+
+
+<div style="text-align:center; font-size:125%; font-weight:bold; color:#660066">Oracle Performance Tuning Tips</div>
+
+
+
+<h1>Avoid buffered I/O</h1>
+
+Buffered datafile I/O wastes copious memory because Oracle data blocks are cached both in the SGA and in the file system buffer cache
+with substantial overlap between the two sets of blocks that are cached.
+<p>
+The file system cache should be used to buffer non-Oracle I/O only.
+Using it to attempt to enhance the caching of Oracle data just wastes memory, and lots of it.
+Oracle can cache its own data much more effectively than the operating system can.
+Oracle has a sophisticated touch count based cache replacement algorithm that is sensitive to both the frequency and recency of data usage.
+Oracle also avoids caching data that is unlikely to be, or will never be reused,
+and DBAs can fine tune Oracle's caching decisions by allocating segments to the KEEP and RECYCLE buffer pools.
+There is also a big saving in CPU time and elapsed time (approximately 50%)
+when getting data from the Oracle buffer cache rather than the filesystem buffer cache.
+<p>
+By switching to raw or <a href=/notes/direct_io.htm>direct I/O</a>
+<i>and by giving Oracle the memory that would otherwise be used by the operating system to cache Oracle data</i>,
+a much larger working set of data can be cached, and a much higher cache hit rate can be sustained with obvious performance benefits.
+And when physical I/O is required, the CPU cost of performing that I/O is reduced because the data is not first copied to file system buffers.
+Also, the file system cache is not flooded with Oracle data, so it can cache non-Oracle data more effectively.
+Switching to raw or direct I/O also eliminates the risk that intensive database I/O might trigger paging storms on systems with a 
+<a href=/notes/paged_buffer_cache.htm>paged buffer cache</a>,
+and prevents performance problems due to a mismatch between the database block size and file system buffer size
+(<a href=buffered_block_size.htm>more</a>).
+<p>
+Buffered I/O can be avoided either by using raw I/O or by using direct I/O.
+Raw is preferable for performance critical databases for the several reasons.
+The following are the most important.
+<ol>
+<li>
+Kernelized asynchronous I/O is only available against raw devices and Quick I/O files,
+and is significantly more efficient and scalable and makes better use of the physical I/O bandwidth
+than either threaded asynchronous I/O or I/O slave processes
+(<a href=use_asynchronous_io.htm>more</a>).
+<p>
+<li>
+<a href=/notes/inode_locks.htm>File system read/write locks</a> are generally used for direct I/O
+despite that they are not logically required.
+The only exception is direct I/O on Solaris UFS.
+Using direct I/O on other file systems allows unnecessary contention for these locks.
+This can degrade performance significantly, particularly in write intensive environments.
+This risk is not present with raw I/O.
+<p>
+</ol>
+Please note that switching to unbuffered I/O on systems that perform repeated full table scans of the same set of medium sized tables
+that would otherwise be fully cached by the operating system
+can cause a drop in performance unless the target tables are also allocated to the KEEP buffer pool.
+<p>
+<hr noshade align=left width=300 size=2 color=black>
+<table cellspacing=0 cellpadding=0 width=100%><tr>
+<td valign=top>
+<div style="font-size:80%; font-weight:bold; color:#660066">
+© Ixora Pty Ltd. &nbsp; All rights reserved.<br>
+
+
+
+26-Oct-2002
+</div>
+</td>
+
+<map name=searches>
+<area coords=3,3,33,25 href=/search.html>
+</map>
+
+<script language=javascript><!--
+document.write('<map name=question><area coords=3,3,15,25 href="mailto:' + email('questions') + '?SUBJECT=About http://www.ixora.com.au/tips/avoid_buffered_io.htm"></map>')
+document.write('<map name=feedback><area coords=3,3,25,25 href="mailto:' + email('feedback') + '?SUBJECT=About http://www.ixora.com.au/tips/avoid_buffered_io.htm"></map>')
+// --></script>
+
+<map name=up1level>
+<area coords=3,3,25,25 href=./>
+</map>
+<map name=homepage>
+<area coords=3,3,25,25 href=/>
+</map>
+
+<td valign=top align=right>
+<nobr>
+
+<img ismap border=0 usemap=#searches src=/images/search.gif width=36 height=28 alt=Search>
+&nbsp;
+
+<img ismap border=0 usemap=#question src=/images/q.gif alt=Questions>
+&nbsp;
+<img ismap border=0 usemap=#feedback src=/images/feedback.gif alt=Feedback>
+&nbsp;
+
+<img ismap border=0 usemap=#up1level src=/images/up_one.gif alt=Up>
+&nbsp;
+<img ismap border=0 usemap=#homepage src=/images/home.gif alt=Home>
+
+</nobr>
+</td>
+</tr></table>
+</body></html>
+

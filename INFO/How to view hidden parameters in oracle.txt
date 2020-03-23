@@ -1,0 +1,12 @@
+create or replace view all_parameters
+as
+select x.ksppinm name, y.ksppstvl value
+    from   x$ksppi  x , x$ksppcv y
+    where  x.indx = y.indx
+    order  by x.ksppinm
+/
+grant select on all_parameters to public
+/
+create public synonym all_parameters for all_parameters
+/
+

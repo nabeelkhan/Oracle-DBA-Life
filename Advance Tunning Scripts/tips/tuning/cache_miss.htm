@@ -1,0 +1,154 @@
+<html>
+	<head>
+		<title>
+			Calculating the Cache Hit and Miss Rates
+		</title>
+		<style>
+			<!-- a:hover{color:#660066;} -->
+		</style>
+	</head>
+	<body background="../../images/bg.jpg" link="#FF6600" vlink="#FF6600" alink="#660066">
+		
+		<h2 align="center">
+			<font color="#990000">
+				Calculating the Cache Hit and Miss Rates
+			</font>
+		</h2>
+		The strategy of increasing the size of the database buffer cache ( <em>db_block_buffers</em>) to improve the cache hit rate
+		is fairly simple, and is perhaps the best understood aspect of Oracle tuning.
+		However, as always with Oracle, significant complexity lurks below the surface.
+		
+		<h3>
+			<font color="#660066">
+				How do you calculate the cache hit rate?
+			</font>
+		</h3>
+		The database buffer cache hit rate is normally calculated from the following three statistics as reported in V$SYSSTAT.
+		<p>
+		<em>consistent gets</em>
+		<blockquote>
+			The number of blocks requested in consistent mode.
+			Blocks are requested in consistent mode for consistent read operations.
+			When a block is requested in consistent mode,
+			if any changes have been committed or made to that block since the requesting statement (or transaction) began,
+			then they must be rolled back for the purposes of the read, to give a consistent view of the data at that time.
+			<blockquote>
+				<small>
+					Note, however, that due to a long-standing Oracle bug the <em>consistent gets</em> statistics
+					actually overstates the number of consistent gets very significantly.
+					For this reason, it is better to use the sum of <em>no work - consistent read gets</em>, <em>cleanouts only - consistent read gets</em>,
+					<em>rollbacks only - consistent read gets</em> and <em>cleanouts and rollbacks - consistent read gets</em> at this point.
+				</small>
+			</blockquote>
+		</blockquote>
+		<em>db block gets</em>
+		<blockquote>
+			The number of blocks requested in current mode.
+			Blocks must be requested in current mode in order to be changed.
+			Also certain classes of blocks, like segment header blocks are always requested in current mode.
+		</blockquote>
+		<em>physical reads</em>
+		<blockquote>
+			The number of database blocks which the database instance has requested the operating system to read from disk.
+			This is typically greater than the actual number of disk read operations performed,
+			because of multiblock reads and because some read requests may be satisfied from the operating system buffer cache.
+		</blockquote>
+		Each consistent get or db block get represents a <em>logical read</em>.
+		Each logical read for which there was no corresponding physical read, represents a cache hit.
+		That is, the requested block was already present in the database buffer cache, and so no physical read request was issued.
+		The cache hit rate is the ratio of cache hits to logical block reads, normally expressed as a percentage.
+		
+		<h3>
+			<font color="#660066">
+				What are direct reads?
+			</font>
+		</h3>
+		Now for a twist. You have probably assumed that if your cache hit rate is 85%, then your cache miss rate is 15%.
+		Not so. Oracle actually performs direct reads for certain operations.
+		So it is possible to have an 85% cache hit rate and a 1% cache miss rate, with the remaining 14% being accounted for by direct reads.
+		<p>
+		Direct reads are performed for parallel scans, and reads from temporary tablespaces.
+		Blocks are read directly into private buffers in the PGA, rather than into the database buffer cache in the SGA.
+		There are no cache hits, because blocks are not searched for in the cache before being read.
+		And there are no subsequent cache hits, because the blocks are just discarded after use, rather than cached.
+		However, this is no great loss.
+		The possibility of getting enough cache hits in equivalent cached operations to actually save disk reads is almost negligible,
+		while the possibility of losing cache hits because of the additional load on the cache is quite significant.
+		So, direct reads actually improve the cache hit rate.
+		They also improve block access concurrency by removing a significant load from the buffer cache latches.
+		<blockquote>
+			<small>
+				Incidentally, direct reads can also be obtained for serial scans
+				using the <em>_serial_direct_read</em> parameter in 8.1, or event 10355 in earlier releases.
+			</small>
+		</blockquote>
+		
+		<h3>
+			<font color="#660066">
+				How do you calculate the cache miss rate?
+			</font>
+		</h3>
+		This discussion of direct reads leads naturally to the observation that it is really the cache miss rate,
+		rather than the cache hit rate, that should influence your sizing of the database buffer cache.
+		A cache hit rate of only 85% may well lead you to enlarge the buffer cache.
+		Whereas, a miss rate of just 1% may not.
+		<h4>
+			<font color="#990000">
+				Oracle 8
+			</font>
+		</h4>
+		In release 8.1, it is easy to calculate the cache miss rate exclusive of direct reads.
+		It is essentially just a matter of subtracting the value of the statistic <em>physical reads direct</em> from the number of <em>physical reads</em>.
+		However, an even better approach, that works for release 8.0 also, is to calculate separate miss rates for each of the three buffer pools
+		using the statistics reported in V$BUFFER_POOL_STATISTICS, instead of a single miss rate for the database buffer cache as a whole.
+		Prior to release 8.1.6,
+		the V$BUFFER_POOL_STATISTICS view must be created by running the <em>$ORACLE_HOME/rdbms/admin/catperf.sql</em> script.
+		Alternatively, the APT script <b><a href="../../scripts/cache.htm#buffer_pool_miss_rates">buffer_pool_miss_rates.sql</a></b>
+		can be used to get this information directly from the underlying X$ tables.
+		The physical reads reported against each buffer pool are exclusive of direct reads.
+		They are not, however, exclusive of the multiblock reads associated with serial full table and index scans.
+		
+		<h4>
+			<font color="#990000">
+				Oracle 7.3
+			</font>
+		</h4>
+		Unfortunately, Oracle7 does not provide statistics to enable you to distinguish between direct reads and cache misses,
+		so the cache miss rate cannot be calculated.
+		However, some careful thought does yield an alternative and indeed more useful statistic.
+		<p>
+		Because cache hits are rare for serial long table scans, and impossible for direct reads,
+		it is reasonable to assume that the cache miss rate can only be reduced by avoiding single block reads.
+		That is, that cache misses associated with multiblock reads are not tunable.
+		Therefore, the <em>tunable cache miss rate</em> can be estimated as the number of single block reads (taken from V$SYSTEM_EVENT)
+		over the number of logical reads minus the number of blocks read for multiblock reads.
+		The APT script <b><a href="../../scripts/cache.htm#tunable_cache_miss_rate">tunable_cache_miss_rate.sql</a></b>
+		calculates this statistic.
+		<p>
+		
+		<hr noshade align="left" width="300" size="2" color="black">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="1000">
+					<font size="2" color="#660066">
+						<strong>
+							Copyright © Ixora Pty Ltd
+						</strong>
+					</font>
+				</td>
+				<td valign="top" align="right">
+					<nobr>
+					<map name="email">
+						<area shape="rect" coords="0, 0, 32, 21" title="Feedback" href="mailto:feedback@ixora.com.au?SUBJECT=[Tip] cache_miss.htm">
+					</map>
+					<img ismap usemap="#email" border="0" alt="Send Email" src="../../images/email.gif" width="32" height="21">
+					<map name="home">
+						<area shape="rect" coords="0, 0, 28, 28" title="Home" href="/">
+					</map>
+					<img ismap usemap="#home" border="0" alt="Home" src="../../images/home.gif" width="28" height="28">
+					</nobr>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

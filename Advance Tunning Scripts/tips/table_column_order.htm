@@ -1,0 +1,205 @@
+<html><head><title>
+Consider table column order
+</title>
+<style>
+body {background-image:url(/images/bg.jpg)}
+a:link {color:#FF6600}
+a:active {color:#660066}
+a:visited {color:#FF6600} 
+a:hover {color:#660066}
+a {font-weight:bold}
+h1 {color:#990000; font-size:150%; text-align:center}
+h2 {color:#660066; font-size:125%}
+ul {list-style-image:url(/images/li.gif); margin-left:16px}
+
+.orange {color:#FF6600}
+.purple {color:#660066}
+.brown {color:#990000}
+.h3 {font-weight:bold; color:#990000}
+</style>
+
+</head>
+<script language="javascript"><!--
+function email(addr) { return addr + '@ixora.com.au' }
+//--></script>
+
+<body>
+
+
+<div style="text-align:center; font-size:125%; font-weight:bold; color:#660066">Oracle Performance Tuning Tips</div>
+
+
+
+<h1>Consider table column order</h1>
+
+The order of columns in a table can have an impact on performance.
+There are two factors to consider.
+<p>
+Firstly, Oracle rows are stored as a row header followed by column data.
+The row header contains a flag byte, lock byte and column count, then for each column there is a column length followed by the column data.
+To access the value of any column in a row, Oracle has to first examine the length bytes of all the preceding columns.
+This is a very quick and efficient operation, but it is done with such frequency that it nevertheless does have an impact on performance.
+<p>
+In the following example we will create a 10-column table and insert enough rows to fill a single 2K database block.
+We will then compare the response time of repeatedly accessing the first column and the last column.
+<p>
+<nospell><blockquote><table border=1 cellspacing=0 cellpadding=3 bgcolor=white><tr><td><pre>
+SQL> create table small (
+  2    n0 number,
+  3    n1 number,
+  4    n2 number,
+  5    n3 number,
+  6    n4 number,
+  7    n5 number,
+  8    n6 number,
+  9    n7 number,
+ 10    n8 number,
+ 11    n9 number
+ 12  ) pctfree 0;
+
+Table created.
+
+SQL> begin
+  2    for i in 1..78 loop
+  3      insert into small values (0,0,0,0,0,0,0,0,0,0);
+  4    end loop;
+  5  end;
+  6  /
+
+PL/SQL procedure successfully completed.
+
+SQL> set timing on
+SQL> declare
+  2    n number;
+  3  begin
+  4    for i in 1..1000000 loop
+  5      select sum(n0) into n from small;
+  6    end loop;
+  7  end;
+  8  /
+
+PL/SQL procedure successfully completed.
+
+Elapsed: 00:07:437.30
+SQL> declare
+  2    n number;
+  3  begin
+  4    for i in 1..1000000 loop
+  5      select sum(n9) into n from small;
+  6    end loop;
+  7  end;
+  8  /
+
+PL/SQL procedure successfully completed.
+
+Elapsed: 00:08:482.13
+</td></tr></table></blockquote>
+</nospell>
+This demonstrates that it took more than 10% longer to access the 10th column in this table than it did to access the 1st column.
+The principle is simple.
+Place frequently accessed columns early in the table column order.
+Remember that column values will normally be accessed more frequently for WHERE clause predicate evaluation,
+than for select-list expression evaluation.
+However, column values that appear in important driving predicates may be accessed relatively infrequently
+if the table is consistently accessed by rowid via an index on that column.
+In particular, primary key columns are seldom the most intensively accessed table columns,
+and should not normally be first in the table column order.
+<p>
+The second aspect of table column order that impacts performance
+is the position of columns that frequently contain NULLs.
+Oracle normally requires one byte to represent each NULL,
+except that it does not store trailing NULLs in a data row.
+This may be demonstrated as follows.
+<nospell><blockquote><table border=1 cellspacing=0 cellpadding=3 bgcolor=white><tr><td><pre>
+SQL> create table null_order (
+  2    column1 number,
+  3    column2 number,
+  4    column3 number
+  5  );
+
+Table created.
+
+SQL> insert into null_order (column2) values (0);
+
+1 row created.
+
+SQL> select header_file, header_block from dba_segments
+  2  where segment_name = 'NULL_ORDER' and owner = user;
+
+HEADER_FILE HEADER_BLOCK
+----------- ------------
+          3        50010
+
+SQL> alter system dump datafile 3 block 50011;
+
+System altered.
+</td></tr></table></blockquote>
+</nospell>
+The first and third columns in the one row of this table are NULL.
+The following extract from the block dump shows how they are represented.
+<nospell><blockquote><table border=1 cellspacing=0 cellpadding=3 bgcolor=white><tr><td><pre>
+block_row_dump:
+tab 0, row 0, @0x7b2
+tl: 6 fb: --H-FL-- lb: 0x1 cc: 2
+col  0: *NULL*
+col  1: [ 1]  80
+end_of_block_dump
+</td></tr></table></blockquote>
+</nospell>
+The NULL in the first column is stored explicitly and increases the row length by one byte.
+But the NULL in the third column does not need to be stored explicitly because there are no subsequent non-NULL values in the row.
+When reading a table row, Oracle is able to infer that any trailing columns that are not represented explicitly just contain NULLs.
+<p>
+Placing columns that frequently contain NULLs last in the table column order,
+minimizes the average row length and optimizes the table data density, which of course benefits performance.
+This column ordering also minimizes the number of column length bytes that need to be navigated to access the non-NULL column values.
+This also benefits performance as discussed above.
+<p>
+<hr noshade align=left width=300 size=2 color=black>
+<table cellspacing=0 cellpadding=0 width=100%><tr>
+<td valign=top>
+<div style="font-size:80%; font-weight:bold; color:#660066">
+© Ixora Pty Ltd. &nbsp; All rights reserved.<br>
+
+
+
+17-Apr-2002
+</div>
+</td>
+
+<map name=searches>
+<area coords=3,3,33,25 href=/search.html>
+</map>
+
+<script language=javascript><!--
+document.write('<map name=question><area coords=3,3,15,25 href="mailto:' + email('questions') + '?SUBJECT=About http://www.ixora.com.au/tips/table_column_order.htm"></map>')
+document.write('<map name=feedback><area coords=3,3,25,25 href="mailto:' + email('feedback') + '?SUBJECT=About http://www.ixora.com.au/tips/table_column_order.htm"></map>')
+// --></script>
+
+<map name=up1level>
+<area coords=3,3,25,25 href=./>
+</map>
+<map name=homepage>
+<area coords=3,3,25,25 href=/>
+</map>
+
+<td valign=top align=right>
+<nobr>
+
+<img ismap border=0 usemap=#searches src=/images/search.gif width=36 height=28 alt=Search>
+&nbsp;
+
+<img ismap border=0 usemap=#question src=/images/q.gif alt=Questions>
+&nbsp;
+<img ismap border=0 usemap=#feedback src=/images/feedback.gif alt=Feedback>
+&nbsp;
+
+<img ismap border=0 usemap=#up1level src=/images/up_one.gif alt=Up>
+&nbsp;
+<img ismap border=0 usemap=#homepage src=/images/home.gif alt=Home>
+
+</nobr>
+</td>
+</tr></table>
+</body></html>
+

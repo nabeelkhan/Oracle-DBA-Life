@@ -1,0 +1,116 @@
+<html>
+	<head>
+		<title>
+			Disk Configuration for Temporary Tablespaces
+		</title>
+		<style>
+			<!-- a:hover{color:#660066;} -->
+		</style>
+	</head>
+	<body background="../../images/bg.jpg" link="#FF6600" vlink="#FF6600" alink="#660066">
+		
+		<h2 align="center">
+			<font color="#990000">
+				Disk Configuration for<br>
+				Temporary Tablespaces
+			</font>
+		</h2>
+		The correct configuration of disks for temporary tablespaces is a key performance factor
+		for data warehouses and other databases that perform intensive batch processing.
+		Most temporary tablespace I/O operations, including writes, are performed in the foreground,
+		and so user response times are directly affected by the speed of these I/O operations.
+		
+		<h3>
+			<font color="#660066">
+				What does temporary tablespace I/O look like?
+			</font>
+		</h3>
+		The temporary tablespace I/O of a single process is typically bursty and logically sequential.
+		However, when multiple processes in the same instance are using the temporary tablespace simultaneously,
+		then the I/O is more consistent and pseudo-random at the disks,
+		although the individual I/O operations may still be large if not split at the file system layer.
+		However, if multiple processes, each in distinct instances, are using the temporary tablespace simultaneously,
+		and if disk affinity exists for at least one tempfile (or datafile) of that tablespace in each instance,
+		then the sequential nature of the I/O may be maintained, because each process will prefer extents in the files for which it has affinity.
+		
+		<h3>
+			<font color="#660066">
+				How should temporary tablespaces be striped?
+			</font>
+		</h3>
+		In general, temporary tablespaces should be striped to allow for multiple processes in the same instance to use the tablespace simultaneously.
+		Unfortunately, this defeats disk affinity, but if the user workload is clearly partitioned between instances,
+		then it may be possible to create a distinct temporary tablespace for each instance on local disk.
+		<p>
+		The striping of temporary tablespace disks should be for concurrency, rather than transfer rate.
+		If the files are raw, or if file system direct I/O is available,
+		then the I/O operations will be large enough to benefit from fine-grained striping to improve the transfer rate.
+		However, in most environments the benefits of increased concurrency from coarse-grained striping
+		easily outweigh those that might be obtained by improving the transfer rate.
+		(In high-end environments it is possible to enjoy both benefits
+		by layering coarse-grained software-based striping over fine-grained hardware-based striping.)
+		<p>
+		The stripe breadth for temporary tablespaces should normally be equal to the largest degree of parallelism
+		expected to be used for parallel query or DML operations against that tablespace,
+		and the stripe element size should be a small integer divisor of the temporary tablespace extent size.
+		If such broad striping is not possible, then the stripe element size should be reduced proportionately.
+		<p>
+		Of course, it should go almost without saying that these disks should be dedicated to just one tablespace.
+		Temporary tablespace I/O within a single tablespace shows very good locality properties,
+		and sharing the disks in any way introduces long seeks, and greatly increases the service times.
+		
+		<h3>
+			<font color="#660066">
+				Do temporary tablespaces need data protection?
+			</font>
+		</h3>
+		It is possible to recover an instance immediately after the loss of a temporary tablespace datafile or tempfile,
+		without needing to first restore the file itself.
+		Indeed, it is recommended that tempfiles not even be backed up.
+		Therefore, data protection is only needed for temporary tablespaces in true 7x24 environments
+		that cannot afford even a brief outage due to media failure.
+		If data protection for the temporary tablespaces is deemed necessary,
+		then it must be provided by the hardware rather than by software,
+		and preferably via mirroring rather than <nobr>RAID-5</nobr>, to ease its performance cost.
+		
+		<h3>
+			<font color="#660066">
+				File-system based tempfiles
+			</font>
+		</h3>
+		File-system based tempfiles are typically sparse.
+		This means that although operating system utilities like <i>ls</i> show the intended full size of the tempfile,
+		no file-system space is allocated to blocks that have never been used.
+		If the file-system space is then exhausted by other files, it is possible for writes to the tempfile to fail with ORA-07248 errors.
+		To avoid this, file system based tempfiles should be preallocated as dense files and the REUSE keyword specified during tablespace creation.
+		Existing sparse tempfiles can be made dense by copying and restoring the file while the instance is down
+		using standard operating system utilities like <i>cp</i>, <i>dd</i> or <i>tar</i>.
+		Of course, tempfiles should be raw, so this concern should not arise.
+		<p>
+		
+		<hr noshade align="left" width="300" size="2" color="black">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="1000">
+					<font size="2" color="#660066">
+						<strong>
+							Copyright © Ixora Pty Ltd
+						</strong>
+					</font>
+				</td>
+				<td valign="top" align="right">
+					<nobr>
+					<map name="email">
+						<area shape="rect" coords="0, 0, 32, 21" title="Feedback" href="mailto:feedback@ixora.com.au?SUBJECT=[Tip] temp_disks.htm">
+					</map>
+					<img ismap usemap="#email" border="0" alt="Send Email" src="../../images/email.gif" width="32" height="21">
+					<map name="home">
+						<area shape="rect" coords="0, 0, 28, 28" title="Home" href="/">
+					</map>
+					<img ismap usemap="#home" border="0" alt="Home" src="../../images/home.gif" width="28" height="28">
+					</nobr>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

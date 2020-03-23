@@ -1,0 +1,321 @@
+Best regards
+
+yahoo id: feng_chunpei
+msn: biti_rainy@xxxxxxxxxxx
+
+=3D=3D=3D=3D=3D=3D from the  mail=3D=3D=3D=3D=3D=3D=3D=3D=3D
+There is a block edit utility that can be used to edit the=
+contents ofblocks. To be used with care. We have used it once (to set=
+ everything in the block to zero) when we knew for sure that the contents of the=
+ block were no longer accessed.
+
+
+is it  the  BBED?    
+
+Article-ID:         <Note:62015.1>
+Alias:              SUPTOOL:BBED
+Circulation:        PUBLISHED (INTERNAL) ***Oracle Confidential -=
+ Internal Use Only***
+Folder:             server.Internals.General
+Topic:              ** Support Tools
+Title:              SUPTOOL:  BBED - 7.3.2+ Database Block=
+ Editor
+Document-Type:      REFERENCE
+Impact:             MEDIUM
+Skill-Level:        NOVICE
+Server-Version:     07.03 to 08.01
+Updated-Date:       24-MAR-2000 16:26:29
+References:         
+Shared-Refs:        
+Authors:            DEV
+Attachments:        NONE
+Content-Type:       TEXT/PLAIN
+Products:           5/RDBMS (7.3 to 8.1); 
+Platforms:          GENERIC;  
+
+** INTERNAL INFORMATION ONLY - THIS TOOL IS NOT FOR USE BY=
+ CUSTOMERS **
+
+BBED (Block Browser/Editor)
+----------------------------
+1. Getting access to BBED:
+
+   BBED is shipped with Oracle8 releases, and with some Oracle7.3=
+ releases.
+   BBED is a SUPPORT ONLY tool and should NOT be discussed with=
+ customers.
+
+   On UNIX the tool needs to be built using a command of the=
+ form:
+
+09cd $ORACLE_HOME/rdbms/lib
+09make -f ins_rdbms.mk $ORACLE_HOME/rdbms/lib/bbed
+
+   OR to build in the bn directory:
+
+        make -f ins_rdbms.mk BBED=3D$ORACLE_HOME/bin/bbed=
+ $ORACLE_HOME/bin/bbed
+
+   On Windows NT a BBED.EXE is shipped as an executable and so is=
+ password 
+   protected. This password protection is present on Unix from=
+ 8.1.6 onwards.
+@  The password in Oracle8 and Oracle8i is "blockedit"
+
+Using BBED:
+~~~~~~~~~~~
+A. Command-line Parameters:
+  DATAFILE=3Dfile to browse/edit
+  BLOCKSIZE=3D<in bytes>
+  MODE=3Dbrowse/edit
+  REVERT=3Dy[es]/n[o]
+  SILENT=3Dy[es]/n[o]
+  SPOOL=3Dy[es]/n[o]
+  LISTFILE=3Dlist_of_files filename (see format below)
+  CMDFILE=3Dcommand filename
+  BIFILE=3Dbefore-image file (default is bifile.bbd)
+  LOGFILE=3Duser logfile (default is log.bbd)
+  PARFILE=3Dparfile
+  
+REVERT
+  use specified (or default) BIFILE to revert changes made in a=
+ previous
+  user session. MODE must be EDIT, all files that were modified=
+ in that 
+  session must be writable.
+
+LOGFILE:
+  appended to an existing file.
+
+LISTFILE format:
+  <file#> <filename> <file size in bytes (optional)>
+e.g. 1 /home/vsrihari/corahome/dbs/systV713.dbf 26214400
+     2 /home/vsrihari/corahome/dbs/rbsV713.dbf 15728640 
+
+CMDFILE format:
+ one command per line (newline is command separator).
+ use "#" to put in comments, that are ignored by BBED.
+ if QUIT/EXIT command is encountered BBED exits, otherwise it
+   goes into interactive mode after executing the file.
+
+B. Implemented commands:
+
+  SET        [IBASE | OBASE | DBA | OFFSET | FILE | FILENAME |=
+ BLOCK | MODE |
+=09      EDIT | WIDTH | BLOCKSIZE | LIST[FILE] | COUNT | SPOOL ]
+  SHOW       [any of the above SET parameters | STACK | ALL]
+  MAP        [/v] [DBA | FILE | FILENAME | BLOCK]
+  COPY       [DBA | FILE | FILENAME | BLOCK] TO [DBA | FILE |=
+ FILENAME | BLOCK]
+ *DUMP       [/v] [DBA | FILE | FILENAME | BLOCK | OFFSET |=
+ COUNT]
+ *MODIFY     [/x|d|u|o|c] <numeric/char string> 
+=09=09=09[DBA | FILE | FILENAME | BLOCK | OFFSET | <off spec>]
+ *ASSIGN     [/x|d|u|o] [DBA | FILE | FILENAME | BLOCK | OFFSET |=
+ <off spec>]
+=09=09=09 =3D 
+=09=09[<value> | DBA | FILE | FILENAME | BLOCK | OFFSET | <off=
+ spec>]
+ *FIND       [/x|d|u|o|c] <numeric/char string> [TOP | CURR]
+ *PRINT      [/f codes] [DBA | FILE | FILENAME | BLOCK | OFFSET |=
+ <off spec>]
+ *EXAMINE    [/Nuf codes] [DBA | FILE | FILENAME | BLOCK | OFFSET=
+ | <off spec>]
+  PUSH       [DBA | FILE | FILENAME | BLOCK | OFFSET]
+  POP        [ALL]
+  INFO       [FILES]
+  UNDO
+  REVERT     [DBA | FILE | FILENAME | BLOCK | ALL]
+ *VERIFY     [DBA | FILE | FILENAME | BLOCK ]
+  HELP 
+  [CHECK]SUM [DBA | FILE | FILENAME | BLOCK] [APPLY]
+  HOST or "!"(Unix), "$"(VMS), etc.
+
+
+* can be abbreviated by one letter (X for EXAMINE).
+- [CHECK]SUM means either CHECKSUM or SUM are valid keywords.
+
+o SET BLOCK or DBA with no arguments just rereads the current=
+ block.
+
+o SHOW STACK displays the locations (dba, offset) that were=
+ PUSHed.
+
+o IBASE/OBASE are set to decimal by default. Use base switches=
+ [/xduoc] or
+  explicit bases to override. Explicit bases have the highest=
+ precedence:
+  Hexadecimal (prefix) =3D 0x  e.g. 0x1234abcdef
+  Octal (prefix)       =3D 0o  e.g. 0o1234567
+  Decimal (suffix)     =3D .   e.g. 1234567890. 
+
+o DUMP/EXAMINE are physical browsing commands, PRINT is logical=
+ browsing.
+
+o MODIFY is for physical editing (a la Orapatch). MODE must be=
+ set to EDIT to
+  allow editing. All edits are written immediately to disk (no=
+ buffering).
+
+o FIND searches only the current block. Use TOP to start search=
+ at top of 
+  block, CURR (default) from current offset. Typing just FIND (or=
+ F) continues
+  looking for the same string.
+
+o ASSIGN <target> =3D <source> does symbolic assignment, with type=
+ and range
+  checking. Either <target> or <source> can be omitted, for the=
+ current offset.
+  e.g. ASSIGN =3Ddba 4, 2 ktbbhitl[0]
+  -- assigns struct at current offset to dba 4, 2 's first itl=
+ entry
+
+o COPY <source block> TO <target block> does a physical block=
+ copy. 
+  Either target or source can be omitted, if the current block is=
+ intended.
+  e.g. COPY TO BLOCK 10  -- copies current block onto block 10
+
+o UNDO rolls back the last modify/assign command issued. The undo=
+ itself can
+  be undone by another UNDO command.
+
+o REVERT rolls back all changes made in the current session, then=
+ clears the
+  current BIFILE.
+
+o VERIFY runs dbverify on a block or a file.
+  e.g. VERIFY FILE;   -- verifies the current file
+
+o PRINT/EXAMINE switches (/):
+  /Nuf - where:
+=09N  -  a number which specifies a repeat COUNT.
+=09u  -  a letter which specifies a UNIT SIZE:
+=09   b - b1, ub1 (byte)
+=09   h - b2, ub2 (half-word)
+=09   w - b4, ub4 (word)
+=09   l - b4, ub4 (long), will become b8/ub8 in Oracle8.
+=09   r - Oracle table/index row
+=09f  -  a letter which specifies a DISPLAY format:
+=09   x - hex
+=09   d - signed decimal
+=09   u - unsigned decimal
+=09   o - octal
+=09   c - character
+=09   n - Oracle Number
+=09   t - Oracle Date
+=09   i - Oracle Rowid
+
+e.g. /10bx  - means 10 bytes in hex format.
+     /rx    - means 1 row with all columns in hex format.
+     /r2cn  - means 1 row, first 2 cols in char, remaining cols=
+ in Oracle
+=09=09number format.
+
+Note: PRINT uses only [/f] since it deals with logical units.
+      EXAMINE uses [/Nuf].
+
+o OFFSET SPECIFIER:
+  BBED is flexible in how you specify the offset at which you=
+ want to operate:
+=09Numeric  - a direct byte offset e.g. 59
+=09Symbolic - name of a symbol e.g. kdbr[3]
+=09Indirect - value stored at this location e.g. *59 or *kdbr[3]]
+
+  e.g. SET OFFSET *kdbr[18] -- takes you to the start of the 19th=
+ row.
+       SET OFFSET  kdbr[18] -- takes you to the 19th row=
+ directory entry.
+
+o PUSH/POP allow traversal of list structures e.g. block free=
+ list.
+
+C. Getting started:
+
+(1) Create a listfile containing all files in the database:
+e.g. files.lst:
+=091 /home/vsrihari/corahome/dbs/systV713.dbf 26214400 
+=092 /home/vsrihari/corahome/dbs/rbsV713.dbf 15728640 
+=093 /home/vsrihari/corahome/dbs/tempV713.dbf 10485760 
+=094 /home/vsrihari/corahome/dbs/usrV713.dbf 20971520 
+=096 /home/vsrihari/corahome/dbs/users_2V713.dbf 5242880 
+=097 /home/vsrihari/corahome/dbs/vhsV713.dbf 102400 
+
+(2) Create a parfile with starting options:
+e.g. par.bbd:
+=09blocksize=3D4096
+=09listfile=3D/private3/vsrihari/vs73/utl/bbed/files.lst
+=09mode=3Dedit
+=09(filename or file to open, default is file 1)
+
+(3) Invoke BBED:
+=09bbed parfile=3Dpar.bbd
+
+
+D. Test Runs:
+
+Currently only data blocks (table and index) are supported. 
+(1) View block data structures:
+=09set dba 4, 1000=09=09-- file, block of data block to view
+=09map=09=09=09-- gives you high level view of block
+=09map /v=09=09=09-- more detailed view
+=09p ktbbh=09=09=09-- look at ktbbh contents
+=09p ktbbh.ktbbhitl[1]=09-- look at the second itl (if one exists)
+=09p *kdbr[0]=09=09-- look at the start of row 1
+=09p *kdbh.kdbhfseo=09-- end of freespace i.e. start of rowdata
+=09p /*=09=09=09-- prints entire block
+=09p kdxle=09=09=09-- prints index leaf data header
+=09set dba *kdxlenxt=09-- switch to next leaf block
+
+(2) View index (leaf/branch), data (table/cluster) rows:
+
+BBED>x /rni *kdxle_off[20]=09-- view a leaf row, with number, rowid=
+ cols
+rowdata[2769]                               @3775    
+-------------
+flag@3775:     0x00 ()
+lock@3776:     0x00
+data key:
+col    0[3]: 7782 
+col    1[6]: 0x100002cb.0x0030 (4,715.48)
+
+BBED> push dba 0x100002cb off *kdbr[48]=09=09-- goto this rowid, push=
+ curr
+        DBA             0x100002cb (268436171)
+        OFFSET          2609
+
+BBED> x /r=09=09=09=09=09-- view the row
+rowdata[1929]                               @2609    
+-------------
+flag@2609: 0x2c (KDRHFL, KDRHFF, KDRHFH)
+lock@2610: 0x00
+cols@2611:    8
+ 
+col    0[3] @2612:  0xc2  0x4e  0x53 
+col    1[5] @2616:  0x43  0x4c  0x41  0x52  0x4b 
+col    2[7] @2622:  0x4d  0x41  0x4e  0x41  0x47  0x45  0x52 
+col    3[3] @2630:  0xc2  0x4f  0x28 
+col    4[7] @2634:  0x77  0xb5  0x06  0x09  0x01  0x01  0x01 
+col    5[3] @2642:  0xc2  0x19  0x33 
+col    6[0] @2646: *NULL*
+col    7[2] @2647:  0xc1  0x0b 
+ 
+BBED> x /rn2cntn=09=09=09=09-- set the datatypes
+rowdata[1929]                               @2609    
+-------------
+flag@2609: 0x2c (KDRHFL, KDRHFF, KDRHFH)
+lock@2610: 0x00
+cols@2611:    8
+ 
+col    0[3] @2612: 7782 
+col    1[5] @2616: CLARK
+col    2[7] @2622: MANAGER
+col    3[3] @2630: 7839 
+col    4[7] @2634: 09-JUN-81 
+col    5[3] @2642: 2450 
+col    6[0] @2646: *NULL*
+col    7[2] @2647: 10 
+
+BBED> pop =09=09=09=09=09=09-- restore old block
+

@@ -1,0 +1,138 @@
+<html>
+	<head>
+		<title>
+			Disk Configuration for Parallel Table Scans
+		</title>
+		<style>
+			<!-- a:hover{color:#660066;} -->
+		</style>
+	</head>
+	<body background="../../images/bg.jpg" link="#FF6600" vlink="#FF6600" alink="#660066">
+		
+		<h2 align="center">
+			<font color="#990000">
+				Disk Configuration for<br>
+				Parallel Table Scans
+			</font>
+		</h2>
+		This tip is about disk configuration for <em>parallel</em> table scans only.
+		To learn how to optimize <em>single-threaded</em> scans,
+		please see <b><a href="sequential_reads.htm">Disk Configuration for Sequential Scans</a></b>.
+		
+		<h3>
+			<font color="#660066">
+				How do parallel table scans work?
+			</font>
+		</h3>
+		When a table is scanned in parallel, the number of blocks from the first data block to the high-water mark is determined,
+		and the table is divided into approximately equally sized regions according to the degree of parallelism, without regard for extent boundaries.
+		<p>
+		Prior to release 8.1, each parallel query region is then subdivided into 3 block ranges, called rowid ranges, on the approximate ratio of 9:3:1 blocks.
+		More exactly, rounding down,
+		the last rowid range is comprised of the last <font size="-1"><sup>1</sup></font>/<font size="-2">13</font>th of the blocks,
+		the middle rowid range covers the last ¼ of the remainder,
+		and the first rowid range contains the rest of the blocks for the region.
+		In release 8.1, each parallel query region is subdivided into 13 or more approximately equally sized rowid ranges.
+		<p>
+		A query coordinator process allocates rowid ranges to parallel query slaves.
+		Each slave begins by reading the first rowid range for its region.
+		If any slave finishes reading its rowid ranges
+		before other slaves have commenced reading their final rowid ranges,
+		then the query coordinator will allocate one of the remaining rowid range to the available slave process.
+		This is called dynamic load balancing.
+		
+		<h3>
+			<font color="#660066">
+				What is disk affinity?
+			</font>
+		</h3>
+		How and whether disk affinity can be established is operating system dependent.
+		In some cases Oracle probes random blocks in the datafiles to identify the underlying disks,
+		and whether they are striped, concatenated or arranged in some other configuration.
+		In other cases this information can only be determined for the header block of a datafile,
+		and then not always reliably because of underlying logical volume management (LVM) software and disk array hardware.
+		<p>
+		If disk affinity has been established,
+		the query coordinator ensures that each parallel query slave reads all rowid ranges for which it has affinity before relieving load elsewhere.
+		Where applicable, a parallel query slave is said to have affinity for disks that are attached to the node on which it is running.
+		In shared disk environments, affinity may be arbitrarily established between instances and disks.
+		In single instance environments, affinity may be arbitrarily established between individual parallel query slaves and disks
+		in order to minimize disk head contention between the slaves.
+		<p>
+		Considering the variety and complexity disk configurations,
+		Oracle does an admirable job of maintaining affinity and balancing load during parallel query processing.
+		In the few cases where Oracle's disk affinity mechanism seems counter-productive,
+		you can disable it by setting the <em>_affinity_on</em> parameter to FALSE.
+		
+		<h3>
+			<font color="#660066">
+				Why not striped disks?
+			</font>
+		</h3>
+		Striping is not well suited to parallel table scans because it defeats disk affinity,
+		and because the benefit of sequential reads, namely only a few short seeks, is lost.
+		Consider, for example, scanning a large table on a 4-way striped datafile with a degree of parallelism of 4.
+		The figure below shows the four regions that would be scanned by the parallel query slaves.
+		Because each of the slaves reads concurrently from its own region,
+		the benefit of sequential reads is lost as the disk heads continually seek between the regions.
+		This is called disk head thrashing.
+		<p align="center">
+		<img src="parallel_bad.gif" alt="Parallel query slaves scanning a striped datafile" border="1" width="416" height="144">
+		
+		<h3>
+			<font color="#660066">
+				What is the alternative?
+			</font>
+		</h3>
+		A better configuration for parallel table scans is to use a concatenation of disks rather than striped disks.
+		This enables you to ensure that the regions correspond largely to disks
+		so that each parallel query slave can obtain the benefit of sequential reads without disk head contention.
+		However, the extents and the degree of parallelism must be controlled for this to work correctly.
+		Assuming the tablespace contains one datafile from each disk, each datafile must contain only one extent for the table,
+		otherwise Oracle's policy of striping extents across datafiles will result in the same I/O pattern as before.
+		Moreover, if the degree of parallelism is not less than the number of disks, then at times more than one parallel query slave
+		will have to read from the same disk and the disk heads will thrash between the regions.
+		<p align="center">
+		<img src="parallel_good.gif" alt="Parallel query slaves scanning concatenated datafiles" border="1" width="416" height="162">
+		<p>
+		It is sometimes suggested that the degree of parallelism for parallel table scans should be set in proportion with the number of CPUs available.
+		However, when scanning a table on concatenated datafiles in parallel,
+		the degree of parallelism should be limited to one less than the number of disks used, even if additional CPU capacity is available.
+		Exceeding this degree of parallelism scarcely improves response times if at all and places unnecessary load on the I/O subsystem.
+		<p>
+		If you have an excessively large table that needs to be scanned in parallel,
+		then striped logical volumes can be used for each of the datafiles to improve the transfer rate as well.
+		However, be warned that such simultaneous sequential reading has the ability to very quickly congest other components in your I/O subsystem,
+		such as disk controllers and I/O buses.
+		If you configure tablespaces for fast parallel table scans in this way,
+		then it is strongly recommended that each of the disks in any one tablespace should be on a separate (but not necessarily dedicated) disk controller.
+		So far as possible, multiple I/O buses should be used for each tablespace as well.
+		In some operating systems the amount of kernel memory dedicated to DMA transfers may also need to be increased.
+		<p>
+		
+		<hr noshade align="left" width="300" size="2" color="black">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="1000">
+					<font size="2" color="#660066">
+						<strong>
+							Copyright © Ixora Pty Ltd
+						</strong>
+					</font>
+				</td>
+				<td valign="top" align="right">
+					<nobr>
+					<map name="email">
+						<area shape="rect" coords="0, 0, 32, 21" title="Feedback" href="mailto:feedback@ixora.com.au?SUBJECT=[Tip] parallel_table_scans.htm">
+					</map>
+					<img ismap usemap="#email" border="0" alt="Send Email" src="../../images/email.gif" width="32" height="21">
+					<map name="home">
+						<area shape="rect" coords="0, 0, 28, 28" title="Home" href="/">
+					</map>
+					<img ismap usemap="#home" border="0" alt="Home" src="../../images/home.gif" width="28" height="28">
+					</nobr>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

@@ -1,0 +1,152 @@
+<html>
+	<head>
+		<title>
+			Planning Tablespaces
+		</title>
+		<style>
+			<!-- a:hover{color:#660066;} -->
+		</style>
+	</head>
+	<body background="../../images/bg.jpg" link="#FF6600" vlink="#FF6600" alink="#660066">
+		
+		<h2 align="center">
+			<font color="#990000">
+				Planning Tablespaces
+			</font>
+		</h2>
+		<p>
+		Grouping segments into tablespaces is one of the most complex tasks in a DBA's job.
+		There are not normally segment level I/O statistics available,
+		so a detailed understanding of the physical data model and its usage characteristics is required.
+		There may also be numerous competing factors to weigh together.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				What are the principles of I/O separation?
+			</font>
+		</h3>
+		<p>
+		Firstly, segments should not be placed together in a tablespace if they have incompatible I/O patterns.
+		Otherwise your ability to optimize the I/O for that tablespace, as outlined in our series of disk configuration tips, will be compromised.
+		There are two particular access patterns that should be catered for.
+		</p>
+		<h4>
+			<font color="#990000">
+				Sequential I/O
+			</font>
+		</h4>
+		<blockquote>
+			<p>
+			Segments that exhibit a predominantly sequential I/O pattern, such as single threaded full table scans or fast full index scans,
+			should be separated into their own tablespaces.
+			If possible, the datafiles for these tablespaces should be placed on disks
+			in such a way as to maximize the probability that there will be no concurrent access to those disks when these segments are being scanned.
+			Service times can be dramatically improved if such I/O separation can be achieved,
+			because very little seek time will be required, and many disk reads will be satisfied immediately from the track buffers.
+			</p>
+		</blockquote>
+		<h4>
+			<font color="#990000">
+				Write Intensive I/O
+			</font>
+		</h4>
+		<blockquote>
+			<p>
+			If RAID-5 data storage is a consideration, segments that are written to intensively,
+			such as by parallel direct loads or bulk updates, should be separated into distinct tablespaces.
+			If possible, the datafiles for these tablespaces should be placed on faster mirrored disk rather than on RAID-5.
+			</p>
+			<p>
+			There is also a case for separating read-only segments so that their tablespaces can be made read-only.
+			This does not affect I/O performance directly, but can have a big impact on backup times.
+			</p>
+		</blockquote>
+		
+		<p>
+		Secondly, segments should not be placed together
+		if they might need to be separated during <b><a href="../tuning/disk_load.htm">disk load balancing</a></b>.
+ 		There are two main reasons why segments might need to be separated.
+		</p>
+		<h4>
+			<font color="#990000">
+				Activity
+			</font>
+		</h4>
+		<blockquote>
+			<p>
+			Two segments with heavy I/O requirements should not be placed in the same tablespace.
+			Otherwise it will not normally be possible to spread the load by moving datafiles.
+			Even if the tablespace has multiple datafiles,
+			Oracle will attempt to spread the load evenly between them by cycling the extents for each segment around the datafiles.
+			While it is possible to move segments between datafiles,
+			the lack of segment level I/O statistics makes it difficult to know which segments to move and where to move them.
+			</p>
+		</blockquote>
+		<h4>
+			<font color="#990000">
+				Relatedness
+			</font>
+		</h4>
+		<blockquote>
+			<p>
+			In general, it is safest to separate related segments into separate tablespaces.
+			However, not all query execution plans that access two related segments cause repeated alternating access between them.
+			For example, two related tables may reside on the same disks if they are only ever joined using a sort-merge join or hash join,
+			because these query execution plans cause the tables to be accessed in series.
+			The same applies to index merges.
+			However, a nested loops join normally involves repeated access to first the outer table,
+			then the index on the inner table, and then the inner table itself.
+			If any 2, or all 3, of these segments reside on the same disks, head thrashing will occur and will result in poor I/O service times.
+			</p>
+			<p>
+			Similarly, an index range scan normally involves repeated alternating access to the index and the table,
+			and partition parallel execution plans normally involve concurrent access to multiple partitions of the same index.
+			These execution plans can also cause disk head thrashing if related segments have not been duly separated.
+			Because of these factors, it is safest to always separate related segments into distinct tablespaces,
+			unless you are confident that the optimizer will always choose an execution plan
+			that does not involve repeated alternating access between the segments.
+			</p>
+		</blockquote>
+		
+		<p>
+		These are not the only factors that should be considered when grouping segments into tablespaces.
+		If a fixed extent size policy is in place, then extent size requirements must be considered.
+		Another particularly important consideration is partitioning for parallel server databases.
+		Segments that are predominantly accessed from one instance should be separated from segments that are predominantly accessed from another.
+		</p>
+		<p>
+		One final consideration is statistics.
+		If major application segments are each placed into their own tablespace,
+		the V$FILESTAT statistics can be guaranteed to correspond exactly with the I/O against those segments.
+		If so, it is possible to monitor trends in the I/O to these tables and indexes and thus determine when they should be rebuilt.
+		These statistics can also assist with disk load balancing.
+		</p>
+		
+		
+		<hr noshade align="left" width="300" size="2" color="black">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="1000">
+					<font size="2" color="#660066">
+						<strong>
+							Copyright © Ixora Pty Ltd
+						</strong>
+					</font>
+				</td>
+				<td valign="top" align="right">
+					<nobr>
+					<map name="email">
+						<area shape="rect" coords="0, 0, 32, 21" title="Feedback" href="mailto:feedback@ixora.com.au?SUBJECT=[Tip] tablespaces.htm">
+					</map>
+					<img ismap usemap="#email" border="0" alt="Send Email" src="../../images/email.gif" width="32" height="21">
+					<map name="home">
+						<area shape="rect" coords="0, 0, 28, 28" title="Home" href="/">
+					</map>
+					<img ismap usemap="#home" border="0" alt="Home" src="../../images/home.gif" width="28" height="28">
+					</nobr>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

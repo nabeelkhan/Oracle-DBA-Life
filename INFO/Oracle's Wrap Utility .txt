@@ -1,0 +1,133 @@
+Oracle's Wrap Utility 
+Steve Callan, stevencallan@hotmail.com 
+
+
+
+One thing that Oracle and UPS have in common is that they both deal with wrapped packages. Why bother with wrapping packages? One obvious reason is to hide the contents from prying eyes. You can wrap a real package with nondescript wrapping paper or use transparent cellophane. This idea of a choice between hiding and exposing packages (and other objects) in Oracle serves the same purpose as wrapping your UPS package - you do not want prying eyes to see what's in your Oracle package.
+
+The PL/SQL Wrap Utility
+Appendix C of the Oracle 9.2 PL/SQL User's Guide and Reference covers the wrap utility. With many applications, it is common to see directories full of source code. Businesses can protect their intellectual property by taking proactive measures to protect and safeguard copyrighted material. If a company suspects copyright infringement is occurring, it is up to the company to seek legal remedies. This approach to protecting intellectual property (source code) is similar to closing the barn door after the cows have left. Perhaps the sheer number of files and lines of code serves as a deterrent to this type of theft. 
+
+If you or your company has developed algorithms that give your product a competitive edge in the marketplace, it makes sense that you would want to protect that code. All that needs to be exposed is the input. The internals of what happens to that input or how the output is produced can be likened to the black box approach in testing. With Oracle's wrap utility, you can turn the inner workings of your code into an impenetrable black box, for the most part, to protect your property.
+
+The "for the most part" caveat serves to alert you that wrap has some limitations. The reference guide, in part, states, "String literals, number literals and names of variables, tables and columns remain in plain text within the wrapped file. Wrapping a procedure helps to hide the algorithm and prevent reverse-engineering, but it is not a way to hide passwords or table names that you want to be secret."
+
+Oracle allows you to wrap the code inside the following statements:
+
+	CREATE [OR REPLACE] FUNCTION function_name
+	CREATE [OR REPLACE] PROCEDURE procedure_name
+	CREATE [OR REPLACE] PACKAGE package_name
+	CREATE [OR REPLACE] PACKAGE BODY package_name
+	CREATE [OR REPLACE] TYPE type_name ... OBJECT
+	CREATE [OR REPLACE] TYPE BODY type_name
+
+A common practice is to leave specifications unwrapped and to wrap the implementation of procedures and functions within the package body.
+
+Running the Wrap Utility
+Wrapping a package is amazingly simple, although there is one pitfall to avoid. Among the 500 plus files in the ORACLE_HOME/bin directory you will see wrap or WRAP depending on your operating system (a lot of the more common files and directories on Windows are upper-cased for ease of readability and identification).
+
+Using wrap is as simple as this:
+
+c:\ora9i\bin wrap iname=input_file_name 
+You can specify an output file as a second argument by using this format:
+
+c:\ora9i\bin wrap iname=input_file_name oname=output_file_name
+Once wrapped, a package cannot be unwrapped. With that in mind, and just like what you would do with a real package, do not wrap the package until it is time to ship it. This implies keeping a source code repository of the original code. If a customer or user reports a bug against a wrapped package, there is no unwrapping it at the customer's site. You are going to have to ship another wrapped package with the fix in it. You will be making the bug fix or enhancement with the repository file and wrapping the new file.
+
+An Example of Using Wrap
+In a previous article, I used the DBMS_RANDOM package. A slightly modified bit of code from that produces the following:
+
+SQL> CREATE or REPLACE PROCEDURE wrap_it (seed_in NUMBER)
+  2  IS
+  3    v_rand INTEGER;
+  4  BEGIN
+  5    DBMS_RANDOM.INITIALIZE (seed_in);
+  6    FOR i IN 1..5 LOOP
+  7     v_rand := mod(abs(DBMS_RANDOM.RANDOM),45);
+  8     dbms_output.put_line(i||': '||v_rand);
+  9    END LOOP;
+ 10  END;
+ 11  /
+
+Procedure created.
+
+SQL> exec wrap_it(123456);
+1: 37
+2: 36
+3: 18
+4: 8
+5: 32
+
+PL/SQL procedure successfully completed.
+
+I can take the code for the wrap_it procedure and, well, wrap it. The code for the procedure is in a file named wrap_example.sql.
+
+C:\ora9i>wrap iname=c:\ora9i\admin\wrap_example.sql
+
+PL/SQL Wrapper: Release 10.1.0.2.0- Production on Thu Jul 15 22:11:18 2004
+
+Copyright (c) 1993, 2004, Oracle.  All rights reserved.
+
+Processing c:\ora9i\admin\wrap_example.sql to wrap_example.plb
+
+Note how Oracle changed the file extension to "plb." Can we see the contents of the wrap_example.plb file? Sure, but will it be completely readable? Let's find out.
+
+Opening wrap_example.plb in my general-purpose text editor (TextPad, www.textpad.com, it's free, but worth paying for a license), we see the following lines of text:
+
+CREATE or REPLACE PROCEDURE wrap_it wrapped 
+a000000
+b2
+abcd
+abcd
+abcd
+abcd
+abcd
+abcd
+abcd
+abcd
+abcd
+abcd
+abcd
+abcd
+abcd
+abcd
+abcd
+7
+e0 f7
+uveH+zmPD1snPwtBZmL3T1hkxRcwgy7w154VfC9GAME+MzyOFMq0DNYH29gBazqoJJQ0Xemb
+pdRvlWrC2UeKeKiS2uzT80HMAvKIMOYhjXZT4CrU98zgprrwl4jKnFKvFljUAnGx8GHexDSU
+XRa3oykCJIUWEovu72mqAm0vttgZB9E/9E6y2HhxKdu1k8arcrHegHYAvF1pwn1e6sCFJg04
+QGsN1g1JLYIklPGBDEEZInWt0w==
+
+/
+
+That looks fairly undecipherable to me. One thing to note is the location of the output file. Using the example above, the new wrap_example.plb file was created in the c:\ora9i (my ORACLE_HOME) directory.
+
+Now we know the procedure works and that the file or script can be wrapped. I will drop the procedure and re-create it using the plb file. If all goes well, I should be able to execute the procedure as before. 
+
+SQL> drop procedure wrap_it;
+
+Procedure dropped.
+
+SQL> @c:\ora9i\wrap_example.plb
+
+Procedure created.
+
+SQL> exec wrap_it(123456);
+1: 37
+2: 36
+3: 18
+4: 8
+5: 32
+
+PL/SQL procedure successfully completed.
+
+
+In Closing
+The wrap utility is very easy to use, so if you have code you would like to protect, wrap it up. If the uncompiled or unwrapped version passes testing, so will the wrapped version because Oracle guarantees portability of the code. 
+
+What are some situations where you would want to wrap your code? Schema migration or alteration immediately comes to mind. Often times when there is a database migration (going to a newer version), you will find application developers or software manufacturers releasing a newer version of their product. The point release or major release version probably incorporates schema changes. Running wrapped update scripts helps protect your work. Keep in mind, though, that if a malicious user is dedicated enough, pretty much any schema can be reverse engineered, but why make it easy for him? Wrap it up and protect your work. And that's a wrap.
+
+
+Back to DBAsupport.com 
+

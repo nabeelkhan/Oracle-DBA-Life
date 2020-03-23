@@ -1,0 +1,1165 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 9">
+<meta name=Originator content="Microsoft Word 9">
+<link rel=File-List href="./FalseKnowledge_files/filelist.xml">
+<title>In search of the truth</title>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>Thomas Kyte</o:Author>
+  <o:LastAuthor>Thomas Kyte</o:LastAuthor>
+  <o:Revision>20</o:Revision>
+  <o:TotalTime>530</o:TotalTime>
+  <o:Created>2005-04-07T16:56:00Z</o:Created>
+  <o:LastSaved>2005-04-07T21:59:00Z</o:LastSaved>
+  <o:Pages>7</o:Pages>
+  <o:Words>4487</o:Words>
+  <o:Characters>25576</o:Characters>
+  <o:Company>Oracle</o:Company>
+  <o:Lines>213</o:Lines>
+  <o:Paragraphs>51</o:Paragraphs>
+  <o:CharactersWithSpaces>31409</o:CharactersWithSpaces>
+  <o:Version>9.2720</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:Zoom>200</w:Zoom>
+  <w:PunctuationKerning/>
+ </w:WordDocument>
+</xml><![endif]-->
+<style>
+<!--
+ /* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+h1
+	{mso-style-next:Normal;
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:1;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-font-kerning:0pt;}
+h2
+	{mso-style-next:Normal;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	mso-pagination:widow-orphan;
+	page-break-after:avoid;
+	mso-outline-level:2;
+	font-size:14.0pt;
+	font-family:Arial;
+	font-style:italic;}
+p.MsoTitle, li.MsoTitle, div.MsoTitle
+	{margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	text-align:center;
+	mso-pagination:widow-orphan;
+	mso-outline-level:1;
+	font-size:16.0pt;
+	font-family:Arial;
+	mso-fareast-font-family:"Times New Roman";
+	mso-font-kerning:14.0pt;
+	font-weight:bold;}
+p.MsoBodyText, li.MsoBodyText, div.MsoBodyText
+	{margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	font-style:italic;}
+p.MsoBodyText2, li.MsoBodyText2, div.MsoBodyText2
+	{margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	mso-bidi-font-size:12.0pt;
+	font-family:"Courier New";
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-weight:bold;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;
+	text-underline:single;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;
+	text-underline:single;}
+p.code, li.code, div.code
+	{mso-style-name:code;
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+p.preformatted, li.preformatted, div.preformatted
+	{mso-style-name:preformatted;
+	mso-style-parent:code;
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.25in 1.0in 1.25in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+-->
+</style>
+</head>
+
+<body lang=EN-US link=blue vlink=purple style='tab-interval:.5in'>
+
+<div class=Section1>
+
+<p class=MsoTitle>In search of the truth</p>
+
+<p class=MsoTitle>Or Correlation is not Causation</p>
+
+<p class=MsoTitle><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>Before I begin, I would like to point out that no technical
+information below is made up.<span style="mso-spacerun: yes">  </span>It is all
+real, verifiable data. Any numbers presented should be reproducible on your
+system (and if not, I'd like to know about it and understand why).<span
+style="mso-spacerun: yes">  </span>When I relate technology in a learning
+fashion, I strive to have examples that are representative and show how the
+software actually works.<span style="mso-spacerun: yes">  </span>I will not
+ever make up numbers to support a conjecture. Not here in this paper, not in
+any of my writings on the internet, and certainly not in any books I author.</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>This article was prompted by my reading of a couple of
+articles, namely <a href="http://www.dba-oracle.com/oracle_tips_ault_proofs.htm">“Understand
+the Oracle ‘proof’ Myth”</a> by Mike Ault and <a
+href="http://dba-oracle.com/oracle_news/2005_3_28_false_proofs.htm">“Important
+new Oracle performance myth is debunked”</a> by Don Burleson <i>(note: the
+thread referenced in that article used to be 12 pages long, it is now 11.<span
+style="mso-spacerun: yes">  </span>Hopefully anything I’ve referenced is still
+there when you read this.<span style="mso-spacerun: yes">  </span>You can see
+it has been selectively edited by noting comments like “QUOTE (ora_dba_guy @
+Apr 2 2005, 05:19 PM)” in a follow up but there is no posting apparently from
+ora_dba_guy at that time anymore. Or Don’s second to last posting where he
+addresses a posting that no longer exists)</i>.<span style="mso-spacerun:
+yes">   </span>Jonathan Lewis has written an article <a
+href="http://asktom.oracle.com/pls/ask/z?p_url=http%3A%2F%2Fwww.jlcomp.demon.co.uk%2Fthinking.html&amp;p_cat=DEBATE_2005&amp;p_company=10">“Can
+we have a sensible debate”</a> that I think you should all read either before
+or after reading the “debunk” article this one.<span style="mso-spacerun:
+yes">  </span>It will really help frame the conversation.</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>I have two guiding principles with regards to Oracle.<span
+style="mso-spacerun: yes">  </span>One is that every day, each and every day, I
+learn something new about Oracle I did not know the day before.<span
+style="mso-spacerun: yes">  </span>Each and every day.<span
+style="mso-spacerun: yes">  </span>Maybe that is more of a fact than a
+principle but that is the way I approach the database.<span
+style="mso-spacerun: yes">  </span>That mindset helps me keep my mind open to
+someone correcting something I’ve said.</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>The other one of my guiding principles is that I ask for
+proof from everyone (yes, it can be annoying, it carries over into my personal
+life as well.<span style="mso-spacerun: yes">  </span>Ask my wife and
+kids).<span style="mso-spacerun: yes">  </span>Is this a
+scientific/mathematical proof as in “prove the square root of 2 is not a rational
+number”?<span style="mso-spacerun: yes">  </span>No, and <i>it never has been</i>.<span
+style="mso-spacerun: yes">  </span>What I need to see is proof as in
+evidence.<span style="mso-spacerun: yes">  </span>When I have a conjuncture, I
+try to rationalize, hypothesize why that conjecture might be true.<span
+style="mso-spacerun: yes">  </span>Then I provide supporting evidence.<span
+style="mso-spacerun: yes">  </span>Why do I do this?<span style="mso-spacerun:
+yes">  </span>Is it because I can generate written material faster?<span
+style="mso-spacerun: yes">  </span>No, <i>not a chance</i>.<span
+style="mso-spacerun: yes">  </span>I could produce 10 times the material I do
+now if I skipped the illustrative examples.<span style="mso-spacerun: yes"> 
+</span>If I were to produce paragraphs instead of pages, I could be much more
+apparently productive.</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal><b>Or would I be</b>?<span style="mso-spacerun: yes"> 
+</span>Actually, what I have found time and time again is that the only thing I
+would accomplish would be to be wrong more often <b><i>than I already am</i>.</b><span
+style="mso-spacerun: yes">  </span>When you rely on 'expert' advice, especially
+when you buy a book, or when you read a paper on the internet authored by a
+name known in the industry -- <b><i>you expect more</i>.</b><span
+style="mso-spacerun: yes">  </span>You expect to be able to have a certain
+level of trust in the contents.<span style="mso-spacerun: yes">  </span>You
+expect that the information, the advice being passed to you is more than likely
+&quot;correct&quot;.<span style="mso-spacerun: yes">  </span></p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>I know of only one way to accomplish that.<span
+style="mso-spacerun: yes">  </span>That is to provide some “proof”,
+evidence.<span style="mso-spacerun: yes">  </span>Some factual reasoning why
+what I believe to be true most likely is.<span style="mso-spacerun: yes"> 
+</span>And present it in a fashion that lets the entire world look at it and
+say “I understand”.<span style="mso-spacerun: yes">  </span>Or, look at it and
+say “yeah, but…..”.<span style="mso-spacerun: yes">  </span>I love “<i>yeahbuts”</i>,
+I learn more from “<i>yeahbuts”</i> than anything else.<span
+style="mso-spacerun: yes">  </span>The <i>&quot;yeahbuts&quot;</i> out there
+look at the cause I am talking about, my hypothesized effects, my reasoning and
+say “yeah but we could accomplish it like this couldn’t we and it would be even
+better”.<span style="mso-spacerun: yes">  </span>That, that makes my day.<span
+style="mso-spacerun: yes">  </span></p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>Experts that offer advice without supporting evidence are in
+my opinion the danger.<span style="mso-spacerun: yes">  </span>The advice might
+be actually good advice – when you understand the caveats that go with it.<span
+style="mso-spacerun: yes">  </span>So I’m not really sure what to make of
+articles like the “Understand the Oracle ‘proof’ Myth”.<span
+style="mso-spacerun: yes">  </span>From there I read:</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoBodyText>What it has brought to light is the fact that you must be
+careful not only in what you believe to be true <b>but in what you prove to be
+true</b></p>
+
+<p class=code><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>Huh,<span style="mso-spacerun: yes">  </span>“<i>but in what
+you prove to be true</i>”.<span style="mso-spacerun: yes">  </span>Forget for a
+minute the difference between “proving something to be true” and “providing
+some evidence that you know what you are talking about, factual evidence that
+can be tested by others” (Jonathan’s article covers that concept well) – I take
+exception to that statement.<span style="mso-spacerun: yes">  </span>It was
+“obvious” in the past, just common knowledge that “a Doctor washing his hands
+was not professional”.<span style="mso-spacerun: yes">  </span>Funny thing, I
+am <i>rather glad </i>someone decided to research this and debunk it.<span
+style="mso-spacerun: yes">  </span>Aren’t you?<span style="mso-spacerun: yes"> 
+</span>(I sort of wish that atom bomb proof hadn’t been done, but that is
+getting into theology, personal beliefs and off topic).<span
+style="mso-spacerun: yes">  </span>I myself am glad there are people out there
+taking “the obvious” and showing that what was “obviously” true, is actually
+false.<span style="mso-spacerun: yes">  </span>He goes onto say:</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoBodyText><span style="mso-spacerun: yes"> </span>So now we have a
+new crop of experts providing proofs (sometimes limited to a single-user, small
+database on a laptop) that their methods are the best and no doubt their proofs
+will be sited long after they are useful or meaningful and their expert advice
+will fade into old DBA tales as new technologies and methods become the rage.
+This is as it should be</p>
+
+<p class=MsoBodyText>…</p>
+
+<p class=MsoBodyText><span style="mso-spacerun: yes"> </span>So be careful in
+what you prove and how you prove it. What seems clever today may come back to
+haunt you. <b>You may be apologizing several years down the road for what is
+right now, but not in the future</b>..</p>
+
+<p class=code><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>Well, I would like to know who these experts are and where
+their proofs are.<span style="mso-spacerun: yes">  </span>But when asked
+repeatedly in a <a href="http://dba.ipbhost.com/index.php?showtopic=1396">recent
+thread on their website</a>, Mike and Don wouldn’t actually give any examples
+of who these people are, nor would they point us to one of these bad
+proofs.<span style="mso-spacerun: yes">  </span>The proofs (aka <i>evidence</i>)
+I repeatedly see is not a proof about “their methods”, but rather examples that
+demonstrate how the software called Oracle actually works.<span
+style="mso-spacerun: yes">  </span>The funny thing with the evidence (as you’ll
+see in that thread, Mike and Don have a very strong hangup with this word
+“proof” and have their own very strict definition for it) that these experts
+find so quaint is that they or anyone can use that evidence.<span
+style="mso-spacerun: yes">  </span>Anyone should be able to reproduce the
+findings, study them to see if what they show <b><i style='mso-bidi-font-style:
+normal'>still holds true.<span style="mso-spacerun: yes">  </span>Without the
+supporting evidence, we have in fact no chance whatsoever of seeing if what
+they say even makes sense anymore.</i></b><span style='mso-bidi-font-style:
+italic'><span style="mso-spacerun: yes">  </span><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'>For example, I’ll
+give a true to life performance tip.<span style="mso-spacerun: yes"> 
+</span>You’ll see this in many books.<span style="mso-spacerun: yes"> 
+</span>You’ll see it </span><i style='mso-bidi-font-style:normal'>my book
+Effective Oracle By Design</i><span style='mso-bidi-font-style:italic'> (and I
+will not be apologizing for it).<span style="mso-spacerun: yes">  </span>Now,
+there are two ways I could present this performance tuning tip I’m about to
+give.<span style="mso-spacerun: yes">  </span>Here is a hypothetical way, and
+then you’ll see how I really presented it:<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'>&lt;quote src=Never
+To be Printed by Tom&gt;<o:p></o:p></span></p>
+
+<p class=MsoBodyText2><b style='mso-bidi-font-weight:normal'>Use Bulk
+Processing<o:p></o:p></b></p>
+
+<p class=MsoBodyText2><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoBodyText2>It should be obvious that doing many operations in one call
+instead of many calls to the database is more efficient.<span
+style="mso-spacerun: yes">  </span>I have seen many times that fetching our
+entire result set using BULK COLLECT in one SQL statement runs faster (about
+twice as fast) than doing the same thing a single row at a time. </p>
+
+<p class=MsoBodyText2><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoBodyText2>The response times you see will be improved. The more
+data you bulk-fetch, the better relative performance you will see from the BULK
+COLLECT.</p>
+
+<p class=MsoBodyText2><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoBodyText2>The larger the array size, the fewer logical IO’s you
+will do and the better the performance and scalability. You need to rewrite the
+code using PL/SQL table types or collections. We needed to declare variables to
+fetch into. </p>
+
+<p class=MsoBodyText2><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoBodyText2>Bulk fetching is truly a good thing.</p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'>&lt;/quote&gt;<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'>Those couple of
+paragraphs sum up very nicely the typical salient effects of Bulk Collecting in
+PLSQL.<span style="mso-spacerun: yes">  </span>It tells you that bulk collects
+are good, they do many things in a single call, they are super efficient.<span
+style="mso-spacerun: yes">  </span>You should use them, you should rewrite your
+code to use them.<span style="mso-spacerun: yes">  </span>There are no caveats
+here, you are not shown how to measure your return on investment, nor are you
+really given any measure beyond “about twice as fast”.<span
+style="mso-spacerun: yes">  </span>It is short, to the point.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'>But it is seriously
+lacking.<span style="mso-spacerun: yes">  </span>What happens if you read this
+and say, well if bulk collecting 100 rows is good, 1,000 must be really good
+and heck, why use LIMIT at all, just bulk collect all of the rows at once. Or
+what happens if most of your queries are 1 to 5 rows, does this hold as true
+(is the extra work worth it)?<span style="mso-spacerun: yes">  </span>Or, what
+happens if you own 10g and read this?<span style="mso-spacerun: yes">  </span><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'>Well, fortunately,
+I won’t write like that.<span style="mso-spacerun: yes">  </span>Too many times
+in the past when just providing my experiences, I’ve been wrong.<span
+style="mso-spacerun: yes">  </span>I use pages where others might use
+paragraphs and try to convey an understanding of why what I say is true (or
+not, you can see for yourself!).<span style="mso-spacerun: yes">  </span>Here
+is a quote from that book (very similar to others you’ll see in fine books like
+Mastering Oracle PL/SQL: Practical Solutions by Connor McDonald) showing how I
+truly believe all technical information needs to be presented.<span
+style="mso-spacerun: yes">  </span>Your idea’s come out, what you think is true
+comes out, some evidence supporting that is shown, the numbers are discussed, </span><i
+style='mso-bidi-font-style:normal'>caveats explored</i><span style='mso-bidi-font-style:
+italic'> – it is all right there:<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'>&lt;quote
+src=Effective Oracle by Design&gt;<o:p></o:p></span></p>
+
+<p class=MsoBodyText2><b style='mso-bidi-font-weight:normal'>Use Bulk
+Processing When It Has Dramatic Effects<o:p></o:p></b></p>
+
+<p class=MsoBodyText2><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoBodyText2>As an example, we'll compare processing the EMP table 14
+rows at a time versus processing it a row at a time. Here is the version for
+row-at-a-time processing:</p>
+
+<p class=MsoBodyText2><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoBodyText2>ops$tkyte@ORA920&gt; exec <a
+href="http://asktom.oracle.com/~tkyte/runstats.html">runstats_pkg.rs_start</a>;</p>
+
+<p class=MsoBodyText2>PL/SQL procedure successfully completed.</p>
+
+<p class=MsoBodyText2><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoBodyText2>ops$tkyte@ORA920&gt; begin</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>2<span
+style="mso-spacerun: yes">      </span>for i in 1 .. 5000</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>3<span
+style="mso-spacerun: yes">      </span>loop</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>4<span
+style="mso-spacerun: yes">          </span>for x in ( select ename, empno,
+hiredate from emp )</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>5<span
+style="mso-spacerun: yes">          </span>loop</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>6<span
+style="mso-spacerun: yes">              </span>null;</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>7<span
+style="mso-spacerun: yes">          </span>end loop;</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>8<span
+style="mso-spacerun: yes">      </span>end loop;</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>9<span
+style="mso-spacerun: yes">  </span>end;</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes"> </span>10<span
+style="mso-spacerun: yes">  </span>/</p>
+
+<p class=MsoBodyText2>PL/SQL procedure successfully completed.</p>
+
+<p class=MsoBodyText2><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoBodyText2>And here is the version that uses bulk processing:</p>
+
+<p class=MsoBodyText2><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoBodyText2>ops$tkyte@ORA920&gt; declare</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>2<span
+style="mso-spacerun: yes">      </span>l_ename<span style="mso-spacerun:
+yes">    </span>dbms_sql.varchar2_table;</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>3<span
+style="mso-spacerun: yes">      </span>l_empno<span style="mso-spacerun:
+yes">    </span>dbms_sql.number_table;</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>4<span
+style="mso-spacerun: yes">      </span>l_hiredate dbms_sql.date_table;</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>5<span
+style="mso-spacerun: yes">  </span>begin</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>6<span
+style="mso-spacerun: yes">      </span>for i in 1 .. 5000</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>7<span
+style="mso-spacerun: yes">      </span>loop</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>8<span
+style="mso-spacerun: yes">          </span>select ename, empno, hiredate</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>9<span
+style="mso-spacerun: yes">            </span>bulk collect into l_ename,
+l_empno, l_hiredate</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes"> </span>10<span
+style="mso-spacerun: yes">            </span>from emp;</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes"> </span>11<span
+style="mso-spacerun: yes">      </span>end loop;</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes"> </span>12<span
+style="mso-spacerun: yes">  </span>end;</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes"> </span>13<span
+style="mso-spacerun: yes">  </span>/</p>
+
+<p class=MsoBodyText2>PL/SQL procedure successfully completed.</p>
+
+<p class=MsoBodyText2><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoBodyText2>Running Runstats to compare the versions shows the
+following:</p>
+
+<p class=MsoBodyText2><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoBodyText2>ops$tkyte@ORA920&gt; exec runstats_pkg.rs_stop(10000);</p>
+
+<p class=MsoBodyText2>Run1 ran in 274 hsecs</p>
+
+<p class=MsoBodyText2>Run2 ran in 132 hsecs</p>
+
+<p class=MsoBodyText2>run 1 ran in 207.58% of the time</p>
+
+<p class=MsoBodyText2><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoBodyText2>This shows that fetching our entire result set using BULK
+COLLECT in one SQL statement runs faster (about twice as fast in this case)
+than doing the same thing a single row at a time. </p>
+
+<p class=MsoBodyText2><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoBodyText2>The response times you see will be a function of the
+amount of data you array-fetch, as well. More or less data in the result set
+will have a definite impact on the performance here. The more data you
+bulk-fetch, up to a point, the better relative performance you will see from
+the BULK COLLECT over time. For example, when I put 56 rows in EMP, the BULK
+COLLECT version was 380% better. When I put 1 row in EMP, both versions ran in
+the same amount of time. At some point, however, the BULK COLLECT will cease
+being more efficient, as the amount of RAM it consumes increases greatly. Where
+that point is varies, but I find a BULK COLLECT size of about 100 rows to be
+universally &quot;good&quot; in practice. Later, we'll look at using the LIMIT
+clause to control this.</p>
+
+<p class=MsoBodyText2><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoBodyText2>Looking further in the Runstats report, we see some
+interesting numbers:</p>
+
+<p class=MsoBodyText2><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoBodyText2>Name<span style="mso-spacerun:
+yes">                                  </span>Run1<span style="mso-spacerun:
+yes">        </span>Run2<span style="mso-spacerun: yes">      </span><span
+style="mso-spacerun: yes">  </span>Diff</p>
+
+<p class=MsoBodyText2>STAT...session logical reads<span style="mso-spacerun:
+yes">        </span>80,522<span style="mso-spacerun: yes">     
+</span>15,525<span style="mso-spacerun: yes">     </span>-64,997</p>
+
+<p class=MsoBodyText2>STAT...consistent gets<span style="mso-spacerun:
+yes">              </span>80,003<span style="mso-spacerun: yes">     
+</span>15,004<span style="mso-spacerun: yes">     </span>-64,999</p>
+
+<p class=MsoBodyText2>STAT...buffer is not pinned co<span style="mso-spacerun:
+yes">      </span>70,000<span style="mso-spacerun: yes">      
+</span>5,000<span style="mso-spacerun: yes">     </span>-65,000</p>
+
+<p class=MsoBodyText2>STAT...no work - consistent re<span style="mso-spacerun:
+yes">      </span>70,000<span style="mso-spacerun: yes">      </span><span
+style="mso-spacerun: yes"> </span>5,000<span style="mso-spacerun: yes">    
+</span>-65,000</p>
+
+<p class=MsoBodyText2>STAT...table scan blocks gotte<span style="mso-spacerun:
+yes">      </span>70,000<span style="mso-spacerun: yes">      
+</span>5,000<span style="mso-spacerun: yes">     </span>-65,000</p>
+
+<p class=MsoBodyText2>STAT...recursive calls<span style="mso-spacerun:
+yes">              </span>75,003<span style="mso-spacerun: yes">      
+</span>5,003<span style="mso-spacerun: yes">     </span>-70,000</p>
+
+<p class=MsoBodyText2>LATCH.cache buffers chains<span style="mso-spacerun:
+yes">         </span>162,601<span style="mso-spacerun: yes">     
+</span>32,582<span style="mso-spacerun: yes">    </span>-130,019</p>
+
+<p class=MsoBodyText2>Overall latching is reduced.</p>
+
+<p class=MsoBodyText2>Run1 latches total versus runs -- difference and pct</p>
+
+<p class=MsoBodyText2>Run1<span style="mso-spacerun: yes">       
+</span>Run2<span style="mso-spacerun: yes">        </span>Diff<span
+style="mso-spacerun: yes">       </span>Pct</p>
+
+<p class=MsoBodyText2>188,736<span style="mso-spacerun: yes">     
+</span>58,658<span style="mso-spacerun: yes">    </span>-130,078<span
+style="mso-spacerun: yes">    </span>321.76%</p>
+
+<p class=MsoBodyText2><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoBodyText2>PL/SQL procedure successfully completed.y</p>
+
+<p class=MsoBodyText2><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoBodyText2>That is analogous to what we observed in SQL*Plus in
+Chapter 2, when we played with the ARRAYSIZE setting while using AUTOTRACE. The
+larger the array size, the fewer consistent gets we performed, and the better
+the performance and scalability. The same rules apply here, but the impact is
+not as transparent as just adjusting an ARRAYSIZE setting is. Here, we needed
+to rewrite the code using PL/SQL table types or collections. We needed to
+declare variables to fetch into. We used more memory in our session. We can use
+V$MYSTAT, a dynamic performance view, to see the net effect on memory usage.</p>
+
+<p class=MsoBodyText2><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoBodyText2>It is for these reasons that I recommend using bulk
+processing only where and when it would have the most dramatic effect. In the
+example shown here, it looks dramatic. But that is only because we did it for
+14<span style="mso-spacerun: yes">  </span>5,000 rows. It would be worthwhile
+here, if you did that process many times. If you did that process for 50 rows,
+you would discover they run in about the same amount of time and that the BULK
+COLLECT actually does more latching! </p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'>&lt;/quote&gt;<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'>There you have pretty
+much all of the facts – and perhaps most importantly you have some way to
+verify the truth.<span style="mso-spacerun: yes">  </span>Say you just bought
+that book (I wrote that book as Oracle 9iR2 was in full swing, Oracle 10g was
+still a glint in our eyes) and you read the advice.<span style="mso-spacerun:
+yes">  </span>You might be tempted to take it to heart and write all of your
+code using BULK COLLECT, or even worse, rewrite all of your existing code to do
+so.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'>Only to discover
+the expert is totally wrong.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'>Because things
+change. (just a side note, most everything else in that books applies to
+10g!<span style="mso-spacerun: yes">  </span>And you have the examples
+available to you to see that)<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'>But fortunately you
+bought the book with evidence, and you grabbed the examples from the
+website.<span style="mso-spacerun: yes">  </span>And you ran it in 10g.<span
+style="mso-spacerun: yes">  </span>And you observed:<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoBodyText2>ops$tkyte@ORA10G&gt; exec runStats_pkg.rs_start</p>
+
+<p class=MsoBodyText2>PL/SQL procedure successfully completed.</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes"> </span></p>
+
+<p class=MsoBodyText2>ops$tkyte@ORA10G&gt; begin</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>2<span
+style="mso-spacerun: yes">      </span>for i in 1 .. 5000</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>3<span
+style="mso-spacerun: yes">      </span>loop</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>4<span
+style="mso-spacerun: yes">          </span>for x in ( select ename, empno,
+hiredate from emp )</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>5<span
+style="mso-spacerun: yes">          </span>loop</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>6<span
+style="mso-spacerun: yes">              </span>null;</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>7<span
+style="mso-spacerun: yes">          </span>end loop;</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>8<span
+style="mso-spacerun: yes">      </span>end loop;</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>9<span
+style="mso-spacerun: yes">  </span>end;</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes"> </span>10<span
+style="mso-spacerun: yes">  </span>/</p>
+
+<p class=MsoBodyText2>PL/SQL procedure successfully completed.</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes"> </span></p>
+
+<p class=MsoBodyText2>ops$tkyte@ORA10G&gt; exec runStats_pkg.rs_middle</p>
+
+<p class=MsoBodyText2>PL/SQL procedure successfully completed.</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes"> </span></p>
+
+<p class=MsoBodyText2>ops$tkyte@ORA10G&gt; declare</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>2<span
+style="mso-spacerun: yes">      </span>l_ename<span style="mso-spacerun:
+yes">    </span>dbms_sql.varchar2_table;</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>3<span
+style="mso-spacerun: yes">      </span>l_empno<span style="mso-spacerun:
+yes">   </span><span style="mso-spacerun: yes"> </span>dbms_sql.number_table;</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>4<span
+style="mso-spacerun: yes">      </span>l_hiredate dbms_sql.date_table;</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>5<span
+style="mso-spacerun: yes">  </span>begin</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>6<span
+style="mso-spacerun: yes">      </span>for i in 1 .. 5000</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>7<span
+style="mso-spacerun: yes">      </span>loop</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>8<span
+style="mso-spacerun: yes">          </span>select ename, empno, hiredate</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes">  </span>9<span
+style="mso-spacerun: yes">            </span>bulk collect into l_ename,
+l_empno, l_hiredate</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes"> </span>10<span
+style="mso-spacerun: yes">           </span>from emp;</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes"> </span>11<span
+style="mso-spacerun: yes">      </span>end loop;</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes"> </span>12<span
+style="mso-spacerun: yes">  </span>end;</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes"> </span>13<span
+style="mso-spacerun: yes">  </span>/</p>
+
+<p class=MsoBodyText2>PL/SQL procedure successfully completed.</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes"> </span></p>
+
+<p class=MsoBodyText2>ops$tkyte@ORA10G&gt; exec runStats_pkg.rs_stop(10000)</p>
+
+<p class=MsoBodyText2>Run1 ran in 51 hsecs</p>
+
+<p class=MsoBodyText2>Run2 ran in 48 hsecs</p>
+
+<p class=MsoBodyText2>run 1 ran in 106.25% of the time</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes"> </span></p>
+
+<p class=MsoBodyText2>Name<span style="mso-spacerun:
+yes">                                  </span>Run1<span style="mso-spacerun:
+yes">        </span>Run2<span style="mso-spacerun: yes">    </span><span
+style="mso-spacerun: yes">    </span>Diff</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes"> </span></p>
+
+<p class=MsoBodyText2>Run1 latches total versus runs -- difference and pct</p>
+
+<p class=MsoBodyText2>Run1<span style="mso-spacerun: yes">       
+</span>Run2<span style="mso-spacerun: yes">        </span>Diff<span
+style="mso-spacerun: yes">       </span>Pct</p>
+
+<p class=MsoBodyText2>58,709<span style="mso-spacerun: yes">     
+</span>58,859<span style="mso-spacerun: yes">         </span>150<span
+style="mso-spacerun: yes">     </span>99.75%</p>
+
+<p class=MsoBodyText2><span style="mso-spacerun: yes"> </span></p>
+
+<p class=MsoBodyText2>PL/SQL procedure successfully completed.</p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'>Well, it would seem
+hardly worth it to do the bulk collect here wouldn’t it?<span
+style="mso-spacerun: yes">  </span>The reason – in Oracle 10g, PLSQL is
+silently array fetching 100 rows at a time for us, when we do “for x in (
+select * from t “ – PLSQL has already bulk collected 100 rows.<span
+style="mso-spacerun: yes">  </span>We no longer needed to do that extra code,
+the extra work.<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'>And, had I not had
+a test case, I might still not know that. I might still be giving the advice
+“bulk collect, everywhere”.<span style="mso-spacerun: yes">  </span>Someone
+reading my book was kind enough to email me and ask “why do I get these numbers
+when I run your example”.<span style="mso-spacerun: yes">  </span>60 seconds of
+research and I found out “why” (tkprof reveals a lot! A simple sql_trace=true
+and away we go).<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'>Now, it is ironic,
+because in his quest to not have to show any evidence, Mike gives they reason
+why supporting evidence is a good thing:<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoBodyText><span style='mso-bidi-font-style:normal'><span
+style="mso-spacerun: yes"> </span>So be careful in what you prove and how you
+prove it. What seems clever today may come back to haunt you.<b> You may be
+apologizing several years down the road for what is right now, but not in the
+future.</b> The net is an amazing place. No doubt you can find numerous places
+where<b> I may have expounded on the virtues of separation of indexes and
+tables, on rebuilding indexes frequently or other items that have since been
+proved,</b> for current versions, old DBA tales. I like others before, am not
+immune to time and neither is my advice.<o:p></o:p></span></p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>If I had written the few paragraphs above (the ones without
+supporting evidence), then I would have to apologize.<span style="mso-spacerun:
+yes">  </span>I would have to apologize for not giving you the truth, the whole
+truth and nothing but the truth <i>and</i> a way to find out if it was still <i>the
+truth</i>.<span style="mso-spacerun: yes">  </span>Instead, I get to say “well,
+thank goodness you didn’t trust me and ran the examples in your
+testing/development environment.<span style="mso-spacerun: yes">  </span>That
+is precisely why I supply them to you”.<span style="mso-spacerun: yes"> 
+</span>And then followup with this brand new feature of 10g that I was until
+that time not aware of (struck by the infamous but not elusive <i>“yeahbut”</i>
+animal again!).</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>It is ironic that if no one had taken the old “obvious”
+advice of old and debunked it, we would still perhaps be listening to it?<span
+style="mso-spacerun: yes">  </span>You see, if no one bothered proving that
+that old wives tale of separate indexes from table data for performance (which
+by the way was always an old wives tale, believe it or not, but that is another
+thread) was in fact an old wives tale – what would we still be doing?<span
+style="mso-spacerun: yes">  </span>If you have a conjecture based on your
+experiences <i style='mso-bidi-font-style:normal'>and you show how to see the
+cause effect, not just state “it must be so”</i><span style='mso-bidi-font-style:
+italic'>, why apologize.<span style="mso-spacerun: yes">  </span>We all know
+things change.<span style="mso-spacerun: yes">  </span>My question to Mike –
+without the evidence, how the heck are we going to know when something has
+changed? <b>So I would really like to understand why it would be bad to show
+something it not true, to provide evidence – as Mike indicates it would be?</b></span><b><i
+style='mso-bidi-font-style:normal'><o:p></o:p></i></b></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'>Mike closes that
+article with this advice<o:p></o:p></span></p>
+
+<p class=code><span style='mso-bidi-font-style:italic'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><i style='mso-bidi-font-style:normal'>If any paper you read
+is older than a year or two, I suggest you take its advice with a big grain of
+salt as it may be applicable only to history and not current events.<o:p></o:p></i></p>
+
+<p class=MsoNormal><i style='mso-bidi-font-style:normal'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></i></p>
+
+<p class=MsoNormal><i style='mso-bidi-font-style:normal'>Critics love to dig up
+old papers, presentations and advice given and use it to bludgeon people into
+believing they are the only authority. Take this type of advice with a grain of
+salt as well. In time, their advice will be referenced, out of date and out of
+style.</i><span style='mso-bidi-font-style:italic'><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'>I don’t see anyone
+getting “bludgeoned”.<span style="mso-spacerun: yes">  </span>I don’t see
+anyone trying to be “the authority”.<span style="mso-spacerun: yes">  </span>I do
+however see a lot people having a discourse, showing evidence, backing up their
+conjectures with reasoning.<span style="mso-spacerun: yes">  </span>I
+personally would have written the closing like this:<o:p></o:p></span></p>
+
+<p class=code><span style='mso-bidi-font-style:italic'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal><i style='mso-bidi-font-style:normal'>If any paper you read
+tells you <b>what</b> but not <b>why</b>, regardless of its timestamp, I
+suggest you take its advice with a big grain of salt as it may be applicable <b>only
+to only specific cases and not applicable to you at all</b>.<span
+style="mso-spacerun: yes">  </span>In fact, it could be something that was true
+in the past and not true anymore.<span style="mso-spacerun: yes">  </span><b>If
+they give you no way to find out, ignore it</b>.<o:p></o:p></i></p>
+
+<p class=MsoNormal><span style='mso-bidi-font-style:italic'><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></span></p>
+
+<p class=MsoNormal>I personally regard unsubstantiated advice from anyone as
+just that.<span style="mso-spacerun: yes">  </span>Unsubstantiated.<span
+style="mso-spacerun: yes">   </span>Depending on who told me, I might treat it
+differently.<span style="mso-spacerun: yes">  </span>If Jonathan Lewis, Cary
+Millsap or others told me something in a conversation, I would place a high
+level of confidence in it (I might well still test the idea, in fact I know I
+would).<span style="mso-spacerun: yes">  </span>But I would have a high degree
+of confidence in it.<span style="mso-spacerun: yes">  </span>Why?<span
+style="mso-spacerun: yes">  </span>Well because time and time again, they have
+backed up their comments with some logic, evidence, proof, facts.<span
+style="mso-spacerun: yes">  </span>I feel confident that prior to making a
+claim, they would have already tested it out.<span style="mso-spacerun: yes"> 
+</span>If they hadn’t, the information would be conveyed with that fact made
+well known (that they hadn’t tested it, it was just an idea they had at that
+point).<span style="mso-spacerun: yes">  </span>That is why I would trust their
+information – but probably still try it out.<span style="mso-spacerun: yes"> 
+</span>I know they do.<span style="mso-spacerun: yes">  </span>But anyone that
+just says “I’ve seen it before, trust me”, sorry but no.</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>The economist had an interesting story, timely one actually,
+that was pointed out to me <a
+href="http://www.economist.com/science/displaystory.cfm?story_id=3809661">http://www.economist.com/science/displaystory.cfm?story_id=3809661</a>
+.<span style="mso-spacerun: yes">  </span>My favorite comment in that article
+was this:</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>&lt;quote&gt;</p>
+
+<p class=MsoNormal>Formal proof is a notion developed in the early part of the
+20th century by logicians such as Bertrand Russell and Gottlob Frege, along
+with mathematicians such as David Hilbert (who can fairly be described as the
+father of modern mathematics) and Nicolas Bourbaki, the pseudonym of a group of
+French mathematicians who sought to place all of mathematics on a rigorous
+footing. <b>This effort was subtle, but its upshot can be described simply. It
+is to replace, in proofs, standard mathematical reasoning which, in essence, <i>relies
+on hand-waving arguments (it should be obvious to everyone that B follows from
+A) </i>with formal logic.</b></p>
+
+<p class=MsoNormal>&lt;/quote&gt;</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal><i>It should be obvious to everyone that B follows from
+A.<span style="mso-spacerun: yes">  </span>Hand-waving arguments.</i><span
+style="mso-spacerun: yes">  </span>Now, that article does not apply entirely to
+this topic, it is about mathematics and mathematical proofs.<span
+style="mso-spacerun: yes">  </span>That is not what we are after here, we are
+after the truth.<span style="mso-spacerun: yes">  </span>We would like to
+understand the cause/effect relationship between two things.<span
+style="mso-spacerun: yes">  </span>Recently, I listed some of these <a
+href="http://asktom.oracle.com/pls/ask/f?p=4950:8:::::F4950_P8_DISPLAYID:6643159615303#37625857922508">in
+a follow-up to a question on my site.</a><span style="mso-spacerun: yes"> 
+</span>Concepts that were, sometimes still are, accepted as fact based on
+apparent correlations that were false positives (it should be obvious to
+everyone that B…)</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>Historically I believe false causality has been the greatest
+case of Oracle Myths.<span style="mso-spacerun: yes">  </span>&quot;Single
+extents are best&quot;.<span style="mso-spacerun: yes">  </span>A falsehood
+brought about by observation based on export/import.<span style="mso-spacerun:
+yes">  </span>There was truth to be gleaned from the export/import maneuver,
+however the conclusion many experts of the time came to was wrong.<span
+style="mso-spacerun: yes">  </span>They<span style="mso-spacerun: yes"> 
+</span>observed something – that an export with compress=y followed by an
+import many times results in better performance.<span style="mso-spacerun:
+yes">  </span>Obviously, it was due to a single extent (wave hands now).<span
+style="mso-spacerun: yes">    </span></p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>Where there other reasons?<span style="mso-spacerun: yes"> 
+</span>Absolutely, and they are all valid – and fixable via other much less
+dramatic means.<span style="mso-spacerun: yes">  </span>What had to be done
+however was to show some evidence that – if you hold all other things constant
+– segments in single extents performed comparably to segments in many hundreds
+or thousands of extents.<span style="mso-spacerun: yes">  </span>That was in
+fact done, exposing the single extent myth for what it truly was.<span
+style="mso-spacerun: yes">  </span>The papers exposing this myth typically went
+on to describe what symptoms the export/import probably fixed and other methods
+for achieving the same goal, in a better way.<span style="mso-spacerun: yes"> 
+</span></p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>For example, perhaps the table had many migrated rows (due
+to an improper pctfree setting) and exporting the table, importing it corrected
+that <b>temporarily</b>.<span style="mso-spacerun: yes">  </span>Had we
+recognized the true cause/effect, we could have fixed that problem once and
+been done with it.<span style="mso-spacerun: yes">  </span>No, instead we come
+to the conclusion that you need to exp/imp your tables on a recurring basis to
+get them into single extents.<span style="mso-spacerun: yes">  </span>Many a
+script exists out there to find objects with double digit numbers of extents
+and “fix them”</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>Or, perhaps one of the indexes on the table was a “sweeping”
+index.<span style="mso-spacerun: yes">  </span>It was an index on a column
+populated by a sequence.<span style="mso-spacerun: yes">  </span>There was a
+process that put rows into this table.<span style="mso-spacerun: yes"> 
+</span>There is another process that looks for the “oldest unprocessed” row and
+processes it.<span style="mso-spacerun: yes">  </span>For <a
+href="http://asktom.oracle.com/pls/ask/f?p=4950:8:::::F4950_P8_DISPLAYID:2913600659112#24081704877485">an
+example of this</a> follow that link.<span style="mso-spacerun: yes"> 
+</span>The export/import of the table would have recreated that index (and in
+fact <i>all</i> indexes, whether they needed it or not).<span
+style="mso-spacerun: yes">  </span>It would have solved this problem, but this
+problem would have been more readily solved by understanding how the data was
+used and rebuilding/coalescing precisely one index.</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>Maybe this was a case of “we purge data” and now the table
+contains lots of “whitespace” over time.<span style="mso-spacerun: yes"> 
+</span>And, we do full scan it.<span style="mso-spacerun: yes"> 
+</span>Export/Import would get rid of the whitespace.<span style="mso-spacerun:
+yes">  </span>But we could have perhaps been avoiding the whitespace issue
+altogether as well.</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>And so on.<span style="mso-spacerun: yes">  </span>Why is it
+relevant?<span style="mso-spacerun: yes">  </span>I mean, if the export import
+accidentally fixes things, that is OK right?<span style="mso-spacerun: yes"> 
+</span>Well, no.<span style="mso-spacerun: yes">  </span>First of all, every
+time you take data out of the database you risk losing it and having to go to
+backups.<span style="mso-spacerun: yes">  </span>It incurred totally
+unnecessary downtime.<span style="mso-spacerun: yes">  </span>It took much
+longer than it could have, had we looked at the problem.<span
+style="mso-spacerun: yes">  </span>It causes lots of people to reorganize data
+frequently and unnecessarily. </p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>So, does this still happen today?<span style="mso-spacerun:
+yes">  </span>Absolutely.<span style="mso-spacerun: yes">  </span>There is a
+lot of hand-waving arguments (it should be obvious to everyone that B follows
+from A) still.<span style="mso-spacerun: yes">  </span>I’d like to look at one,
+it has come up on my site recently <a
+href="http://asktom.oracle.com/pls/ask/f?p=4950:8:::::F4950_P8_DISPLAYID:6643159615303#37842005636797">in
+this follow-up/review</a>.<span style="mso-spacerun: yes">  </span>It was
+talking about the ability to use multiple size blocks in Oracle 9i and up and
+whether indexes really “like” really large blocks.<span style="mso-spacerun:
+yes">  </span>A reference to read first would be this <a
+href="http://www.dba-oracle.com/oracle_tips_multiple_buffers.htm">white paper</a>.<span
+style="mso-spacerun: yes">  </span>It all sounds very good, doesn’t it.<span
+style="mso-spacerun: yes">  </span>I see no caveats, no drawbacks, no “your
+mileage may vary”.<span style="mso-spacerun: yes">   </span>I will be coming
+back to do another article, taking a look at the theory that large blocksizes
+are a good thing all around but that their adoption is being hindered by:</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoBodyText>However, widespread acceptance of using multiple
+blocksizes has been hindered because the I/O reduction cannot be proven using
+simple SQL*Plus scripts on personal computers and because multiple blocksizes
+were originally created to support transportable tablespace</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>There might be a reason why their acceptance should be
+hindered (eg: what Don points out as a bad thing might well be a very good
+thing indeed).<span style="mso-spacerun: yes">  </span>And it could be because
+of false causality.<span style="mso-spacerun: yes">  </span>It will be a study
+in why apparent correlations could well be false positives.<span
+style="mso-spacerun: yes">  </span>More study does need to be done.<span
+style="mso-spacerun: yes">  </span>Wouldn’t you like to know if the perceived
+benefits of multiple blocksizes could be achieved in a much less intrusive
+way?<span style="mso-spacerun: yes">  </span>Or how to actually measure their
+benefit?<span style="mso-spacerun: yes">  </span>Or that the benefit that was
+measured actually was a benefit? (if that last statement confuses you, well,
+I’ll have to ask you to wait for the other paper to be completed)</p>
+
+<h2>In closing…</h2>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>I truly believe that people wanting to provide information
+should back it up.<span style="mso-spacerun: yes">  </span>Give evidence.<span
+style="mso-spacerun: yes">  </span>Yes, I know, we are all busy people and
+providing the evidence is “hard”, but if you want to be a published author, if
+you want people to accept your advice, you have to go that extra mile.<span
+style="mso-spacerun: yes">  </span>The information you use should be real, not
+made up.<span style="mso-spacerun: yes">  </span>You’ll find you make far far
+fewer errors that way.<span style="mso-spacerun: yes">  </span>You should be
+able to explain everything in your findings – not most things – and you cannot
+just ignore things that don’t fit your hypothesis.</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>One of my favorite stories about this, making sure you know
+what you are talking about goes like this (it is true, not made up, swear to
+god, I have witnesses! 100 of them in fact for this one).<span
+style="mso-spacerun: yes">  </span>There was a gentleman giving a seminar.
+During the weeks before the seminar he had an idea to allow the attendees to
+ask questions they had on their minds but never had the time to adequately
+research and answer themselves.<span style="mso-spacerun: yes">  </span>Sounded
+like a good idea, but some of questions he received took a really long time to
+answer.<span style="mso-spacerun: yes">  </span>It was a three day seminar,
+lots of stuff to get ready, much preparation was necessary, time was getting
+short.<span style="mso-spacerun: yes">  </span>One of the questions was about
+the overhead of two phase commit.<span style="mso-spacerun: yes">  </span>Well,
+how do you describe the overhead of a two phase commit?<span
+style="mso-spacerun: yes">  </span>All you can do is set up some multi-user
+benchmarks in a distributed environment and check it out, measure it.<span
+style="mso-spacerun: yes">  </span>Describe how to measure it so anyone could
+in their environment.<span style="mso-spacerun: yes">  </span>This gentleman
+set up the test, did all of the work, collated all of the numbers, had nice
+findings.<span style="mso-spacerun: yes">  </span>But apparently he proved that
+a distributed transaction will have a most profound effect on LGWR.<span
+style="mso-spacerun: yes">  </span>LGWR is massively impacted by two phase
+commits.<span style="mso-spacerun: yes">  </span>The log file syncs with two
+phase commits are provably very long.<span style="mso-spacerun: yes"> 
+</span>No two phase commit and no waiting.<span style="mso-spacerun: yes"> 
+</span>He came to this conclusion because the waits on log file sync jumped
+from “none” to “a whole bunch”.<span style="mso-spacerun: yes"> 
+</span>Obviously this is a side effect of two phase commits.</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>Fortunately or unfortunately depending on your perspective,
+there was a smart fellow in the audience.<span style="mso-spacerun: yes"> 
+</span>This was the first time this material was being presented and this smart
+fellow followed along carefully.<span style="mso-spacerun: yes">  </span>As the
+presenter was finishing up this section and asking for questions – the
+following happened:</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>Jonathan Lewis raised his hand and asked Tom Kyte if he knew
+about the <a
+href="http://asktom.oracle.com/pls/ask/f?p=4950:8:::::F4950_P8_DISPLAYID:1415454871121#20061201507022">commit
+optimization</a> in PLSQL (page down to my response from there for a
+demonstration of it).<span style="mso-spacerun: yes">  </span>Sound of hand
+smacking forehead.<span style="mso-spacerun: yes">  </span>Of course he says,
+that explains the difference – without a distributed transaction, PLSQL can do
+its commit time optimization and not suffer from log file syncs, whereas in a
+distributed environment that commit optimization cannot happen.<span
+style="mso-spacerun: yes">  </span>So, while the evidence was valid, under the
+scrutiny of peers – it was shown to be incomplete.<span style="mso-spacerun:
+yes">  </span>Had the simulation been performed with a Java/JDBC, Pro*C, OCI,
+VB, any other language other than PLSQL – the findings would have been
+different.<span style="mso-spacerun: yes">  </span>So, if that person giving
+the seminar had just written into an article or a book “It has been my
+observation that if you two phase commit, you should expect to see massive
+increases in log file sync” (because his experience was on systems with lots of
+PLSQL) – that information would not apply to the public in general.<span
+style="mso-spacerun: yes">  </span>It would not by true to anyone doing
+Java/JDBC programming for example.<span style="mso-spacerun: yes">  </span>But
+by publishing his experience, his evidence, and subjecting it to review by
+peers, we know now the truth, the whole truth and nothing but the truth (and
+yet another reason to code database stuff in PLSQL perhaps!)</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>And, even better, <b>if the truth changes in the future,</b>
+we have the test case waiting in the wings to tell us that.<span
+style="mso-spacerun: yes">  </span>If all we had were experts saying “do this,
+it is very good”, well, we would not.<span style="mso-spacerun: yes"> 
+</span>Features like that array fetch of 100 rows in PLSQL happening in
+10g?<span style="mso-spacerun: yes">  </span>I never would have known that had
+I not had test cases that were dramatically affected by it.<span
+style="mso-spacerun: yes">  </span>I would have still be programming with BULK
+COLLECT in 10g, even though it is not necessary!</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>Things change.</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>It only takes one counter case to show something is not
+universally true.</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal>Rules of thumb without evidence, without ways to test them
+before implementing them, are dangerous, seriously dangerous.</p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+</div>
+
+</body>
+
+</html>

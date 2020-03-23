@@ -1,0 +1,860 @@
+PL/SQL Question:
+
+1)	Describe the difference between a procedure, function and anonymous PL/SQL block?
+
+
+
+
+
+2)	What is a mutating table error and how can you get around it?
+
+
+
+
+
+3)	Describe the use of %ROWTYOE AND %TYPE in PL/SQL?
+
+
+
+
+
+4)	What Package: (If any) has Oracle provided for use by developer?
+
+
+
+
+
+5)	Describe the use of PL/SQL tables?
+
+
+
+
+
+
+6)	When is a declare statement needed?
+
+
+
+
+
+7)	In what order should a OPEN/FETCH/LOOP set of commands in a PL/SQL block be implemented if you use the %NOTFOUND cursor variable in the exit when statement? Why?
+
+
+
+
+
+
+8)	What are SQLCODE and SQLERRM and why they important for PL/SQL developer?
+
+
+
+
+
+
+9)	How can you find within a PL/SQL block, if a cursor is OPEN?
+
+
+
+
+
+
+10)	How can you generate debugging output from PL/SQL?
+
+
+
+
+
+
+
+11)	What are the types of triggers?
+
+DBA Questions:
+
+12)	Give one method of transferring a table from one schema to another?
+
+
+
+
+
+13)	What is the purpose of the IMPORT Option IGNORE? What is its default setting?
+
+
+
+
+14)	You have a rollback segment in a version 7.2 database that has expanded beyond optimal, how can it be restored to optimal?
+
+
+
+
+
+15)	If the DEFAULT and TEMPORARY TABLESPACE clauses are left out of a CREATE USER command what happens? Is this Bad of Good? Why?
+
+
+
+
+
+16)	What are some of the ORACLE provided PACKAGES that DBAs should be aware of?
+
+
+
+
+
+
+17)	What happens if the CONSTRAINT NAME is left out of a constraint clause?
+
+
+
+
+
+
+18)	What happens if a TABLESPACE clause is left off of a PRIMARY KEY constraint clause?
+
+
+
+
+
+
+19)	What is the proper method for disabling and re-enabling a PRIMARY KEY Constraint?
+
+
+
+
+
+
+
+20)	What happens if a PRIMARY KEY Constraint is disabled and then enabled without fully specifying the index clause?
+
+
+
+
+
+
+21)	(ON UNIX) When should more than one DB writer process be used? How many should be used?
+
+
+
+
+
+
+22)	You are using hot backup without being in archive log mode, can you recover in the even of a failure? Why? Or why not?
+
+
+
+
+
+
+23)	What causes the "SNAPSHOT TOO OLD" error? How can this be prevented or mitigated?
+
+
+
+
+
+
+24)	How can you tell if a database object is invalid?
+
+
+
+
+
+
+25)	A user if getting an ORA-00942 error yet you know you have granted them permission on the table, what else should you check?
+
+
+
+
+
+
+
+26)	A developer is trying to create a view and the database won't let him. He has the "DEVELOPER" role which had the "CREATE VIEW" system privilege and SELECT grants on the tables he is using, what is the problem?
+
+
+
+
+
+
+
+27)	If you have an example table, what is the best way to get sizing data for the production implementation?
+
+
+
+
+
+
+28)	How can you find out how many users are currently logged into the database? How can you find their operating system ID?
+
+
+
+
+
+
+29)	A user selects from a sequence and gets back two values, his select statement is:  SELECT pf_seq.nextval FROM dual; What is the problem?
+
+
+
+
+
+
+30)	How can you determine if an index needs to be dropped and rebuilt?
+
+
+
+
+
+
+SQL/PLSQL
+
+31)	How can variables be passed to a SQL routine?
+
+
+
+
+
+
+32)	You want to include a carriage return/linefeed in your output from a SQL script, how can you do this?
+
+
+
+
+
+
+33)	How can you call a PL/SQL procedure from SQL?
+
+
+
+
+
+
+34)	How do you execute a host operating system command within SQL?
+
+
+
+
+
+
+35)	You want to use SQL to build SQL, what is this called and give an example?
+
+
+
+
+
+
+36)	What SQLPlus command is used format output from a select?
+
+
+
+
+
+
+
+37)	You want to group the following set of select returns, what can you group on?
+
+
+
+
+
+
+38)	MAX(sum_of_cost), min(sum_of_cost), count(item_no), item_no
+
+
+
+
+
+39)	What special Oracle feature allows you to specify how the cost based system treats a SQL statement?
+
+
+
+
+
+
+40)	You want to determine the location of identical rows in a table before attempting to place a unique index on the table, how can this be done?
+
+
+
+
+
+
+
+41)	What is a Cartesian product?
+
+
+
+
+
+42)	You are joining a local and a remote table, the network manager complains about the traffic involved, how can you reduce the network traffic?
+
+
+
+
+
+43)	What is the default ordering of an ORDER BY clause in a SELECT statement?
+
+
+
+
+
+44)	What is tkprof and how is it used?
+
+
+
+
+
+45)	What is explain plan and how is it used?
+
+
+
+
+
+46)	How do you set the number of lines on a page of output? The width?
+
+
+
+
+
+47)	How do you prevent output from coming to the screen?
+
+
+
+
+
+48)	How do you prevent Oracle from giving you informational messages during and after a SQL statement execution?
+
+
+
+
+
+
+49)	How do you generate file output from SQL?
+
+
+
+
+
+
+TUNING QUESTIONS:
+
+50)	A tables pace has a table with 30 extents in it. Is this bad? Why or why not.
+
+
+
+
+
+
+51)	How do you set up tablespaces during an Oracle installation?
+
+
+
+
+
+
+52)	You see multiple fragments in the SYSTEM tablespace, what should you check first?
+
+
+
+
+
+
+53)	What are some indications that you need to increase the SHARED_POOL_SIZE parameter?
+
+
+
+
+
+
+54)	What is the general guideline for sizing db_block_size and db_multi_block_read for an application that c many full table scans?
+
+
+
+
+
+
+55)	What is the fastest query method for a table?
+
+
+
+
+
+
+56)	Explain the use of TKPROF? What initialization parameter should be turned on to get full TKPROF 01
+
+
+
+
+
+
+
+57)	When looking at v$sysstat you see that sorts (disk) is high. Is this bad or good? If bad -how do you correct it?
+
+
+
+
+
+58)	When should you increase copy latches? What parameters control copy latches?
+
+
+
+
+
+
+59)	Where can you get a list of all initialization parameters for your instance? How about an indication if they arc default settings or have been changed?
+
+
+
+
+60)	Describe hit ratio as it pertains to the database buffers. What is the difference between instantaneous and cumulative hit ratio and which should be used for tuning?
+
+
+
+
+
+
+61)	Discuss row chaining, how does it happen? How can you reduce it? How do you correct it?
+
+
+
+
+
+
+62)	When looking at the estat events report you see that you are getting busy buffer waits. Is this bad? How can you find what is causing it?
+
+
+
+
+
+
+63)	If you see contention for library caches how can you fix it?
+
+
+
+
+
+
+64)	If you see statistics that deal with "undo" what are they really talking about?
+
+
+
+
+
+
+65)	If a tablespace has a default pctincrease of zero what will this cause (in relationship to the smon process)?
+
+
+
+
+
+
+66)	If a tables pace shows excessive fragmentation what are some methods to defragment the tablespace? (7.1,7.2 and 7.3 only)
+
+
+
+
+
+
+67)	How can you tell if a tablespace has excessive fragmentation?
+
+
+
+
+
+
+68)	You see the following on a status report:
+a.	redo log space requests     23
+b.	redo log space wait time   0
+
+Is this something to worry about? What if redo log space wait time is high? How can you fix this?
+
+
+
+
+
+
+69)	What can cause a high value for recursive calls? How can this be fixed?
+
+
+
+
+
+
+70)	If you see a pin hit ratio of less than 0.8 in the estat library cache report is this a problem? If so, how do you fix it?
+
+
+
+
+
+
+71)	If you see the value for reloads is high in the estat library cache report is this a matter for concern?
+
+
+
+
+
+
+72)	You look at the dba_rollback_segs view and see that there is a large number of shrinks and they are of relatively small size, is this a problem? How can it be fixed if it is a problem?
+
+
+
+
+
+73)	You look at the dba_rollback_segs view and see that you have a large number of wraps is this a problem?
+
+
+
+
+
+74)	In a system with an average of 40 concurrent users you get the following from a query on rollback extents:
+a.	ROLLBACK 			CUR EXTENTS
+b.	R01					11
+c.	R02 					8
+d.	R03 					12
+e.	R04 					9
+f.	SYSTEM				4
+You have room for each to grow by 20 more extents each. Is there a problem? Should you take any action?
+
+
+
+
+
+75)	You see multiple extents in the temporary tablespace. Is this a problem?
+
+
+
+
+
+
+INSTALLA TION/CONFIGURATION
+
+76)	Define OFA.
+
+
+
+
+
+77)	How do you set up your tablespace on installation?
+
+
+
+
+
+78)	What should be done prior to installing Oracle (for the OS and the disks)?
+
+
+
+
+
+79)	You have installed Oracle and you are now setting up the actual instance. You have been waiting an hour for the initialization script to finish, what should you check first to determine if there is a problem?
+
+
+
+
+
+80)	When con figuring SQLNET on the server what files must be set up?
+
+
+
+
+
+81)	When con figuring SQLNET on the client what f1les need to be set up?
+
+
+
+
+
+82)	What must be installed with ODBC on the client in order for it to work with Oracle?
+
+
+
+
+
+83)	You have just started a new instance with a large SGA on a busy existing server. Performance is terrible, what should you check for?
+
+
+
+
+
+84)	What OS user should be used for the first part of an Oracle installation (on UNIX)?
+
+
+
+
+
+85)	When should the default values for Oracle initialization parameters be used as is?
+
+
+
+
+
+86)	How many control files should you have? Where should they be located?
+
+
+
+
+
+87)	How many redo logs should you have and how should they be con figured for maximum recoverability?
+
+
+
+
+
+88)	You have a simple application with no "hot" tables (i.e. uniform 10 and access requirements). How many disks should you have assuming standard layout for SYSTEM, USER, TEMP and ROLLBACK tablespaces?
+
+
+
+
+
+DATA MODELER:
+
+89)	Describe third normal form?
+
+
+
+
+
+90)	Is the following statement true or false:
+"All relational databases must be in third normal form"
+Why or why not?
+
+
+
+
+
+
+91)	What is an ERD?
+
+
+
+
+
+92)	Why are recursive relationships bad? How do you resolve them?
+
+
+
+
+
+93)	What does a hard one-to-one relationship mean (one where the relationship on both ends is "must")?
+
+
+
+
+
+94)	How should a many-to-many relationship be handled?
+
+
+
+
+
+95)	What is an artificial (derived) primary key? When should an artificial (or derived) primary key be
+
+
+
+
+
+96)	When should you consider denormalization?
+
+
+
+
+
+
+UNIX:
+
+97)	How can you determine the space left in a file system?
+
+
+
+
+
+98)	How can you determine the number of SQLNET users logged in to the UNIX system?
+
+
+
+
+
+99)	What command is used to type files to the screen?
+
+
+
+
+
+100)	What command is used to remove a file? 
+
+
+
+
+
+101)	Can you remove an open file under UNIX?
+
+
+
+
+
+102)	How do you create a decision tree in a shell script?
+
+
+
+
+
+103)	What is the purpose of the GREP command?
+
+
+
+
+
+104)	The system has a program that always includes the word nocomp in its name, how can you determine the number of processes that are using this program?
+
+
+
+
+
+105)	What is an in ode?
+
+
+
+
+
+106)	The system administrator tells you that the system hasn't been rebooted in 6 months, should he be proud of this?
+
+
+
+
+
+107)	What is redirection and how is it used?
+
+
+
+
+
+108)	How can you find dead processes?
+
+
+
+
+
+109)	How can you find all the processes on your system?
+
+
+
+
+
+110)	How can you find your id on a system?
+
+
+
+
+
+111)	What is the finger command?
+
+
+
+
+
+112)	What is the easiest method to create a file on UNIX?
+
+
+
+
+
+113)	What does >> do?
+
+
+
+
+
+115)	If you aren't sure what command does a particular UNIX function what is the best way to determine the command?
+
+
+
+
+
+
+ORACLE TROUBLESHOOTING:
+
+114)	How can you determine if an Oracle instance is up from the operating system level?
+
+
+
+
+
+115)	Users from the PC clients are getting messages indicating:
+
+
+
+
+116)	What could the problem be?
+
+
+
+
+
+116)	Users from the PC clients are getting the following error stack:
+
+
+
+
+
+
+117)	What is the probable cause?
+
+
+
+
+
+117)	How can you determine if the SQLNET process is running for SQLNET V1? How about V2?
+
+
+
+
+
+118)	What file will give you Oracle instance status information? Where is it located?
+
+
+
+
+
+119)	Users aren't being allowed on the system. The following message is received: 
+
+
+
+118)	What is the problem?
+
+
+
+
+
+
+
+
+
+120)	Where would you look to find out if a redo log was corrupted assuming you are using Oracle mirrored redo logs?
+
+
+
+
+
+121)	You attempt to add a datafile and get:
+ORA-01118: cannot add anymore dataflow: limit of 40 exceeded
+What is the problem and how can you fix it?
+
+
+
+
+
+122)	You look at your fragmentation report and see that smon hasn't coalesced any of you tablespaces, even though you know several have large chunks of contiguous free extents. What is the problem?
+
+
+
+
+
+123)	Your users get the following error:
+ORA-00055 maximum number of DML locks exceeded
+What is the problem and how do you fix it?
+
+
+
+
+
+
+124)	You get a call from you backup DBA while you are on vacation. He has corrupted all of the control files while playing with the ALTER DATABASE BACKUP CONTROLFILE command. What do you do?
+
+
+
+
+

@@ -1,0 +1,40 @@
+Press <Enter> to continue...Date: 04/20/03                                          Kuwait Insurance Co.                                         Page:   1      
+Time: 11:50 AM                                     Locks Held By All Users Report                                    SYS            
+                                                        orakic database                                                             
+                                                                                                                                    
+User Name            SID Type                           Object Name                    Mode                                         
+--------------- -------- ------------------------------ ------------------------------ ----------                                   
+^                      2 Media Recovery                 I_OBJ#                         Share                                        
+                       2 Media Recovery                 TAB$                           Share                                        
+                       2 Media Recovery                 CLU$                           Share                                        
+                       2 Media Recovery                 C_TS#                          Share                                        
+                       2 Media Recovery                 I_TS#                          Share                                        
+                       2 Media Recovery                 C_FILE#_BLOCK#                 Share                                        
+                       2 Media Recovery                 I_FILE#_BLOCK#                 Share                                        
+                       2 Media Recovery                 C_USER#                        Share                                        
+                       2 Media Recovery                 I_USER#                        Share                                        
+                       2 Media Recovery                 FET$                           Share                                        
+                       2 Media Recovery                 UET$                           Share                                        
+                       2 Media Recovery                 SEG$                           Share                                        
+                       2 Media Recovery                 UNDO$                          Share                                        
+                       2 Media Recovery                 TS$                            Share                                        
+                       2 Media Recovery                 FILE$                          Share                                        
+                       2 Media Recovery                 OBJ$                           Share                                        
+                       2 Media Recovery                 IND$                           Share                                        
+                       2 Media Recovery                 ICOL$                          Share                                        
+                       2 Media Recovery                 I_JOB_NEXT                     Share                                        
+                       2 Media Recovery                 RGROUPSEQ                      Share                                        
+                       2 Media Recovery                 C_RG#                          Share                                        
+                       2 Media Recovery                 I_RG#                          Share                                        
+                       2 Media Recovery                 C_OBJ#                         Share                                        
+                       2 Media Recovery                 JOB$                           Share                                        
+                       2 Media Recovery                 I_JOB_JOB                      Share                                        
+                       5 ^                              TAB$                           Other                                        
+                       6 Temp Segment                   C_OBJ#                         Row-X(SX)                                    
+                       6 Temp Segment                   PROXY_DATA$                    Row-X(SX)                                    
+                       6 Temp Segment                   COL$                           Row-X(SX)                                    
+                       6 Temp Segment                   PROXY_ROLE_DATA$               Row-X(SX)                                    
+ERROR:
+ORA-00028: your session has been killed 
+
+

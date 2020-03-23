@@ -1,0 +1,519 @@
+a60
+<HTML>
+<HEAD>
+<META name=vsisbn content="067230886x">
+<META name=vstitle content="Oracle Performance Tuning and Optimization">
+<META name=vsauthor content="Edward Whalen">
+<META name=vsimprint content="Sams">
+<META name=vspublisher content="Macmillan Computer Publishing">
+<META name=vspubdate content="04/01/96">
+<META name=vscategory content="Archive,Databases: Relational Databases">
+
+
+
+
+<TITLE>Oracle Performance Tuning and Optimization:Introduction</TITLE>
+
+<!-- HEADER -->
+
+<STYLE type="text/css"> 
+ <!--
+ A:hover  {
+ 	color : Red;
+ }
+ -->
+</STYLE>
+
+<META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+<script>
+<!--
+function displayWindow(url, width, height) {
+         var Win = window.open(url,"displayWindow",'width=' + width +',height=' + height + ',resizable=1,scrollbars=yes');
+	if (Win) {
+		Win.focus();
+	}
+}
+//-->
+</script>
+<SCRIPT>
+<!--
+function popUp(url) {
+        var Win = window.open(url,"displayWindow",'width=400,height=300,resizable=1,scrollbars=yes');
+	if (Win) {
+		Win.focus();
+	}
+}
+//-->
+</SCRIPT>
+
+<script language="JavaScript1.2">
+<!--
+function checkForQuery(fm) {
+  /* get the query value */
+  var i = escape(fm.query.value);
+  if (i == "") {
+      alert('Please enter a search word or phrase');
+      return false;
+  }                  /* query is blank, dont run the .jsp file */
+  else return true;  /* execute the .jsp file */
+}
+//-->
+</script>
+
+</HEAD>
+
+<body background="/images/back.jpg" bgcolor="#FFFFFF" link="#003399" alink="#FF0000" vlink="#003399" topmargin=0 leftmargin=0 marginheight=0 marginwidth=0>
+
+<table bgcolor="#003366" width="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td colspan="3">
+		
+		<table width="100%">
+			<tr valign="top">
+				<td bgcolor="#003366">&nbsp;&nbsp;<a href="http://www.earthweb.com" target="resource window"><img src="/images/ew_logo.jpg" width="109" height="93" vspace="5" alt="EarthWeb" border="0"></a>&nbsp;&nbsp;&nbsp;</td>
+				<td bgcolor="#003366" nowrap>
+
+<!--  Begin Ads ITK.BOOKS.DATABASE //-->
+
+<A HREF="/adclick.html/CID=00000349ba50285a00000000/site=corpitk/area=corpitk.books.database/aamsz=468x60" target="_blank"><IMG SRC="http://adimages.earthweb.com/images/ads/spidercatcher.gif?" %%HEIGHT%% %%WIDTH%% ALT="Click Here!"  BORDER="0"></A>
+
+
+<!-- ITK.BOOKS.DATABASE End Ads //--></td>
+				<td bgcolor="#003366" nowrap>
+
+<!--  Begin Ads ITKBAN.FRONT //-->
+
+<A HREF="/adclick.html/CID=00000ac5ba50285a00000000/site=corpitk/area=corpitk.books.database/aamsz=160x60/position=top" target="_blank"><IMG SRC="http://adimages.earthweb.com/images/ads/160x60/spider_catcher160x60.gif?" %%HEIGHT%% %%WIDTH%% ALT=""  BORDER="0"></A>
+
+
+<!-- ITKBAN.FRONT End Ads //-->
+990
+</td>
+<td><a href="CITK1a2b3c4d5e6f7g8h9idefcon4.html">
+<img src="/images/dotblue.gif" border="0" height="1" width="1" align="right"></a></td>
+			</tr>
+		</table>
+		
+		</td>
+	</tr>
+		
+	<tr>
+		<td height="1" colspan="3" bgcolor="#003366"><img src="/images/dotclear.gif" border=0 alt=""></td>
+	</tr>
+</table>
+
+<!-- END HEADER -->
+
+
+<!-- BEGIN SUB HEADER -->
+
+<table bgcolor="#003366" cellpadding="0" cellspacing="0" border="0" width="100%">
+
+<!-- ITK TOPNAV -->
+	
+	<tr>
+		<td align="left" valign="top" nowrap><a href="/"><img src="/images/top_tabs/home_off.gif" alt="Home" border="0"></a><a href="/content/corp.html"><img src="/images/top_tabs/subscribe.gif" alt="Subscribe" border="0"></a><a href="/search/"><img src="/images/top_tabs/search.gif" alt="Search" border="0"></a><a href="/faq/faq.html"><img src="/images/top_tabs/faq.gif" alt="FAQ" border="0"></a><a href="/sitemap.html"><img src="/images/top_tabs/sitemap.gif" alt="Sitemap" border="0"></a><a href="/contactus.html"><img src="/images/top_tabs/contact_us.gif" alt="Contact Us" border="0"></a></td> 
+	</tr>
+	
+<!-- END of ITK TOPNAV -->
+
+<!-- ITK LOGO and newsletter sign up -->
+
+</table>
+	
+<table cellpadding="0" cellspacing="0" border="0" width="100%">
+
+	<tr>
+		<td align="left" valign="top" nowrap><img src="/images/itk_logo_sm.jpg" alt="" border="0"></td>
+		<td align="right"><font face="verdana, sans-serif" size="1">
+
+<script language="JavaScript">
+<!-- 
+
+var days = new Array(8);
+days[1] = "Sunday";
+days[2] = "Monday";
+days[3] = "Tuesday";
+days[4] = "Wednesday";
+days[5] = "Thursday";
+days[6] = "Friday";
+days[7] = "Saturday";
+
+var months = new Array(13);
+months[1] = "January";
+months[2] = "February";
+months[3] = "March";
+months[4] = "April";
+months[5] = "May";
+months[6] = "June";
+months[7] = "July";
+months[8] = "August";
+months[9] = "September";
+months[10] = "October";
+months[11] = "November";
+months[12] = "December";
+
+var dateObj = new Date()
+var wday = days[dateObj.getDay() + 1]
+var lmonth = months[dateObj.getMonth() + 1]
+var date = dateObj.getDate()
+var fyear = dateObj.getYear()
+if (fyear <1000) fyear += 1900;
+document.write(wday + ", " + lmonth + " " + date + ", " + fyear)
+                
+//-->
+</script>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>
+<br><br>
+
+<!-- <img src="/images/enterprise_logo.gif" width="254" height="51" border="0"> --></td>
+	</tr>
+</table>
+
+<!-- END ITK LOGO and newsletter sign up-->
+	
+<!-- begin of ITK left NAV -->
+
+<!-- BEGIN LEFT NAVBAR -->
+
+
+1000
+
+<!-- BEGIN LEFT NAVBAR -->
+
+	<table border="0" cellpadding="0" cellspacing="0">
+	
+	
+		<tr>
+		<td width="145" valign="top" align="left" rowspan=8>
+		
+	<!-- KEYWORD SEARCH -->
+<script language="JavaScript1.2">
+<!--
+function checkForQuery(fm) {
+  /* get the query value */
+  var i = escape(fm.query.value);
+  if (i == "") {
+      alert('Please enter a search word or phrase');
+      return false;
+  }                  /* query is blank, dont run the .jsp file */
+  else return true;  /* execute the .jsp file */
+}
+//-->
+</script>
+ 
+	
+	<form name="keyword" method="POST" action="http://ewsearch.earthweb.com:80/jsp/k2search/ewkwk2search.jsp" onSubmit=" return checkForQuery(this); ">
+
+<img src="/images/keyword_searcha.gif" vspace="5" width="145" alt="" border="0">
+<INPUT type="hidden" name="collection" value="corpitk">
+<INPUT type="hidden" name="altcoll" value="bookscorpitk">
+<INPUT type="hidden" name="hl" value="on">
+<INPUT name="sortspec" type=hidden value="vspubdate desc score desc">
+<INPUT name=fields type=hidden value="vdkvgwkey score vstitle vsauthor vsisbn vspublisher vspubdate">		
+<INPUT name=imageprefix type=hidden value="http://corpitk.earthweb.com">
+<INPUT name=ssiFolder type=hidden value="corpitkads">
+		
+		<table width="145" border="0" cellpadding="0" cellspacing="0">
+		<tr>
+		<td width="145">&nbsp;&nbsp;<input type="text" name="query" value="" size="11">&nbsp;<input type="image" width=28 height=23 border=0 value="Go" name="Go" src="/images/go.gif" align=absmiddle><br>
+			<font face="arial, helvetica" size="2">
+			<img src="/images/dotclear.gif" width="1" height="5" alt="" border="0"><br>
+			
+			&nbsp;&nbsp;<a href="/search/search-tips.html"><img src="/images/arrows_blue.gif" alt="" border="0"><font size="1" color="#ffffff">Search Tips</font></a><br>
+			&nbsp;&nbsp;<a href="/search/"><img src="/images/arrows_blue.gif" alt="" border="0"><font size="1" color="#ffffff">Advanced Search</font></a><br>
+			
+			</font>
+			
+		</td>
+		<td width="5"><img src="/images/dotclear.gif" width=5 height=10 hspace="5" alt="" border="0"></td>
+		</tr>
+		</table>
+	</form>
+		
+		
+<!-- BROWSE BY TOPIC -->
+		
+
+<form name="meta" method="POST" action="http://ewsearch.earthweb.com:80/jsp/k2search/ewmetak2search.jsp" onSubmit=" return checkForQuery(this); ">
+
+
+
+<img src="/images/publication_searcha.gif" width="145" alt="" border="0">
+<INPUT type="hidden" name="collection" value="bookscorpitk">
+<INPUT type="hidden" name="altcoll" value="corpitk">
+<INPUT type="hidden" name="hl" value="on">
+<INPUT name="sortspec" type=hidden value="vspubdate desc score desc">
+<INPUT name=fields type=hidden value="vdkvgwkey score vstitle vsauthor vspublisher vspubdate">
+<INPUT name=imageprefix type=hidden value="http://corpitk.earthweb.com">
+<INPUT name=ssiFolder type=hidden value="corpitkads">
+		
+<table width="145" border="0" cellpadding="0" cellspacing="0">
+	
+			<tr>
+			<td valign="top">
+			&nbsp;&nbsp;<input type="text" name="query" value="" size="11">&nbsp;<input type="image" width=28 height=23 border=0 value="Go" name="Go" src="/images/go.gif" align=absmiddle><br><font face="arial, helvetica" size="2">
+			&nbsp;&nbsp;<SELECT NAME="metatags" style="font-size: 12; font-family: sans-serif;" size="1">
+			<option value="vstitle" SELECTED>Title
+			<option value="vsauthor">Author
+			<option value="vspublisher">Publisher
+			<option value="vsisbn">ISBN			
+			</SELECT><br><br></font>
+			</td>
+			</tr>
+</table>
+</form>
+
+<form action="" name="catlist">	
+<table width="145" border="0" cellpadding="0" cellspacing="0">				
+			<tr>
+			<td valign="top">
+			<img src="/images/jump_topica.gif" width="145" alt="" border="0">
+			</td>
+			</tr>
+			<tr>
+			<td width="145">
+				
+	        	<font face="Arial,helvetica" size="1">
+				&nbsp;&nbsp;<SELECT NAME="cat" onChange='top.location.href=this.options[selectedIndex].value;' style="font-size: 10; font-family: sans-serif;">
+                        <option value="" selected>Please Select
+                        <option value="">-----------
+						<option value="/reference/dir.ai.html">Artificial Intel
+						<option value="/reference/dir.busman.ht
+ad1
+ml">Business &amp; Mgmt
+                        <option value="/reference/dir.components.html">Components
+                        <option value="/reference/dir.contentmanagement.html">Content Mgmt
+                        <option value="/reference/dir.certification1.html">Certification
+                        <option value="/reference/dir.databases.html">Databases
+                        <option value="/reference/dir.enterprisemanagement1.html">Enterprise Mgmt
+                        <option value="/reference/dir.funandgames1.html">Fun/Games
+                        <option value="/reference/dir.groupwareandcollaboration1.html">Groupware
+                        <option value="/reference/dir.hardware1.html">Hardware
+                        <option value="/reference/dir.ibmredbooks.html">IBM Redbooks
+                        <option value="/reference/dir.intranetandextranetdevelopment1.html">Intranet Dev
+                        <option value="/reference/dir.middleware.html">Middleware
+                        <option value="/reference/dir.multimediaandgraphicdesign1.html">Multimedia
+                        <option value="/reference/dir.networkservices1.html">Networks 
+                        <option value="/reference/dir.operatingsystems.html">OS
+                        <option value="/reference/dir.productivityapplications1.html">Productivity Apps
+                        <option value="/reference/dir.programminglanguages.html">Programming Langs
+                        <option value="/reference/dir.security1.html">Security  
+						<option value="/reference/dir.softwareengineering1.html">Soft Engineering
+                        <!-- <option value="/reference/dir.ewtraining1.html">Training Guides -->
+                        <option value="/reference/dir.userinterfaces.html">UI
+                        <option value="/reference/dir.webservices.html">Web Services
+                        <option value="/reference/dir.webmasterskills1.html">Webmaster
+                        <option value="/reference/dir.y2k1.html">Y2K
+                        <option value="">-----------
+                        <option value="/reference/whatsnew.html">New Arrivals
+                        </SELECT>
+						</font>
+			
+		</td>
+		</tr>
+	</table>
+	</form>
+	
+<!-- LEFT NAV SEARCH END -->
+
+<table border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td>
+<a href="/desktop/"><img src="/images/desktop_icona.gif" border=0 alt="Go to ITKnowledge Enterprise"></a><br><br></td>
+	</tr>
+</table>
+
+<!-- END LEFT NAVBAR -->
+
+
+
+<!-- END LEFT NAVBAR -->
+	
+	<td width="15"><img src="/images/dotclear.gif" width="15" alt="" border="0"></td>
+
+<!-- end of ITK left NAV -->
+
+<!-- begin main content -->
+	
+	<td width="100%" valign="top" align="left">
+		<br>
+
+<!-- END SUB HEADER -->
+
+
+
+674
+<!-- Created by dB Page Builder.  http://www.pchelponline.com/bluestem -->
+
+<!--Begin Content Column -->
+
+<TABLE border=0 cellspacing=0 cellpadding=0>
+<tr>
+<td width=75 valign=top>
+<img src="/images/sm_covers/067230886x.gif" width=60 height=73 alt="Oracle Performance Tuning and Optimization" border="1">
+</td>
+<td align="left">
+    <font face="arial, helvetica" size="-1" color="#336633"><b>Oracle Performance Tuning and Optimization</b></font>
+    <br>
+    <font face="arial, helvetica" size="-1"><i>by Edward Whalen</i>
+    <br>
+    Sams,&nbsp;Macmillan Computer Publishing
+    <br>
+    <b>ISBN:</b>&nbsp;067230886x<b>&nbsp;&nbsp;&nbsp;Pub Date:</b>&nbsp;04/01/96</font>
+</td>
+</tr>
+</table>
+<P>
+<FORM name= "search2" method="POST" action="http://ewsearch.earthweb.com:80/jsp/k2search/ewintrak2search.jsp" onSubmit=" return checkForQuery(this); ">
+<INPUT type="hidden" name="collection" value="corpitk">
+<INPUT type="hidden" name="altcoll" value="bookscorpitk">
+<INPUT type="hidden" name="hl" value="on">
+<INPUT name="sortspec" type=hidden value="score desc">
+<INPUT name="fields" type=hidden value="vdkvgwkey score vstitle vsisbn vsauthor vspublisher vspubdate">
+<INPUT name="imageprefix" type=hidden value="http://corpitk.earthweb.com">
+<INPUT name="ssiFolder" type=hidden value="corpitk">
+<INPUT type="hidden" name="bookid" value="corpitk.earthweb.comreferencepro067230886x">
+
+<font face="arial, helvetica" size=2><b>Search this book:</b></font><br>
+<INPUT NAME="query" size=25 VALUE="">&nbsp;<input type="image" width=28 height=23 border=0 value="Go" name="Go" src="/images/go.gif" align=absmiddle>
+
+</form>
+
+
+22 
+
+<!-- Empty Reference Subhead -->
+1000
+
+
+<!--ISBN=067230886x//-->
+<!--TITLE=Oracle Performance Tuning and Optimization//-->
+<!--AUTHOR=Edward Whalen//-->
+<!--PUBLISHER=Macmillan Computer Publishing//-->
+<!--IMPRINT=Sams//-->
+<!--CHAPTER=0//-->
+<!--PAGES=xxiv-xxvii//-->
+<!--UNASSIGNED1//-->
+<!--UNASSIGNED2//-->
+
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="ewtoc.html">Table of Contents</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+<P><BR></P>
+<H2><A NAME="Heading1"></A><FONT COLOR="#000077">Introduction</FONT></H2>
+<P>Database management software and the manipulation of data has evolved to where it touches every aspect of our lives. A day doesn&#146;t go by in which we don&#146;t access a database. Whether we are withdrawing money from an ATM machine, opening a checking account, or purchasing groceries, every aspect of our lives is affected by databases. Hand in hand with the new power of information comes the frustration of having to wait for data to be retrieved. I&#146;m sure there isn&#146;t a person today who hasn&#146;t had to wait for a credit card to be approved. Although the speed of computers has been increasing every year, so has the amount of data being manipulated. Amounts of data that several years ago were unheard of are now a daily part of many companies. In years past, databases were used strictly in the realm of big business because large mainframes cost millions of dollars; today, gigabytes of data are being manipulated on the same types of computer you may have in your own home.
+</P>
+<P>No matter how fast new generations of computers get, applications will always be written to take advantage of them. As the cost of storage continues to drop, the amount of data stored will continue to increase. A perfect example of this is the CD-ROM. The advent of the CD-ROM allowed large amounts of data to be inexpensively stored; predictably, many new applications have arisen to take advantage of that technology. These applications are now augmenting written text with video and audio clips. The same type of information revolution is also happening in the database industry.</P>
+<P>Oracle already has the capability to store video, documents, and large binary objects in the database and allow quick access to this data. Oracle databases can store hundreds of gigabytes of data and can easily retrieve it; Oracle has the potential of storing <I>terabytes</I> of data in a single database in the near future.</P>
+<P>What is needed to store this kind of data? You must have a Relational Database Management System (RDBMS) with the following attributes:</P>
+<DL>
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Can effectively handle large amounts of data.</B> The amount of data in entry-level systems is increasing at an amazing rate.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Can manage large numbers of uses.</B> Contention must be effectively managed and data integrity guaranteed.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Can maintain the required level of security.</B> With large numbers of users, it is imperative that protected data be secured.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Can consistently perform at the required rates. </B> To serve a large user community effectively, the system must be able to maintain the performance rate required by the user community.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Is available as needed.</B> The system may be required to perform in a 7&#215;24 environment (that is, up 24 hours a day, 7 days a week).
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Is reliable. </B> The system is only as good as its reliability. An unreliable system is unacceptable in today&#146;s mission-critical environments.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Is serviceable.</B> The system should be easily maintained and serviced to reduce downtime and boost productivity.
+<DD><B>&#149;</B>&nbsp;&nbsp;<B>Is within your budget.</B> A perfect solution that you cannot afford is not a good solution.
+</DL>
+<P>This book focuses on engineering the performance of Oracle systems while maintaining the attributes just mentioned. To achieve optimal performance, you must incorporate many factors, including engineering pe
+1000
+rformance into the initial design of the database layout, properly constructing the application code, tuning the database, properly selecting the hardware, designing the network, and choosing the operating system.
+</P>
+<P><FONT SIZE="+1"><B>What&#146;s in this Book?</B></FONT></P>
+<P>In this book, I help you build a foundation of understanding. When you finish reading this book, you should have not only an understanding about how to design high-performance applications but also the knowledge about how the system operates and how each component contributes to the performance of the whole. With this philosophy in mind, the book was designed with six parts, each of which has several chapters.
+</P>
+<P><B>Part I, &#147;Introduction,&#148;</B> lays down a foundation by presenting an overview of the Oracle architecture and products. You will gain an understanding of the design of Oracle and the different features available. I also discuss what it means to have a well-performing system. If you tune a system without having any goals in mind, you usually end in disappointment.</P>
+<P>Chapter 4, &#147;Tuning Methodology,&#148; is an overview of my methodology for system performance tuning. Here you will find the way to plan, execute, and analyze changes that have been made and how to determine what the result means.</P>
+<P>In Chapter 5, &#147;Benchmarking,&#148; you learn how to set up a test to show whether your system is performing well and where the problem areas are. You also learn about some of the industry standard benchmarks and what they mean to you. You are introduced to the Transaction Processing Performance Council (TCP), their Web site, and how you can use this information.</P>
+<P>Chapter 6, &#147;Performance Monitoring Tools,&#148; gives an overview of some of the performance monitoring tools available from Oracle and third-party vendors and describes how they can help you in investigating performance problems.</P>
+<P>Chapter 7, &#147;Performance Engineering Starts at the Design Stage,&#148; explains the holistic approach to performance engineering. Performance should be engineered into every aspect of the system, from hardware selection and network configuration to database design and application development.</P>
+<P><B>Part II, &#147;Tuning the Server,&#148;</B> focuses on tuning the RDBMS server. The performance of the system depends on a number of factors. By analyzing each component individually, you can determine where performance can be enhanced.</P>
+<P>Chapter 8, &#147;What Affects Oracle Server Performance?&#148; is an overview of what can effect the server performance and where bottlenecks can occur.</P>
+<P>Chapter 9, &#147;Oracle Instance Tuning,&#148; reviews the bulk of instance tuning. Items such as memory, I/O, and CPU usage are discussed here. You also get a more in-depth look at some internal Oracle structures.</P>
+<P>Chapter 10, Performance Enhancements,&#148; looks at some of the things you can do in the RDBMS server to improve performance. Some examples are the use of clusters and indexes as well as some of Oracle&#146;s parallel features.</P>
+<P>Chapter 11, &#147;Tuning the Server Operating System,&#148; discusses the OS parameters you can tune. Chapter 12, &#147;Operating System-Specific Tuning,&#148; focuses on a few of the 90 platforms Oracle supports.</P>
+<P>Chapter 13, System Processors,&#148; Chapter 14, &#147;Advanced Disk I/O Concepts,&#148; and Chapter 15, &#147;Disk Arrays,&#148; describe some specifics concerning hardware and include detailed explanations about why different hardware features affect RDBMS performance.</P>
+<P><B>Part III, &#147;Configuring the System,&#148;</B> looks at differences in design, tuning, and configuration based on the type of application to be run. This part of the book is designed to give you an understanding of the differences in data access patterns and system loading based on your application profile. In addition to explaining the differences in system workload, the chapters in this part of the book provide solutions to the problems these w
+e47
+orkloads cause.</P>
+<P><B>Part IV, &#147;Tuning SQL,&#148;</B> and <B>Part V, &#147;Tuning the Client,&#148;</B> explore the client. Here, the focus is on the application and the front-end pieces and how to improve the client&#146;s performance. Part IV focuses on the SQL statements used in your application; Part V looks more at the client machines themselves and how you can tune them.</P>
+<P>Chapter 24, &#147;What Is a Well-Tuned SQL Statement?&#148; introduces the concept of badly tuned SQL statements and how they can affect the performance of the client and the server. It is here that the importance of a well-tuned SQL statement is discussed. The remainder of Part IV looks at various topics relating to how your SQL statements can be improved and tuned. Included are many tips and hints on features and techniques that can improve your SQL statements.</P>
+<P>Part V focuses on the client OS and improvements you can make to streamline the system. The goal of tuning the client OS is to get it out of the way of the client application so that the client application can be more efficient. Chapter 34, &#147;Using GUI Builders,&#148; examines the popular GUI builder products available on the market and how you can tune the resulting application to improve performance.</P>
+<P><B>Part VI, &#147;Tuning the Network,&#148;</B> is what is left over when you have tuned the server and the application. It covers how you know if you have a network problem and how you solve it.</P>
+<P><FONT SIZE="+1"><B>How To Use this Book</B></FONT></P>
+<P>To keep the book interesting, I have woven in some personal anecdotes relevant to the subject matter. I hope I have conveyed some of the excitement that comes when you push systems to their limits. Those of us who work in the database performance field constantly push the envelope of technology to achieve new levels of performance previously thought impossible. This kind of experimentation can be very satisfying when everything works well; it can be frustrating when it doesn&#146;t.
+</P>
+<P>My hopes are that, having read this book, you have a basic understanding of how the components of the system work together to form the whole. If you have this foundation, I feel confident that you can tackle a performance problem, know what to look for, and know how to fix it. Not all performance problems are alike, nor are all solutions. It is important that you have a basic understanding of what to look for and what the possible solutions are.</P>
+<P>To me, performance is one of the most exciting areas of computing. Personal computers now have the computing power reserved for mainframes just a few years ago. Gigabyte hard disks for less than $300 now make it possible for us to have huge stores of information in our home computers. But performance does not mean buying the biggest and the fastest; you have to get the most out of what you&#146;ve got. Buying a bigger or a faster server may be a waste if, in fact, the problem is the client machine or the network: a 10-second response time to a query could be caused by a 1-second response from the server and a 9-second wait for the information to be processed in the GUI.</P>
+<P>If I have done my job correctly, you should finish this book with the ability to analyze the problem, hypothesize a solution, test that solution, and understand the result. I hope this book gives novices an idea of what performance engineering is all about; seasoned professionals should receive some new insight and ideas.</P><P><BR></P>
+<CENTER>
+<TABLE BORDER>
+<TR>
+<TD><A HREF="ewtoc.html">Table of Contents</A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+
+
+55e
+<!-- all of the reference materials (books) have the footer and subfoot reveresed -->
+<!-- reference_subfoot = footer -->
+<!-- reference_footer = subfoot -->
+
+<!-- BEGIN SUB FOOTER -->
+	<br>
+	<img src="/images/dotclear.gif" width="5" height="7" border="0">
+	</TD>
+    </TR>
+	</TABLE>
+	
+	<table width="100%" border=0 cellpadding=0 cellspacing=0>
+	<tr>
+		<td align="left" width="160"><img src="/images/bot_curve.jpg" width="160" alt="" border="0"></td>
+		<td align="left" valign="top" nowrap><a href="/"><img src="/images/top_tabs/home_bot.gif" alt="home" border="0"></a><a href="/content/corp.html"><img src="/images/top_tabs/subscribe_bot.gif" alt="subscribe" border="0"></a><a href="/search/"><img src="/images/top_tabs/search_bot.gif" alt="search" border="0"></a><a href="/faq/faq.html"><img src="/images/top_tabs/faq_bot.gif" alt="faq" border="0"></a><a href="/sitemap.html"><img src="/images/top_tabs/sitemap_bot.gif" alt="sitemap" border="0"></a><a href="/contactus.html"><img src="/images/top_tabs/contact_us_bot.gif" alt="contactus" border="0"></a><img src="/images/dotclear.gif" width=260 height="1" alt="" border="0"></td> 
+	</tr>
+	</table>
+		
+	<table width="100%" bgcolor="#003366" border=0 cellpadding=0 cellspacing=0>
+	<tr>
+		<td align="left" width=145><img src="/images/clear_pixel.gif" width=145 height="1" alt="" border="0"></td>
+				
+<!-- END SUB FOOTER -->
+
+702
+
+<!-- all of the books have the footer and subfoot reveresed -->
+<!-- reference_subfoot = footer -->
+<!-- reference_footer = subfoot -->
+
+<!-- FOOTER -->
+			
+<td align="left" bgcolor="#003366">
+<table border="0" cellspacing="10" cellpadding="5">
+<tr>
+<td align="center">
+<font face="arial, helvetica" size="1" color="#cccccc"><b><a href="/products.html"><font color="#0099CC">Products</font></a>&nbsp;|&nbsp; <a href="/contactus.html"><font color="#0099CC">Contact Us</font></a>&nbsp;|&nbsp; <a href="/aboutus.html"><font color="#0099CC">About Us</font></a>&nbsp;|&nbsp; <a href="http://www.earthweb.com/dlink.corp|privacy-jhtml.72.0.-.-.jhtml" target="resource window"><font color="#0099CC">Privacy</font></a> &nbsp;|&nbsp; <a href="http://www.itmarketer.com/" target="resource window"><font color="#0099CC">Ad Info</font></a> &nbsp;|&nbsp; <a href="/"><font color="#0099CC">Home</font></a></b>
+<br><br>Use of this site is subject to certain <a href="/agreement.html"><font color="#0099CC">Terms &amp; Conditions</font></a>, <a href="/copyright.html"><font color="#0099CC">Copyright &copy; 1996-2000 EarthWeb Inc.</font></a> All rights reserved.  Reproduction whole or in part in any form or medium without express written <a href="http://www.earthweb.com/dlink.corp|permissions-jhtml.72.0.-.-.jhtml" target="resource window"><font color="#0099CC">permission</font></a> of EarthWeb is prohibited. Read EarthWeb's <A HREF="http://www.earthweb.com/dlink.corp|privacy-jhtml.72.0.-.-.jhtml" target="resource window"><font color="#0099CC">privacy</font></A> statement.</font><br><br>
+</td>
+</tr>
+</table>
+
+<a href="CITK1a2b3c4d5e6f7g8h9idefcon4.html">
+<img src="/images/dotclear.gif" border="0" height="1" width="1" align="left"></a>
+</td>
+		</tr>
+</table>
+</BODY>
+</HTML>
+
+<!-- END FOOTER -->
+
+
+0
+

@@ -1,0 +1,30 @@
+Using the sizing spreadsheet (TBSIZE.XLS):
+
+The sizing spreadsheet is an Excell based spreadsheet. It can 
+calculate the size for up to 20 columns of each type (1 byte 
+header, 3 byte header, Date and Number). It includes overhead 
+for multiple transactions as determined by inittrans*23. 
+If this is for a cluster this data is also enterable, 
+otherwise it defaults to 1. The standard value for 57 
+is used for the fixed header. 
+
+Only enter data in the Table, 1Byte Sz, # byte Sz, Date 
+and Number columns. The other columns are calculated. 
+The date is set to 7+1 (8) bytes no matter what you enter, 
+so just enter a 1 for each date column. An average value of 
+11 for length of the date field is used for the 
+flat file (FFS) calculation.
+
+You need to enter your DB Bk Sz (DB Block Size), the value for 
+inittrans, pctfree and number of tables in cluster (if needed) 
+and the # of ROW values. The spread sheet calculates intial 
+Rows per Blocks not using the 2*rpb value and then a final rpb 
+based on that number. The sizes calculated for both rpb numbers 
+are reported in either m (meg) or k (kilobytes) and an average 
+is taken. This should be close enough for sizing estimates 
+(usually the first and second sizes are within a few precent 
+of each other).
+
+Also included is a filled out spread sheet (EXAMPLE.XLS) to 
+show what it looks like.
+

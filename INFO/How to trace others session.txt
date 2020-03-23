@@ -1,0 +1,90 @@
+How to trace others session:
+==============================
+Step 1:
+
+Connect to sql as sysdba and issue
+
+sqlplus /nolog
+
+SQL> conn sys/manager@dig as sysdba
+Connected.
+
+SQL> @getpid
+
+SQL>SELECT s.SID, s.SERIAL#,p.pid, s.OSUSER, s.MACHINE, s.PROGRAM
+from v$process p , v$session s
+where p.addr = s.paddr
+--WHERE MACHINE LIKE '%NK%'
+and SID LIKE '&ID'
+--WHERE SERIAL# LIKE %77%
+ORDER BY MACHINE
+/
+
+
+       SID    SERIAL# OSUSER                         MACHINE         PROGRAM
+---------- ---------- ------------------------------ --------------- ----------------------------
+        49       6974 Administrator                  KICDELL\NK      sqlplusw.exe
+       143       9878 Administrator                  KICDELL\NK      brwo.exe
+       160       4829 Administrator                  KICDELL\NK      sqlplusw.exe
+       192       7484 Administrator                  KICDELL\NK      Golden32.exe
+       266       9682 Administrator                  KICDELL\NK      sqlplusw.exe
+       268       6839 Administrator                  KICDELL\NK      jrew.exe
+
+
+Turn SQL tracing on in session 143 with serial 9878. The trace information will get written to user_dump_dest.
+
+SQL> @otstraceon
+Enter value for sess: 143
+Enter value for serial: 9878
+
+PL/SQL procedure successfully completed.
+
+
+SQL> exec dbms_system.set_sql_trace_in_session(143,9878,TRUE);
+ 
+Turn SQL tracing off in session 143
+
+SQL> @otstraceoff
+Enter value for sess: 143
+Enter value for serial: 9878
+
+PL/SQL procedure successfully completed.
+
+SQL> exec dbms_system.set_sql_trace_in_session(448,2288,FALSE); 
+ 
+
+Find out ur trace file and from os level run following:
+
+ops$tkyte@ORA9IR2> @gettrace
+ops$tkyte@ORA9IR2> column trace new_val TRACE
+ops$tkyte@ORA9IR2>
+ops$tkyte@ORA9IR2>  select c.value || '/' || d.instance_name || '_ora_' || a.spid || '.trc' trace
+ from v$process a, v$session b, v$parameter c, v$instance d
+ where a.addr = b.paddr
+-- and b.audsid = userenv('sessionid')
+ and c.name = 'user_dump_dest'
+ and a.pid = '&P_ID'
+    /
+
+Enter value for p_id: 18
+old   6:  and a.pid = '&P_ID'
+new   6:  and a.pid = '18'
+
+TRACE
+-------------------------------------------------------------------------------
+/ora/oracle/admin/orakic/udump/orakic_ora_390630.trc
+
+
+
+
+Use this command on OS level for TKPROF
+
+$ tkprof orakic_ora_298552.trc sp-traced.lst
+
+
+OR 
+
+Use this from OS level to generate the create table and insert statement for the output of tkprod for the traced session
+
+$ tkprof orakic_ora_369130.trc civilid_TIMMED_EXP.lst EXPLAIN=PREMPROD/PREMPROD TABLE=PREMPROD.nk_plan_table INSERT=STOREA.SQL SYS=NO
+Use this from os level to generate the insert statement from tkprod

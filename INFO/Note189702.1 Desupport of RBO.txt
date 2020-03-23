@@ -1,0 +1,94 @@
+
+Doc ID:  Note:189702.1 
+Subject:  Rule Based Optimizer is to be Desupported in Oracle10g 
+Type:  ANNOUNCEMENT 
+Status:  PUBLISHED 
+ Content Type:  TEXT/X-HTML 
+Creation Date:  15-MAY-2002 
+Last Revision Date:  06-AUG-2004 
+ 
+
+Desupport of the Rule-Based Optimizer 
+
+The rule-based optimizer (RBO) will no longer be supported when Oracle9i is de-supported. Oracle10g will only support the cost-based optimizer (CBO). Hence Oracle9i Release 2 is the last release to support the RBO. Partners and customers should certify their applications with the CBO before that time. The CBO has been Oracle's primary optimization method for many years now, and most major independant software vendors use the CBO by choice. Our surveys indicate that over 80% of customers are using the CBO with Oracle8i, and this number is expected to increase with Oracle9i. For more information on the CBO please refer to the Query Optimization in Oracle9i white paper which can be found at: http://otn.oracle.com/products/bi/pdf/o9i_optimization_twp.pdf 
+
+What is being Desupported? 
+
+The RBO is Oracle's legacy optimizer originating from Oracle Version 6 and earlier. The RBO is being desupported in Oracle10g. The RBO will still exist in Oracle10g, but will be an unsupported feature and will be removed in a future release. No code changes will be made to the RBO code and no bug fixes will be provided. The RBO was superseded in Oracle7 by the CBO and has continued to be available for backwards compatibility. Oracle Oracle10g will support only one optimizer, and all applications running on that release should use that optimizer. 
+
+Versions Affected 
+
+Support for the RBO will be removed in Oracle10g. The last release that supports the rule-based optimizer will be Oracle9i Release 2. 
+
+Platforms Affected 
+
+GENERIC - All platforms will be affected by this change. 
+
+Why is the RBO being Desupported? 
+
+The existence of the RBO prevents Oracle from making key enhancements to its query-processing engine. The removal of the RBO will permit Oracle to improve performance and reliability of the query-processing components of the database engine. Furthermore, using the RBO prevents customers from taking advantage of all the query-processing technologies introduced since Oracle 7.3. For example, the RBO cannot take advantage of partitioned tables, bitmap indexes, hash join, parallel query, index organized tables, function-based indexes, materialized views and many others. As a result, customers never realize the benefits and the superior performance gained by these techniques. 
+
+Third Party Applications 
+
+This RBO desupport message is being distributed to both partners and customers. Partners are being encouraged to certify their products on Oracle's CBO as soon as possible. Customers should contact their software provider directly if they have concerns. 
+
+Timescales 
+
+The RBO will be supported throughout the lifetime of Oracle9i Release 2. From the date this notice is issued, May 2002, customers and ISVs have at least 2 years to prepare for this change. In addition, Oracle has consistently documented that all applications written after the Oracle Version 6 timeframe (over ten years ago) should use the CBO. Oracle has also publicly stated for many years that the RBO would be de-supported in a future release. The only new information in this notice is that Oracle now has a specific timeframe for desupporting the RBO. 
+
+RBO Support in Oracle9i 
+
+Until Oracle9i is desupported, Oracle will continue its current level of support for the RBO. For the RBO, Oracle only fixes bugs such as internal (i.e. ORA-00600) errors, 'wrong-results' from queries, and backwards-compatibility issues. Consistent with this policy (which was implemented with Oracle8), no new functionality will be added to the RBO. Oracle will not enhance the RBO in any way; thus, Oracle will not modify the RBO to take advantage of new features or to remove existing limitations or to generate different execution plans for any queries, with the exception of when the chosen execution plan generates incorrect query results. 
+
+What action should I take now? 
+
+Oracle advises customers to prepare for this change now by starting to convert any RBO based applications to CBO. 
+
+
+How do I know whether I am using the RBO? 
+If your optimizer_mode initialization parameter is set to CHOOSE (default setting) and you have not collected statistics on your database objects, or your optimizer_mode is set to RULE, then you may be using the RBO to optimize your queries. For more details see <Note:66484.1> Which Optimizer is Used? and <Note:98956.1> How to Set the Optimizer Mode for the Database 
+
+
+Switching to the CBO 
+
+CBO Prerequisites 
+The CBO relies on accurate statistics to determine the optimal access path for a query. Information regarding gathering and maintenance of statistics is included below. The Oracle9i Database Performance Tuning Guide and Reference extensively documents the behavior of the CBO. 
+
+
+Moving applications tuned for the RBO to work well with the CBO 
+The main issue is ensuring that appropriate statistics are collected and maintained. Little, if any, change to the actual SQL application code is required. Customers new to the CBO should gather statistics on all of their database objects, and should carefully consider the proper setting for the <Parameter:OPTIMIZER_MODE> (FIRST_ROWS_N will be a good setting for many OLTP applications previously using the RBO). 
+
+
+Testing applications under the CBO 
+Oracle strongly recommends that applications should be thoroughly tested prior to any major change such as implementation of a new optimizer. Testing can take place on a dedicated test system or even on a production environment. By explicitly setting the optimizer mode to 'RULE', database administrators can ensure that their production users continue to use the RBO. Meanwhile, application developers can force the use of CBO in their sessions to observe the behavior of the CBO. 
+
+
+Management of statistics 
+Extensive facilities are provided to facilitate the collection and maintenance of optimizer statistics. Optimizer statistics gathering can be as simple as turning on DML Monitoring and collecting statistics through the DBMS_STATS package. 
+Turning on DML monitoring for the entire system can be accomplished by calling the relevant procedure: 
+
+
+execute dbms_stats.alter_database_tab_monitoring;
+
+
+Once monitoring has been initiated, functions such as gather_schema_stats can be used to gather the appropriate statistics for the optimizer: 
+
+
+
+execute dbms_stats.gather_schema_stats(<schema_name>, options => 'GATHER AUTO');
+
+
+This procedure can be called on regular intervals using Oracle's job queue mechanism (see the DBMS_JOB package). 
+These packages provide many more monitoring options than can be detailed here. Please refer to the following documents for more details: 
+
+Oracle9i Database Performance Tuning Guide and Reference for information about using DBMS_STATS to gather statistics for the optimizer 
+Oracle9i Supplied PL/SQL Packages and Types Reference for a description of the DBMS_STATS and DBMS_JOB packages
+
+Maintaining RBO access paths 
+In some cases it may be desirable to maintain the original RBO access paths for queries. Plan stability for these queries can be maintained using Stored outlines, a feature introduced in Oracle8i, to capture, save, and re-use the execution plans for all of the queries of a given application. This feature can thus preserve the RBO behavior for a fixed set of queries. See Oracle9i Database Performance Tuning Guide and Reference for information about Using Plan Stability 
+
+
+Useful CBO Articles 
+<Note:35934.1> TECH: Cost Based Optimizer - Common Misconceptions and Issues 
+<Note:222627.1> Migrating to the Cost-Based Optimizer
+

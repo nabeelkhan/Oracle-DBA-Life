@@ -1,0 +1,186 @@
+<html>
+	<head>
+		<title>
+			Customizing SQL.BSQ
+		</title>
+		<style>
+			<!-- a:hover{color:#660066;} -->
+		</style>
+	</head>
+	<body background="../../images/bg.jpg" link="#FF6600" vlink="#FF6600" alink="#660066">
+		
+		<h2 align="center">
+			<font color="#990000">
+				Customizing SQL.BSQ
+			</font>
+		</h2>
+		Most DBAs are reluctant to customize the <em>sql.bsq</em> file prior to database creation, in the belief that doing so is unsupported.
+		However, since release 7.3, limited customization of the <em>sql.bsq</em> file has been supported.
+		You may still see comments to the contrary, even from within Oracle.
+		However, the <em>Tuning</em> guide of the official Oracle documentation set
+		allows that modifications may be made to the <em>sql.bsq</em> file to optimize the physical storage of the data dictionary.
+		You may not, however, modify the logical structure of the data dictionary.
+		<p>
+		We strongly recommend that you take the opportunity to customize the <em>sql.bsq</em> file
+		prior to the creation of any performance critical database.
+		A failure to do so will introduce problems that can only be repaired by recreating the database.
+		But before you can make your changes to <em>sql.bsq</em>, you need to consider to the following question.
+		
+		<h3>
+			<font color="#660066">
+				How can you prevent fragmentation of the SYSTEM tablespace?
+			</font>
+		</h3>
+		The control of space within the SYSTEM tablespace is particularly difficult because it is used in diverse and mysterious ways.
+		However, of all tablespaces the SYSTEM tablespace is the most important one in which to avoid fragmentation,
+		because repairing such damage normally involves rebuilding the database.
+		<p>
+		I scarcely need repeat the cardinal rule that other than the data dictionary
+		<em>nothing</em> should be allowed in the SYSTEM tablespace that can possibly go elsewhere.
+		In particular, no user, other than SYS, should have SYSTEM as their DEFAULT TABLESPACE.
+		And no user, not even SYS, should have SYSTEM as their TEMPORARY TABLESPACE.
+		You can use the APT script <b><a href="../../scripts/misc.htm#system_space_invaders">system_space_invaders.sql</a></b> to identify any such users.
+		<p>
+		Despite all such warnings, the creation of extraneous segments in the SYSTEM tablespace
+		is still the main cause of SYSTEM tablespace fragmentation.
+		Scripts such as Oracle's <em>utlbstat.sql</em> and <em>utlestat.sql</em>
+		that create and drop segments in the SYS schema's default tablespace don't help.
+		<p>
+		Of course, there are some things that go into the SYSTEM tablespace that you cannot control -
+		namely, the data dictionary, the SYSTEM rollback segment and deferred rollback segments.
+		<blockquote>
+			<small>
+				It is actually possible to place much of the data dictionary in another tablespace, and there is sometimes good reason for doing so.
+				However, if you do need to do anything like this, you should get Oracle's blessing first.
+			</small>
+		</blockquote>
+		The data dictionary segments have very diverse storage requirement, however these are basically static in mature databases.
+		The SYSTEM rollback segment should be lightly used, and thus not require much space management.
+		But deferred rollback segments are the wildcards in SYSTEM tablespace space management.
+		<p>
+		Deferred rollback segments are also called <em>save undo</em> segments.
+		They are created automatically if a tablespace goes offline with uncommitted changes.
+		Normally, this will only happen in the event of media failure, and only if your database is in archivelog mode.
+		One deferred rollback segment is created for each tablespace affected.
+		Each transaction affected copies the undo records for changes to that tablespace only,
+		from the rollback segment to which it has been writing, into the deferred rollback segment.
+		When the tablespace comes back online again, the undo from transactions that were rolled back is automatically applied,
+		and the deferred rollback segment is dropped.
+		<p>
+		Deferred rollback segments are created in the SYSTEM tablespace explicitly (not in the SYS schema's default tablespace, if that has been changed).
+		So you need to allow space in the SYSTEM tablespace for deferred rollback segments.
+		There must be at least enough space to accommodate all the outstanding undo
+		against any set of tablespaces that may go offline together due to a single media failure.
+		<p>
+		The most unpleasant thing about the creation of deferred rollback segments
+		is that they do not use the SYSTEM tablespace's default INITIAL and NEXT extent sizes, but instead specify tiny 10K extents.
+		However, they do use the SYSTEM tablespace's default PCTINCREASE value.
+		This seems calculated to defeat most attempts to actively manage space in the SYSTEM tablespace.
+		If you change the default PCTINCREASE value for the SYSTEM tablespace to zero, deferred rollback segments will be created in lots of tiny extents.
+		Deferred rollback segments, like the SYSTEM rollback segment, cannot have an unlimited number of extents.
+		The number of extents is limited by the number of slots in the extent control table in the segment header block.
+		To avoid data loss, you must ensure that that limit is never reached for a deferred rollback segment.
+		<p>
+		This means that you have to choose between the following three options for SYSTEM tablespace space management.
+		<ol>
+			<li>
+			You can (in theory) make SYSTEM a locally managed tablespace using the AUTOALLOCATE policy
+			(the UNIFORM SIZE policy is not available for the SYSTEM tablespace).
+			<li>
+			You can make SYSTEM a dictionary managed tablespace with a fixed extent size policy.
+			In this case the PCTINCREASE value would be zero, but the extent size would be large enough
+			to prevent any risk of being unable to extend a deferred rollback segment.
+			<li>
+			You can make SYSTEM a dictionary managed tablespace with a non-zero PCTINCREASE value
+			and rely on the MINIMUM EXTENT size feature to limit fragmentation.
+			(This feature is not available prior to Oracle8; but nobody should be creating Oracle7 databases anymore.)
+		</ol>
+		<p>
+		It is not recommended that you make SYSTEM a locally managed tablespace.
+		Extent information for locally managed tablespaces is not cached in the dictionary cache,
+		and in the case of the data dictionary itself this caching is important to the performance of rowcache recursive SQL.
+		(Not to mention that database creation fails if you attempt this anyway unless you've made extensive changes to <em>sql.bsq</em>.)
+		<p>
+		We also prefer not to use a large fixed extent size for the SYSTEM tablespace.
+		Most of the short-term segments created in the SYSTEM tablespace have very modest space requirements,
+		and using a large fixed extent size is inefficient in terms of space.
+		<p>
+		We therefore recommend that the data dictionary be created initially with default extent sizes,
+		and that fragmentation be controlled by applying a MINIMUM EXTENT size to the SYSTEM tablespace
+		immediately after database creation, as follows:
+		<blockquote>
+			<samp>
+				alter tablespace system minimum extent 64K;
+			</samp>
+		</blockquote>
+		The MINIMUM EXTENT size adopted should be exactly one multiblock read.
+		
+		<h3>
+			<font color="#660066">
+				Why create databases twice?
+			</font>
+		</h3>
+		But we don't recommend that you leave it there.
+		In fact, we recommend that you create all performance critical databases twice.
+		This first time is just for practice and to take some measurements, so that you can do it perfectly the second time.
+		<p>
+		Doing it perfectly the second time involves some customization of the <em>sql.bsq</em> file as foreshadowed at the beginning of this tip.
+		Firstly, do not touch the <em>sql.bsq</em> file that comes with your Oracle distribution
+		(in <em>$ORACLE_HOME/rdbms/admin</em>, or in <em>$ORACLE_HOME/dbs</em>).
+		Copy that file to your database creation directory, and edit the copy instead.
+		To use your customized <em>sql.bsq</em> file when recreating the database, you will need to set the <em>_init_sql_file</em> parameter.
+		<p>
+		The most important thing to change in the <em>sql.bsq</em> file is the SIZE clause of the primary data dictionary clusters,
+		C_OBJ# and C_FILE#_BLOCK#.
+		By default, C_OBJ# is sized for tables with 10 columns and 2 indexes over 2 columns each.
+		Tables with significantly more columns and/or heavier indexing than this will cause cluster block chaining in this cluster unless you prevent it.
+		C_FILE#_BLOCK# is sized for segments with only 5 extents.
+		Segments in dictionary managed tablespaces with significantly more than 5 extents
+		will cause cluster block chaining in this cluster unless you customize the SIZE clause.
+		<p>
+		To get the SIZE clauses right, we recommend that you use the APT script <b><a href="../../scripts/dd.htm#dd_cluster_sizes">dd_cluster_sizes.sql</a></b>.
+		This script requires that you first create all the database objects that will be required for the application,
+		and extend them to their estimated stable number of extents, if using dictionary managed tablespaces.
+		The script then measures the average space usage per cluster key in the relevant data dictionary clusters,
+		and makes a recommendation for the SIZE clauses.
+		<p>
+		Since you are going to be editing the <em>sql.bsq</em> file, you also have the opportunity to set appropriate INITIAL and NEXT extent sizes
+		for all the data dictionary segments that might otherwise immediately require multiple extents.
+		Indeed, you must for the clusters if you have customized their SIZE clauses, otherwise database creation is likely to fail.
+		First, you need to ensure that the data dictionary of your trial database is fully populated,
+		by running all the required catalog scripts, loading all the required optional packages,
+		loading all the stored program units for your application, creating all the users, and analyzing all the segments.
+		You can then use the APT script <b><a href="../../scripts/dd.htm#dd_initial_extents">dd_initial_extents.sql</a></b>
+		to get recommended sizes for the INITIAL and NEXT extents for these segments, and edit you copy of <em>sql.bsq</em> accordingly.
+		<p>
+		On more thing that you can fruitfully do at this point is to run <b><a href="../../scripts/io_opt.htm#row_migration">row_migration.sql</a></b>
+		to check for row migration problems in the data dictionary, and adopt the suggested PCTFREE settings, if any.
+		The last thing to check before you actually create the database again,
+		is that you have allowed enough free space in the SYSTEM tablespace for the dynamic creation of deferred rollback segments if necessary.
+		
+		<hr noshade align="left" width="300" size="2" color="black">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="1000">
+					<font size="2" color="#660066">
+						<strong>
+							Copyright © Ixora Pty Ltd
+						</strong>
+					</font>
+				</td>
+				<td valign="top" align="right">
+					<nobr>
+					<map name="email">
+						<area shape="rect" coords="0, 0, 32, 21" title="Feedback" href="mailto:feedback@ixora.com.au?SUBJECT=[Tip] bsq.htm">
+					</map>
+					<img ismap usemap="#email" border="0" alt="Send Email" src="../../images/email.gif" width="32" height="21">
+					<map name="home">
+						<area shape="rect" coords="0, 0, 28, 28" title="Home" href="/">
+					</map>
+					<img ismap usemap="#home" border="0" alt="Home" src="../../images/home.gif" width="28" height="28">
+					</nobr>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

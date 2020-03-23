@@ -1,0 +1,116 @@
+Scripts from chapter 7 of ORACLE9i DBA Handbook.  See the readme.doc file for details.
+
+
+alter rollback segment SEGMENT_NAME offline;
+
+drop rollback segment SEGMENT_NAME;
+
+create rollback segment SEGMENT_NAME
+tablespace RBS;
+
+
+alter rollback segment SEGMENT_NAME online;
+
+
+commit;
+
+set transaction use rollback segment ROLL_BATCH;
+insert into TABLE_NAME
+select * from DATA_LOAD_TABLE;
+
+commit;
+
+REM*  The commit command clears the rollback segment assignment.
+REM*  Implicit commits, like those caused by DDL commands, will
+REM*  also clear the rollback segment designation.
+
+insert into TABLE_NAME select * from SOME_OTHER_TABLE;
+
+
+
+create rollback segment SEGMENT_NAME
+storage (initial 1M next 1M optimal 2M) 
+tablespace RBS;
+
+
+select * from DBA_SEGMENTS
+ where Segment_Type = 'ROLLBACK';
+
+
+
+select N.Name,         /* rollback segment name */
+       S.OptSize       /* rollback segment OPTIMAL size */
+from V$ROLLNAME N, V$ROLLSTAT S
+where N.USN=S.USN;
+
+
+alter rollback segment R1 shrink to 15M;
+
+alter rollback segment R1 shrink;
+
+
+select
+   N.Name,                      /* rollback segment name */
+   S.RsSize                     /* rollback segment size */
+from V$ROLLNAME N, V$ROLLSTAT S
+where N.USN=S.USN;
+
+
+
+REM  Users in rollback segments
+REM
+column rr heading 'RB Segment' format a18
+column us heading 'Username' format a15
+column os heading 'OS User' format a10
+column te heading 'Terminal' format a10
+select R.Name rr,
+       nvl(S.Username,'no transaction') us,
+       S.Osuser os,
+       S.Terminal te
+  from V$LOCK L, V$SESSION S, V$ROLLNAME R
+ where L.Sid = S.Sid(+)
+   and trunc(L.Id1/65536) = R.USN
+   and L.Type = 'TX'
+   and L.Lmode = 6
+order by R.Name
+/
+
+
+
+select
+   N.Name,                      /* rollback segment name */
+   S.Writes                     /* bytes written to date */
+from V$ROLLNAME N, V$ROLLSTAT S
+where N.USN=S.USN;
+
+
+
+
+set transaction use rollback segment SEGMENT_NAME
+
+
+alter tablespace RBS
+default storage
+(initial 125K next 125K minextents 18 maxextents 249)
+
+
+
+create rollback segment R4 tablespace RBS
+   storage (optimal 2250K);
+alter rollback segment R4 online;
+
+
+set transaction use rollback segment SEGMENT_NAME
+
+
+
+select Sessions_Highwater from V$LICENSE;
+
+
+create undo tablespace UNDO_TBS 
+datafile '/u01/oracle/undodb/undo_tbs_1.dbf' 
+size 100m;
+
+
+
+

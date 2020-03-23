@@ -1,0 +1,135 @@
+<html><head><title>
+Use raw log files
+</title>
+<style>
+body {background-image:url(/images/bg.jpg)}
+a:link {color:#FF6600}
+a:active {color:#660066}
+a:visited {color:#FF6600} 
+a:hover {color:#660066}
+a {font-weight:bold}
+h1 {color:#990000; font-size:150%; text-align:center}
+h2 {color:#660066; font-size:125%}
+ul {list-style-image:url(/images/li.gif); margin-left:16px}
+
+.orange {color:#FF6600}
+.purple {color:#660066}
+.brown {color:#990000}
+.h3 {font-weight:bold; color:#990000}
+</style>
+
+</head>
+<script language="javascript"><!--
+function email(addr) { return addr + '@ixora.com.au' }
+//--></script>
+
+<body>
+
+
+<div style="text-align:center; font-size:125%; font-weight:bold; color:#660066">Oracle Performance Tuning Tips</div>
+
+
+
+<h1>Use raw log files</h1>
+
+There are two important performance problems with buffered log file I/O.
+<ol>
+<li>
+<a name=partial_block_writes></a>
+Buffered log file I/O suffers from <i><b>partial block writes</b></i>.
+Because redo writes address an arbitrary number of log blocks (see <a href=/notes/redo_write_size.htm>redo write size</a>)
+and log blocks are small relative to the size of file system buffers (see <a href=/notes/log_block_size.htm>log block size</a>)
+it is normal that the last log block of a redo write does not align with the end of a file system buffer.
+Therefore, unless the target file system block from the old image of the log file is already in cache, 
+the operating system must first read that block from disk before the new redo can be copied into part of its file system buffer.
+Such a preliminary read from the log file is needed for the majority of buffered redo writes.
+<p align=center>
+<img src=partial_block_write.gif alt="LGWR performing a partial block write" border=1 width=418 height=334>
+<p>
+If a disk array with a large cache and an effective prefetching algorithm is used for the log files,
+then the preliminary read will only take about 2 milliseconds, and will not otherwise delay the redo write.
+However, if both the preliminary read and the redo write require physical disk service,
+there must be an additional delay equivalent to a full rotation of the disk before the write can be serviced.
+<p>
+<li>
+Buffered log file I/O also suffers from <i><b>I/O fragmentation</b></i>.
+When redo writes address more than one file system buffer, the physical writes for each buffer are not queued in parallel,
+and therefore cannot be processed seamlessly by the hardware.
+Instead, the component physical writes are performed serially, and a full rotational latency is sustained between each pair of writes.
+<p>
+</ol>
+Both of these problems can be prevented by using a file system <a href=/notes/direct_io.htm>direct I/O</a> facility for the log files,
+or by using raw log files.
+Raw I/O is normally preferable to direct I/O, because it enables more efficient <a href=/notes/asynchronous_io.htm>asynchronous I/O</a>.
+<p>
+LGWR needs asynchronous I/O to parallelize writes to multiple log file members
+(see <a href=/notes/redo_write_multiplexing.htm>redo write multiplexing</a>)
+and to overlap redo writes when transactions are committed in quick succession.
+Hardware mirroring can be used in preference to redo log multiplexing to avoid serial writes to multiple log file members,
+and indeed such hardware mirroring is recommended to minimize the CPU cost of redo writes.
+However, asynchronous I/O is nevertheless needed to overlap consecutive redo writes, because LGWR I/O slaves do not do so consistently.
+Raw I/O (or Quick I/O) makes kernelized asynchronous I/O possible,
+whereas otherwise LGWR would have to rely on threaded asynchronous I/O or LGWR I/O slaves.
+<p>
+Partial block writes, I/O fragmentation and synchronous I/O all have a major impact on LGWR's I/O performance,
+over and above the performance and scalability penalty that buffered I/O carries in any case.
+However, because LGWR is an Oracle background process and does much of its work in the background,
+poor LGWR I/O performance might not be noticed except during <i>log file sync</i> waits after commits.
+This can nevertheless be an important and difficult wait event to tune, particularly in OLTP environments,
+and the strategy of switching to raw log file I/O has proved to be very effective on many occasions.
+This strategy can even be used in environments that do not have any facility to backup raw disk,
+because online log files should not be backed up anyway.
+<p>
+In some instances, poor LGWR I/O performance also results in considerable <i>log buffer space</i> waits despite the use of a large log buffer.
+This occurs when there is an extended burst of redo generation, and LGWR is just not able to keep up.
+In such instances switching to raw log file I/O typically eliminates the <i>log buffer space</i> waits immediately,
+and raises the ceiling on the sustainable rate of redo generation dramatically.
+<p>
+<hr noshade align=left width=300 size=2 color=black>
+<table cellspacing=0 cellpadding=0 width=100%><tr>
+<td valign=top>
+<div style="font-size:80%; font-weight:bold; color:#660066">
+© Ixora Pty Ltd. &nbsp; All rights reserved.<br>
+
+
+
+03-Apr-2002
+</div>
+</td>
+
+<map name=searches>
+<area coords=3,3,33,25 href=/search.html>
+</map>
+
+<script language=javascript><!--
+document.write('<map name=question><area coords=3,3,15,25 href="mailto:' + email('questions') + '?SUBJECT=About http://www.ixora.com.au/tips/use_raw_log_files.htm"></map>')
+document.write('<map name=feedback><area coords=3,3,25,25 href="mailto:' + email('feedback') + '?SUBJECT=About http://www.ixora.com.au/tips/use_raw_log_files.htm"></map>')
+// --></script>
+
+<map name=up1level>
+<area coords=3,3,25,25 href=./>
+</map>
+<map name=homepage>
+<area coords=3,3,25,25 href=/>
+</map>
+
+<td valign=top align=right>
+<nobr>
+
+<img ismap border=0 usemap=#searches src=/images/search.gif width=36 height=28 alt=Search>
+&nbsp;
+
+<img ismap border=0 usemap=#question src=/images/q.gif alt=Questions>
+&nbsp;
+<img ismap border=0 usemap=#feedback src=/images/feedback.gif alt=Feedback>
+&nbsp;
+
+<img ismap border=0 usemap=#up1level src=/images/up_one.gif alt=Up>
+&nbsp;
+<img ismap border=0 usemap=#homepage src=/images/home.gif alt=Home>
+
+</nobr>
+</td>
+</tr></table>
+</body></html>
+

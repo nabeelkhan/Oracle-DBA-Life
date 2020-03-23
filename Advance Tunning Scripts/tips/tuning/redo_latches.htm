@@ -1,0 +1,215 @@
+<html>
+	<head>
+		<title>
+			Redo Latch Tuning
+		</title>
+		<style>
+			<!-- a:hover{color:#660066;} -->
+		</style>
+	</head>
+	<body background="../../images/bg.jpg" link="#FF6600" vlink="#FF6600" alink="#660066">
+		
+		<h2 align="center">
+			<font color="#990000">
+				Redo Latch Tuning
+			</font>
+		</h2>
+		The high <em>redo copy</em> latch miss rates seen under Oracle 7.3 and 8.0 have generated a lot of interest in redo latch tuning.
+		However, it is seldom a problem, and there is not normally any tuning required.
+		All that is required, is an understanding of how the redo latches are used.
+		
+		<h3>
+			<font color="#660066">
+				How are the redo latches used?
+			</font>
+		</h3>
+		The redo latches are used primarily for redo generation, but also in connection with <em>log file sync</em> waits.
+		
+		<h4>
+			<font color="#990000">
+				Redo Generation
+			</font>
+		</h4>
+		A logically atomic database change normally consists of two or more physical block changes.
+		For example, inserting a row into a table may involve changes to several index blocks, as well as a change to one of the blocks of the table itself.
+		And for most block changes, there must be a corresponding change to at least one rollback segment block.
+		There may also be changes required to a rollback segment header block, block cleanouts, freelist changes, and so on.
+		<p>
+		Before making a database change,
+		a process must take buffer locks on each of the buffers holding the current mode image of the database blocks affected,
+		and prepare a set of <em>change vectors</em> representing the intended changes.
+		Before the set of change vectors can be applied to the database blocks,
+		they must all be copied into the redo stream as a single <em>redo entry</em>.
+		<p>
+		The <em>redo allocation</em> latch must be taken to allocate space in the log buffer.
+		This latch protects the SGA variables that are used to track which log buffer blocks are used and free.
+		See our tip <b><a href="log_buffer_size.htm">Tuning the Log Buffer Size</a></b> for an explanation of these variables.
+		The amount of space allocated is that required for all of the change vectors comprising that logical database change,
+		plus an allowance for a 16-byte block header at the beginning of each redo log block, if the redo entry spans the beginning of one or more log blocks.
+		<p>
+		However, before taking the <em>redo allocation</em> latch,
+		the process first takes the <em>redo copy</em> latch that will be needed for the copy into the log buffer.
+		The <em>redo copy</em> latches are used to indicate that a process is copying redo into the log buffer,
+		and that LGWR should wait until the copy has finished, before writing the target log buffer blocks to disk.
+		<p>
+		No-wait mode is used for most gets against the <em>redo copy</em> latches,
+		because the process can use any one of them to protect its copy into the log buffer.
+		It first attempts to get the copy latch that it last held.
+		Failing that, the process attempts to get each other copy latch in turn, in no-wait mode.
+		Willing-to-wait mode is only used to get the last copy latch if no-wait gets against all the other copy latches have failed.
+		<blockquote>
+			<small>
+				Prior to release 8.1, the use of a <em>redo copy</em> latch was conditional on the size of the redo entry.
+				If the redo entry was less than the number of bytes specified by the <em>_log_small_entry_max_size</em> parameter
+				then a <em>redo copy</em> latch would not be taken, and the copy would be performed while retaining the <em>redo allocation</em> latch.
+				This parameter defaulted to 800 bytes up to the early releases of Oracle 7.3, and to 80 bytes thereafter.
+				Copies performed under the <em>redo allocation</em> latch were reported in the <em>redo small copies</em> statistic,
+				and it was not uncommon for this to represent almost all redo entries.
+				However, it was a common tuning practice to set the parameter to 0 bytes
+				to prevent small copies, and thus minimize the load on the critical <em>redo allocation</em> latch.
+			</small>
+		</blockquote>
+		Once a <em>redo copy</em> latch and the <em>redo allocation</em> latch have been acquired, and space has been allocated in the redo log buffer,
+		the <em>redo allocation</em> latch is then released
+		and the change vectors are copied into the log buffer from temporary buffers in the PGA of the process.
+		<blockquote>
+			<small>
+				Prior to release 8.1, the change vectors for redo entries larger than the value of the <em>_log_entry_prebuild_threshold</em> parameter
+				would first be copied into a single buffer in the PGA of the process, before acquiring any latches,
+				so that they could be copied into the log buffer in a single operation.
+				This was reflected in the <em>redo entries linearized</em> statistic.
+			</small>
+		</blockquote>
+		Once the copy is complete, the change vectors are applied to the affected database blocks, the redo entry is marked as valid,
+		and the process then releases its <em>redo copy</em> latch.
+		At this point the process may need to post LGWR to signal that it should begin to flush the log buffer.
+		This applies if the allocation raised the number of used blocks in the log buffer above the threshold set by the <em>_log_io_size</em> parameter,
+		or if a commit marker has been copied into the redo stream as part of a commit.
+		However, to ensure that LGWR is not posted needlessly,
+		the process takes the <em>redo writing</em> latch to check whether LGWR is already active or has already been posted.
+		The <em>redo writing</em> latch is then released, and if appropriate the LGWR process is posted.
+		
+		<h4>
+			<font color="#990000">
+				Log File Syncs
+			</font>
+		</h4>
+		If a process is waiting for LGWR to write a particular log buffer block to disk, it waits in a <em>log file sync</em> wait.
+		The normal cause of <em>log file sync</em> waits is transaction termination;
+		however, DBWn also suffers these waits when writing recently modified blocks.
+		<p>
+		When a process wakes up from a <em>log file sync</em> wait,
+		it must check whether the log buffer block containing the redo of interest has yet been written to disk.
+		If not, it must continue to wait.
+		The SGA variable that shows whether a particular log buffer block has yet been written to disk
+		is the index into the log file representing the base disk block for the log buffer.
+		This variable is of course protected by the <em>redo allocation</em> latch, and so the <em>redo allocation</em> latch must be taken to check it.
+		
+		<h3>
+			<font color="#660066">
+				How does LGWR use the redo latches?
+			</font>
+		</h3>
+		The redo latches are not only taken in connection with redo generation and <em>log file sync</em> waits.
+		They are taken by LGWR as well in connection with writing redo from the log buffer to the log files.
+		<p>
+		When LGWR wakes up, it first takes the <em>redo writing</em> latch to update the SGA variable that shows whether it is active.
+		This prevents other processes from posting LGWR needlessly.
+		Then, if it was not posted, LGWR then takes the <em>redo allocation</em> latch to determine whether there is any redo to write.
+		If not, it takes the <em>redo writing</em> latch again to record that it is no longer active, before starting another <em>rdbms ipc message</em> wait.
+		<p>
+		If there is any redo to write, LGWR then inspects the latch recovery areas for the <em>redo copy</em> latches (without taking the latches)
+		to determine whether there are any incomplete copies into the redo buffers that it intends to write.
+		If so, LGWR sleeps on a <em>LGWR wait for redo copy</em> wait event, and is posted when the required copy latches have been released.
+		The time taken by LGWR to take the <em>redo writing</em> latch, the <em>redo allocation</em> latch
+		and to wait for the <em>redo copy</em> latches is accumulated in the <em>redo writer latching time</em> statistic.
+		<blockquote>
+			<small>
+		Under Oracle 7.3 and 8.0 foreground processes held the <em>redo copy</em> latches more briefly 
+		because they did not retain them for the application of the change vectors.
+		Therefore, LGWR would instead attempt to assure itself that there were no ongoing copies into the log buffer
+		by taking all the <em>redo copy</em> latches.
+			</small>
+		</blockquote>
+		After each log write has completed, LGWR must take the <em>redo allocation</em> latch again
+		in order to update the SGA variable containing the base disk block for the log buffer.
+		This effectively frees the log buffer blocks that have just been written, and they may then be reused.
+		
+		<h3>
+			<font color="#660066">
+				How should the redo latches be tuned?
+			</font>
+		</h3>
+		In general, redo latching only needs tuning if the willing-to-wait miss rate on the <em>redo allocation</em> latch is high,
+		or if the no-wait miss rate on the <em>redo copy</em> latches is high.
+		
+		<h4>
+			<font color="#990000">
+				Redo Allocation
+			</font>
+		</h4>
+		There is, and can only be, one <em>redo allocation</em> latch in each instance, so there is no scope for parallelism on this latch.
+		There is also no way to reduce the duration for which the latch is held.
+		All you can do is to attempt to reduce load on the latch.
+		Most importantly, ensure that LGWR is not overactive because of too low a <em>_log_io_size</em> setting,
+		and that DBWn is not checkpointing recently changed blocks too intensively.
+		At the application level, beware of spurious COMMITs, avoid SELECT FOR UPDATE statements and before row triggers,
+		and code DML operations to minimize redo generation.
+		
+		<h4>
+			<font color="#990000">
+				Redo Copy
+			</font>
+		</h4>
+		Under Oracle 8.1, because LGWR does not itself sleep on the <em>redo copy</em> latches,
+		sleeps against these latches do indicate a higher degree of concurrency than supported by the current number of latches.
+		In such cases, the number of <em>redo copy</em> latches may be raised, using the <em>_log_simultaneous_copies</em> parameter.
+		Note, however, that there is a fixed limit of 32 <em>redo copy</em> latches,
+		and that some platforms support shareable <em>redo copy</em> latches.
+		<p>
+		Under Oracle 7.3 and 8.0, a high willing-to-wait <em>redo copy</em> latch miss rate is routine.
+		Willing-to-wait gets for a <em>redo copy</em> latch by foregrounds are rare,
+		and only occur when all the other <em>redo copy</em> latches are unavailable.
+		The normal reason why all the <em>redo copy</em> latches are unavailable at times is not that there are not enough latches,
+		but that LGWR is holding all of them.
+		Increasing the number of latches only increases the <em>redo writer latching time</em>,
+		and does not reduce the risk of <em>redo copy</em> latch unavailability.
+		If any process goes to sleep while holding a <em>redo copy</em> latch,
+		LGWR will spin waiting for it, while holding all the other <em>redo copy</em> latches,
+		and all other gets will quickly fall through to a willing-to-wait miss.
+		Therefore, a high willing-to-wait miss rate is to be regarded as a symptom of a small problem elsewhere,
+		rather than a problem in its own right.
+		<p>
+		In general, <em>redo copy</em> latch issues should not be addressed until redo generation has been minimized
+		and the <em>redo allocation</em> latch has been tuned.
+		You should also check that latch holders are not suffering from CPU starvation.
+		Thereafter, modest increases in the number of <em>redo copy</em> latches may be appropriate in some circumstances.
+		</p>
+		
+		
+		<hr noshade align="left" width="300" size="2" color="black">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="1000">
+					<font size="2" color="#660066">
+						<strong>
+							Copyright © Ixora Pty Ltd
+						</strong>
+					</font>
+				</td>
+				<td valign="top" align="right">
+					<nobr>
+					<map name="email">
+						<area shape="rect" coords="0, 0, 32, 21" title="Feedback" href="mailto:feedback@ixora.com.au?SUBJECT=[Tip] redo_latches.htm">
+					</map>
+					<img ismap usemap="#email" border="0" alt="Send Email" src="../../images/email.gif" width="32" height="21">
+					<map name="home">
+						<area shape="rect" coords="0, 0, 28, 28" title="Home" href="/">
+					</map>
+					<img ismap usemap="#home" border="0" alt="Home" src="../../images/home.gif" width="28" height="28">
+					</nobr>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

@@ -1,0 +1,94 @@
+#!/bin/sh
+cd /home/oracle/admin/imp/adhoc/report_output
+yn=y
+while [ yn -eq y or yn -eq Y ]
+do
+  tput clear
+  rep_name="none.lst"
+  echo ""
+  echo ""
+  echo "Please enter the the report to use from the following list:"
+  echo ""
+  echo "*************************************************************"
+  ls -C *
+  echo "*************************************************************"
+  echo ""
+  echo "\n                                Enter choice: \c"
+  read rep_name2
+        echo ""
+        if [ -s "$rep_name2" ]
+        then
+                rep_name="$rep_name2"
+        fi
+  #
+  tput clear
+  echo "Enter value to grep the report for:\c"
+  read search_value
+  echo "Enter name for output file from grep operation:\c"
+  read output_file
+  if [ -r $output_file ]; then
+        echo "File exists - do you want to remove it? (Y or N):\c"
+        read yn
+        case $yn in
+        y|Y)
+                rm $output_file
+                echo "File " $output " Removed"
+        ;;
+
+        n|N)
+                echo "Enter a different file name for the output file:\c"
+                read output_file
+        ;;
+        esac
+  fi
+  #
+  egrep -i "$search_value" $rep_name >$output_file
+  echo "View the result file using the page utility?(Y or N)?:\c"
+  read yn
+  case $yn in
+        y|Y)
+                tput clear
+                pg $output_file
+        ;;
+
+        n|N)
+                tput clear
+        ;;
+
+        *)
+                echo "Invalid Response"
+                echo "Press enter to continue"
+                read nada
+        ;;
+  esac
+  echo "Do you want to remove the result file? (Y or N):\c"
+  read yn
+  case $yn in
+        y|Y)
+                tput clear
+                rm $output_file
+        ;;
+
+        n|N)
+                tput clear
+        ;;
+
+        *)
+                echo "Invalid Response"
+                echo "Press enter to continue"
+                read nada
+        ;;
+  esac
+  echo "DO you wish to exit the utility? (Y or N):\c"
+  read yn
+  case $yn in 
+        n|N)
+                tput clear
+                ;;
+
+        y|Y)
+                tput clear
+                exit
+        ;;
+  esac
+  done

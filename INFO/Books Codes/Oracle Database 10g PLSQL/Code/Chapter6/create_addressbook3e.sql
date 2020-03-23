@@ -1,0 +1,67 @@
+/*
+ * create_addressbook3e.sql
+ * Chapter 6, Oracle10g PL/SQL Programming
+ * by Ron Hardman, Michael McLaughlin and Scott Urman
+ *
+ * This script builds objects for the example with standard Oracle data types
+ * in all but one column. It uses a nested table of VARCHAR2(30 CHAR) for the
+ * ADDRESSES.STREET_ADDRESS column.
+ */
+
+BEGIN
+  FOR i IN (SELECT null
+            FROM user_tables
+            WHERE table_name = 'INDIVIDUALS') LOOP
+    EXECUTE IMMEDIATE 'DROP TABLE individuals CASCADE CONSTRAINTS';
+  END LOOP;
+END;
+/
+
+CREATE TABLE individuals
+(individual_id            INTEGER             NOT NULL
+,first_name               VARCHAR2(30 CHAR)   NOT NULL
+,middle_initial           VARCHAR2(1 CHAR)
+,last_name                VARCHAR2(30 CHAR)   NOT NULL
+,CONSTRAINT individual_pk PRIMARY KEY (individual_id));
+
+BEGIN
+  FOR i IN (SELECT null
+            FROM user_tables
+            WHERE table_name = 'ADDRESSES') LOOP
+    EXECUTE IMMEDIATE 'DROP TABLE addresses CASCADE CONSTRAINTS';
+  END LOOP;
+END;
+/
+
+BEGIN
+
+  -- Loop if a row is found and delete it.
+  FOR i IN (SELECT   null
+            FROM     user_types
+            WHERE    type_name = 'ADDRESS_VARRAY') LOOP
+
+    EXECUTE IMMEDIATE 'DROP TYPE address_varray';
+    COMMIT;
+
+  END LOOP;
+
+END;
+/
+
+CREATE OR REPLACE TYPE address_table
+  AS TABLE OF VARCHAR2(30 CHAR) NOT NULL;
+/
+
+CREATE TABLE addresses
+(address_id               INTEGER             NOT NULL
+,individual_id            INTEGER             NOT NULL
+,street_address           ADDRESS_TABLE       NOT NULL
+,city                     VARCHAR2(20 CHAR)   NOT NULL
+,state                    VARCHAR2(20 CHAR)   NOT NULL
+,postal_code              VARCHAR2(20 CHAR)   NOT NULL
+,country_code             VARCHAR2(10 CHAR)   NOT NULL
+,CONSTRAINT address_pk    PRIMARY KEY (address_id)
+,CONSTRAINT addr_indiv_fk FOREIGN KEY (individual_id)
+ REFERENCES individuals  (individual_id))
+NESTED TABLE street_address
+STORE AS nested_street_address;

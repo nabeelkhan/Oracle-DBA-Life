@@ -1,0 +1,30 @@
+CREATE OR REPLACE PROCEDURE author_book_count wrapped 
+a000000
+b2
+abcd
+abcd
+abcd
+abcd
+abcd
+abcd
+abcd
+abcd
+abcd
+abcd
+abcd
+abcd
+abcd
+abcd
+abcd
+7
+3bc 21b
+aobxOtpNeS7l6UcMqnjDRDT7FFIwgwIJ2SdqfC+KMQ8tnC/9X6GDui6eP35+zJMK8sAcSYRr
+sBzheWucz88BOvNJIfRnyt6Agoyz8umIiw3mWide8ScJUbEbjKMElrMcpn7sKl6DIWYmOchK
+3ICCA5wEv2dBcQbUtz5Zs2Fepvoyakav4ZR6ZHDzEmJmCo0bQ1ermDmLz7Rr9wvJyliFB594
+GEaPEXMhZUe4dJL29uk9j+fxL4NJJ1r4/GHbM4Hz2ThE3nfupxAtDVKHQjSjQvzVAlGj5kWd
+uQNbp/pA9AYVgjTd4ImFedFKETQntvItcBVEjbCNSE3fwt/zGBRDfZYfSDZM8RTMX61F0q33
+duA1t423iQJrA3LLsCSr3LViuYi4xlkTmqELG4XYYhS70pZ6gzG4G1BPL/5LqsYIVyg4P/1/
+Ms8HmT+dyyQs/r3GvxmGEiR2InO7yuxb0fOOvtmxeXHvxyVX+ppqTEAlfNOHsTDhhbQz/ZIF
+4pU7tNL9gGPFCsljBgckntJVaw==
+
+/

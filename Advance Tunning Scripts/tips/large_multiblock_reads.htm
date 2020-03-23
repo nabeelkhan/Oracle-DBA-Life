@@ -1,0 +1,131 @@
+<html><head><title>
+Use large (direct) multiblock reads
+</title>
+<style>
+body {background-image:url(/images/bg.jpg)}
+a:link {color:#FF6600}
+a:active {color:#660066}
+a:visited {color:#FF6600} 
+a:hover {color:#660066}
+a {font-weight:bold}
+h1 {color:#990000; font-size:150%; text-align:center}
+h2 {color:#660066; font-size:125%}
+ul {list-style-image:url(/images/li.gif); margin-left:16px}
+
+.orange {color:#FF6600}
+.purple {color:#660066}
+.brown {color:#990000}
+.h3 {font-weight:bold; color:#990000}
+</style>
+
+</head>
+<script language="javascript"><!--
+function email(addr) { return addr + '@ixora.com.au' }
+//--></script>
+
+<body>
+
+
+<div style="text-align:center; font-size:125%; font-weight:bold; color:#660066">Oracle Performance Tuning Tips</div>
+
+
+
+<h1>Use large (direct) multiblock reads</h1>
+
+Performing large <i>physical</i> reads improves performance and reduces load
+because it is more efficient for the hardware to process one large read request, than several equivalent smaller ones.
+This difference can be explained in terms of the component <a href=/notes/io_service_times.htm>I/O service times</a>.
+<p>
+Consider reading 64K of contiguous data from a single disk.
+What are the differences between performing one 64K read or eight separate 8K reads?
+The total <i>transfer time</i> would be the same.
+But the single multiblock read would require only one <i>seek</i> and one <i>rotational latency</i>,
+whereas the eight separate reads might require extra seeks and rotational latencies
+depending on whether the disk had to service other requests in the interim.
+Also, the CPU usage of the eight separate reads would include eight times more overhead than the one multiblock read.
+In terms of resource usage, the only benefit of the eight separate reads is that they can conceivably all use the same 8K memory buffer,
+whereas the multiblock read might require a 64K memory buffer.
+The only other potentially significant difference is that
+the multiblock read would take longer to return the first block of data to the application for it to begin processing.
+<p>
+So, a large multiblock read size improves raw and direct I/O throughput significantly and reduces CPU usage,
+at the expense of a tiny increase in memory usage and a slight reduction in the "first rows" response times.
+This response time impact is of little concern.
+Multiblock reads are only performed for full table scans and fast full index scans,
+and these execution plans should not normally be used if response times are more important than throughput.
+So the multiblock read size should be as large as possible if you use raw or direct I/O
+(<a href="avoid_buffered_io.htm">which you should</a>).
+Unfortunately, finding and using the maximum effective multiblock read count possible for your database is not always easy.
+<a href="max_multiblock_read.htm">Find out how</a>.
+<p>
+Of course, the foregoing only applies to unbuffered I/O.
+If you use buffered I/O the operating system will service multiblock reads as a series of small I/O operations anyway
+and so there will be almost no benefit in using a large multiblock read size, only a small saving in CPU usage.
+On the other hand, there is no point in using a small multiblock read size either,
+because the file system read ahead mechanism will be triggered anyway.
+So for buffered I/O, it is best to match the multiblock read size to the file system read ahead size exactly,
+in order to make optimum use of track buffering and file system read ahead.
+<p>
+You will notice that we are speaking of the multiblock read size as a constant,
+even though it is tunable - indeed it is session-modifiable.
+However, it is best to regard its setting as fixed from database creation because it is a factor in determining the optimal extent sizes for your database,
+and it is also a key factor in choosing the stripe element size for disk striping.
+Once these things have been fixed, they are not readily changed and so the multiblock read size should not be changed either.
+<p>
+Of the other read count parameters,
+there is no reason to use anything less than the maximum effective value for the <i>_db_file_direct_io_count</i> parameter.
+This parameter dictates the size of the multiblock I/O operations performed for all Oracle direct I/O except sorts and hash joins.
+The size of the multiblock I/O operations for sorts and hash joins are set by the <i>_sort_multiblock_read_count</i> and
+<i>_hash_multiblock_io_count</i> parameters.
+Although the principle that "large reads are efficient" also applies to these parameters,
+there are other factors that need to be considered, and so much greater care is needed here.
+Please use the search button below for information about setting the sort and hash multiblock read sizes.
+<p>
+<hr noshade align=left width=300 size=2 color=black>
+<table cellspacing=0 cellpadding=0 width=100%><tr>
+<td valign=top>
+<div style="font-size:80%; font-weight:bold; color:#660066">
+© Ixora Pty Ltd. &nbsp; All rights reserved.<br>
+
+
+
+05-Apr-2002
+</div>
+</td>
+
+<map name=searches>
+<area coords=3,3,33,25 href=/search.html>
+</map>
+
+<script language=javascript><!--
+document.write('<map name=question><area coords=3,3,15,25 href="mailto:' + email('questions') + '?SUBJECT=About http://www.ixora.com.au/tips/large_multiblock_reads.htm"></map>')
+document.write('<map name=feedback><area coords=3,3,25,25 href="mailto:' + email('feedback') + '?SUBJECT=About http://www.ixora.com.au/tips/large_multiblock_reads.htm"></map>')
+// --></script>
+
+<map name=up1level>
+<area coords=3,3,25,25 href=./>
+</map>
+<map name=homepage>
+<area coords=3,3,25,25 href=/>
+</map>
+
+<td valign=top align=right>
+<nobr>
+
+<img ismap border=0 usemap=#searches src=/images/search.gif width=36 height=28 alt=Search>
+&nbsp;
+
+<img ismap border=0 usemap=#question src=/images/q.gif alt=Questions>
+&nbsp;
+<img ismap border=0 usemap=#feedback src=/images/feedback.gif alt=Feedback>
+&nbsp;
+
+<img ismap border=0 usemap=#up1level src=/images/up_one.gif alt=Up>
+&nbsp;
+<img ismap border=0 usemap=#homepage src=/images/home.gif alt=Home>
+
+</nobr>
+</td>
+</tr></table>
+</body></html>
+

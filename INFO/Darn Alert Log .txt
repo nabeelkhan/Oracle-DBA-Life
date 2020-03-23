@@ -1,0 +1,216 @@
+That Darn Alert Log 
+jkoopmann@dbdoctor.net 
+
+
+
+Until Oracle decides to give DBAs built-in direct access to the alert log, it will always be our responsibility to continually check and maintain it. Here is a simple solution that will help with this most basic of DBA task.
+
+The Oracle alert log file is a chronological log of important messages and errors that are encountered by the simple use of an Oracle database. It is the first line-of-defense, or area of notification for problems encountered in the database. If you haven’t been introduced to this log file in the past, I have provided a short list of the types of messaging that you will see in this file. As you can see there is tons of information just waiting for discovery.
+
+Types of messages and errors
+ORA-600 internal errors that need immediate support from Oracle's customer support 
+ORA-1578 block corruption errors that require recovery 
+ORA-12012 job queue errors 
+STARTUP & SHUTDOWN, and RECOVER statement execution messages 
+Certain CREATE, ALTER, & DROP statements 
+Statements that effect TABLESPACES, DATAFILES, and ROLLBACK SEGMENTS 
+When a resumable statement is suspended 
+When log writer (LGWR) cannot write to a member of a group 
+When new Archiver Process (ARCn) is started 
+Dispatcher information 
+The occurrence of someone changing a dynamic parameter 
+As a DBA, you are responsible for the proper running of your Oracle database. You have a task list one mile long, that must be performed every day. In the case of alert log monitoring, you must check this log file a few times a day, if not more, to ensure that users have not experienced any problems and that the database is running without any internal notifications. What makes this worse, most database shops have more than one instance of Oracle running. In order to check the alert log, you must log onto each database box, open the alert log file with an editor, and search for errors. The joy of the approach I would suggest gives you access to the alert log without ever having to log onto the database box again. Through the use of a simple package and procedures, which you should modify to suit your tastes, you can have a robust alert log monitoring device and sleep well at nights. 
+
+
+
+Reference for the procedures, packages, and objects used
+Directory Object
+This object allows you to access and use external Large Objects (LOBS) or Binary Files (BFILEs) in an Oracle Server. The DIRECTORY object is an alias for a physical directory under which there may be files you wish to access.
+
+Note: In Oracle documentation there is a statement that states:
+
+Do Not Map DIRECTORY to Directories of Data Files, And So On. A DIRECTORY should not be mapped to physical directories that contain Oracle data files, control files, log files, and other system files. Tampering with these files (accidental or otherwise) could corrupt the database or the server operating system.
+
+I have contacted Oracle support (TAR 266057.996) and received the following response / blessing from them on this method of accessing the alert.log:
+
+You can access the alert.log file through the creation of a directory object.
+This should not be any problem with respect to performance etc. 
+Utl_raw package
+This package supplied by Oracle allows you to manipulate raw data and should be available with a typical install. If it is not there, you can find it in the $ORACLE_HOME\rdbms\admin directory. If you have to install this package yourself just do so as user ‘sys’.
+
+DBMS_LOB package
+Used to access, search, and manipulate LOB/BFILE information.
+
+Bdump_dir_setup
+This procedure is an initial setup for use of the package. It determines where your alert log is, and creates a directory object to that log file.
+
+Build_possible_alert_log_name
+When supplied with possible SID names from the database, this procedure builds a string of possible alert log file names. Typically, for Windows’ environments, the alert log name is SIDALRT.LOG and for UNIX environments, it is alert_SID.log. 
+
+Check_alertlog_name
+This procedure just loops through the possible alert log file names and checks for its’ existence. 
+
+Read_alertlog
+The meat of the code. Read_alertlog sets up calls to the build_possible_alert_log_name procedure, calls to check_alertlog_name for the existence of a good alert log file, opens the alert log file, and begins reading the alert log file for the lines encountered after first finding the current date in the log. It then prints out the lines to the terminal. 
+
+
+
+To get you going, let’s first go through the ‘How to Use’ procedures to put the simple shell on a database box and see the results. After you are comfortable with the shell, I would suggest you modify it by removing the DBMS_OUTPUT.PUT_LINE with a call to code that will search the strings returned, insert them into a table, and have email or pager notification wrapped around those important error messages. After you get that done, just put the procedures on every database you want to monitor, schedule a task or dbms_job around it and then sleep peacefully. 
+
+Page 2
+
+That Darn Alert Log 
+jkoopmann@dbdoctor.net 
+
+
+
+How to Use
+compile the package 
+SQL> @that_darn_alert_log
+
+set serveroutput on 
+SQL> set serveroutput on
+initial setup of directory object 
+SQL> exec that_darn_alert_log.bdump_dir_setup
+run to check the alert log for current date 
+SQL> exec that_darn_alert_log.read_alertlog
+Full Script:
+
+CREATE OR REPLACE PACKAGE 
+          that_darn_alert_log 
+	  AS
+
+ PROCEDURE bdump_dir_setup;
+ PROCEDURE build_possible_alert_log_names;
+ PROCEDURE check_alertlog_name;
+ PROCEDURE read_alertlog;
+
+END that_darn_alert_log;
+/
+CREATE OR REPLACE PACKAGE BODY 
+          that_darn_alert_log 
+	  AS
+
+bdump_dir   VARCHAR2(500);
+alertlist   VARCHAR2(4000);
+sid         VARCHAR2(100);
+comma       VARCHAR2(1);       
+alertfile   VARCHAR2(255);
+itexists    NUMBER;
+fileat      BFILE;
+pointa      INTEGER;
+pointb      INTEGER;
+v_length    INTEGER;
+r_char10    RAW(4);
+char10      VARCHAR2(1) := CHR(10);
+startdate   VARCHAR2(100);
+r_startdate RAW(100);
+buffer      VARCHAR2(800);
+buffer2     VARCHAR2(800);
+
+PROCEDURE bdump_dir_setup IS
+ BEGIN
+  EXECUTE IMMEDIATE 
+  'SELECT value '||
+  '  FROM v$parameter '||
+  ' WHERE name = ''background_dump_dest''' 
+     INTO bdump_dir;
+  EXECUTE IMMEDIATE 
+  'CREATE DIRECTORY BDUMP_DIR '||
+  '    AS '''||bdump_dir||'''';
+END bdump_dir_setup;
+
+PROCEDURE check_alertlog_name IS
+BEGIN
+ pointa    := 1;
+ LOOP
+  pointb   := INSTR(alertlist,
+                    ',',
+                    pointa,1);
+  v_length := pointb - pointa;
+  alertfile:= SUBSTR(alertlist,
+                     pointa,
+                     v_length);
+  pointa   := pointb + 1;
+  itexists := DBMS_LOB.FILEEXISTS(
+              BFILENAME('BDUMP_DIR',alertfile));
+  IF itexists = 1 THEN
+   pointb  := 0;
+   EXIT;
+  END IF;
+ END LOOP;
+END check_alertlog_name;
+
+ 
+PROCEDURE build_possible_alert_log_names IS
+BEGIN
+ alertlist := alertlist||
+                        comma||
+                        'alert_'||
+                        lower(sid)||
+                        '.log';
+ comma     := ',';
+ alertlist := alertlist||
+                        comma||
+                        upper(sid)||
+                        'ALRT.LOG';
+END build_possible_alert_log_names;
+
+PROCEDURE read_alertlog IS
+
+BEGIN
+ DBMS_OUTPUT.ENABLE(1000000);
+ alertlist := NULL;
+ comma     := NULL;
+ EXECUTE IMMEDIATE 
+ 'SELECT value '||
+ '  FROM v$parameter '||
+ ' WHERE name = ''db_name'''                      
+    INTO sid;
+ build_possible_alert_log_names;
+ EXECUTE IMMEDIATE 
+ 'SELECT value '||
+ '  FROM v$parameter '||
+ ' WHERE name = ''instance_name'''
+    INTO sid;
+ build_possible_alert_log_names;
+ EXECUTE IMMEDIATE 
+ 'SELECT substr(global_name,1,'||
+ '        instr(global_name,''.'',-1)-1) '||
+  ' FROM global_name' 
+    INTO sid;
+ build_possible_alert_log_names;
+
+ r_char10    := UTL_RAW.CAST_TO_RAW(char10);
+
+ check_alertlog_name;
+ fileat       := BFILENAME('BDUMP_DIR',alertfile);
+ DBMS_LOB.FILEOPEN(fileat,DBMS_LOB.FILE_READONLY);
+
+ startdate  := TO_CHAR(SYSDATE,'Dy Mon DD');
+ r_startdate  := UTL_RAW.CAST_TO_RAW(startdate);
+ pointa := DBMS_LOB.INSTR(fileat,r_startdate,1,1);
+
+ IF pointa != 0 THEN
+  LOOP
+   pointb  := DBMS_LOB.INSTR(fileat,r_char10,pointa,1);
+   EXIT WHEN pointb = 0;
+   v_length  := pointb - pointa;
+   buffer  := DBMS_LOB.SUBSTR(fileat,v_length,pointa);
+   buffer2 := utl_raw.cast_to_varchar2(buffer);
+   DBMS_OUTPUT.PUT_LINE(buffer2);
+   pointa  := pointb + 1;
+  END LOOP;
+ END IF;
+ DBMS_LOB.FILECLOSE(fileat);
+
+END read_alertlog;
+
+BEGIN
+  DBMS_OUTPUT.ENABLE(1000000);
+END that_darn_alert_log;
+/
+
+
+The Oracle alert log contains loads of information. Even so, Oracle has yet to put in place an easy method for notifying DBAs when errors and important messages occur. On the flip side, even the best DBA with the best intentions will on occasion forget to view this log from time to. Do yourself a favor and put something in place to notify yourself so that you can avert potential database failure. I have given you one method to do just that. Please modify to your hearts content and let me know how it works. 
+

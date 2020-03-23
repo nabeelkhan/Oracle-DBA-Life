@@ -1,0 +1,345 @@
+REM fragmentation scripts
+
+create table FREESP (
+Fname  VARCHAR2(513),
+Tspace VARCHAR2(30),
+First  NUMBER(10),
+Blocks NUMBER(10),
+Last   NUMBER(10))
+/
+
+Rather than create this table each time the PL/SQL script 
+is run (and further fragment the tablespace!), FREESP is 
+created once and truncated before each use in the fragment.sql script.
+
+set feedback off term off verify off pagesize 60 newpage 0 linesize 66
+truncate table FREESP;
+declare
+  Fileid    NUMBER(9);
+  Filename  VARCHAR2(513);
+  Tsname    VARCHAR2(30);
+  Cursor Tablespaces is
+     select File_Name, File_ID, Tablespace_Name
+       from DBA_DATA_FILES
+      where Tablespace_Name = upper('&1');
+begin
+open tablespaces;
+loop
+  fetch Tablespaces into Filename, Fileid, Tsname;
+  exit when Tablespaces%NOTFOUND;
+declare
+  First   NUMBER(10);
+  Blocks  NUMBER(10);
+  Last    NUMBER(10);
+  Tfirst  NUMBER(10);
+  Tblocks NUMBER(10);
+  Tlast   NUMBER(10);
+  Cursor Free is
+    select Block_ID a, Blocks b, Block_ID+Blocks c
+      from DBA_FREE_SPACE
+     where File_ID = Fileid
+     order by Block_ID;
+begin
+  open Free;
+  fetch Free into First, Blocks, Last;
+  if Free%NOTFOUND
+   then
+       goto close_free;
+  end if;
+  loop
+    fetch Free into Tfirst, Tblocks, Tlast;
+    exit when Free%NOTFOUND;
+    if Tfirst = Last
+      then
+        Blocks := Blocks + Tblocks;
+        Last := Tlast;
+      else
+        insert into FREESP
+          values (Filename, Tsname, First, Blocks, Last-1);
+        commit;
+        First := Tfirst;
+        Blocks := Tblocks;
+        Last := Tlast;
+    end if;
+  end loop;
+      insert into FREESP
+         values (Filename, Tsname, First, Blocks, Last-1);
+  commit;
+<<close_free>>
+  close Free;
+end;
+end loop;
+commit;
+close Tablespaces;
+end;
+/
+set term off echo off
+col Db_Name new_value Instance
+select 'INSTANCE NAME' Description, value Db_Name 
+  from V$PARAMETER
+ where UPPER(Name) = 'DB_NAME'
+/
+ttitle center Instance ' TABLESPACE FRAGMENTATION REPORT'
+col Tspace heading 'TABLESPACE|NAME' format a10 trunc
+col Fname heading 'FILE' format A30 trunc
+col First heading 'START|BLOCK' format 999,999
+col Blocks heading 'SIZE(BLKS)' format 99,999,999
+break on report on Tspace skip 1 on Fname skip 1
+compute sum of Blocks on Fname
+compute sum of Blocks on report
+
+spool fragmentation.rpt
+select Tspace, Fname, First, Blocks
+  from FREESP
+ order by Tspace,Fname,First;
+
+spool off
+
+To monitor the growth of tables in a database, 
+you can use the following script:
+
+
+prompt CHECKING FOR FRAGMENTED DATABASE OBJECTS:
+prompt 
+column Owner noprint new_value Owner_Var
+column Segment_Name format a30 heading 'Object Name'
+column Segment_Type format a9 heading 'Table/Indx'
+column Bytes format 999,999,999 heading 'Bytes Used'
+column Extents format 999 heading 'No.'
+break on Owner skip page 2
+ttitle center 'Table Fragmentation Report' skip 2 -
+  left 'creator: ' Owner_Var skip 2
+select Owner, 
+       Segment_Name, 
+       Segment_Type, 
+       Bytes, 
+       Max_Extents, 
+       Extents
+  from DBA_SEGMENTS
+ where Extents > 12
+   and Segment_Type = 'TABLE'
+ order by Owner, Segment_Name, Segment_Type, Max_Extents
+/
+ttitle center 'Index Fragmentation Report' skip 2 -
+  left 'creator: ' Owner_Var skip 2
+select Owner, 
+       Segment_Name, 
+       Segment_Type, 
+       Bytes, 
+       Max_Extents, 
+       Extents
+  from DBA_SEGMENTS
+ where Extents > 12
+   and Segment_Type = 'INDEX'
+   and owner not in ('SYS','SYSTEM')
+ order by Owner, Segment_Name, Segment_Type, Max_Extents
+/
+As an alternative, you can run the following script:
+set feedback off;
+set term off
+set pagesize 60;
+set newpage 0;
+set linesize 80;
+col db_name new_value instance
+select 'INSTANCE NAME' description, value db_name from v$parameter
+   where upper(name) = 'DB_NAME'
+/
+ttitle center instance ' TABLESPACE/FILE/EXTENTS REPORT'
+column tablespace_name format a15 heading 'TABLESPACE|NAME'
+column segment_name format a20 heading 'TABLE|NAME'
+column extents format 99999 heading 'EXTENTS'
+column max_extents format 99999 heading 'MAXEXTENTS'
+column owner format a10
+column segment_type format a7 heading 'TABLE|TYPE'
+break on tablespace_name skip 2 on report
+spool check_extents.log
+select tablespace_name,segment_name,segment_type, owner, extents, max_extents
+from dba_segments
+where segment_type not in ('CACHE','ROLLBACK','DEFERRED ROLLBACK')
+and (extents/decode(max_extents,0,1,max_extents))*100 > 25
+order by tablespace_name,owner,segment_name
+/
+spool off
+exit
+This version of the script will report on all segments (tables, indexes, temporary 
+segments) with more than 25% of their maxextents already allocated. 
+
+create table EXTGROW
+(Segname     VARCHAR2(81)   NOT NULL
+,Segown      VARCHAR2(30)   NOT NULL
+,Growdate    DATE           NOT NULL
+,Segtype     VARCHAR2(17)
+,Segtbs      VARCHAR2(30)
+,Exts        NUMBER
+,Nextext     NUMBER
+,Tbsfree     NUMBER
+,Hwm         NUMBER
+,Totbytes    NUMBER
+,Usedbytes   NUMBER
+,Contigfree  NUMBER
+,Freepct     NUMBER
+,Tbsexts     NUMBER
+)
+tablespace TOOLS
+storage (initial      819200 
+         next         819200
+         minextents   10
+         maxextents   505
+         pctincrease  0
+)
+/
+alter table EXTGROW add constraint EXTGROW_PK 
+      primary key (Segname, Segown, Growdate)
+      using index tablespace TOOLS
+      storage (initial     81920 
+               next        81920
+               minextents  10
+               maxextents  505
+               pctincrease 0);
+
+
+The rate at which this table will grow will depend on how many 
+tables and indexes you want to track.
+
+ 
+insert into EXTGROW (segname, segown, growdate, segtype, segtbs, exts,
+                     nextext, tbsfree, hwm, totbytes, usedbytes,
+                     contigfree, freepct, tbsexts)
+       select   segment_name,owner, 
+                to_date(to_char(sysdate-1,'YYYYMMDD'),'YYYYMMDD'),
+                segment_type, tablespace_name,0,0,0,0,0,0,0,0,0 
+         from dba_segments
+        where owner = upper('&1')
+          and segment_type in ('TABLE','INDEX')
+/
+
+Next script is:
+
+declare
+   Total_Blocks       NUMBER;
+   Total_Bytes        NUMBER;
+   Unused_Blocks      NUMBER;
+   Unused_Bytes       NUMBER;
+   Lue_File_Id        NUMBER;
+   Lue_Block_Id       NUMBER;
+   Last_Used_Block    NUMBER;
+   T_Name             EXTGROW.Segname%TYPE;
+   Ts_Name            EXTGROW.Segtbs%TYPE;
+   Hwm                NUMBER;
+   T_Exts             NUMBER;
+   T_Own              EXTGROW.Segown%TYPE;
+   N_Exts             NUMBER;
+   T_Free             NUMBER;
+   N_Ext_Bytes        NUMBER;
+   L_Chunk            NUMBER;
+   Db_Blk_Size        NUMBER;
+
+cursor TABSPACE is 
+       select Table_Name, 
+              dt.Owner, 
+              dt.Tablespace_Name,
+              dt.Next_Extent, 
+              Extents, 
+              dt.Blocks
+         from DBA_TABLES dt, EXTGROW eg, DBA_SEGMENTS ds
+        where Table_Name = Segname 
+          and dt.Owner=Segown 
+          and ds.Owner=Segown 
+          and Segment_Name = Segname 
+          and Growdate=to_date('&1','YYYYMMDD')-1;
+
+cursor INDSPACE is 
+       select Index_Name, 
+              di.Owner, 
+              di.Tablespace_Name,
+              di.Next_Extent, 
+              Extents
+         from DBA_INDEXES di, EXTGROW eg, DBA_SEGMENTS ds
+        where Index_Name = Segname 
+          and di.Owner=Segown 
+          and ds.Owner=Segown
+          and Segment_Name =Segname 
+          and Growdate=to_date('&1','YYYYMMDD')-1;
+
+begin
+
+select Value
+  into Db_Blk_Size
+  from SYS.V_$PARAMETER
+ where upper(Name) = 'DB_BLOCK_SIZE';
+
+open TABSPACE;
+
+loop
+   fetch TABSPACE 
+    into t_name, 
+         t_own, 
+         ts_name, 
+         n_ext_bytes, 
+         t_exts, 
+         hwm;
+
+    exit when TABSPACE%NOTFOUND;
+
+DBMS_SPACE.UNUSED_SPACE(T_Own,T_Name,'TABLE',Total_Blocks, Total_Bytes,
+Unused_Blocks, Unused_Bytes, Lue_File_Id, Lue_Block_Id, Last_Used_Block);
+
+Hwm := Hwm*Db_Blk_Size;
+
+select count(*), 
+       sum(Bytes), 
+       max(Bytes) 
+  into N_Exts, T_Free, L_Chunk
+  from DBA_FREE_SPACE
+ where Tablespace_Name = Ts_Name;
+
+insert into EXTGROW (segname, segown, growdate, segtype, segtbs, exts,
+                     nextext, tbsfree, hwm, totbytes, usedbytes,
+                     contigfree,  freepct, tbsexts)
+     values (T_Name, T_Own, to_date('&1','YYYYMMDD'), 'TABLE',Ts_Name,
+             T_Exts, N_Ext_Bytes, T_Free, Hwm, Total_Bytes, 
+             (Total_Bytes-Unused_Bytes), L_Chunk,
+             (Unused_Bytes/Total_Bytes)*100, N_Exts);
+
+commit;
+
+end loop;
+close TABSPACE;
+
+open INDSPACE;
+
+loop
+   fetch INDSPACE 
+    into T_Name, 
+         T_Own, 
+         Ts_Name, 
+         N_Ext_Bytes, 
+         T_Exts;
+exit when INDSPACE%NOTFOUND;
+ 
+DBMS_SPACE.UNUSED_SPACE(T_Own,T_Name,'INDEX',Total_Blocks, Total_Bytes, 
+                        Unused_Blocks, Unused_Bytes, Lue_File_Id,
+                        Lue_Block_Id, Last_Used_Block);
+
+select count(*), 
+       sum(Bytes), 
+       max(Bytes) 
+  into N_Exts, T_Free, L_Chunk
+  from DBA_FREE_SPACE
+ where Tablespace_Name = Ts_Name;
+
+insert into EXTGROW (Segname, Segown, Growdate, Segtype, Segtbs, Exts,
+                     Nextext, Tbsfree, Hwm, Totbytes, Usedbytes,
+                     Contigfree,  Freepct, Tbsexts)
+     values (T_Name, T_Own, to_date('&1','YYYYMMDD'), 'INDEX',Ts_Name, 
+             T_Exts, N_Ext_Bytes, T_Free, NULL, Total_Bytes, 
+            (Total_Bytes-Unused_Bytes), L_Chunk,
+            (Unused_Bytes/Total_Bytes)*100, N_Exts);
+
+commit;
+
+end loop;
+close INDSPACE;
+end;
+/
+

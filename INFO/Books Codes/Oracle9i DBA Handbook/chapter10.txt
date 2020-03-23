@@ -1,0 +1,544 @@
+Scripts from chapter 10 of ORACLE9i DBA Handbook.  See the readme.doc file for details.
+
+
+
+grant select on EMPLOYEE to PUBLIC;
+
+
+create user THUMPER
+identified by R3BB#T
+default tablespace USERS
+temporary tablespace TEMP;
+
+
+alter user THUMPER
+quota 100M on USERS;
+
+
+drop user THUMPER cascade;
+
+
+create role ACCOUNT_CREATOR;
+grant CREATE SESSION, CREATE USER, ALTER USER 
+   to ACCOUNT_CREATOR;
+
+
+alter user THUMPER default role NONE;
+
+alter user THUMPER default role CONNECT;
+
+alter user THUMPER default role all except ACCOUNT_CREATOR;
+
+
+alter profile DEFAULT
+limit idle_time 60;
+
+
+create profile LIMITED_PROFILE limit
+FAILED_LOGIN_ATTEMPTS 5;
+
+create user JANE identified by EYRE
+profile LIMITED_PROFILE;
+
+grant CREATE SESSION to JANE;
+
+
+alter user JANE account unlock;
+
+
+alter user JANE account lock;
+
+
+alter profile LIMITED_PROFILE limit
+PASSWORD_LIFE_TIME 30;
+
+
+alter user jane password expire;
+
+
+alter profile LIMITED_PROFILE limit
+PASSWORD_REUSE_MAX 3
+PASSWORD_REUSE_TIME UNLIMITED;
+
+
+alter user JANE identified by austen;
+
+alter user JANE identified by eyre;
+
+
+alter user jane identified by austen;
+
+
+
+Rem utlpwdmg.sql
+Rem
+Rem  Copyright (c) Oracle Corporation 1996. All Rights Reserved.
+Rem
+Rem    NAME
+Rem      utlpwdmg.sql - script for Default Password Resource Limits
+Rem
+Rem    DESCRIPTION
+Rem      This is a script for enabling the password management features
+Rem      by setting the default password resource limits.
+Rem
+Rem    NOTES
+Rem      This file contains a function for minimum checking of password
+Rem      complexity. This is more of a sample function that the customer
+Rem      can use to develop the function for actual complexity checks
+Rem      that the customer wants to make on the new password.
+Rem
+Rem    asurpur     12/12/96 - Changing the name of
+Rem    password_verify_function
+-- This script sets the default password resource parameters
+-- This script needs to be run to enable the password features.
+-- However the default resource parameters can be changed based
+-- on the need.
+-- A default password complexity function is also provided.
+-- This function makes the minimum complexity checks like
+-- the minimum length of the password, password not same as the
+-- username, etc. The user may enhance this function according to
+-- the need.
+-- This function must be created in SYS schema.
+-- connect sys/<password> as sysdba before running the script
+
+CREATE OR REPLACE FUNCTION verify_function
+(username varchar2,
+  password varchar2,
+  old_password varchar2)
+  RETURN boolean IS 
+   n boolean;
+   m integer;
+   differ integer;
+   isdigit boolean;
+   ischar  boolean;
+   ispunct boolean;
+   digitarray varchar2(20);
+   punctarray varchar2(25);
+   chararray varchar2(52);
+
+BEGIN 
+   digitarray:= '0123456789';
+   chararray:= 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+   punctarray:='!"#$%&()''*+,-/:;<>?_';
+
+   - Check if the password is same as the username
+   IF password = username THEN
+     raise_application_error(-20001, 'Password same as user');
+   END IF;
+
+   - Check for the minimum length of the password
+   IF length(password) < 4 THEN<
+      raise_application_error(-20002, 'Password length less than 4');
+   END IF;
+
+   - Check if the password is too simple. A dictionary of words may be
+   - maintained and a check may be made so as not to allow the words
+   - that are too simple for the password.
+   IF password IN ('welcome', 'password', 'oracle', 'computer', 'abcd') THEN
+      raise_application_error(-20002, 'Password too simple');
+   END IF;
+  
+   - Check if the password contains at least one letter, one digit and one
+   - punctuation mark.
+   - 1. Check for the digit
+   isdigit:=FALSE;
+   m := length(password);
+   FOR i IN 1..10 LOOP 
+       FOR j IN 1..m LOOP 
+         IF substr(password,j,1) = substr(digitarray,i,1) THEN
+            isdigit:=TRUE;
+             GOTO findchar;
+         END IF;
+      END LOOP;
+   END LOOP;
+   IF isdigit = FALSE THEN
+      raise_application_error(-20003, 'Password should contain at
+least one digit, one character and one punctuation');
+   END IF;
+   -- 2. Check for the character
+   <<<findchar>>>
+   ischar:=FALSE;
+   FOR i IN 1..length(chararray) LOOP
+      FOR j IN 1..m LOOP
+         IF substr(password,j,1) = substr(chararray,i,1) THEN
+            ischar:=TRUE;
+
+             GOTO findpunct;
+         END IF;
+      END LOOP;
+   END LOOP;
+   IF ischar = FALSE THEN
+      raise_application_error(-20003, 'Password should contain at least one \line               digit, one character and one punctuation');
+   END IF;
+   -- 3. Check for the punctuation
+   <<<findpunct>>>
+   ispunct:=FALSE;
+   FOR i IN 1..length(punctarray) LOOP
+      FOR j IN 1..m LOOP
+         IF substr(password,j,1) = substr(punctarray,i,1) THEN
+            ispunct:=TRUE;
+             GOTO endsearch;
+         END IF;
+      END LOOP;
+   END LOOP;
+   IF ispunct = FALSE THEN
+      raise_application_error(-20003, 'Password should contain at least one \line               digit, one character and one punctuation');
+   END IF;
+
+   <<<endsearch>>>
+   -- Check if the password differs from the previous password by at least
+   -- 3 letters
+   IF old_password = '' THEN
+      raise_application_error(-20004, 'Old password is null');
+   END IF;
+   - Everything is fine; return TRUE ;
+   RETURN(TRUE);
+   differ := length(old_password) - length(password);
+
+   IF abs(differ) < 3 THEN<R      IF length(password) < length(old_password) THEN<R         m := length(password);
+      ELSE
+         m := length(old_password);
+      END IF;
+      differ := abs(differ);
+      FOR i IN 1..m LOOP
+          IF substr(password,i,1) != substr(old_password,i,1) THEN
+             differ := differ + 1;
+          END IF;
+
+      END LOOP;
+      IF differ < 3 THEN<R          raise_application_error(-20004, 'Password should differ by at \line             least 3 characters');
+      END IF;
+   END IF;
+   - Everything is fine; return TRUE ;
+   RETURN(TRUE);
+END;
+/
+
+- This script alters the default parameters for Password Management
+
+- This means that all the users on the system have Password Management
+- enabled and set to the following values unless another profile is
+- created with parameter values set to different value or UNLIMITED
+- is created and assigned to the user.
+
+ALTER PROFILE DEFAULT LIMIT
+PASSWORD_LIFE_TIME 60
+PASSWORD_GRACE_TIME 10
+PASSWORD_REUSE_TIME 1800
+PASSWORD_REUSE_MAX UNLIMITED
+FAILED_LOGIN_ATTEMPTS 3
+PASSWORD_LOCK_TIME 1/1440
+PASSWORD_VERIFY_FUNCTION verify_function;
+
+
+alter profile DEFAULT limit
+PASSWORD_VERIFY_FUNCTION VERIFY_FUNCTION;
+
+
+create user OPS$FARMER
+identified by SOME_PASSWORD
+default tablespace USERS
+temporary tablespace TEMP;
+
+
+create user OPS$FARMER
+identified externally
+default tablespace USERS
+temporary tablespace TEMP;
+
+
+connect george/mch11@PROD.world AS SYSDBA
+
+
+revoke SYSDBA from George;
+
+create user THUMPER
+identified by R3BB#T;
+
+alter user THUMPER identified by NEWPASSWORD;
+
+password
+
+password JANE
+
+alter user USERNAME identified by NEWPASSWORD;
+
+create role ACCOUNT_CREATOR identified by HELPD2SK_ONLY;
+alter role ACCOUNT_CREATOR not identified;
+alter role MANAGER identified externally;
+
+
+grant select, update (Employee_Name, Address)
+on EMPLOYEE to MCGREGOR
+with grant option;
+
+connect MCGREGOR/FARMER
+grant select on THUMPER.EMPLOYEE to JFISHER;
+
+
+
+create role APPLICATION_USER;
+grant CREATE SESSION to APPLICATION_USER;
+
+create role DATA_ENTRY_CLERK;
+connect THUMPER/R3BB#T
+grant select, insert on THUMPER.EMPLOYEE to DATA_ENTRY_CLERK;
+grant select, insert on THUMPER.TIME_CARDS to DATA_ENTRY_CLERK;
+grant select, insert on THUMPER.DEPARTMENT to DATA_ENTRY_CLERK;
+
+
+
+grant APPLICATION_USER to DATA_ENTRY_CLERK;
+
+
+grant DATA_ENTRY_CLERK to MCGREGOR;
+
+
+grant DATA_ENTRY_CLERK to BPOTTER with admin option;
+
+
+set role DATA_ENTRY_CLERK;
+
+set role NONE;
+
+
+revoke delete on EMPLOYEE from PETER;
+revoke all on EMPLOYEE from MCGREGOR;
+
+revoke ACCOUNT_CREATOR from HELPDESK;
+
+drop user USERNAME cascade;
+
+grant SELECT on EMPLOYEE to MCGREGOR with grant option;
+
+grant SELECT on THUMPER.EMPLOYEE to BPOTTER with grant option;
+
+revoke SELECT on EMPLOYEE from MCGREGOR;
+
+
+select
+      Role,             /*Name of the role*/
+      Privilege,        /*System privilege*/
+      Admin_Option      /*Was admin option granted?*/
+ from ROLE_SYS_PRIVS;
+
+
+select
+      Grantee,           /*Recipient of the grant*/
+      Owner,             /*Owner of the object*/
+      Table_Name,        /*Name of the object*/
+      Grantor,           /*User who made the grant*/
+      Privilege,         /*Privilege granted*/
+      Grantable          /*Was admin option granted?*/
+ from DBA_TAB_PRIVS;
+
+
+select
+      DBA_ROLE_PRIVS.Grantee,        /*Recipient of the grant*/
+      ROLE_TAB_PRIVS.Owner,          /*Owner of the object*/
+      ROLE_TAB_PRIVS.Table_Name,     /*Name of the object*/
+      ROLE_TAB_PRIVS.Privilege,      /*Privilege granted*/
+      ROLE_TAB_PRIVS.Grantable       /*Was admin option granted?*/
+ from DBA_ROLE_PRIVS, ROLE_TAB_PRIVS
+where DBA_ROLE_PRIVS.Granted_Role = ROLE_TAB_PRIVS.Role
+  and DBA_ROLE_PRIVS.Grantee = 'some username';
+
+
+select
+      Username,         /*Username*/
+      Password          /*Encrypted password*/
+from DBA_USERS
+where Username in ('MCGREGOR','THUMPER','OPS$FARMER');
+
+
+
+create user MCGREGOR identified by VALUES '1A2DD3CCEE354DFA';
+
+
+
+alter user OPS$FARMER identified by VALUES 'no way';
+
+select
+      Username,         /*Username*/
+      Password          /*Encrypted password*/
+from DBA_USERS
+where Username in ('MCGREGOR','THUMPER','OPS$FARMER');
+
+
+REM*  become_another_user.sql
+REM*
+REM*  This script generates the commands necessary to allow
+REM*  you to temporarily become another user.
+REM*
+REM*  It MUST be run from a DBA account.
+REM*
+REM*  Input variable: The username of the account to be taken
+REM*  over.
+REM*
+REM*  Steps 1, 2, and 3: Query DBA_USERS. Generate the ALTER USER
+REM*  command that will be necessary to reset the password to its
+REM*  present value.
+REM*
+set pagesize 0 feedback off verify off echo off termout off
+REM*
+REM*  Create a file called reset.sql to hold the commands
+REM*  generated
+REM*
+spool reset.sql
+REM*
+REM*  Select the encrypted password from DBA_USERS.
+REM*
+SELECT 'alter user &&1 identified by values '||''''||
+password||''''||' profile '||profile||';'
+FROM dba_users WHERE username = upper('&&1');
+
+prompt 'host rm -f reset.sql'
+prompt 'exit'
+spool off
+exit
+
+
+alter user MCGREGOR identified by MY_TURN;
+connect MCGREGOR/MY_TURN
+
+
+sqlplus system/manager @reset
+
+
+create profile temp_profile limit
+password_verify_function   null
+password_reuse_time        unlimited
+password_reuse_max         unlimited; 
+
+
+select * from PATIENTS;
+
+select * 
+  from PATIENTS
+ where PATIENT_ID = sys_context('PATIENT_CONTEXT','ALL_PATIENT_ID')
+/
+
+create table PATIENT_PERSONAL_INFORMATION
+(PATIENT_ID          number(10) primary key,
+ PHYSICIAN_ID        number(6) not null,
+ PATIENT_USERNAME  varchar2(10),
+ PATIENT_NAME      varchar2(20),
+ PATIENT_ADDRESS1  varchar2(20),
+ PATIENT_ADDRESS2  varchar2(20),
+ PATIENT_PHONE     number(10)
+);
+create table MEDICAL_INFORMATION
+(PATIENT_ID          number(10) primary key,
+ TEST_PERFORMED      varchar2(30),
+ TEST_RESULTS         varchar2(50),
+ DIAGNOSIS            varchar2(500)
+);
+
+
+create context MEDICAL_SEC_CTX using MEDICAL_DEPT.MEDICAL_SEC;
+
+create or replace package MEDICAL_SEC is
+   procedure GET_PATIENT_ID;
+end MEDICAL_SEC;
+/ 
+create or replace package body MEDICAL_SEC is 
+   procedure GET_PATIENT_ID
+   is
+   PATIENT_ID_VAR number;
+   begin
+    select PATIENT_ID
+      into PATIENT_ID_VAR from PATIENT_PERSONAL_INFORMATION 
+     where PATIENT_USERNAME = SYS_CONTEXT('USERENV','SESSION_USER');
+    dbms_session.set_context('MEDICAL_SEC_CTX', 'PATIENT_ID', PATIENT_ID_VAR);
+   end GET_PATIENT_ID;
+end MEDICAL_SEC;
+/
+
+
+
+create or replace package MEDICAL_SEC as
+ function MEDICAL_ID_SEC return varchar2;
+ END MEDICAL_SEC;
+/
+create or replace package body MEDICAL_SEC as
+/* LIMITS SELECT STATEMENTS BASED ON PATIENT_ID VALUE */
+ function MEDICAL_ID_SEC return varchar2
+ is
+   MY_PREDICATE varchar2 (2000);
+   begin
+     MY_PREDICATE := 'PATIENT_ID=SYS_CONTEXT(''MEDICAL_SEC_CTX'',''PATIENT_ID'')';
+     return MY_PREDICATE;
+    end MEDICAL_ID_SEC;
+end MEDICAL_SEC;
+/
+
+
+execute DBMS_RLS.ADD_POLICY ('MEDICAL_DEPT','MEDICAL_INFORMATION','MEDICAL_POLICY','MEDICAL_DEPT','MEDICAL_SEC.MEDICAL_ID_SEC','SELECT',FALSE,TRUE);
+
+
+execute DBMS_RLS.REFRESH_POLICY
+('<schema where policy is stored>','<table_name>','<policy_name>'; 
+
+
+audit session;
+
+audit session whenever successful;
+audit session whenever not successful;
+
+
+select
+  OS_Username,           /*Operating system username used.*/
+  Username,              /*Oracle username of the account used.*/
+  Terminal,              /*Terminal ID used.*/
+  DECODE(Returncode,'0','Connected',
+              '1005','FailedNull',
+              '1017','Failed',Returncode),      /*Failure check*/
+  TO_CHAR(Timestamp,'DD-MON-YY HH24:MI:SS'),    /*Login time*/
+  TO_CHAR(Logoff_Time,'DD-MON-YY HH24:MI:SS')   /*Logoff time*/
+from DBA_AUDIT_SESSION;
+
+
+audit role;
+noaudit role;
+
+select
+      Action,       /*Action code.*/
+      Name          /*Name of the action, such as ALTER USER.*/
+from AUDIT_ACTIONS;
+
+select
+  OS_Username,          /*Operating system username used.*/
+  Username,             /*Oracle username of the account used.*/
+  Terminal,             /*Terminal ID used.*/
+  Owner,                /*Owner of the affected object.*/
+  Obj_Name,             /*Name of the affected object.*/
+  Action_Name,          /*Numeric code for the action.*/
+  DECODE(Returncode,'0','Success',Returncode),   /*Failure check*/
+  TO_CHAR(Timestamp,'DD-MON-YYYY HH24:MI:SS')      /*Timestamp*/
+from DBA_AUDIT_OBJECT;
+
+
+audit update table by MCGREGOR;
+
+
+audit insert on THUMPER.EMPLOYEE;
+audit all on THUMPER.TIME_CARDS;
+audit delete on THUMPER.DEPARTMENT by session;
+
+
+/* add the policy */
+exec DBMS_FGA.ADD_POLICY(
+object_schema => 'FM',
+object_name   => 'PRODUCE',
+policy_name   => 'CHK_CARROT_COUNT',
+audit_condition => 'VEGETABLE = ''CARROTS'' ', 
+audit_column => 'QUANTITY',
+handler_schema => 'SEC',
+handler_module => 'LOG_ACTION',
+enable               =>  TRUE);
+
+audit all on SYS.AUD$ by access;
+
+
+
+

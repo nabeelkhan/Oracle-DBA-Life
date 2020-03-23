@@ -1,0 +1,17 @@
+Date: 02/04/03                                                   Page:   1      
+Time: 10:49 AM             ROLLBACK SEGMENT STATISTICS           NK_DBA         
+                              ORAKIC database                                   
+                                                                                
+ROLLBACK   EXTENTS  TRANS  LARGEST TRANS       CUR SIZE WAITS WRAPS EXTENDS     
+---------- ------- ------ -------------- -------------- ----- ----- -------     
+SYSTEM           7      0        454,656        454,656     0     0       0     
+_SYSSMU1$        2      0     13,758,464        126,976     1   550      16     
+_SYSSMU10$       2      1      6,418,432        126,976     2   335       9     
+_SYSSMU2$        2      0     55,701,504        126,976     1   874     110     
+_SYSSMU3$        2      0    176,287,744        126,976     1   708      84     
+_SYSSMU4$        2      0      6,615,040        126,976     3   731      19     
+_SYSSMU5$        8      0     21,164,032        520,192     2   541      48     
+_SYSSMU6$        3      0      6,483,968        192,512     0   531       2     
+_SYSSMU7$        2      0     31,584,256        126,976     5   565      41     
+_SYSSMU8$        2      0     17,952,768        126,976     1   701      24     
+_SYSSMU9$        2      0      4,321,280        126,976     1   517       7     

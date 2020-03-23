@@ -1,0 +1,270 @@
+# FILE NAME: report_m.shl 
+# FUNCTION:  K-Shell report menu 
+#  FUNCTION:
+# TESTED ON:  
+# PLATFORM:   non-specific
+# REQUIRES:   
+#
+#  This is a part of the RevealNet Oracle Administration library. 
+#  Copyright (C) 1996-98 RevealNet, Inc. 
+#  All rights reserved. 
+# 
+#  For more information, call RevealNet at 1-800-REVEAL4 
+#  or check out our Web page: www.revealnet.com
+# 
+#*************** RevealNet Oracle Administration ***********************
+#
+#!/bin/sh 
+# dba_menu
+# Oracle Database DBA Menu. Allows simple generation, viewing
+# and printing of Oracle Database Reports and DBA activities
+# Rev 0. 30/9/95 MRA - RevealNet
+#
+# first full path the report files
+#
+REP=/home/oracle/sql_scripts
+#
+# now set report output full path
+#
+REP_OUT=/home/oracle/sql_scripts/rep_out
+SH_FILES=/home/oracle/sh_files
+x="0"
+while [ $x != "99" ]
+do
+#
+tput clear
+echo ""
+echo ""
+echo "                     Oracle Database DBA Menu"
+echo "                  ------------------------------"
+echo ""
+echo "                   1. Generate a report, execute script"
+echo "                   2. View a report"
+echo "                   3. Print a report"
+echo "                   4. See a reports function statement"
+echo "                   5. grep Against the sessions report"
+echo "                   6. Enter SQLPLUS"
+echo "                   7. Enter SVRMGR (Must be from Oracle user)"
+echo "                   8. tail the Alert log"
+echo "                   9. Check SQLNet V1 TCPIP status"
+echo "                  10. tail SQLNet V1 TCPIP log"
+echo "                  11. Check SQLNet V2 TCPIP status"
+echo "                  12. tail SQLNET V2 TCPIP log"
+echo "                  13. Start/Stop SQLNET"
+echo ""
+echo "                  99. Exit menu"
+echo ""
+echo "                  -----------------------------"
+echo ""
+echo "                          Enter Choice: \c"
+read x1
+if [ -n "$x1" ]
+        then
+                x=$x1
+fi
+case $x in
+
+1)
+cd $REP
+tput clear
+rep_name="none.sql"
+echo ""
+echo ""
+echo "Please enter the name of the report to run from the following list:"
+echo ""
+echo "********************************************************************* "
+ls -C *.sql
+echo "********************************************************************* "
+echo ""
+echo "\n                                Enter choice: \c"
+read rep_name2
+        echo ""
+        if [ -s "$rep_name2" ] 
+        then
+                rep_name="$rep_name2"
+        fi 
+echo "\n Enter Oracle user name to run report under : \c"
+read orauser
+stty -echo
+echo "\n                       Enter Oracle password: \c"
+read pw
+stty echo
+#
+# get into SQLPLUS and run report, normally report will terminate 
+# automatically with output directed to REP_OUT
+# 
+tput clear
+sqlplus -s $orauser/$pw @$rep_name
+#
+;;
+
+2)
+cd $REP_OUT
+tput clear
+rep_name="none.lis"
+echo ""
+echo ""
+echo "Please enter the name of the report to view from the following list:"
+echo ""
+echo "*********************************************************************"
+ls -C 
+echo "*********************************************************************"
+echo ""
+echo "\n                        Enter choice: \c"
+read rep_name2 
+                echo ""
+        if [ -s "$rep_name2" ] 
+        then
+                rep_name="$rep_name2"
+        fi 
+         pg $rep_name
+#
+;;
+
+3)
+cd $REP_OUT
+tput clear
+rep_name="none.lis"
+echo ""
+echo ""
+echo "Please enter the name of the report to print from the following list:"
+echo ""
+echo "*********************************************************************"
+ls -C 
+echo "*********************************************************************"
+echo ""
+echo "\n                        Enter choice: \c"
+read rep_name2
+                echo ""
+        if [ -s "$rep_name2" ]
+        then
+                rep_name="$rep_name2"
+                lp $rep_name
+        else
+        pg $rep_name
+        fi
+echo ""
+;;
+
+4)
+cd $REP 
+tput clear
+rep_name="none.sql"
+echo ""
+echo ""
+echo "Enter the name of the report to see the function for from following list:"
+echo ""
+echo "*********************************************************************"
+ls -C *.sql
+echo "*********************************************************************"
+echo ""
+echo "\n Enter choice: \c"
+read rep_name2
+        if [ -s "$rep_name2" ] 
+        then
+                rep_name="$rep_name2"
+        fi 
+echo ""
+grep -i FUNCTION $rep_name
+echo "                          Press enter to continue"
+read nada
+;;
+
+5)
+$SH_FILES/grep_sessions
+;;
+
+99)
+tput clear
+exit
+;;
+
+6)
+tput clear
+echo "Enter Oracle User name for SQLPLUS session: \c"
+read un
+stty -echo
+echo ""
+echo "Enter Oracle Password: \c"
+stty echo
+read pw
+sqlplus $un/$pw
+;;
+
+7)
+svrmgrl
+;;
+
+8)
+tput clear
+$SH_FILES/ck_alrt
+;;
+
+9)
+tput clear
+tcpctl status>status.lis
+pg status.lis
+rm status.lis
+;;
+
+10)
+tput clear
+echo "Enter number of lines to display: \c"
+read lines
+tail -$lines /home/oracle/product/7.1.4.1.0/tcp/log/orasrv.log>tail.lis
+pg tail.lis
+rm tail.lis
+;;
+
+11)
+tput clear
+lsnrctl status>status.lis
+pg status.lis
+rm status.lis
+;;
+ 
+12)
+tput clear
+echo "Enter number of lines to display: \c"
+read lines
+tail -$lines /home/oracle/product/7.1.4.1.0/network/log/listener.log>tail.lis
+pg tail.lis
+rm tail.lis
+;;
+
+13)
+tput clear
+echo " S - Start SQLNET V1 and V2, X - Stop SQLNET V1 and V2: \c"
+read strt_stp
+if [ $strt_stp = "s|S" ] 
+then
+        tput clear
+        echo " Has the re-start of the SQLNET protocols been authorized by STREAM? (Y or N):\c" 
+        read yn
+        if [ $yn = "y|Y" ] 
+        then
+                /home/oracle/start_tcpctl
+        fi
+fi
+if [ $strt_stp = "x|X" ] 
+then
+        echo " Has the stop of SQLNET protocols been authorized by STREAM? (Y or N): \c"
+        read yn
+        if [ $yn = "y|Y" ] 
+        then
+                /home/oracle/stop_tcpctl
+        fi
+fi
+;;
+*)
+tput clear
+echo ""
+echo "                          Invalid Selection try again"
+echo "                          Press enter to continue"
+read nada
+pw="0"
+;;
+esac
+pw="0"
+done
+

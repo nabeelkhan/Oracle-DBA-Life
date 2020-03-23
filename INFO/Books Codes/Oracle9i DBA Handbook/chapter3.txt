@@ -1,0 +1,69 @@
+Scripts from chapter 3 of ORACLE9i DBA Handbook.  See the readme.doc file for details.
+
+
+alter user USER quota 0 on SYSTEM;
+
+create user USERNAME identified by PASSWORD
+default tablespace TABLESPACE_NAME;
+
+alter user USERNAME default tablespace TABLESPACE_NAME;
+
+
+alter index EMPLOYEE$DEPT_NO rebuild
+tablespace INDEXES
+storage (initial 2M next 2M pctincrease 0);
+
+
+create table JOB
+(Job_Code     NUMBER,
+Description   VARCHAR2(35),
+constraint JOB_PK primary key (Job_Code)
+using index tablespace INDEXES
+storage (initial 2M next 2M pctincrease 0))
+tablespace DATA
+storage (initial 5M next 5M pctincrease 0);
+
+
+alter table EMPLOYEE_TYPE
+  add constraint UNIQ_DESCR  unique(DESCRIPTION)
+using index tablespace INDEXES_2;
+
+
+alter user SYSTEM quota 50M on TOOLS;
+
+
+alter index TOOLTAB_PK rebuild
+tablespace TOOLS_I
+storage (initial 2M next 2M pctincrease 0);
+
+
+set transaction use rollback segment SEGMENT_NAME
+
+
+create user USERNAME identified by PASSWORD
+default tablespace DATA
+temporary tablespace TEMP;
+
+
+alter user USERNAME temporary tablespace TEMP;
+
+
+create user USERNAME identified by PASSWORD
+default tablespace TABLESPACE_NAME
+temporary tablespace TEMP_USER;
+
+alter user USERNAME temporary tablespace TEMP_USER;
+
+create user USERNAME identified by PASSWORD
+default tablespace USERS
+temporary tablespace TEMP;
+
+alter user USERNAME default tablespace USERS;
+alter user USERNAME quota nnnn on USERS;
+
+
+alter tablespace TEMP_WORK read only;
+
+
+
+

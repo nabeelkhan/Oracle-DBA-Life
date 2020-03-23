@@ -1,0 +1,22 @@
+To Stop and restart the EM on 11g Please set the ENV Variable called 
+
+ORACLE_UNQNAME=orcl
+
+Then
+
+emctl stop dbconsole 
+
+
+C:\Windows\system32>emctl stop dbconsole
+Oracle Enterprise Manager 11g Database Control Release 11.2.0.1.0
+Copyright (c) 1996, 2010 Oracle Corporation.  All rights reserved.
+https://nabeelkhan-TOSH:1158/em/console/aboutApplication
+The OracleDBConsoleorcl service is stopping.....................................
+........
+The OracleDBConsoleorcl service was stopped successfully.
+
+
+
+
+
+emctl start dbconsole 

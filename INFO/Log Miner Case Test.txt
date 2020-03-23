@@ -1,0 +1,88 @@
+TESTCASE of USING LOG MINER WITH COMPLETE EXAMPLES:
+----------
+
+SQL> connect system/manager
+Connected.
+
+SQL> select sysdate from dual;
+SYSDATE
+--------------------
+2004-NOV-03 15:00:28
+
+SQL> update scott.emp set sal=sal*10 where ename='SCOTT';
+1 row updated.
+
+SQL> commit;
+Commit complete.
+
+SQL> connect sys/change_on_install as sysdba
+Connected.
+
+SQL> select * from v$version;
+BANNER
+----------------------------------------------------------------
+Oracle9i Enterprise Edition Release 9.2.0.5.0 - Production
+PL/SQL Release 9.2.0.5.0 - Production
+CORE 9.2.0.6.0 Production
+TNS for 32-bit Windows: Version 9.2.0.5.0 - Production
+NLSRTL Version 9.2.0.5.0 - Production
+
+SQL> alter system switch logfile;
+System altered.
+
+SQL> alter system switch logfile;
+System altered.
+
+SQL> alter system switch logfile;
+System altered.
+
+SQL> select first_time,status,name from v$archived_log
+where first_time > sysdate - (1/24);
+FIRST_TIME S NAME
+-------------------- - ---------------------------------------------------
+2004-NOV-01 09:12:20 A M:\ORACLE\ARCHIVE\M9205WA\M9205WA_T001_S00072.ARC
+2004-NOV-01 18:21:33 A M:\ORACLE\ARCHIVE\M9205WA\M9205WA_T001_S00073.ARC
+2004-NOV-02 08:23:50 A M:\ORACLE\ARCHIVE\M9205WA\M9205WA_T001_S00074.ARC
+2004-NOV-02 18:23:55 A M:\ORACLE\ARCHIVE\M9205WA\M9205WA_T001_S00075.ARC
+2004-NOV-03 15:00:35 A M:\ORACLE\ARCHIVE\M9205WA\M9205WA_T001_S00076.ARC
+2004-NOV-03 15:00:35 A M:\ORACLE\ARCHIVE\M9205WA\M9205WA_T001_S00077.ARC
+
+6 rows selected.
+
+SQL> select name,log_mode,supplemental_log_data_min,supplemental_log_data_pk,
+2 supplemental_log_data_ui,force_logging from v$database;
+NAME LOG_MODE SUP SUP SUP FOR
+--------- ------------ --- --- --- ---
+M9205WA ARCHIVELOG NO NO NO NO
+
+SQL> execute dbms_logmnr.add_logfile(logfilename => -
+> 'M:\ORACLE\ARCHIVE\M9205WA\M9205WA_T001_S00075.ARC', -
+> options => dbms_logmnr.new);
+PL/SQL procedure successfully completed.
+
+SQL> execute dbms_logmnr.add_logfile(logfilename => -
+> 'M:\ORACLE\ARCHIVE\M9205WA\M9205WA_T001_S00076.ARC', -
+> options => dbms_logmnr.addfile);
+PL/SQL procedure successfully completed.
+
+SQL> execute dbms_logmnr.start_logmnr( -
+> options => dbms_logmnr.dict_from_online_catalog);
+PL/SQL procedure successfully completed.
+
+SQL> select scn, timestamp, username, sql_redo,session_info
+2 from v$logmnr_contents
+3 where upper(sql_redo) like '%SCOTT%' and upper(seg_name)='EMP'
+4 and operation = 'UPDATE';
+
+SCN TIMESTAMP USERNAME
+---------- -------------------- ------------------------------
+SQL_REDO
+--------------------------------------------------------------------------
+SESSION_INFO
+--------------------------------------------------------------------------
+6593769 2004-NOV-03 15:00:31 SYSTEM
+update "SCOTT"."EMP" set "SAL" = '30000' where "SAL" = '3000' and ROWID = 'AAAKquAAJAAAAAlAAH';
+login_username=SYSTEM client_info= OS_username=mhiemstr Machine_name=CH-ORACLE\MHIEMST3 OS_terminal=MHIEMST3
+OS_process_id=2696:2980 OS_program name=sqlplus.exe
+
+

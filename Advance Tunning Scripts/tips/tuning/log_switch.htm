@@ -1,0 +1,219 @@
+<html>
+	<head>
+		<title>
+			Tuning Log Switches
+		</title>
+		<style>
+			<!-- a:hover{color:#660066;} -->
+		</style>
+	</head>
+	<body background="../../images/bg.jpg" link="#FF6600" vlink="#FF6600" alink="#660066">
+		
+		<h2 align="center">
+			<font color="#990000">
+				Tuning Log Switches
+			</font>
+		</h2>
+		<p>
+		A log switch is when Oracle stops writing to the current log file, closes it, opens the next log file, and begins writing to the new log file.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				When do log switches happen?
+			</font>
+		</h3>
+		<p>
+		Log switches may be forced manually using either the SWITCH LOGFILE or the ARCHIVE LOG clauses of the ALTER SYSTEM command.
+		Log switches may also be forced automatically in relatively idle instances of a parallel server database, to secure recoverability.
+		However, the normal cause of a log switch is when a process generating redo
+		is unable to advance the index into the log buffer for redo generation further,
+		because it is already mapped to the last log block in the current log file.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				How is a log switch triggered?
+			</font>
+		</h3>
+		<p>
+		In a parallel server environment, the LGWR process in each instance holds a KK instance lock on its own thread.
+		The <em>id2</em> field identifies the thread number.
+		This lock is used to trigger forced log switches from remote instances.
+		A log switch is forced whenever the current SCN for a thread falls behind the force SCN recorded in the database entry section of the controlfile.
+		The force SCN is one more than the highest high SCN of any log file reused in any thread.
+		</p>
+		<p>
+		For local log switches, the process initiating the log switch allocates a message buffer in the SGA
+		and constructs a message to LGWR indicating that a log switch is required, before posting LGWR's semaphore.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				What does a log switch involve?
+			</font>
+		</h3>
+		<p>
+		LGWR performs the following four steps to effect a log switch.
+		</p>
+		<ol>
+			<li>
+			It performs a controlfile transaction to select the next log file to be used and to clear its controlfile entry.
+			Normally, the log file currently bearing the lowest log sequence number is chosen.
+			If necessary, the log switch will be delayed at this point
+			until DBWn has completed the log switch checkpoint following the previous use of this log file,
+			and until ARCn has archived its contents.<br>&nbsp;
+			</li>
+			<li>
+			It takes the <i>redo copy</i> latches (up to 8.0) and the <i>redo allocation</i> latch to disable redo generation
+			by setting a state variable and then flushes the log buffer to disk.
+			In parallel, if possible, it writes the SCN of the last redo record in the file (the high SCN) into the header block.
+			Once these writes have completed, LGWR closes the file.<br>&nbsp;
+			</li>
+			<li>
+			It then advances the SCN and performs a second controlfile transaction
+			to mark the next log file as CURRENT, and to mark the old log file as ACTIVE.
+			The status of that log file will be changed to INACTIVE once DBWn has completed the log switch checkpoint.
+			If the database is in archivelog mode,
+			then LGWR also adds the previous log file to the archive linked list through the log file entries section of the controlfile (see V$ARCHIVE)
+			and if automatic archiving is enabled, it posts the ARCn background process to archive it.
+			Under Oracle 8.1, LGWR can spawn a new ARCn process up to the value of <em>log_archive_max_processes</em>,
+			if all the existing archive processes are still busy.<br>&nbsp;
+			</li>
+			<li>
+			Finally, LGWR opens all members of the new log file group and writes the new log sequence number and low SCN into the header block.
+			It then enables redo generation again.<br>&nbsp;
+			</li>
+		</ol>
+		
+		<h3>
+			<font color="#660066">
+				Why tune log switches?
+			</font>
+		</h3>
+		<p>
+		It may surprise you to learn that log switches can take a long time,
+		sometimes in the order of seconds, and so there may be plenty of potential for tuning here.
+		OLTP users tend to be much less tolerant of intermittent poor performance than consistent moderate performance.
+		So, it is important to both minimize the frequency of log switches, and to minimize their duration when they occur.
+		</p>
+		<p>
+		The <em>log file switch completion</em> wait event is the primary indicator of the impact of log switches on system performance.
+		However, if log switch performance is poor,
+		secondary waits such as <em>log buffer space</em> waits will also be seen immediately following a log switch.
+		When tuning log switches, the objective is to minimize the primary waits and eliminate the secondary.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				Using large log files
+			</font>
+		</h3>
+		<p>
+		We recommend large log files - as large as you can conveniently archive - to minimize the frequency of log switches.
+		Of course, you must also control checkpointing to ensure acceptable recovery performance.
+		</p>
+		
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="42" align="center">
+					<img src="../../images/ball.gif" width="13" height="14" vspace="2">
+				</td>
+				<td>
+					The disk space used by large online log files is not of concern.
+					Each online log file should reside on a dedicated disk pair to prevent concurrent access, even by ARCn.
+					There is no point in using small online log files to conserve disk space, because any such space saved must not be used.<br>&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td valign="top" width="42" align="center">
+					<img src="../../images/ball.gif" width="13" height="14" vspace="2">
+				</td>
+				<td>
+					It is sometimes suggested that using large log files increases the intensity of the resource usage spikes associate with archival.
+					This is not true; it merely increases their duration.<br>&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td valign="top" width="42" align="center">
+					<img src="../../images/ball.gif" width="13" height="14" vspace="2">
+				</td>
+				<td>
+					On the contrary, if large log files are used, archival can normally be tuned to reduce the intensity of its resource usage.
+					This is because there is reduced risk of a sustained burst of redo generation resulting in an archival backlog.
+				</td>
+			</tr>
+		</table>
+		
+		<h3>
+			<font color="#660066">
+				Holding the log files open
+			</font>
+		</h3>
+		<p>
+		The greatest potential for tuning the speed of a log switch is in the opening of the new log file members.
+		The operating system's <em>open</em>() system call is much faster if another process already has an open file descriptor on the same file.
+		This is partly because certain information about the file is already cached in kernel memory.
+		But more importantly in the case of raw logical volumes, it avoids a delay while logical volume state data
+		reflecting the opening of the raw logical volume is written to the volume group reserved area on disk.
+		</p>
+		<p>
+		The APT script <b><a href="../../scripts/redo_log.htm#hold_logs_open">hold_logs_open.sh</a></b> is intended to be run daily from <em>cron</em> under Unix
+		to hold all the log files for an instance open for the next 24 hours.
+		The first time we tried this technique, it shaved an impressive 6 seconds of the speed of each log switch.
+		Your mileage will vary depending on your logical volume or file system and kernel configuration, but it is sure to help a little.
+		</p>
+		
+		<h3>
+			<font color="#660066">
+				Tuning controlfile transactions
+			</font>
+		</h3>
+		<p>
+		Every log switch involves two controlfile transactions.
+		Controlfile transactions are performed under the protection of the CF enqueue,
+		so there is no further need for concurrency control over the writes to the controlfile.
+		However, there is still every need for recoverability should an instance or system failure occur during a controlfile transaction.
+		</p>
+		<p>
+		Recoverability for controlfile transactions is provided by first writing to a recovery structure in the second block of the controlfile,
+		and waiting for that write to complete, before writing to the target blocks of the controlfile.
+		Thus every controlfile transaction involves at least two write I/O waits.
+		</p>
+		<p>
+		Moreover, if there are multiple active controlfiles, then these I/O operations are performed in series for each active controlfile.
+		Therefore, the key to improving controlfile transaction performance is to minimize the number of active controlfiles.
+		In most cases, using a single active controlfile, protected by hardware mirroring,
+		and supplemented by regular ALTER DATABASE BACKUP CONTROLFILE TO TRACE commands, should provide ample protection.
+		</p>
+		<p>
+		The APT script <b><a href="../../scripts/backup.htm#backup_controlfile">backup_controlfile.sql</a></b> provides an elegant controlfile backup facility under Unix,
+		by automatically moving the trace file produced into the database creation directory.
+		</p>
+		
+		<hr noshade align="left" width="300" size="2" color="black">
+		<table cellpadding="0" cellspacing="0">
+			<tr>
+				<td valign="top" width="1000">
+					<font size="2" color="#660066">
+						<strong>
+							Copyright © Ixora Pty Ltd
+						</strong>
+					</font>
+				</td>
+				<td valign="top" align="right">
+					<nobr>
+					<map name="email">
+						<area shape="rect" coords="0, 0, 32, 21" title="Feedback" href="mailto:feedback@ixora.com.au?SUBJECT=[Tip] log_switch.htm">
+					</map>
+					<img ismap usemap="#email" border="0" alt="Send Email" src="../../images/email.gif" width="32" height="21">
+					<map name="home">
+						<area shape="rect" coords="0, 0, 28, 28" title="Home" href="/">
+					</map>
+					<img ismap usemap="#home" border="0" alt="Home" src="../../images/home.gif" width="28" height="28">
+					</nobr>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

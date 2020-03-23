@@ -1,0 +1,39 @@
+# Akadia AG, Arvenweg 4, CH-3604 Thun
+# ----------------------------------------------------------------------
+#
+# File:       initFOC1.ora
+#
+# Autor:      Martin Zahn / 25.03.2004
+#
+# Purpose:    Minimal required instance configuration parameters,
+#             only needed to create the database
+#
+# Location:   $ORACLE_HOME\Database
+#
+# Certified:  Oracle 10.1.0.2 on Windows 2000
+# ----------------------------------------------------------------------
+db_name                       = FOC2
+db_files                      = 20
+control_files                 = C:\Oradata\FOC2\ctl\FOC2_con01.con,
+                                E:\Oradata\FOC2\ctl\FOC2_con02.con
+compatible                    = 10.1.0.2
+db_cache_size                 = 12M
+db_2k_cache_size              = 8M
+db_8k_cache_size              = 4M
+db_file_multiblock_read_count = 32
+undo_management               = AUTO
+undo_retention                = 10800
+undo_tablespace               = UNDO
+shared_pool_size              = 200000000
+java_pool_size                = 100000000
+log_checkpoint_interval       = 10000
+processes                     = 50
+dml_locks                     = 100
+log_buffer                    = 8192
+max_dump_file_size            = 10240
+user_dump_dest                = E:\Oradata\FOC2\Adm\udmp
+background_dump_dest          = E:\Oradata\FOC2\Adm\bdmp
+core_dump_dest                = E:\Oradata\FOC2\Adm\cdmp
+utl_file_dir                  = E:\Oradata\FOC2\Adm\utld
+db_block_size                 = 4096
+remote_login_passwordfile     = shared
