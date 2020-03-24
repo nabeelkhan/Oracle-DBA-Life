@@ -5,7 +5,7 @@
 -- For:		Unix only
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Synopsis:	sqlplus -s / @prevent_1555 <seconds>
 --		rbs_protectors=$(sh prevent_1555.sh)

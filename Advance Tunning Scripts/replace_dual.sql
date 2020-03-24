@@ -5,7 +5,7 @@
 -- For:		8.1 (should be OK against 8.0 but not yet tested)
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 

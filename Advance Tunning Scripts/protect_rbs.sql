@@ -4,7 +4,7 @@
 -- Purpose:	to prevent extent reuse in a rollback segment for a period
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Synopsis:	sqlplus -s / @protect_rbs <rbs_name> <seconds> &
 --

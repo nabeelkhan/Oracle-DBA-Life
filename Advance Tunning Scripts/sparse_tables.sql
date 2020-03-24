@@ -5,7 +5,7 @@
 -- For:		8.0 and higher
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Note:	! THIS SCRIPT IS ONLY AS GOOD AS YOUR OPTIMIZER STATISTICS !
 --

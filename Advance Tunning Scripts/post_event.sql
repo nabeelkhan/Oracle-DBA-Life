@@ -4,7 +4,7 @@
 -- Purpose:	to set/unset an event in another session
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Synopsis:	@set_background  OR  @set_sid
 --		@post_event

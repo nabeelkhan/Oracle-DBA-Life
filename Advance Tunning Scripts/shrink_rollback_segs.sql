@@ -4,7 +4,7 @@
 -- Purpose:	to shrink all online rollback segments back to optimal
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 @save_sqlplus_settings

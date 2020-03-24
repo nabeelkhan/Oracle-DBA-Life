@@ -4,7 +4,7 @@
 -- Purpose:	to convert a raw (address) to a number
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Note:	Unless you have an alternative local convention, persistent
 --		database objects used for database administration should go

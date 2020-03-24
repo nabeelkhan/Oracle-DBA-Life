@@ -5,7 +5,7 @@
 -- For:		8.0 and up
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Comment:	The division of waits in to write waits and read waits may not
 --		be right if rollback segments have been taken offline.

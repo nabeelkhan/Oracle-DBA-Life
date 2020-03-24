@@ -4,7 +4,7 @@
 -- Purpose:	to connect as another user without knowing their password
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 @save_sqlplus_settings

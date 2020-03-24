@@ -4,7 +4,7 @@
 -- Purpose:	to take a state dump or structure dump
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 @save_sqlplus_settings

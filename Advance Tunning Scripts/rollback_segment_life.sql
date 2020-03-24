@@ -4,7 +4,7 @@
 -- Purpose:	to check the useful life of rollback segments 
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Comment:	The rollback segment wrap number can only go up to 2^32 - 1.
 --		before the segment has to be dropped and recreated.

@@ -4,7 +4,7 @@
 -- Purpose:	to setup the cluster table needed by prevent_1555.sql
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 @save_sqlplus_settings

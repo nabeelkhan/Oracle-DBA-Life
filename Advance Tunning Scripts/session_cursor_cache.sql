@@ -5,7 +5,7 @@
 -- For:		8.0 and higher
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Description:	If 'session cursor cache count' = session_cached_cursors, then
 --		session_cached_cursors should be increased.

@@ -4,7 +4,7 @@
 -- Purpose:	to get the SID for the current session
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Synopsis:	@my_sid
 --

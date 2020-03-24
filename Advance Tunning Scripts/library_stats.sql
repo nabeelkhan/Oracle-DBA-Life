@@ -4,7 +4,7 @@
 -- Purpose:	to report basic library cache statistics
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 @save_sqlplus_settings

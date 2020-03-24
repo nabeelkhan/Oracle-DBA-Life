@@ -4,7 +4,7 @@
 -- Purpose:	to report the time used and waiting for the instance
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 @save_sqlplus_settings

@@ -4,7 +4,7 @@
 -- Purpose:	to generate a description of the fixed table columns
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 @save_sqlplus_settings

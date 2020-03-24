@@ -4,7 +4,7 @@
 -- Purpose:	to reset sqlplus settings
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 

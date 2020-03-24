@@ -5,7 +5,7 @@
 -- For:		8.0 and higher
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Description:	This scripts sums the number of times that the SQL statements
 --		used within each stored code object have been executed.

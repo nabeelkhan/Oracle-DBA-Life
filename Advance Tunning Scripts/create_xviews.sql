@@ -4,7 +4,7 @@
 -- Purpose:	to create views on the x$ tables
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Comment:	Must be executed as SYS via SQL*Plus.
 --

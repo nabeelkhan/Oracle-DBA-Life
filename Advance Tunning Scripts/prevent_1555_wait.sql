@@ -4,7 +4,7 @@
 -- Purpose:	to wait until old transactions have finished
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams (with thanks to Anita Bardeen and Yong Huang for
+-- Author:	Nabeel Khan (with thanks to Anita Bardeen and Yong Huang for
 --			     pointing out the need for such a script)
 --
 -- Description:	This script is designed to be used with prevent_1555.sql.

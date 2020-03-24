@@ -4,7 +4,7 @@
 -- Purpose:	find columns that maybe should be NOT NULL
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 @save_sqlplus_settings

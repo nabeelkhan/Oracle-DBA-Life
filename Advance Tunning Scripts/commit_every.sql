@@ -4,7 +4,7 @@
 -- Purpose:	a packaged to commit periodically based on elapsed time
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 

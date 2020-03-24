@@ -4,7 +4,7 @@
 -- Purpose:	to flush the shared pool without losing sequence numbers
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 @keeper

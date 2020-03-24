@@ -4,7 +4,7 @@
 -- Purpose:	to dynamically zip the current process's trace file
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Synopsis:	@trace_zip
 --		-- produce big trace file

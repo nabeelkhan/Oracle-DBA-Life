@@ -5,7 +5,7 @@
 -- For:		8.0 and later
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Description:	Compares the time taken for each archival with the time to the
 --		log switch that reused the file and reports the least headroom.

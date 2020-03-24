@@ -4,7 +4,7 @@
 -- Purpose:	to count the objects of each type owned by each schema
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 @save_sqlplus_settings

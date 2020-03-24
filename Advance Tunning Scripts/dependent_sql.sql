@@ -4,7 +4,7 @@
 -- Purpose:	to find the SQL dependent on a particular object
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 @save_sqlplus_settings

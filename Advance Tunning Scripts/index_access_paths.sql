@@ -4,7 +4,7 @@
 -- Purpose:	*** called from table_access_paths.sql ***
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 --------------------------------------------------------------------------------
 

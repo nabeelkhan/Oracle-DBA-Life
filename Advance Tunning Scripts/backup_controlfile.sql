@@ -4,7 +4,7 @@
 -- Purpose:	to save a create controlfile statement
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Description:	This script uses the backup controlfile to trace command to
 --		save a create controlfile statement, and then moves the trace

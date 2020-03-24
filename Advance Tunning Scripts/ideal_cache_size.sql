@@ -5,7 +5,7 @@
 -- For:		8.1
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Description:	This script assumes that the ideal number of buffers in each
 --		pool is the current number, plus the number of buffers due to

@@ -4,7 +4,7 @@
 -- Purpose:	to calculate a time as required for a redo dump
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 @save_sqlplus_settings

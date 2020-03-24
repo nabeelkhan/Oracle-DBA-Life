@@ -4,7 +4,7 @@
 -- Purpose:	to mark all cached sequences for keeping in the pool
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 @restore_sqlplus_settings

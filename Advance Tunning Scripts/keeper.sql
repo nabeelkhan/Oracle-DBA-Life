@@ -5,7 +5,7 @@
 -- For:		8.0 and higher
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Description:	This script is intended to be run regularly from cron.
 --		It keeps all in-use keepable database objects.

@@ -3,7 +3,7 @@ rem ***************************************************************************
 rem Script:    utilcheck.sql
 rem Purpose:   Provide basic statistics on the usage of an Oracle 7 database
 rem            instance
-rem Author:    Joe Greene
+rem Author:    Nabeel Khan
 rem Revised:   11/3/94
 rem Inputs:    Much of the logic in this script is taken from scripts found
 rem            on the Compuserve Oracle Forum, the Oracle Server 

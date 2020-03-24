@@ -4,7 +4,7 @@
 -- Purpose:	to get the size of the controlfile in bytes
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 @save_sqlplus_settings

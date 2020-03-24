@@ -4,7 +4,7 @@
 -- Purpose:	to show the sessions that have waited for a certain event
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 @save_sqlplus_settings

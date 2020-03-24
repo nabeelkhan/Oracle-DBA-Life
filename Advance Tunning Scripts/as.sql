@@ -6,7 +6,7 @@
 -- Synopsis:	@as &Owner 'grant execute on &Object to public'
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Notes:	termout is not set/unset, as this is for use by other scripts
 --

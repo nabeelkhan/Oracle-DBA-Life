@@ -4,7 +4,7 @@
 -- Purpose:	to do a few things that to_char does not
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Synopsis:	apt_format(value, '9999K')
 --		apt_format(value, '9999k')

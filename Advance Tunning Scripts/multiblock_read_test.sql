@@ -4,7 +4,7 @@
 -- Purpose:	find largest actual multiblock read size
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Description:	This script prompts the user to enter the name of a table to
 --		scan, and then does so with a large multiblock read count, and

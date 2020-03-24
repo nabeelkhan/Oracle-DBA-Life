@@ -4,7 +4,7 @@
 -- Purpose:	to report the time used and waiting for a session
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Synopsis:	@set_sid
 --		@session_times

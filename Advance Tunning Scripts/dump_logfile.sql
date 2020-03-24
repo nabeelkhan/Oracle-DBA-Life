@@ -4,7 +4,7 @@
 -- Purpose:	to assist with dumping the contents of a log file
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 @save_sqlplus_settings

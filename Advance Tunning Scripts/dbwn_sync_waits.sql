@@ -4,7 +4,7 @@
 -- Purpose:	how many write batches have to wait for a log file sync?
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 @save_sqlplus_settings

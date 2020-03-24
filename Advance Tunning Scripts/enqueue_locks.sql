@@ -4,7 +4,7 @@
 -- Purpose:	to display enqueue locks held and wanted in order
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 @save_sqlplus_settings

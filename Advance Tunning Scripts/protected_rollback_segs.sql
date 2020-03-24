@@ -4,7 +4,7 @@
 -- Purpose:	to prevent extent reuse in a rollback segment for a period
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Description:	This script may be used to monitor rollback segment status
 --		when a critical report or program has been protected from

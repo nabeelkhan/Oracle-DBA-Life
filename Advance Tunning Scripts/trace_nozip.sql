@@ -4,7 +4,7 @@
 -- Purpose:	to remove the named pipe created by trace_zip.sql
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Synopsis:	see trace_zip.sql
 --

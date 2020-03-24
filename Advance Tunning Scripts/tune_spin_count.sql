@@ -5,7 +5,7 @@
 -- For:		8.1 and higher
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Description:	This script takes note of total misses and spin_gets so far
 --		and computes the spin hit rate so far. It then prompts the

@@ -4,7 +4,7 @@
 -- Purpose:	to set a big sort area size prior to index creation
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 @save_sqlplus_settings

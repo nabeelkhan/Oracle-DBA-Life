@@ -5,7 +5,7 @@
 -- For:		8.1
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Synopsis:	@set_sid
 --		@suspend_process

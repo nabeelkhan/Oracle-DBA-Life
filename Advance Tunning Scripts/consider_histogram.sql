@@ -5,7 +5,7 @@
 -- For:		8.1.6+
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams -- based a suggestion from Steve Orr
+-- Author:	Nabeel Khan -- based a suggestion from Steve Orr
 --
 -------------------------------------------------------------------------------
 @save_sqlplus_settings

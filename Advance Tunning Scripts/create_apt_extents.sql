@@ -5,7 +5,7 @@
 -- For:		8.1
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Description: The apt_extents table is used by other APT scripts to look up
 --		the segment to which a particular block belongs.

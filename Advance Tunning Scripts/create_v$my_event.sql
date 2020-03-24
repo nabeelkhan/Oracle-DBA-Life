@@ -4,7 +4,7 @@
 -- Purpose:	to create a view to select the current sessions wait events
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 @save_sqlplus_settings

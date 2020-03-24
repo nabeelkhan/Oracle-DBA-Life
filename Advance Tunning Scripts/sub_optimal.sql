@@ -4,7 +4,7 @@
 -- Purpose:	to raise optimal to reduce dynamic extension 
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Description:	This script suggests raising optimal if rollback segments of
 --		that optimal size have been shrinking more than once per reuse

@@ -4,7 +4,7 @@
 -- Purpose:	to get the average time to reuse a rollback segment extent
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 @save_sqlplus_settings

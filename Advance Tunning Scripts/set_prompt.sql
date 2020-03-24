@@ -4,7 +4,7 @@
 -- Purpose:	to include the user and instance in the SQL*Plus prompt
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 define Prompt = "SQL> "

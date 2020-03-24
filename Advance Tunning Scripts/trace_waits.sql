@@ -4,7 +4,7 @@
 -- Purpose:	to trace sessions waiting for a resource
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 @save_sqlplus_settings

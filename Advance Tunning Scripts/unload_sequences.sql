@@ -4,7 +4,7 @@
 -- Purpose:	to unload cached sequence numbers from the shared pool
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 @save_sqlplus_settings

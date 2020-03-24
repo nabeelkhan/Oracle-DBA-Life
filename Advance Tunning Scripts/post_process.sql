@@ -5,7 +5,7 @@
 -- For:		8.1
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Synopsis:	@set_background  OR  @set_sid
 --		@post_process

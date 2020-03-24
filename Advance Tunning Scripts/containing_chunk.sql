@@ -4,7 +4,7 @@
 -- Purpose:	to find the X$KSMSP chunk that contains a particular address
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 @save_sqlplus_settings

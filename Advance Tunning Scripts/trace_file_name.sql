@@ -4,7 +4,7 @@
 -- Purpose:	to get the name of the current trace file
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Synopsis:	@trace_file_name
 --

@@ -4,7 +4,7 @@
 -- Purpose:	to suggest a number of freelists for insert intensive tables
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Comment:	We only add 1.5 bytes for the row directory overhead to allow
 --		for a possible rounding of the avg_row_len. So ITL space usage

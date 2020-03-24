@@ -4,7 +4,7 @@
 -- Purpose:	to consider table access paths when tuning a problem query
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 --------------------------------------------------------------------------------
 @save_sqlplus_settings

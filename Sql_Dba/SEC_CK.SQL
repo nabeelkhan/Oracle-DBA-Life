@@ -2,7 +2,7 @@ rem ***************************************************************************
 
 rem Script:    seccheck.sql
 rem Purpose:   Checks security statusof an Oracle 7 database instance
-rem Author:    Joe Greene
+rem Author:    Nabeel Khan
 rem Revised:   6/29/94
 
 rem ***************************************************************************

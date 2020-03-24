@@ -4,7 +4,7 @@
 -- Purpose:	to sample to the buffer busy wait parameters and sql text
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 @save_sqlplus_settings

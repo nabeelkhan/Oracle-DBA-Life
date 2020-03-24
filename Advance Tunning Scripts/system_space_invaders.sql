@@ -4,7 +4,7 @@
 -- Purpose:	who has SYSTEM has their default tablespaces
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 @save_sqlplus_settings

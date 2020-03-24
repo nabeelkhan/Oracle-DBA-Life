@@ -4,7 +4,7 @@
 -- Purpose:	to prompt for a script parameter, but allow a default value
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Synopsis:	@accept name prompt default
 --

@@ -4,7 +4,7 @@
 -- Purpose:	to set the SID of a background to be used by other scripts
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -------------------------------------------------------------------------------
 @save_sqlplus_settings

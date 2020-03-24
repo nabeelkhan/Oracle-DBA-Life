@@ -5,7 +5,7 @@
 -- For:		8.0 and higher
 --
 -- Copyright:	(c) Ixora Pty Ltd
--- Author:	Steve Adams
+-- Author:	Nabeel Khan
 --
 -- Warning:	This script queries x$ksmsp which causes it to take the
 --		shared pool latch for a fairly long time.
